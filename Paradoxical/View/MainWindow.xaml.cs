@@ -54,7 +54,7 @@ namespace Paradoxical.View
 
         private void EventExplorerFilterTextChanged(object sender, TextChangedEventArgs e)
         {
-            CollectionViewSource.GetDefaultView(EventExplorerDataGrid.ItemsSource).Refresh();
+            CollectionViewSource.GetDefaultView(EventExplorerDataGrid.ItemsSource)?.Refresh();
         }
 
         private void ActiveModTriggersFilterHandler(object sender, FilterEventArgs e)
@@ -83,7 +83,7 @@ namespace Paradoxical.View
 
         private void TriggerExplorerFilterTextChanged(object sender, TextChangedEventArgs e)
         {
-            CollectionViewSource.GetDefaultView(TriggerExplorerDataGrid.ItemsSource).Refresh();
+            CollectionViewSource.GetDefaultView(TriggerExplorerDataGrid.ItemsSource)?.Refresh();
         }
 
         private void ActiveModEffectsFilterHandler(object sender, FilterEventArgs e)
@@ -112,7 +112,7 @@ namespace Paradoxical.View
 
         private void EffectExplorerFilterTextChanged(object sender, TextChangedEventArgs e)
         {
-            CollectionViewSource.GetDefaultView(EffectExplorerDataGrid.ItemsSource).Refresh();
+            CollectionViewSource.GetDefaultView(EffectExplorerDataGrid.ItemsSource)?.Refresh();
         }
     }
 }
