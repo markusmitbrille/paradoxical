@@ -230,8 +230,6 @@
                                     x:Name="AddEventButton"
                                     Grid.Column="0"
                                     Margin="2"
-                                    BorderThickness="1"
-                                    BorderBrush="{DynamicResource MahApps.Brushes.Gray}"
                                     VerticalAlignment="Center"
                                     Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
                                     Command="{Binding AddEventCommand}">
@@ -242,8 +240,6 @@
                                     x:Name="RemoveEventButton"
                                     Grid.Column="1"
                                     Margin="2"
-                                    BorderThickness="1"
-                                    BorderBrush="{DynamicResource MahApps.Brushes.Gray}"
                                     VerticalAlignment="Center"
                                     Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
                                     Command="{Binding RemoveEventCommand}">
@@ -801,8 +797,6 @@
                                     x:Name="AddTriggerButton"
                                     Grid.Column="0"
                                     Margin="2"
-                                    BorderThickness="1"
-                                    BorderBrush="{DynamicResource MahApps.Brushes.Gray}"
                                     VerticalAlignment="Center"
                                     Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
                                     Command="{Binding AddTriggerCommand}">
@@ -813,8 +807,6 @@
                                     x:Name="RemoveTriggerButton"
                                     Grid.Column="1"
                                     Margin="2"
-                                    BorderThickness="1"
-                                    BorderBrush="{DynamicResource MahApps.Brushes.Gray}"
                                     VerticalAlignment="Center"
                                     Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
                                     Command="{Binding RemoveTriggerCommand}">
@@ -938,8 +930,6 @@
                                     x:Name="AddEffectButton"
                                     Grid.Column="0"
                                     Margin="2"
-                                    BorderThickness="1"
-                                    BorderBrush="{DynamicResource MahApps.Brushes.Gray}"
                                     VerticalAlignment="Center"
                                     Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
                                     Command="{Binding AddEffectCommand}">
@@ -950,8 +940,6 @@
                                     x:Name="RemoveEffectButton"
                                     Grid.Column="1"
                                     Margin="2"
-                                    BorderThickness="1"
-                                    BorderBrush="{DynamicResource MahApps.Brushes.Gray}"
                                     VerticalAlignment="Center"
                                     Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
                                     Command="{Binding RemoveEffectCommand}">
