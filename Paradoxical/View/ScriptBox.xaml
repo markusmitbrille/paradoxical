@@ -1,0 +1,82 @@
+﻿<xctk:RichTextBox
+    x:Class="Paradoxical.View.ScriptBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Paradoxical"
+    xmlns:view="clr-namespace:Paradoxical.View"
+    xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
+    xmlns:model="clr-namespace:Paradoxical.Model"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    Style="{DynamicResource MahApps.Styles.RichTextBox}"
+    mc:Ignorable="d"
+    d:DesignHeight="450"
+    d:DesignWidth="800">
+    <RichTextBox.Resources>
+        <RoutedUICommand
+            x:Key="CompleteWordCommand"
+            Text="Complete Word">
+            <RoutedUICommand.InputGestures>
+                <KeyGesture>CTRL+Space</KeyGesture>
+            </RoutedUICommand.InputGestures>
+        </RoutedUICommand>
+    </RichTextBox.Resources>
+    <RichTextBox.InputBindings>
+        <KeyBinding
+            Command="{StaticResource CompleteWordCommand}"
+            Gesture="CTRL+Space" />
+    </RichTextBox.InputBindings>
+    <RichTextBox.CommandBindings>
+        <!-- disable default editing commands -->
+        <CommandBinding
+            Command="EditingCommands.AlignCenter"
+            CanExecute="NeverExecute" />
+        <CommandBinding
+            Command="EditingCommands.AlignJustify"
+            CanExecute="NeverExecute" />
+        <CommandBinding
+            Command="EditingCommands.AlignLeft"
+            CanExecute="NeverExecute" />
+        <CommandBinding
+            Command="EditingCommands.AlignRight"
+            CanExecute="NeverExecute" />
+        <CommandBinding
+            Command="EditingCommands.DecreaseFontSize"
+            CanExecute="NeverExecute" />
+        <CommandBinding
+            Command="EditingCommands.DecreaseIndentation"
+            CanExecute="NeverExecute" />
+        <CommandBinding
+            Command="EditingCommands.IncreaseFontSize"
+            CanExecute="NeverExecute" />
+        <CommandBinding
+            Command="EditingCommands.IncreaseIndentation"
+            CanExecute="NeverExecute" />
+        <CommandBinding
+            Command="EditingCommands.ToggleBold"
+            CanExecute="NeverExecute" />
+        <CommandBinding
+            Command="EditingCommands.ToggleBullets"
+            CanExecute="NeverExecute" />
+        <CommandBinding
+            Command="EditingCommands.ToggleItalic"
+            CanExecute="NeverExecute" />
+        <CommandBinding
+            Command="EditingCommands.ToggleNumbering"
+            CanExecute="NeverExecute" />
+        <CommandBinding
+            Command="EditingCommands.ToggleSubscript"
+            CanExecute="NeverExecute" />
+        <CommandBinding
+            Command="EditingCommands.ToggleSuperscript"
+            CanExecute="NeverExecute" />
+        <CommandBinding
+            Command="EditingCommands.ToggleUnderline"
+            CanExecute="NeverExecute" />
+        <!-- new commands -->
+        <CommandBinding
+            Command="{StaticResource CompleteWordCommand}"
+            Executed="CompleteWordCommandExecuted" />
+    </RichTextBox.CommandBindings>
+</xctk:RichTextBox>
