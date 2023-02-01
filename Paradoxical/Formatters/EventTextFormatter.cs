@@ -23,10 +23,9 @@ namespace Paradoxical.Formatters
                 builder.Append(ParadoxText.NewParagraph);
             }
 
-            builder.Length -= ParadoxText.NewParagraph.Length;
-            if (builder.Length < 0)
+            if (builder.Length >= ParadoxText.NewParagraph.Length)
             {
-                builder.Length = 0;
+                builder.Length -= ParadoxText.NewParagraph.Length;
             }
 
             return builder.ToString();
