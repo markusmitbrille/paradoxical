@@ -8,11 +8,13 @@
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
     xmlns:model="clr-namespace:Paradoxical.Model"
+    xmlns:formatters="clr-namespace:Paradoxical.Formatters"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    Style="{DynamicResource MahApps.Styles.RichTextBox}"
     mc:Ignorable="d"
     d:DesignHeight="450"
-    d:DesignWidth="800">
+    d:DesignWidth="800"
+    Style="{DynamicResource MaterialDesignRichTextBox}">
     <RichTextBox.Resources>
         <RoutedUICommand
             x:Key="CompleteWordCommand"

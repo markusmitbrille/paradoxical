@@ -1,9 +1,6 @@
-﻿using Microsoft.Win32;
-using Paradoxical.Model;
+﻿using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,17 +16,11 @@ using System.Windows.Shapes;
 
 namespace Paradoxical.View
 {
-    public partial class MainWindow
+    public partial class FindEventDialog : UserControl
     {
-        public MainWindow()
+        public FindEventDialog()
         {
             InitializeComponent();
-        }
-
-        private void DragWindowMouseDownHandler(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            { DragMove(); }
         }
     }
 }

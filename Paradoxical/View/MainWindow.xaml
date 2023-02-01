@@ -1,4 +1,4 @@
-﻿<mah:MetroWindow
+﻿<Window
     x:Class="Paradoxical.View.MainWindow"
     x:Name="Main"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -11,9 +11,8 @@
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
     xmlns:model="clr-namespace:Paradoxical.Model"
     xmlns:formatters="clr-namespace:Paradoxical.Formatters"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     mc:Ignorable="d"
     Title="Paradoxical"
     d:DataContext="{d:DesignInstance viewmodel:MainViewModel}"
@@ -21,91 +20,128 @@
     d:DesignWidth="800"
     Height="900"
     Width="800"
-    GlowBrush="{DynamicResource MahApps.Brushes.Accent}"
+    Style="{DynamicResource MaterialDesignWindow}"
+    WindowStyle="None"
+    WindowState="Normal"
     WindowStartupLocation="CenterScreen"
-    ResizeMode="CanResizeWithGrip">
-    <mah:MetroWindow.DataContext>
+    ResizeMode="CanResizeWithGrip"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextElement.FontWeight="Regular"
+    TextElement.FontSize="13"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}">
+    <Window.DataContext>
         <viewmodel:MainViewModel />
-    </mah:MetroWindow.DataContext>
-    <mah:MetroWindow.InputBindings>
+    </Window.DataContext>
+    <Window.InputBindings>
         <KeyBinding
             Command="{Binding NewModCommand}"
             Gesture="CTRL+N" />
-    </mah:MetroWindow.InputBindings>
-    <mah:MetroWindow.Resources>
-        <CollectionViewSource
-            x:Key="ActiveModEvents"
-            Source="{Binding ActiveMod.Events}"
-            Filter="ActiveModEventsFilterHandler" />
-        <CollectionViewSource
-            x:Key="ActiveModTriggers"
-            Source="{Binding ActiveMod.Triggers}"
-            Filter="ActiveModTriggersFilterHandler" />
-        <CollectionViewSource
-            x:Key="ActiveModEffects"
-            Source="{Binding ActiveMod.Effects}"
-            Filter="ActiveModEffectsFilterHandler" />
-    </mah:MetroWindow.Resources>
-    <DockPanel
-        x:Name="MainLayout"
-        Margin="2">
-        <!--#region Menu Bar -->
-        <Menu
-            x:Name="MainMenu"
-            DockPanel.Dock="Top">
-            <MenuItem
-                x:Name="FileItem"
-                Header="_File">
-                <MenuItem
-                    x:Name="NewItem"
-                    Header="New"
-                    Command="{Binding NewModCommand}"
-                    InputGestureText="CTRL+N" />
-                <MenuItem
-                    x:Name="OpenItem"
-                    Header="Open"
-                    Command="{Binding OpenModCommand}"
-                    InputGestureText="CTRL+O" />
-                <MenuItem
-                    x:Name="SaveItem"
-                    Header="Save"
-                    Command="{Binding SaveModCommand}"
-                    InputGestureText="CTRL+S" />
-                <MenuItem
-                    x:Name="ExportItem"
-                    Header="Export"
-                    Command="{Binding ExportModCommand}" />
-                <MenuItem
-                    x:Name="ExitItem"
-                    Header="Exit"
-                    Command="{Binding ExitCommand}"
-                    InputGestureText="ALT+F4" />
-            </MenuItem>
-            <MenuItem
-                x:Name="EditItem"
-                Header="_Edit" />
-        </Menu>
-        <!--#endregion-->
-        <TabControl
-            x:Name="ContentTabControl">
-            <!--#region Mod Info Tab -->
-            <TabItem
-                x:Name="ModInfoTab"
-                Header="Info">
-                <!--#region Mod Info Form -->
-                <ScrollViewer
-                    VerticalScrollBarVisibility="Auto"
-                    HorizontalScrollBarVisibility="Disabled">
-                    <Border
-                        BorderThickness="1"
-                        BorderBrush="{DynamicResource MahApps.Brushes.Gray}">
+    </Window.InputBindings>
+    <Window.Resources>
+    </Window.Resources>
+    <materialDesign:DialogHost
+        DialogTheme="Inherit"
+        Identifier="RootDialog">
+        <DockPanel>
+            <!--#region Menu Bar -->
+            <materialDesign:ColorZone
+                DockPanel.Dock="Top"
+                Padding="16"
+                materialDesign:ElevationAssist.Elevation="Dp4"
+                Mode="PrimaryMid"
+                MouseDown="DragWindowMouseDownHandler">
+                <DockPanel>
+                    <materialDesign:PopupBox
+                        DockPanel.Dock="Right"
+                        PlacementMode="BottomAndAlignRightEdges"
+                        StaysOpen="False">
+                        <StackPanel>
+                            <MenuItem
+                                Header="New"
+                                Icon="{materialDesign:PackIcon Kind=Create}"
+                                Command="{Binding NewModCommand}"
+                                InputGestureText="CTRL+N" />
+                            <MenuItem
+                                Header="Open"
+                                Icon="{materialDesign:PackIcon Kind=FolderOpen}"
+                                Command="{Binding OpenModCommand}"
+                                InputGestureText="CTRL+O" />
+                            <MenuItem
+                                Header="Save"
+                                Icon="{materialDesign:PackIcon Kind=ContentSave}"
+                                Command="{Binding SaveModCommand}"
+                                InputGestureText="CTRL+S" />
+                            <MenuItem
+                                Header="Export"
+                                Icon="{materialDesign:PackIcon Kind=Export}"
+                                Command="{Binding ExportModCommand}" />
+
+                            <Separator />
+
+                            <MenuItem
+                                Header="Exit"
+                                Icon="{materialDesign:PackIcon Kind=ExitToApp}"
+                                Command="{Binding ExitCommand}"
+                                InputGestureText="ALT+F4" />
+                        </StackPanel>
+                    </materialDesign:PopupBox>
+
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="22"
+                        Text="Paradoxical" />
+                </DockPanel>
+            </materialDesign:ColorZone>
+            <!--#endregion-->
+            <TabControl
+                Margin="0,20,0,0"
+                Style="{StaticResource MaterialDesignNavigationRailTabControl}"
+                HorizontalContentAlignment="Center"
+                materialDesign:ColorZoneAssist.Mode="PrimaryLight"
+                materialDesign:NavigationRailAssist.SelectionCornerRadius="50"
+                materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
+                TabStripPlacement="Bottom">
+                <!--#region Mod Info Tab -->
+                <TabItem
+                    Margin="4">
+                    <TabItem.Header>
+                        <StackPanel
+                            Width="auto"
+                            Height="auto">
+                            <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                Kind="Information" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                Text="Info" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <!--#region Mod Info Form -->
+                    <ScrollViewer
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Disabled">
                         <Grid
-                            x:Name="ModInfoForm"
-                            Margin="2">
+                            Margin="20,10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition
-                                    Width="120"
-                                    MinWidth="120" />
+                                    Width="*"
+                                    MinWidth="100" />
+                                <ColumnDefinition
+                                    Width="*"
+                                    MinWidth="100" />
+                                <ColumnDefinition
+                                    Width="*"
+                                    MinWidth="100" />
+                                <ColumnDefinition
+                                    Width="*"
+                                    MinWidth="100" />
                                 <ColumnDefinition
                                     Width="*"
                                     MinWidth="100" />
@@ -121,224 +157,179 @@
                                     Height="auto" />
                             </Grid.RowDefinitions>
 
-                            <TextBlock
-                                x:Name="NameTextBlock"
+                            <TextBox
                                 Grid.Row="0"
                                 Grid.Column="0"
-                                Margin="2"
-                                VerticalAlignment="Center"
-                                Text="Name"
-                                ToolTip="Name of the mod. Will be used for directory names." />
+                                Grid.ColumnSpan="3"
+                                Margin="4"
+                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                Text="{Binding ActiveMod.Name, Mode=TwoWay}"
+                                materialDesign:HintAssist.Hint="Mod Name" />
+
                             <TextBox
-                                x:Name="NameTextBox"
                                 Grid.Row="0"
-                                Grid.Column="1"
-                                Margin="2"
-                                Text="{Binding ActiveMod.Name, Mode=TwoWay}" />
+                                Grid.Column="3"
+                                Grid.ColumnSpan="1"
+                                Margin="4"
+                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                Text="{Binding ActiveMod.Version, Mode=TwoWay}"
+                                materialDesign:HintAssist.Hint="Mod Version" />
 
-                            <TextBlock
-                                x:Name="VersionTextBlock"
+                            <TextBox
+                                Grid.Row="0"
+                                Grid.Column="4"
+                                Grid.ColumnSpan="1"
+                                Margin="4"
+                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                Text="{Binding ActiveMod.GameVersion, Mode=TwoWay}"
+                                materialDesign:HintAssist.Hint="Game Version" />
+
+                            <TextBox
                                 Grid.Row="1"
                                 Grid.Column="0"
-                                Margin="2"
-                                VerticalAlignment="Center"
-                                Text="Version"
-                                ToolTip="Version of the mod. This is not the target version of the game the mod is compatible with." />
-                            <TextBox
-                                x:Name="VersionTextBox"
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                Margin="2"
-                                Text="{Binding ActiveMod.Version, Mode=TwoWay}" />
-
-                            <TextBlock
-                                x:Name="GameVersionTextBlock"
-                                Grid.Row="2"
-                                Grid.Column="0"
-                                Margin="2"
-                                VerticalAlignment="Center"
-                                Text="Game Version"
-                                ToolTip="Target version of the game the mod is compatible with." />
-                            <TextBox
-                                x:Name="GameVersionTextBox"
-                                Grid.Row="2"
-                                Grid.Column="1"
-                                Margin="2"
-                                Text="{Binding ActiveMod.GameVersion, Mode=TwoWay}" />
-
-                            <TextBlock
-                                x:Name="NamespaceTextBlock"
-                                Grid.Row="3"
-                                Grid.Column="0"
-                                Margin="2"
-                                VerticalAlignment="Center"
-                                Text="Namespace"
-                                ToolTip="Default namespace for the mod. Will be used for event namespaces, and put before every file and element name." />
-                            <TextBox
-                                x:Name="NamespaceTextBox"
-                                Grid.Row="3"
-                                Grid.Column="1"
-                                Margin="2"
-                                Text="{Binding ActiveMod.EventNamespace, Mode=TwoWay}" />
+                                Grid.ColumnSpan="5"
+                                Margin="4"
+                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                Text="{Binding ActiveMod.EventNamespace, Mode=TwoWay}"
+                                materialDesign:HintAssist.Hint="Namespace"
+                                materialDesign:HintAssist.HelperText="Used for events, file names, etc." />
                         </Grid>
-                    </Border>
-                </ScrollViewer>
+                    </ScrollViewer>
+                    <!--#endregion-->
+                </TabItem>
                 <!--#endregion-->
-            </TabItem>
-            <!--#endregion-->
-            <!--#region Events Tab -->
-            <TabItem
-                x:Name="EventsTab"
-                Header="Events"
-                IsSelected="True">
-                <Border
-                    BorderThickness="1"
-                    BorderBrush="{DynamicResource MahApps.Brushes.Gray}">
-                    <Grid
-                        x:Name="EventsLayout"
-                        Margin="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
-                                Width="250"
-                                MinWidth="200"
-                                MaxWidth="500" />
-                            <ColumnDefinition
-                                Width="auto" />
-                            <ColumnDefinition
-                                Width="*"
-                                MinWidth="400" />
-                        </Grid.ColumnDefinitions>
+                <!--#region Events Tab -->
+                <TabItem
+                    Margin="4"
+                    IsSelected="True">
+                    <TabItem.Header>
+                        <StackPanel
+                            Width="auto"
+                            Height="auto">
+                            <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                Kind="FileImage" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                Text="Events" />
+                        </StackPanel>
+                    </TabItem.Header>
 
-                        <!--#region Event Explorer -->
-                        <DockPanel
-                            x:Name="EventExplorer"
-                            Grid.Column="0"
-                            Margin="2">
-                            <Grid
-                                x:Name="EventExplorerToolbar"
-                                DockPanel.Dock="Top">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition
-                                        Width="auto" />
-                                    <ColumnDefinition
-                                        Width="auto" />
-                                    <ColumnDefinition
-                                        Width="*" />
-                                </Grid.ColumnDefinitions>
+                    <DockPanel
+                        Margin="20,10">
+                        <!--#region Event Tool Bar -->
+                        <ToolBarTray
+                            DockPanel.Dock="Top">
+                            <ToolBar
+                                ClipToBounds="False"
+                                Style="{StaticResource MaterialDesignToolBar}">
+                                <Button
+                                    Command="{Binding AddEventCommand}"
+                                    Content="{materialDesign:PackIcon Kind=Add}"
+                                    ToolTip="Add Event" />
+                                <Button
+                                    Command="{Binding RemoveEventCommand}"
+                                    Content="{materialDesign:PackIcon Kind=Remove}"
+                                    ToolTip="Remove Event" />
+
+                                <Separator />
 
                                 <Button
-                                    x:Name="AddEventButton"
-                                    Grid.Column="0"
-                                    Margin="2"
-                                    VerticalAlignment="Center"
-                                    Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
-                                    Command="{Binding AddEventCommand}">
-                                    <iconPacks:PackIconModern
-                                        Kind="ListCreate" />
-                                </Button>
+                                    Command="{Binding PreviousEventCommand}"
+                                    Content="{materialDesign:PackIcon Kind=NavigateBefore}"
+                                    ToolTip="Previous Event" />
                                 <Button
-                                    x:Name="RemoveEventButton"
-                                    Grid.Column="1"
-                                    Margin="2"
-                                    VerticalAlignment="Center"
-                                    Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
-                                    Command="{Binding RemoveEventCommand}">
-                                    <iconPacks:PackIconModern
-                                        Kind="ListDelete" />
-                                </Button>
-                                <TextBox
-                                    x:Name="EventExplorerFilter"
-                                    Grid.Column="2"
-                                    Margin="2"
-                                    VerticalAlignment="Stretch"
-                                    VerticalContentAlignment="Center"
-                                    TextChanged="EventExplorerFilterTextChanged"
-                                    mah:TextBoxHelper.Watermark="Search events ..."
-                                    mah:TextBoxHelper.ClearTextButton="True" />
-                            </Grid>
-                            <DataGrid
-                                x:Name="EventExplorerDataGrid"
-                                Margin="2"
-                                BorderThickness="1"
-                                BorderBrush="{DynamicResource MahApps.Brushes.Gray}"
-                                ItemsSource="{Binding Source={StaticResource ActiveModEvents}}"
-                                SelectedItem="{Binding SelectedEvent}"
-                                IsReadOnly="True"
-                                CanUserReorderColumns="False"
-                                CanUserResizeColumns="False"
-                                CanUserResizeRows="False"
-                                CanUserAddRows="False"
-                                CanUserDeleteRows="False"
-                                AutoGenerateColumns="False">
-                                <DataGrid.Columns>
-                                    <mah:DataGridNumericUpDownColumn
-                                        Header="ID"
-                                        Width="*"
-                                        MinWidth="60"
-                                        Binding="{Binding Id}" />
-                                    <DataGridTextColumn
-                                        Header="Title"
-                                        Width="5*"
-                                        MinWidth="100"
-                                        Binding="{Binding Title}" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </DockPanel>
+                                    Command="{Binding FindEventCommand}"
+                                    Content="{materialDesign:PackIcon Kind=FileSearch}"
+                                    ToolTip="Find Event" />
+                                <Button
+                                    Command="{Binding NextEventCommand}"
+                                    Content="{materialDesign:PackIcon Kind=NavigateNext}"
+                                    ToolTip="Next Event" />
+                            </ToolBar>
+                        </ToolBarTray>
                         <!--#endregion-->
-
-                        <GridSplitter
-                            Grid.Column="1"
-                            Background="Transparent"
-                            Width="4" />
-
                         <!--#region Event Form -->
                         <ScrollViewer
-                            Grid.Column="2"
-                            Margin="2"
-                            VerticalScrollBarVisibility="Visible"
+                            Grid.Column="1"
+                            VerticalScrollBarVisibility="Hidden"
                             HorizontalScrollBarVisibility="Disabled">
-                            <StackPanel
-                                x:Name="EventsForm"
-                                Margin="2">
-                                <!--#region Form Header -->
-                                <TextBlock
-                                    Background="{DynamicResource MahApps.Brushes.Accent}"
-                                    Foreground="White"
-                                    TextAlignment="Center"
-                                    FontFamily="{DynamicResource MahApps.Fonts.Family.Header}"
-                                    FontSize="{DynamicResource MahApps.Font.Size.Header}"
-                                    Text="{Binding SelectedEvent.Id}" />
-                                <!--#endregion-->
-                                <!--#region Display Section -->
-                                <Expander
-                                    Header="Display"
-                                    IsExpanded="True">
-                                    <StackPanel>
-                                        <view:ScriptBox
-                                            Margin="2"
-                                            Text="{Binding SelectedEvent.Title, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter title ...">
-                                            <view:ScriptBox.TextFormatter>
-                                                <formatters:EventTextFormatter />
-                                            </view:ScriptBox.TextFormatter>
-                                        </view:ScriptBox>
+                            <materialDesign:Card>
+                                <StackPanel>
+                                    <!--#region Display Section -->
+                                    <Expander
+                                        Header="Display"
+                                        IsExpanded="True">
+                                        <StackPanel>
+                                            <view:ScriptBox
+                                                Margin="4"
+                                                Style="{DynamicResource MaterialDesignRichTextBox}"
+                                                Text="{Binding SelectedEvent.Title, Mode=TwoWay}">
+                                                <view:ScriptBox.TextFormatter>
+                                                    <formatters:EventTextFormatter />
+                                                </view:ScriptBox.TextFormatter>
+                                            </view:ScriptBox>
 
-                                        <view:ScriptBox
-                                            Margin="2"
-                                            Height="120"
-                                            AcceptsReturn="True"
-                                            Text="{Binding SelectedEvent.Description, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter description ...">
-                                            <view:ScriptBox.TextFormatter>
-                                                <formatters:EventTextFormatter />
-                                            </view:ScriptBox.TextFormatter>
-                                        </view:ScriptBox>
+                                            <view:ScriptBox
+                                                Height="120"
+                                                Margin="4"
+                                                Style="{DynamicResource MaterialDesignRichTextBox}"
+                                                Text="{Binding SelectedEvent.Description, Mode=TwoWay}"
+                                                AcceptsReturn="True">
+                                                <view:ScriptBox.TextFormatter>
+                                                    <formatters:EventTextFormatter />
+                                                </view:ScriptBox.TextFormatter>
+                                            </view:ScriptBox>
 
-                                        <Grid
-                                            Margin="2">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition
+                                                        Height="auto" />
+                                                    <RowDefinition
+                                                        Height="auto" />
+                                                    <RowDefinition
+                                                        Height="auto" />
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition
+                                                        Width="*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBox
+                                                    Grid.Row="0"
+                                                    Grid.Column="0"
+                                                    Margin="4"
+                                                    Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                    Text="{Binding SelectedEvent.Theme, Mode=TwoWay}"
+                                                    materialDesign:HintAssist.Hint="Theme" />
+
+                                                <TextBox
+                                                    Grid.Row="1"
+                                                    Grid.Column="0"
+                                                    Margin="4"
+                                                    Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                    Text="{Binding SelectedEvent.Background, Mode=TwoWay}"
+                                                    materialDesign:HintAssist.Hint="Background" />
+
+                                                <TextBox
+                                                    Grid.Row="2"
+                                                    Grid.Column="0"
+                                                    Margin="4"
+                                                    Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                    Text="{Binding SelectedEvent.Sound, Mode=TwoWay}"
+                                                    materialDesign:HintAssist.Hint="Background" />
+                                            </Grid>
+                                        </StackPanel>
+                                    </Expander>
+                                    <!--#endregion-->
+                                    <!--#region Main Portraits Section -->
+                                    <Expander
+                                        Header="Main Portraits"
+                                        IsExpanded="True">
+                                        <Grid>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition
-                                                    Height="auto" />
                                                 <RowDefinition
                                                     Height="auto" />
                                                 <RowDefinition
@@ -350,8 +341,10 @@
                                             </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition
-                                                    Width="80"
-                                                    MinWidth="80" />
+                                                    Width="*"
+                                                    MinWidth="100" />
+                                                <ColumnDefinition
+                                                    Width="4" />
                                                 <ColumnDefinition
                                                     Width="*"
                                                     MinWidth="100" />
@@ -360,666 +353,287 @@
                                             <TextBlock
                                                 Grid.Row="0"
                                                 Grid.Column="0"
-                                                Margin="2"
+                                                Grid.ColumnSpan="2"
+                                                Margin="4,8,4,8"
                                                 VerticalAlignment="Center"
-                                                Text="Theme" />
+                                                FontStyle="Italic"
+                                                TextAlignment="Center"
+                                                Text="Left Portrait" />
+
                                             <TextBox
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Margin="4"
+                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                Text="{Binding SelectedEvent.LeftPortrait.Character, Mode=TwoWay}"
+                                                materialDesign:HintAssist.Hint="Character" />
+                                            <TextBox
+                                                Grid.Row="2"
+                                                Grid.Column="0"
+                                                Margin="4"
+                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                Text="{Binding SelectedEvent.LeftPortrait.Animation, Mode=TwoWay}"
+                                                materialDesign:HintAssist.Hint="Animation" />
+                                            <TextBox
+                                                Grid.Row="3"
+                                                Grid.Column="0"
+                                                Margin="4"
+                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                Text="{Binding SelectedEvent.LeftPortrait.OutfitTags, Mode=TwoWay}"
+                                                materialDesign:HintAssist.Hint="OutfitTags" />
+
+                                            <TextBlock
                                                 Grid.Row="0"
-                                                Grid.Column="1"
-                                                Margin="2"
-                                                Text="{Binding SelectedEvent.Theme, Mode=TwoWay}" />
-
-                                            <TextBlock
-                                                Grid.Row="1"
-                                                Grid.Column="0"
-                                                Margin="2"
+                                                Grid.Column="2"
+                                                Grid.ColumnSpan="2"
+                                                Margin="4,8,4,8"
                                                 VerticalAlignment="Center"
-                                                Text="Background" />
+                                                FontStyle="Italic"
+                                                TextAlignment="Center"
+                                                Text="Right Portrait" />
+
                                             <TextBox
                                                 Grid.Row="1"
-                                                Grid.Column="1"
-                                                Margin="2"
-                                                Text="{Binding SelectedEvent.Background, Mode=TwoWay}" />
-
-                                            <TextBlock
-                                                Grid.Row="2"
-                                                Grid.Column="0"
-                                                Margin="2"
-                                                VerticalAlignment="Center"
-                                                Text="Sound" />
+                                                Grid.Column="2"
+                                                Margin="4"
+                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                Text="{Binding SelectedEvent.RightPortrait.Character, Mode=TwoWay}"
+                                                materialDesign:HintAssist.Hint="Character" />
                                             <TextBox
                                                 Grid.Row="2"
-                                                Grid.Column="1"
-                                                Margin="2"
-                                                Text="{Binding SelectedEvent.Sound, Mode=TwoWay}" />
+                                                Grid.Column="2"
+                                                Margin="4"
+                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                Text="{Binding SelectedEvent.RightPortrait.Animation, Mode=TwoWay}"
+                                                materialDesign:HintAssist.Hint="Animation" />
+                                            <TextBox
+                                                Grid.Row="3"
+                                                Grid.Column="2"
+                                                Margin="4"
+                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                Text="{Binding SelectedEvent.RightPortrait.OutfitTags, Mode=TwoWay}"
+                                                materialDesign:HintAssist.Hint="OutfitTags" />
                                         </Grid>
-                                    </StackPanel>
-                                </Expander>
-                                <!--#endregion-->
-                                <!--#region Main Portraits Section -->
-                                <Expander
-                                    Header="Main Portraits"
-                                    IsExpanded="True">
-                                    <Grid
-                                        Margin="2">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition
-                                                Height="auto" />
-                                            <RowDefinition
-                                                Height="auto" />
-                                            <RowDefinition
-                                                Height="auto" />
-                                            <RowDefinition
-                                                Height="auto" />
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition
-                                                Width="*"
-                                                MinWidth="100" />
-                                            <ColumnDefinition
-                                                Width="4" />
-                                            <ColumnDefinition
-                                                Width="*"
-                                                MinWidth="100" />
-                                        </Grid.ColumnDefinitions>
+                                    </Expander>
+                                    <!--#endregion-->
+                                    <!--#region Lower Portraits Section -->
+                                    <Expander
+                                        Header="Lower Portraits"
+                                        IsExpanded="False">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition
+                                                    Height="auto" />
+                                                <RowDefinition
+                                                    Height="auto" />
+                                                <RowDefinition
+                                                    Height="auto" />
+                                                <RowDefinition
+                                                    Height="auto" />
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition
+                                                    Width="*"
+                                                    MinWidth="100" />
+                                                <ColumnDefinition
+                                                    Width="4" />
+                                                <ColumnDefinition
+                                                    Width="*"
+                                                    MinWidth="100" />
+                                                <ColumnDefinition
+                                                    Width="4" />
+                                                <ColumnDefinition
+                                                    Width="*"
+                                                    MinWidth="100" />
+                                            </Grid.ColumnDefinitions>
 
-                                        <TextBlock
-                                            Grid.Row="0"
-                                            Grid.Column="0"
-                                            Grid.ColumnSpan="2"
-                                            Margin="2"
-                                            VerticalAlignment="Center"
-                                            Foreground="{DynamicResource MahApps.Brushes.Gray2}"
-                                            FontStyle="Italic"
-                                            TextAlignment="Center"
-                                            Text="Left Portrait" />
+                                            <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Grid.ColumnSpan="2"
+                                                Margin="4,8,4,8"
+                                                VerticalAlignment="Center"
+                                                FontStyle="Italic"
+                                                TextAlignment="Center"
+                                                Text="Lower Left Portrait" />
 
-                                        <TextBox
-                                            Grid.Row="1"
-                                            Grid.Column="0"
-                                            Margin="2"
-                                            Text="{Binding SelectedEvent.LeftPortrait.Character, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter character scope ..." />
-                                        <TextBox
-                                            Grid.Row="2"
-                                            Grid.Column="0"
-                                            Margin="2"
-                                            Text="{Binding SelectedEvent.LeftPortrait.Animation, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter animation ..." />
-                                        <TextBox
-                                            Grid.Row="3"
-                                            Grid.Column="0"
-                                            Margin="2"
-                                            Text="{Binding SelectedEvent.LeftPortrait.OutfitTags, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter outfit tags ..." />
+                                            <TextBox
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                Text="{Binding SelectedEvent.LowerLeftPortrait.Character, Mode=TwoWay}"
+                                                materialDesign:HintAssist.Hint="Character" />
+                                            <TextBox
+                                                Grid.Row="2"
+                                                Grid.Column="0"
+                                                Margin="4"
+                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                Text="{Binding SelectedEvent.LowerLeftPortrait.Animation, Mode=TwoWay}"
+                                                materialDesign:HintAssist.Hint="Animation" />
+                                            <TextBox
+                                                Grid.Row="3"
+                                                Grid.Column="0"
+                                                Margin="4"
+                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                Text="{Binding SelectedEvent.LowerLeftPortrait.OutfitTags, Mode=TwoWay}"
+                                                materialDesign:HintAssist.Hint="OutfitTags" />
 
-                                        <TextBlock
-                                            Grid.Row="0"
-                                            Grid.Column="2"
-                                            Grid.ColumnSpan="2"
-                                            Margin="2"
-                                            VerticalAlignment="Center"
-                                            Foreground="{DynamicResource MahApps.Brushes.Gray2}"
-                                            FontStyle="Italic"
-                                            TextAlignment="Center"
-                                            Text="Right Portrait" />
+                                            <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="2"
+                                                Grid.ColumnSpan="2"
+                                                Margin="4,8,4,8"
+                                                VerticalAlignment="Center"
+                                                FontStyle="Italic"
+                                                TextAlignment="Center"
+                                                Text="Lower Center Portrait" />
 
-                                        <TextBox
-                                            Grid.Row="1"
-                                            Grid.Column="2"
-                                            Margin="2"
-                                            Text="{Binding SelectedEvent.RightPortrait.Character, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter character scope ..." />
-                                        <TextBox
-                                            Grid.Row="2"
-                                            Grid.Column="2"
-                                            Margin="2"
-                                            Text="{Binding SelectedEvent.RightPortrait.Animation, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter animation ..." />
-                                        <TextBox
-                                            Grid.Row="3"
-                                            Grid.Column="2"
-                                            Margin="2"
-                                            Text="{Binding SelectedEvent.RightPortrait.OutfitTags, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter outfit tags ..." />
-                                    </Grid>
-                                </Expander>
-                                <!--#endregion-->
-                                <!--#region Lower Portraits Section -->
-                                <Expander
-                                    Header="Lower Portraits"
-                                    IsExpanded="False">
-                                    <Grid
-                                        Margin="2">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition
-                                                Height="auto" />
-                                            <RowDefinition
-                                                Height="auto" />
-                                            <RowDefinition
-                                                Height="auto" />
-                                            <RowDefinition
-                                                Height="auto" />
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition
-                                                Width="*"
-                                                MinWidth="100" />
-                                            <ColumnDefinition
-                                                Width="4" />
-                                            <ColumnDefinition
-                                                Width="*"
-                                                MinWidth="100" />
-                                            <ColumnDefinition
-                                                Width="4" />
-                                            <ColumnDefinition
-                                                Width="*"
-                                                MinWidth="100" />
-                                        </Grid.ColumnDefinitions>
+                                            <TextBox
+                                                Grid.Row="1"
+                                                Grid.Column="2"
+                                                Margin="4"
+                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                Text="{Binding SelectedEvent.LowerCenterPortrait.Character, Mode=TwoWay}"
+                                                materialDesign:HintAssist.Hint="Character" />
+                                            <TextBox
+                                                Grid.Row="2"
+                                                Grid.Column="2"
+                                                Margin="4"
+                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                Text="{Binding SelectedEvent.LowerCenterPortrait.Animation, Mode=TwoWay}"
+                                                materialDesign:HintAssist.Hint="Character" />
+                                            <TextBox
+                                                Grid.Row="3"
+                                                Grid.Column="2"
+                                                Margin="4"
+                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                Text="{Binding SelectedEvent.LowerCenterPortrait.OutfitTags, Mode=TwoWay}"
+                                                materialDesign:HintAssist.Hint="Character" />
 
-                                        <TextBlock
-                                            Grid.Row="0"
-                                            Grid.Column="0"
-                                            Grid.ColumnSpan="2"
-                                            Margin="2"
-                                            VerticalAlignment="Center"
-                                            Foreground="{DynamicResource MahApps.Brushes.Gray2}"
-                                            FontStyle="Italic"
-                                            TextAlignment="Center"
-                                            Text="Lower Left Portrait" />
+                                            <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="4"
+                                                Grid.ColumnSpan="2"
+                                                Margin="4,8,4,8"
+                                                VerticalAlignment="Center"
+                                                FontStyle="Italic"
+                                                TextAlignment="Center"
+                                                Text="Lower Right Portrait" />
 
-                                        <TextBox
-                                            Grid.Row="1"
-                                            Grid.Column="0"
-                                            Margin="2"
-                                            Text="{Binding SelectedEvent.LowerLeftPortrait.Character, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter character scope ..." />
-                                        <TextBox
-                                            Grid.Row="2"
-                                            Grid.Column="0"
-                                            Margin="2"
-                                            Text="{Binding SelectedEvent.LowerLeftPortrait.Animation, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter animation ..." />
-                                        <TextBox
-                                            Grid.Row="3"
-                                            Grid.Column="0"
-                                            Margin="2"
-                                            Text="{Binding SelectedEvent.LowerLeftPortrait.OutfitTags, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter outfit tags ..." />
+                                            <TextBox
+                                                Grid.Row="1"
+                                                Grid.Column="4"
+                                                Margin="4"
+                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                Text="{Binding SelectedEvent.LowerRightPortrait.Character, Mode=TwoWay}"
+                                                materialDesign:HintAssist.Hint="Character" />
+                                            <TextBox
+                                                Grid.Row="2"
+                                                Grid.Column="4"
+                                                Margin="4"
+                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                Text="{Binding SelectedEvent.LowerRightPortrait.Animation, Mode=TwoWay}"
+                                                materialDesign:HintAssist.Hint="Character" />
+                                            <TextBox
+                                                Grid.Row="3"
+                                                Grid.Column="4"
+                                                Margin="4"
+                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                Text="{Binding SelectedEvent.LowerRightPortrait.OutfitTags, Mode=TwoWay}"
+                                                materialDesign:HintAssist.Hint="Character" />
+                                        </Grid>
+                                    </Expander>
+                                    <!--#endregion-->
+                                    <!--#region Options Section -->
+                                    <Expander
+                                        Header="Options"
+                                        IsExpanded="True">
+                                        <ScrollViewer>
+                                            <ItemsControl
+                                                ItemsSource="{Binding SelectedEvent.Options}">
 
-                                        <TextBlock
-                                            Grid.Row="0"
-                                            Grid.Column="2"
-                                            Grid.ColumnSpan="2"
-                                            Margin="2"
-                                            VerticalAlignment="Center"
-                                            Foreground="{DynamicResource MahApps.Brushes.Gray2}"
-                                            FontStyle="Italic"
-                                            TextAlignment="Center"
-                                            Text="Lower Center Portrait" />
-
-                                        <TextBox
-                                            Grid.Row="1"
-                                            Grid.Column="2"
-                                            Margin="2"
-                                            Text="{Binding SelectedEvent.LowerCenterPortrait.Character, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter character scope ..." />
-                                        <TextBox
-                                            Grid.Row="2"
-                                            Grid.Column="2"
-                                            Margin="2"
-                                            Text="{Binding SelectedEvent.LowerCenterPortrait.Animation, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter animation ..." />
-                                        <TextBox
-                                            Grid.Row="3"
-                                            Grid.Column="2"
-                                            Margin="2"
-                                            Text="{Binding SelectedEvent.LowerCenterPortrait.OutfitTags, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter outfit tags ..." />
-
-                                        <TextBlock
-                                            Grid.Row="0"
-                                            Grid.Column="4"
-                                            Grid.ColumnSpan="2"
-                                            Margin="2"
-                                            VerticalAlignment="Center"
-                                            Foreground="{DynamicResource MahApps.Brushes.Gray2}"
-                                            FontStyle="Italic"
-                                            TextAlignment="Center"
-                                            Text="Lower Right Portrait" />
-
-                                        <TextBox
-                                            Grid.Row="1"
-                                            Grid.Column="4"
-                                            Margin="2"
-                                            Text="{Binding SelectedEvent.LowerRightPortrait.Character, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter character scope ..." />
-                                        <TextBox
-                                            Grid.Row="2"
-                                            Grid.Column="4"
-                                            Margin="2"
-                                            Text="{Binding SelectedEvent.LowerRightPortrait.Animation, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter animation ..." />
-                                        <TextBox
-                                            Grid.Row="3"
-                                            Grid.Column="4"
-                                            Margin="2"
-                                            Text="{Binding SelectedEvent.LowerRightPortrait.OutfitTags, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter outfit tags ..." />
-                                    </Grid>
-                                </Expander>
-                                <!--#endregion-->
-                                <!--#region Options Section -->
-                                <Expander
-                                    Header="Options"
-                                    IsExpanded="True">
-                                    <ScrollViewer>
-                                        <ItemsControl
-                                            ItemsSource="{Binding SelectedEvent.Options}">
-
-                                        </ItemsControl>
-                                    </ScrollViewer>
-                                </Expander>
-                                <!--#endregion-->
-                                <!--#region Triggers Section -->
-                                <Expander
-                                    Header="Triggers"
-                                    IsExpanded="False">
-                                    <Grid
-                                        Margin="2">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition
-                                                Height="auto" />
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition
-                                                Width="*"
-                                                MinWidth="100" />
-                                            <ColumnDefinition
-                                                Width="*"
-                                                MinWidth="100" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <!-- TODO: trigger list -->
-                                        <ListView
-                                            Grid.Row="0"
-                                            Grid.Column="0"
-                                            Margin="2"
-                                            ToolTip="Trigger List"
-                                            ItemsSource="{Binding SelectedEvent.AfterEffects}" />
-
-                                        <view:ScriptBox
-                                            Grid.Row="0"
-                                            Grid.Column="1"
-                                            Height="120"
-                                            Margin="2"
-                                            AcceptsReturn="True"
-                                            Text="{Binding SelectedEvent.Trigger, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter custom trigger ...">
-                                            <view:ScriptBox.TextFormatter>
-                                                <xctk:PlainTextFormatter />
-                                            </view:ScriptBox.TextFormatter>
-                                        </view:ScriptBox>
-                                    </Grid>
-                                </Expander>
-                                <!--#endregion-->
-                                <!--#region Immediate Effects Section -->
-                                <Expander
-                                    Header="Immediate Effects"
-                                    IsExpanded="False">
-                                    <Grid
-                                        Margin="2">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition
-                                                Height="auto" />
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition
-                                                Width="*"
-                                                MinWidth="100" />
-                                            <ColumnDefinition
-                                                Width="*"
-                                                MinWidth="100" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <!-- TODO: effects list -->
-                                        <ListView
-                                            Grid.Row="0"
-                                            Grid.Column="0"
-                                            Margin="2"
-                                            ToolTip="Immediate Effects List"
-                                            ItemsSource="{Binding SelectedEvent.ImmediateEffects}" />
-
-                                        <view:ScriptBox
-                                            Grid.Row="0"
-                                            Grid.Column="1"
-                                            Height="120"
-                                            Margin="2"
-                                            AcceptsReturn="True"
-                                            Text="{Binding SelectedEvent.ImmediateEffect, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter custom immediate effect ...">
-                                            <view:ScriptBox.TextFormatter>
-                                                <xctk:PlainTextFormatter />
-                                            </view:ScriptBox.TextFormatter>
-                                        </view:ScriptBox>
-                                    </Grid>
-                                </Expander>
-                                <!--#endregion-->
-                                <!--#region After Effects Section -->
-                                <Expander
-                                    Header="After Effects"
-                                    IsExpanded="False">
-                                    <Grid
-                                        Margin="2">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition
-                                                Height="auto" />
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition
-                                                Width="*"
-                                                MinWidth="100" />
-                                            <ColumnDefinition
-                                                Width="*"
-                                                MinWidth="100" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <!-- TODO: effects list -->
-                                        <ListView
-                                            Grid.Row="0"
-                                            Grid.Column="0"
-                                            Margin="2"
-                                            ToolTip="After Effects List"
-                                            ItemsSource="{Binding SelectedEvent.AfterEffects}" />
-
-                                        <view:ScriptBox
-                                            Grid.Row="0"
-                                            Grid.Column="1"
-                                            Height="120"
-                                            Margin="2"
-                                            AcceptsReturn="True"
-                                            Text="{Binding SelectedEvent.AfterEffect, Mode=TwoWay}"
-                                            mah:TextBoxHelper.Watermark="Enter custom after effect ...">
-                                            <view:ScriptBox.TextFormatter>
-                                                <xctk:PlainTextFormatter />
-                                            </view:ScriptBox.TextFormatter>
-                                        </view:ScriptBox>
-                                    </Grid>
-                                </Expander>
-                                <!--#endregion-->
-                            </StackPanel>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </Expander>
+                                    <!--#endregion-->
+                                    <!--#region Triggers Section -->
+                                    <Expander
+                                        Header="Triggers"
+                                        IsExpanded="False">
+                                        <Grid>
+                                        </Grid>
+                                    </Expander>
+                                    <!--#endregion-->
+                                    <!--#region Immediate Effects Section -->
+                                    <Expander
+                                        Header="Immediate Effects"
+                                        IsExpanded="False">
+                                        <Grid>
+                                        </Grid>
+                                    </Expander>
+                                    <!--#endregion-->
+                                    <!--#region After Effects Section -->
+                                    <Expander
+                                        Header="After Effects"
+                                        IsExpanded="False">
+                                        <Grid>
+                                        </Grid>
+                                    </Expander>
+                                    <!--#endregion-->
+                                </StackPanel>
+                            </materialDesign:Card>
                         </ScrollViewer>
                         <!--#endregion-->
-                    </Grid>
-                </Border>
-            </TabItem>
-            <!--#endregion-->
-            <!--#region Triggers Tab -->
-            <TabItem
-                x:Name="TriggersTab"
-                Header="Triggers">
-                <Border
-                    BorderThickness="1"
-                    BorderBrush="{DynamicResource MahApps.Brushes.Gray}">
-                    <Grid
-                        x:Name="TriggersLayout"
-                        Margin="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
-                                Width="250"
-                                MinWidth="200"
-                                MaxWidth="500" />
-                            <ColumnDefinition
-                                Width="auto" />
-                            <ColumnDefinition
-                                Width="*"
-                                MinWidth="400" />
-                        </Grid.ColumnDefinitions>
-
-                        <!--#region Trigger Explorer -->
-                        <DockPanel
-                            x:Name="TriggerExplorer"
-                            Grid.Column="0"
-                            Margin="2">
-                            <Grid
-                                x:Name="TriggerExplorerToolbar"
-                                DockPanel.Dock="Top">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition
-                                        Width="auto" />
-                                    <ColumnDefinition
-                                        Width="auto" />
-                                    <ColumnDefinition
-                                        Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <Button
-                                    x:Name="AddTriggerButton"
-                                    Grid.Column="0"
-                                    Margin="2"
-                                    VerticalAlignment="Center"
-                                    Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
-                                    Command="{Binding AddTriggerCommand}">
-                                    <iconPacks:PackIconModern
-                                        Kind="ListCreate" />
-                                </Button>
-                                <Button
-                                    x:Name="RemoveTriggerButton"
-                                    Grid.Column="1"
-                                    Margin="2"
-                                    VerticalAlignment="Center"
-                                    Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
-                                    Command="{Binding RemoveTriggerCommand}">
-                                    <iconPacks:PackIconModern
-                                        Kind="ListDelete" />
-                                </Button>
-                                <TextBox
-                                    x:Name="TriggerExplorerFilter"
-                                    Grid.Column="2"
-                                    Margin="2"
-                                    VerticalAlignment="Stretch"
-                                    VerticalContentAlignment="Center"
-                                    TextChanged="TriggerExplorerFilterTextChanged"
-                                    mah:TextBoxHelper.Watermark="Search triggers ..."
-                                    mah:TextBoxHelper.ClearTextButton="True" />
-                            </Grid>
-                            <DataGrid
-                                x:Name="TriggerExplorerDataGrid"
-                                Margin="2"
-                                BorderThickness="1"
-                                BorderBrush="{DynamicResource MahApps.Brushes.Gray}"
-                                ItemsSource="{Binding Source={StaticResource ActiveModTriggers}}"
-                                SelectedItem="{Binding SelectedTrigger}"
-                                IsReadOnly="True"
-                                CanUserReorderColumns="False"
-                                CanUserResizeColumns="False"
-                                CanUserResizeRows="False"
-                                CanUserAddRows="False"
-                                CanUserDeleteRows="False"
-                                AutoGenerateColumns="False">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn
-                                        Header="Name"
-                                        Width="*"
-                                        Binding="{Binding Name}" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </DockPanel>
-                        <!--#endregion-->
-
-                        <GridSplitter
-                            Grid.Column="1"
-                            Background="Transparent"
-                            Width="4" />
-
-                        <!--#region Trigger Form -->
-                        <Grid
-                            Grid.Column="2"
-                            Margin="2">
-                            <Grid.RowDefinitions>
-                                <RowDefinition
-                                    Height="auto" />
-                                <RowDefinition
-                                    Height="*" />
-                            </Grid.RowDefinitions>
-
-                            <TextBox
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                Margin="2"
-                                Text="{Binding SelectedTrigger.Name, Mode=TwoWay}"
-                                mah:TextBoxHelper.Watermark="Enter trigger name ..." />
-
-                            <view:ScriptBox
-                                Grid.Row="1"
-                                Grid.Column="0"
-                                Margin="2"
-                                AcceptsReturn="True"
-                                Text="{Binding SelectedTrigger.Code, Mode=TwoWay}"
-                                mah:TextBoxHelper.Watermark="Enter trigger code ...">
-                                <view:ScriptBox.TextFormatter>
-                                    <xctk:PlainTextFormatter />
-                                </view:ScriptBox.TextFormatter>
-                            </view:ScriptBox>
-                        </Grid>
-                        <!--#endregion-->
-                    </Grid>
-                </Border>
-            </TabItem>
-            <!--#endregion-->
-            <!--#region Effects Tab -->
-            <TabItem
-                x:Name="EffectsTab"
-                Header="Effects">
-                <Border
-                    BorderThickness="1"
-                    BorderBrush="{DynamicResource MahApps.Brushes.Gray}">
-                    <Grid
-                        x:Name="EffectsLayout"
-                        Margin="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
-                                Width="250"
-                                MinWidth="200"
-                                MaxWidth="500" />
-                            <ColumnDefinition
-                                Width="auto" />
-                            <ColumnDefinition
-                                Width="*"
-                                MinWidth="400" />
-                        </Grid.ColumnDefinitions>
-
-                        <!--#region Effect Explorer -->
-                        <DockPanel
-                            x:Name="EffectExplorer"
-                            Grid.Column="0"
-                            Margin="2">
-                            <Grid
-                                x:Name="EffectExplorerToolbar"
-                                DockPanel.Dock="Top">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition
-                                        Width="auto" />
-                                    <ColumnDefinition
-                                        Width="auto" />
-                                    <ColumnDefinition
-                                        Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <Button
-                                    x:Name="AddEffectButton"
-                                    Grid.Column="0"
-                                    Margin="2"
-                                    VerticalAlignment="Center"
-                                    Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
-                                    Command="{Binding AddEffectCommand}">
-                                    <iconPacks:PackIconModern
-                                        Kind="ListCreate" />
-                                </Button>
-                                <Button
-                                    x:Name="RemoveEffectButton"
-                                    Grid.Column="1"
-                                    Margin="2"
-                                    VerticalAlignment="Center"
-                                    Style="{DynamicResource MahApps.Styles.Button.ToolBar}"
-                                    Command="{Binding RemoveEffectCommand}">
-                                    <iconPacks:PackIconModern
-                                        Kind="ListDelete" />
-                                </Button>
-                                <TextBox
-                                    x:Name="EffectExplorerFilter"
-                                    Grid.Column="2"
-                                    Margin="2"
-                                    VerticalAlignment="Stretch"
-                                    VerticalContentAlignment="Center"
-                                    TextChanged="EffectExplorerFilterTextChanged"
-                                    mah:TextBoxHelper.Watermark="Search effects ..."
-                                    mah:TextBoxHelper.ClearTextButton="True" />
-                            </Grid>
-                            <DataGrid
-                                x:Name="EffectExplorerDataGrid"
-                                Margin="2"
-                                BorderThickness="1"
-                                BorderBrush="{DynamicResource MahApps.Brushes.Gray}"
-                                ItemsSource="{Binding Source={StaticResource ActiveModEffects}}"
-                                SelectedItem="{Binding SelectedEffect}"
-                                IsReadOnly="True"
-                                CanUserReorderColumns="False"
-                                CanUserResizeColumns="False"
-                                CanUserResizeRows="False"
-                                CanUserAddRows="False"
-                                CanUserDeleteRows="False"
-                                AutoGenerateColumns="False">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn
-                                        Header="Name"
-                                        Width="*"
-                                        Binding="{Binding Name}" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </DockPanel>
-                        <!--#endregion-->
-
-                        <GridSplitter
-                            Grid.Column="1"
-                            Background="Transparent"
-                            Width="4" />
-
-                        <!--#region Effect Form -->
-                        <Grid
-                            Grid.Column="2"
-                            Margin="2">
-                            <Grid.RowDefinitions>
-                                <RowDefinition
-                                    Height="auto" />
-                                <RowDefinition
-                                    Height="*" />
-                            </Grid.RowDefinitions>
-
-                            <TextBox
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                Margin="2"
-                                Text="{Binding SelectedEffect.Name, Mode=TwoWay}"
-                                mah:TextBoxHelper.Watermark="Enter effect name ..." />
-
-                            <view:ScriptBox
-                                Grid.Row="1"
-                                Grid.Column="0"
-                                Margin="2"
-                                AcceptsReturn="True"
-                                Text="{Binding SelectedEffect.Code, Mode=TwoWay}"
-                                mah:TextBoxHelper.Watermark="Enter effect code ...">
-                                <view:ScriptBox.TextFormatter>
-                                    <xctk:PlainTextFormatter />
-                                </view:ScriptBox.TextFormatter>
-                            </view:ScriptBox>
-                        </Grid>
-                        <!--#endregion-->
-                    </Grid>
-                </Border>
-            </TabItem>
-            <!--#endregion-->
-        </TabControl>
-    </DockPanel>
-</mah:MetroWindow>
+                    </DockPanel>
+                </TabItem>
+                <!--#endregion-->
+                <!--#region Triggers Tab -->
+                <TabItem
+                    Margin="4">
+                    <TabItem.Header>
+                        <StackPanel
+                            Width="auto"
+                            Height="auto">
+                            <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                Kind="ArrowDecision" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                Text="Triggers" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <ScrollViewer
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Disabled">
+                    </ScrollViewer>
+                </TabItem>
+                <!--#endregion-->
+                <!--#region Effects Tab -->
+                <TabItem
+                    Margin="4">
+                    <TabItem.Header>
+                        <StackPanel
+                            Width="auto"
+                            Height="auto">
+                            <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                Kind="Run" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                Text="Effects" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <ScrollViewer
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Disabled">
+                    </ScrollViewer>
+                </TabItem>
+                <!--#endregion-->
+            </TabControl>
+        </DockPanel>
+    </materialDesign:DialogHost>
+</Window>
