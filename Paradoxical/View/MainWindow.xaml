@@ -258,31 +258,41 @@
                             HorizontalScrollBarVisibility="Disabled">
                             <materialDesign:Card>
                                 <StackPanel>
+                                    <view:ScriptBox
+                                        Margin="4,24,4,24"
+                                        Style="{DynamicResource MaterialDesignRichTextBox}"
+                                        Text="{Binding SelectedEvent.Title, Mode=TwoWay}"
+                                        materialDesign:HintAssist.Hint="Title"
+                                        materialDesign:HintAssist.IsFloating="True"
+                                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+                                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                                        <view:ScriptBox.TextFormatter>
+                                            <formatters:EventTextFormatter />
+                                        </view:ScriptBox.TextFormatter>
+                                    </view:ScriptBox>
+
+                                    <view:ScriptBox
+                                        Height="120"
+                                        Margin="4,24,4,24"
+                                        Style="{DynamicResource MaterialDesignRichTextBox}"
+                                        Text="{Binding SelectedEvent.Description, Mode=TwoWay}"
+                                        materialDesign:HintAssist.Hint="Description"
+                                        materialDesign:HintAssist.IsFloating="True"
+                                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+                                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
+                                        AcceptsReturn="True">
+                                        <view:ScriptBox.TextFormatter>
+                                            <formatters:EventTextFormatter />
+                                        </view:ScriptBox.TextFormatter>
+                                    </view:ScriptBox>
+
                                     <!--#region Display Section -->
                                     <Expander
                                         Header="Display"
                                         IsExpanded="True">
                                         <StackPanel>
-                                            <view:ScriptBox
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignRichTextBox}"
-                                                Text="{Binding SelectedEvent.Title, Mode=TwoWay}">
-                                                <view:ScriptBox.TextFormatter>
-                                                    <formatters:EventTextFormatter />
-                                                </view:ScriptBox.TextFormatter>
-                                            </view:ScriptBox>
-
-                                            <view:ScriptBox
-                                                Height="120"
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignRichTextBox}"
-                                                Text="{Binding SelectedEvent.Description, Mode=TwoWay}"
-                                                AcceptsReturn="True">
-                                                <view:ScriptBox.TextFormatter>
-                                                    <formatters:EventTextFormatter />
-                                                </view:ScriptBox.TextFormatter>
-                                            </view:ScriptBox>
-
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition
@@ -356,8 +366,8 @@
                                                 Grid.ColumnSpan="2"
                                                 Margin="4,8,4,8"
                                                 VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
                                                 FontStyle="Italic"
-                                                TextAlignment="Center"
                                                 Text="Left Portrait" />
 
                                             <TextBox
@@ -380,7 +390,7 @@
                                                 Margin="4"
                                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                                 Text="{Binding SelectedEvent.LeftPortrait.OutfitTags, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="OutfitTags" />
+                                                materialDesign:HintAssist.Hint="Outfit Tags" />
 
                                             <TextBlock
                                                 Grid.Row="0"
@@ -388,8 +398,8 @@
                                                 Grid.ColumnSpan="2"
                                                 Margin="4,8,4,8"
                                                 VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
                                                 FontStyle="Italic"
-                                                TextAlignment="Center"
                                                 Text="Right Portrait" />
 
                                             <TextBox
@@ -412,7 +422,7 @@
                                                 Margin="4"
                                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                                 Text="{Binding SelectedEvent.RightPortrait.OutfitTags, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="OutfitTags" />
+                                                materialDesign:HintAssist.Hint="Outfit Tags" />
                                         </Grid>
                                     </Expander>
                                     <!--#endregion-->
@@ -453,13 +463,14 @@
                                                 Grid.ColumnSpan="2"
                                                 Margin="4,8,4,8"
                                                 VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
                                                 FontStyle="Italic"
-                                                TextAlignment="Center"
                                                 Text="Lower Left Portrait" />
 
                                             <TextBox
                                                 Grid.Row="1"
                                                 Grid.Column="0"
+                                                Margin="4"
                                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                                 Text="{Binding SelectedEvent.LowerLeftPortrait.Character, Mode=TwoWay}"
                                                 materialDesign:HintAssist.Hint="Character" />
@@ -476,7 +487,7 @@
                                                 Margin="4"
                                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                                 Text="{Binding SelectedEvent.LowerLeftPortrait.OutfitTags, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="OutfitTags" />
+                                                materialDesign:HintAssist.Hint="Outfit Tags" />
 
                                             <TextBlock
                                                 Grid.Row="0"
@@ -484,8 +495,8 @@
                                                 Grid.ColumnSpan="2"
                                                 Margin="4,8,4,8"
                                                 VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
                                                 FontStyle="Italic"
-                                                TextAlignment="Center"
                                                 Text="Lower Center Portrait" />
 
                                             <TextBox
@@ -501,14 +512,14 @@
                                                 Margin="4"
                                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                                 Text="{Binding SelectedEvent.LowerCenterPortrait.Animation, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Character" />
+                                                materialDesign:HintAssist.Hint="Animation" />
                                             <TextBox
                                                 Grid.Row="3"
                                                 Grid.Column="2"
                                                 Margin="4"
                                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                                 Text="{Binding SelectedEvent.LowerCenterPortrait.OutfitTags, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Character" />
+                                                materialDesign:HintAssist.Hint="Outfit Tags" />
 
                                             <TextBlock
                                                 Grid.Row="0"
@@ -516,8 +527,8 @@
                                                 Grid.ColumnSpan="2"
                                                 Margin="4,8,4,8"
                                                 VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
                                                 FontStyle="Italic"
-                                                TextAlignment="Center"
                                                 Text="Lower Right Portrait" />
 
                                             <TextBox
@@ -533,14 +544,14 @@
                                                 Margin="4"
                                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                                 Text="{Binding SelectedEvent.LowerRightPortrait.Animation, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Character" />
+                                                materialDesign:HintAssist.Hint="Animation" />
                                             <TextBox
                                                 Grid.Row="3"
                                                 Grid.Column="4"
                                                 Margin="4"
                                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                                 Text="{Binding SelectedEvent.LowerRightPortrait.OutfitTags, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Character" />
+                                                materialDesign:HintAssist.Hint="Outfit Tags" />
                                         </Grid>
                                     </Expander>
                                     <!--#endregion-->
