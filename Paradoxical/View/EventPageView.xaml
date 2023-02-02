@@ -15,6 +15,7 @@
     d:DesignHeight="450"
     d:DesignWidth="800">
     <DockPanel>
+        
         <materialDesign:Card
             DockPanel.Dock="Top"
             Margin="20,10"
@@ -69,6 +70,7 @@
                                 Style="{DynamicResource MaterialDesignRichTextBox}"
                                 Text="{Binding SelectedEvent.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 IsEnabled="{Binding IsEventSelected}"
+                                AcceptsReturn="False"
                                 materialDesign:HintAssist.Hint="Title"
                                 materialDesign:HintAssist.IsFloating="True"
                                 materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
@@ -705,5 +707,6 @@
                 </StackPanel>
             </ScrollViewer>
         </materialDesign:Card>
+   
     </DockPanel>
 </UserControl>

@@ -120,31 +120,15 @@ namespace Paradoxical.ViewModel
             if (SelectedEvent == null)
             { return; }
 
-            for (int i = SelectedEvent.Id - 1; i > 0; i--)
-            {
-                ParadoxEvent? evt = ActiveMod.Events.SingleOrDefault(evt => evt.Id == i);
-                if (evt != null)
-                {
-                    SelectedEvent = evt;
-                    return;
-                }
-            }
+            int index = ActiveMod.Events.IndexOf(SelectedEvent);
+            SelectedEvent = ActiveMod.Events[index - 1];
         }
         private bool CanPreviousEvent()
         {
-            if (ActiveMod == null)
-            { return false; }
-
-            if (SelectedEvent == null)
-            { return false; }
-
-            for (int i = SelectedEvent.Id - 1; i > 0; i--)
-            {
-                if (ActiveMod.Events.Any(evt => evt.Id == i))
-                { return true; }
-            }
-
-            return false;
+            return ActiveMod != null
+                && SelectedEvent != null
+                && ActiveMod.Events.Any()
+                && SelectedEvent != ActiveMod.Events.First();
         }
 
         [RelayCommand(CanExecute = nameof(CanNextEvent))]
@@ -156,33 +140,15 @@ namespace Paradoxical.ViewModel
             if (SelectedEvent == null)
             { return; }
 
-            int maxId = ActiveMod.Events.Max(evt => evt.Id);
-            for (int i = SelectedEvent.Id + 1; i <= maxId; i++)
-            {
-                ParadoxEvent? evt = ActiveMod.Events.SingleOrDefault(evt => evt.Id == i);
-                if (evt != null)
-                {
-                    SelectedEvent = evt;
-                    return;
-                }
-            }
+            int index = ActiveMod.Events.IndexOf(SelectedEvent);
+            SelectedEvent = ActiveMod.Events[index + 1];
         }
         private bool CanNextEvent()
         {
-            if (ActiveMod == null)
-            { return false; }
-
-            if (SelectedEvent == null)
-            { return false; }
-
-            int maxId = ActiveMod.Events.Max(evt => evt.Id);
-            for (int i = SelectedEvent.Id + 1; i <= maxId; i++)
-            {
-                if (ActiveMod.Events.Any(evt => evt.Id == i))
-                { return true; }
-            }
-
-            return false;
+            return ActiveMod != null
+                && SelectedEvent != null
+                && ActiveMod.Events.Any()
+                && SelectedEvent != ActiveMod.Events.Last();
         }
 
         [RelayCommand(CanExecute = nameof(CanAddOption))]
