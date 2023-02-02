@@ -46,6 +46,7 @@
                         Command="{Binding NextEventCommand}"
                         Content="{materialDesign:PackIcon Kind=NavigateNext}"
                         ToolTip="Next Event" />
+
                 </ToolBar>
             </ToolBarTray>
         </materialDesign:Card>
@@ -64,9 +65,10 @@
                         IsExpanded="True">
                         <StackPanel>
                             <view:ScriptBox
-                                Margin="4,24,4,24"
+                                Margin="4"
                                 Style="{DynamicResource MaterialDesignRichTextBox}"
                                 Text="{Binding SelectedEvent.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Title"
                                 materialDesign:HintAssist.IsFloating="True"
                                 materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
@@ -79,9 +81,10 @@
 
                             <view:ScriptBox
                                 Height="120"
-                                Margin="4,24,4,24"
+                                Margin="4"
                                 Style="{DynamicResource MaterialDesignRichTextBox}"
                                 Text="{Binding SelectedEvent.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Description"
                                 materialDesign:HintAssist.IsFloating="True"
                                 materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
@@ -122,6 +125,7 @@
                                     Margin="4"
                                     Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                     Text="{Binding SelectedEvent.Theme, Mode=TwoWay}"
+                                    IsEnabled="{Binding IsEventSelected}"
                                     materialDesign:HintAssist.Hint="Theme" />
 
                                 <TextBox
@@ -130,6 +134,7 @@
                                     Margin="4"
                                     Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                     Text="{Binding SelectedEvent.Background, Mode=TwoWay}"
+                                    IsEnabled="{Binding IsEventSelected}"
                                     materialDesign:HintAssist.Hint="Background" />
 
                                 <TextBox
@@ -138,6 +143,7 @@
                                     Margin="4"
                                     Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                     Text="{Binding SelectedEvent.Sound, Mode=TwoWay}"
+                                    IsEnabled="{Binding IsEventSelected}"
                                     materialDesign:HintAssist.Hint="Background" />
                             </Grid>
                         </StackPanel>
@@ -187,6 +193,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding SelectedEvent.LeftPortrait.Character, Mode=TwoWay}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Character" />
                             <TextBox
                                 Grid.Row="2"
@@ -194,6 +201,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding SelectedEvent.LeftPortrait.Animation, Mode=TwoWay}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Animation" />
                             <TextBox
                                 Grid.Row="3"
@@ -201,6 +209,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding SelectedEvent.LeftPortrait.OutfitTags, Mode=TwoWay}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Outfit Tags" />
 
                             <TextBlock
@@ -219,6 +228,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding SelectedEvent.RightPortrait.Character, Mode=TwoWay}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Character" />
                             <TextBox
                                 Grid.Row="2"
@@ -226,6 +236,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding SelectedEvent.RightPortrait.Animation, Mode=TwoWay}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Animation" />
                             <TextBox
                                 Grid.Row="3"
@@ -233,6 +244,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding SelectedEvent.RightPortrait.OutfitTags, Mode=TwoWay}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Outfit Tags" />
                         </Grid>
                     </Expander>
@@ -286,6 +298,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding SelectedEvent.LowerLeftPortrait.Character, Mode=TwoWay}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Character" />
                             <TextBox
                                 Grid.Row="2"
@@ -293,6 +306,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding SelectedEvent.LowerLeftPortrait.Animation, Mode=TwoWay}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Animation" />
                             <TextBox
                                 Grid.Row="3"
@@ -300,6 +314,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding SelectedEvent.LowerLeftPortrait.OutfitTags, Mode=TwoWay}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Outfit Tags" />
 
                             <TextBlock
@@ -318,6 +333,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding SelectedEvent.LowerCenterPortrait.Character, Mode=TwoWay}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Character" />
                             <TextBox
                                 Grid.Row="2"
@@ -325,6 +341,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding SelectedEvent.LowerCenterPortrait.Animation, Mode=TwoWay}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Animation" />
                             <TextBox
                                 Grid.Row="3"
@@ -332,6 +349,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding SelectedEvent.LowerCenterPortrait.OutfitTags, Mode=TwoWay}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Outfit Tags" />
 
                             <TextBlock
@@ -350,6 +368,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding SelectedEvent.LowerRightPortrait.Character, Mode=TwoWay}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Character" />
                             <TextBox
                                 Grid.Row="2"
@@ -357,6 +376,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding SelectedEvent.LowerRightPortrait.Animation, Mode=TwoWay}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Animation" />
                             <TextBox
                                 Grid.Row="3"
@@ -364,6 +384,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding SelectedEvent.LowerRightPortrait.OutfitTags, Mode=TwoWay}"
+                                IsEnabled="{Binding IsEventSelected}"
                                 materialDesign:HintAssist.Hint="Outfit Tags" />
                         </Grid>
                     </Expander>
@@ -374,12 +395,266 @@
                     <Expander
                         Header="Options"
                         IsExpanded="True">
-                        <ScrollViewer>
+                        <StackPanel>
                             <ItemsControl
                                 ItemsSource="{Binding SelectedEvent.Options}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate
+                                        DataType="model:ParadoxEventOption">
 
+                                        <materialDesign:Card
+                                            Margin="20,10"
+                                            Padding="8">
+                                            <StackPanel>
+
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition
+                                                            Width="*" />
+                                                        <ColumnDefinition
+                                                            Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition
+                                                            Height="auto" />
+                                                        <RowDefinition
+                                                            Height="auto" />
+                                                        <RowDefinition
+                                                            Height="auto" />
+                                                        <RowDefinition
+                                                            Height="auto" />
+                                                        <RowDefinition
+                                                            Height="auto" />
+                                                    </Grid.RowDefinitions>
+
+                                                    <TextBox
+                                                        Grid.Row="0"
+                                                        Grid.Column="0"
+                                                        Margin="4"
+                                                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                        Text="{Binding Name, Mode=TwoWay}"
+                                                        materialDesign:HintAssist.Hint="Name" />
+
+                                                    <TextBox
+                                                        Grid.Row="0"
+                                                        Grid.Column="1"
+                                                        Margin="4"
+                                                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                        Text="{Binding Tooltip, Mode=TwoWay}"
+                                                        materialDesign:HintAssist.Hint="Tooltip" />
+
+                                                    <!-- TODO: control for selection of triggered event -->
+
+                                                    <TextBox
+                                                        Grid.Row="1"
+                                                        Grid.Column="1"
+                                                        Margin="4"
+                                                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                        Text="{Binding TriggeredEventScope, Mode=TwoWay}"
+                                                        materialDesign:HintAssist.Hint="Triggered Event Scope" />
+
+                                                    <!-- TODO: control for selection of triggers -->
+
+                                                    <view:ScriptBox
+                                                        Grid.Row="2"
+                                                        Grid.Column="1"
+                                                        Margin="4"
+                                                        Style="{DynamicResource MaterialDesignRichTextBox}"
+                                                        Text="{Binding Trigger, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        materialDesign:HintAssist.Hint="Custom Trigger"
+                                                        materialDesign:HintAssist.IsFloating="True"
+                                                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                                                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+                                                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                                                        <view:ScriptBox.TextFormatter>
+                                                            <formatters:CodeFormatter />
+                                                        </view:ScriptBox.TextFormatter>
+                                                    </view:ScriptBox>
+
+                                                    <!-- TODO: control for selection of effects -->
+
+                                                    <view:ScriptBox
+                                                        Grid.Row="3"
+                                                        Grid.Column="1"
+                                                        Margin="4"
+                                                        Style="{DynamicResource MaterialDesignRichTextBox}"
+                                                        Text="{Binding Effect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        materialDesign:HintAssist.Hint="Custom Effect"
+                                                        materialDesign:HintAssist.IsFloating="True"
+                                                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                                                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+                                                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                                                        <view:ScriptBox.TextFormatter>
+                                                            <formatters:CodeFormatter />
+                                                        </view:ScriptBox.TextFormatter>
+                                                    </view:ScriptBox>
+
+                                                    <Grid
+                                                        Grid.Row="4"
+                                                        Grid.Column="0">
+
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition
+                                                                Width="*" />
+                                                            <ColumnDefinition
+                                                                Width="*" />
+                                                            <ColumnDefinition
+                                                                Width="*" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition
+                                                                Height="auto" />
+                                                            <RowDefinition
+                                                                Height="auto" />
+                                                            <RowDefinition
+                                                                Height="auto" />
+                                                            <RowDefinition
+                                                                Height="auto" />
+                                                        </Grid.RowDefinitions>
+
+                                                        <TextBox
+                                                            Grid.Row="0"
+                                                            Grid.Column="0"
+                                                            Grid.ColumnSpan="3"
+                                                            Margin="4"
+                                                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                            Text="{Binding AiBaseChance, Mode=TwoWay}"
+                                                            materialDesign:HintAssist.Hint="Base Chance" />
+
+                                                        <TextBox
+                                                            Grid.Row="1"
+                                                            Grid.Column="0"
+                                                            Margin="4"
+                                                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                            Text="{Binding AiBoldnessTargetModifier, Mode=TwoWay}"
+                                                            materialDesign:HintAssist.Hint="Boldness" />
+
+                                                        <TextBox
+                                                            Grid.Row="1"
+                                                            Grid.Column="1"
+                                                            Margin="4"
+                                                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                            Text="{Binding AiCompassionTargetModifier, Mode=TwoWay}"
+                                                            materialDesign:HintAssist.Hint="Compassion" />
+
+                                                        <TextBox
+                                                            Grid.Row="1"
+                                                            Grid.Column="2"
+                                                            Margin="4"
+                                                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                            Text="{Binding AiGreedTargetModifier, Mode=TwoWay}"
+                                                            materialDesign:HintAssist.Hint="Boldness" />
+
+                                                        <TextBox
+                                                            Grid.Row="2"
+                                                            Grid.Column="0"
+                                                            Margin="4"
+                                                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                            Text="{Binding AiEnergyTargetModifier, Mode=TwoWay}"
+                                                            materialDesign:HintAssist.Hint="Energy" />
+
+                                                        <TextBox
+                                                            Grid.Row="2"
+                                                            Grid.Column="1"
+                                                            Margin="4"
+                                                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                            Text="{Binding AiHonorTargetModifier, Mode=TwoWay}"
+                                                            materialDesign:HintAssist.Hint="Honor" />
+
+                                                        <TextBox
+                                                            Grid.Row="2"
+                                                            Grid.Column="2"
+                                                            Margin="4"
+                                                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                            Text="{Binding AiRationalityTargetModifier, Mode=TwoWay}"
+                                                            materialDesign:HintAssist.Hint="Rationality" />
+
+                                                        <TextBox
+                                                            Grid.Row="3"
+                                                            Grid.Column="0"
+                                                            Margin="4"
+                                                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                            Text="{Binding AiSociabilityTargetModifier, Mode=TwoWay}"
+                                                            materialDesign:HintAssist.Hint="Sociability" />
+
+                                                        <TextBox
+                                                            Grid.Row="3"
+                                                            Grid.Column="1"
+                                                            Margin="4"
+                                                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                            Text="{Binding AiVengefulnessTargetModifier, Mode=TwoWay}"
+                                                            materialDesign:HintAssist.Hint="Vengefulness" />
+
+                                                        <TextBox
+                                                            Grid.Row="3"
+                                                            Grid.Column="2"
+                                                            Margin="4"
+                                                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                                            Text="{Binding AiZealTargetModifier, Mode=TwoWay}"
+                                                            materialDesign:HintAssist.Hint="Zeal" />
+
+                                                    </Grid>
+
+                                                    <view:ScriptBox
+                                                        Grid.Row="4"
+                                                        Grid.Column="1"
+                                                        Margin="4"
+                                                        Style="{DynamicResource MaterialDesignRichTextBox}"
+                                                        Text="{Binding AiChance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        materialDesign:HintAssist.Hint="Custom AI Chance"
+                                                        materialDesign:HintAssist.IsFloating="True"
+                                                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                                                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+                                                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                                                        <view:ScriptBox.TextFormatter>
+                                                            <formatters:CodeFormatter />
+                                                        </view:ScriptBox.TextFormatter>
+                                                    </view:ScriptBox>
+                                                </Grid>
+
+                                                <Separator
+                                                    Style="{DynamicResource MaterialDesignDarkSeparator}" />
+
+                                                <StackPanel
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Horizontal">
+
+                                                    <Button
+                                                        Margin="8"
+                                                        Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                                        Command="{Binding DataContext.DuplicateOptionCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                        CommandParameter="{Binding}"
+                                                        Content="{materialDesign:PackIcon Kind=PlaylistPlus}"
+                                                        ToolTip="Duplicate Option" />
+                                                    
+                                                    <Button
+                                                        Margin="8"
+                                                        Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                                        Command="{Binding DataContext.RemoveOptionCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                        CommandParameter="{Binding}"
+                                                        Content="{materialDesign:PackIcon Kind=PlaylistRemove}"
+                                                        ToolTip="Remove Option" />
+
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </materialDesign:Card>
+
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                        </ScrollViewer>
+
+                            <Separator
+                                Style="{DynamicResource MaterialDesignDarkSeparator}" />
+
+                            <Button
+                                Margin="8"
+                                Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                Command="{Binding AddOptionCommand}"
+                                Content="{materialDesign:PackIcon Kind=PlaylistAdd}"
+                                ToolTip="Add Option" />
+
+                        </StackPanel>
+
                     </Expander>
 
                     <Border

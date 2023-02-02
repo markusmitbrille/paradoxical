@@ -14,16 +14,24 @@ namespace Paradoxical.ViewModel
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(AddEventCommand))]
         [NotifyCanExecuteChangedFor(nameof(RemoveEventCommand))]
+        [NotifyCanExecuteChangedFor(nameof(AddOptionCommand))]
+        [NotifyCanExecuteChangedFor(nameof(RemoveOptionCommand))]
+        [NotifyCanExecuteChangedFor(nameof(DuplicateOptionCommand))]
         [NotifyCanExecuteChangedFor(nameof(FindEventCommand))]
         [NotifyCanExecuteChangedFor(nameof(PreviousEventCommand))]
         [NotifyCanExecuteChangedFor(nameof(NextEventCommand))]
         private ParadoxMod? activeMod;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsEventSelected))]
         [NotifyCanExecuteChangedFor(nameof(RemoveEventCommand))]
+        [NotifyCanExecuteChangedFor(nameof(AddOptionCommand))]
+        [NotifyCanExecuteChangedFor(nameof(RemoveOptionCommand))]
+        [NotifyCanExecuteChangedFor(nameof(DuplicateOptionCommand))]
         [NotifyCanExecuteChangedFor(nameof(PreviousEventCommand))]
         [NotifyCanExecuteChangedFor(nameof(NextEventCommand))]
         private ParadoxEvent? selectedEvent;
+        public bool IsEventSelected => SelectedEvent != null;
 
         [RelayCommand(CanExecute = nameof(CanAddEvent))]
         private void AddEvent()
@@ -31,9 +39,11 @@ namespace Paradoxical.ViewModel
             if (ActiveMod == null)
             { return; }
 
-            ParadoxEvent evt = new();
-            evt.Id = ActiveMod.Events.Count == 0 ? 10000 : ActiveMod.Events.Max(evt => evt.Id) + 1;
-            evt.Title = "New Event";
+            ParadoxEvent evt = new()
+            {
+                Id = ActiveMod.Events.Count == 0 ? 1 : ActiveMod.Events.Max(evt => evt.Id) + 1,
+                Title = "New Event"
+            };
 
             ActiveMod.Events.Add(evt);
             SelectedEvent = evt;
@@ -55,9 +65,9 @@ namespace Paradoxical.ViewModel
             {
                 foreach (ParadoxEventOption opt in evt.Options)
                 {
-                    if (opt.TriggerEvent == SelectedEvent)
+                    if (opt.TriggeredEvent == SelectedEvent)
                     {
-                        opt.TriggerEvent = null;
+                        opt.TriggeredEvent = null;
                     }
                 }
             }
@@ -169,6 +179,90 @@ namespace Paradoxical.ViewModel
             }
 
             return false;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanAddOption))]
+        private void AddOption()
+        {
+            if (ActiveMod == null)
+            { return; }
+
+            if (SelectedEvent == null)
+            { return; }
+
+            ParadoxEventOption opt = new()
+            {
+                Name = "New Option"
+            };
+
+            SelectedEvent.Options.Add(opt);
+        }
+        private bool CanAddOption()
+        {
+            return ActiveMod != null && SelectedEvent != null;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanRemoveOption))]
+        private void RemoveOption(ParadoxEventOption opt)
+        {
+            if (ActiveMod == null)
+            { return; }
+
+            if (SelectedEvent == null)
+            { return; }
+
+            SelectedEvent.Options.Remove(opt);
+        }
+        private bool CanRemoveOption(ParadoxEventOption opt)
+        {
+            return ActiveMod != null && SelectedEvent != null;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanDuplicateOption))]
+        private void DuplicateOption(ParadoxEventOption opt)
+        {
+            if (ActiveMod == null)
+            { return; }
+
+            if (SelectedEvent == null)
+            { return; }
+
+            ParadoxEventOption copy = new()
+            {
+                Name = opt.Name,
+                Tooltip = opt.Tooltip,
+                TriggeredEvent = opt.TriggeredEvent,
+                TriggeredEventScope = opt.TriggeredEventScope,
+                Trigger = opt.Trigger,
+                Effect = opt.Effect,
+                AiChance = opt.AiChance,
+                AiBaseChance = opt.AiBaseChance,
+                AiBoldnessTargetModifier = opt.AiBoldnessTargetModifier,
+                AiGreedTargetModifier = opt.AiGreedTargetModifier,
+                AiCompassionTargetModifier = opt.AiCompassionTargetModifier,
+                AiEnergyTargetModifier = opt.AiEnergyTargetModifier,
+                AiHonorTargetModifier = opt.AiHonorTargetModifier,
+                AiRationalityTargetModifier = opt.AiRationalityTargetModifier,
+                AiSociabilityTargetModifier = opt.AiSociabilityTargetModifier,
+                AiVengefulnessTargetModifier = opt.AiVengefulnessTargetModifier,
+                AiZealTargetModifier = opt.AiZealTargetModifier,
+            };
+
+            foreach (var trigger in opt.Triggers)
+            {
+                copy.Triggers.Add(trigger);
+            }
+
+            foreach (var effect in opt.Effects)
+            {
+                copy.Effects.Add(effect);
+            }
+
+            SelectedEvent.Options.Add(copy);
+        }
+        private bool CanDuplicateOption(ParadoxEventOption opt)
+        {
+            return ActiveMod != null && SelectedEvent != null;
         }
     }
 }

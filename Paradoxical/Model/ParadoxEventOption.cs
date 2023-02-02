@@ -12,9 +12,9 @@ namespace Paradoxical.Model
         private string tooltip = "";
 
         [ObservableProperty]
-        private ParadoxEvent? triggerEvent = null;
+        private ParadoxEvent? triggeredEvent = null;
         [ObservableProperty]
-        private string triggerEventScope = "";
+        private string triggeredEventScope = "";
 
         [ObservableProperty]
         private string trigger = "";
