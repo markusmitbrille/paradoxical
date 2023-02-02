@@ -32,7 +32,7 @@ namespace Paradoxical.ViewModel
             { return; }
 
             ParadoxEvent evt = new();
-            evt.Id = ActiveMod.Events.Count == 0 ? 1 : ActiveMod.Events.Max(evt => evt.Id) + 1;
+            evt.Id = ActiveMod.Events.Count == 0 ? 10000 : ActiveMod.Events.Max(evt => evt.Id) + 1;
             evt.Title = "New Event";
 
             ActiveMod.Events.Add(evt);

@@ -19,6 +19,8 @@
     d:DesignWidth="800"
     Height="900"
     Width="800"
+    MinHeight="800"
+    MinWidth="700"
     Style="{DynamicResource MaterialDesignWindow}"
     WindowStyle="None"
     WindowState="Normal"
@@ -58,10 +60,10 @@
 
                     <ListBox
                         Margin="0,16"
+                        Style="{StaticResource MaterialDesignNavigationPrimaryListBox}"
                         ItemsSource="{Binding Pages}"
                         SelectionChanged="ListBox_SelectionChanged"
-                        SelectedItem="{Binding SelectedPage, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
+                        SelectedItem="{Binding SelectedPage, UpdateSourceTrigger=PropertyChanged}">
                         <ListBox.ItemTemplate>
                             <DataTemplate
                                 DataType="viewmodel:PageViewModel">

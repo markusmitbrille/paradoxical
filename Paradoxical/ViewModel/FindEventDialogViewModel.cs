@@ -16,7 +16,7 @@ namespace Paradoxical.ViewModel
         private ObservableCollection<ParadoxEvent>? items;
 
         [ObservableProperty]
-        private string filter = "";
+        private string? filter;
 
         [ObservableProperty]
         private ParadoxEvent? selected;
@@ -49,6 +49,9 @@ namespace Paradoxical.ViewModel
 
         private bool FilterItems(object obj)
         {
+            if (string.IsNullOrEmpty(Filter))
+            { return true; }
+
             if (obj is not ParadoxEvent evt)
             { return false; }
 

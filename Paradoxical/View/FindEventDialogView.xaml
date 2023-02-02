@@ -13,7 +13,16 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance viewmodel:FindEventDialogViewModel}"
     d:DesignHeight="450"
-    d:DesignWidth="800">
+    d:DesignWidth="800"
+    Height="400"
+    Width="550">
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger
+            EventName="LostFocus">
+            <behaviors:InvokeCommandAction
+                Command="{Binding CloseCommand}" />
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
     <UserControl.InputBindings>
         <KeyBinding
             Command="{Binding CloseCommand}"
@@ -29,34 +38,31 @@
         <ScrollViewer
             Margin="0,20,0,0">
             <ListBox
+                Style="{StaticResource MaterialDesignNavigationPrimaryListBox}"
                 ItemsSource="{Binding Items}"
-                SelectedItem="{Binding Selected, Mode=TwoWay}">
+                SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <ListBox.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate
+                        DataType="model:ParadoxEvent">
                         <StackPanel
-                            d:DataContext="{d:DesignInstance model:ParadoxEvent}"
+                            Margin="24,4,0,4"
                             Orientation="Horizontal">
                             <TextBlock
-                                Width="80"
                                 Style="{DynamicResource MaterialDesignButtonTextBlock}"
-                                FontSize="24"
                                 Text="{Binding Id}"
                                 TextAlignment="Right" />
                             <TextBlock
                                 Style="{DynamicResource MaterialDesignButtonTextBlock}"
-                                FontSize="24"
                                 Text=": " />
                             <TextBlock
-                                Width="350"
                                 Style="{DynamicResource MaterialDesignButtonTextBlock}"
-                                FontSize="24"
                                 Text="{Binding Title}" />
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger
-                        EventName="SelectionChanged">
+                        EventName="Selected">
                         <behaviors:InvokeCommandAction
                             Command="{Binding CloseCommand}" />
                     </behaviors:EventTrigger>

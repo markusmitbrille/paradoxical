@@ -66,7 +66,7 @@
                             <view:ScriptBox
                                 Margin="4,24,4,24"
                                 Style="{DynamicResource MaterialDesignRichTextBox}"
-                                Text="{Binding SelectedEvent.Title, Mode=TwoWay}"
+                                Text="{Binding SelectedEvent.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 materialDesign:HintAssist.Hint="Title"
                                 materialDesign:HintAssist.IsFloating="True"
                                 materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
@@ -81,7 +81,7 @@
                                 Height="120"
                                 Margin="4,24,4,24"
                                 Style="{DynamicResource MaterialDesignRichTextBox}"
-                                Text="{Binding SelectedEvent.Description, Mode=TwoWay}"
+                                Text="{Binding SelectedEvent.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 materialDesign:HintAssist.Hint="Description"
                                 materialDesign:HintAssist.IsFloating="True"
                                 materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
