@@ -17,6 +17,8 @@ namespace Paradoxical.ViewModel
         [NotifyCanExecuteChangedFor(nameof(AddOptionCommand))]
         [NotifyCanExecuteChangedFor(nameof(RemoveOptionCommand))]
         [NotifyCanExecuteChangedFor(nameof(DuplicateOptionCommand))]
+        [NotifyCanExecuteChangedFor(nameof(MoveOptionUpCommand))]
+        [NotifyCanExecuteChangedFor(nameof(MoveOptionDownCommand))]
         [NotifyCanExecuteChangedFor(nameof(FindEventCommand))]
         [NotifyCanExecuteChangedFor(nameof(PreviousEventCommand))]
         [NotifyCanExecuteChangedFor(nameof(NextEventCommand))]
@@ -28,6 +30,8 @@ namespace Paradoxical.ViewModel
         [NotifyCanExecuteChangedFor(nameof(AddOptionCommand))]
         [NotifyCanExecuteChangedFor(nameof(RemoveOptionCommand))]
         [NotifyCanExecuteChangedFor(nameof(DuplicateOptionCommand))]
+        [NotifyCanExecuteChangedFor(nameof(MoveOptionUpCommand))]
+        [NotifyCanExecuteChangedFor(nameof(MoveOptionDownCommand))]
         [NotifyCanExecuteChangedFor(nameof(PreviousEventCommand))]
         [NotifyCanExecuteChangedFor(nameof(NextEventCommand))]
         private ParadoxEvent? selectedEvent;
@@ -196,6 +200,9 @@ namespace Paradoxical.ViewModel
             };
 
             SelectedEvent.Options.Add(opt);
+
+            MoveOptionUpCommand.NotifyCanExecuteChanged();
+            MoveOptionDownCommand.NotifyCanExecuteChanged();
         }
         private bool CanAddOption()
         {
@@ -212,6 +219,9 @@ namespace Paradoxical.ViewModel
             { return; }
 
             SelectedEvent.Options.Remove(opt);
+
+            MoveOptionUpCommand.NotifyCanExecuteChanged();
+            MoveOptionDownCommand.NotifyCanExecuteChanged();
         }
         private bool CanRemoveOption(ParadoxEventOption opt)
         {
@@ -259,10 +269,59 @@ namespace Paradoxical.ViewModel
             }
 
             SelectedEvent.Options.Add(copy);
+
+            MoveOptionUpCommand.NotifyCanExecuteChanged();
+            MoveOptionDownCommand.NotifyCanExecuteChanged();
         }
         private bool CanDuplicateOption(ParadoxEventOption opt)
         {
             return ActiveMod != null && SelectedEvent != null;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanMoveOptionUp))]
+        private void MoveOptionUp(ParadoxEventOption opt)
+        {
+            if (ActiveMod == null)
+            { return; }
+
+            if (SelectedEvent == null)
+            { return; }
+
+            int index = SelectedEvent.Options.IndexOf(opt);
+            SelectedEvent.Options.Move(index, index - 1);
+
+            MoveOptionUpCommand.NotifyCanExecuteChanged();
+            MoveOptionDownCommand.NotifyCanExecuteChanged();
+        }
+        private bool CanMoveOptionUp(ParadoxEventOption opt)
+        {
+            return ActiveMod != null
+                && SelectedEvent != null
+                && SelectedEvent.Options.Any()
+                && opt != SelectedEvent.Options.First();
+        }
+
+        [RelayCommand(CanExecute = nameof(CanMoveOptionDown))]
+        private void MoveOptionDown(ParadoxEventOption opt)
+        {
+            if (ActiveMod == null)
+            { return; }
+
+            if (SelectedEvent == null)
+            { return; }
+
+            int index = SelectedEvent.Options.IndexOf(opt);
+            SelectedEvent.Options.Move(index, index + 1);
+
+            MoveOptionUpCommand.NotifyCanExecuteChanged();
+            MoveOptionDownCommand.NotifyCanExecuteChanged();
+        }
+        private bool CanMoveOptionDown(ParadoxEventOption opt)
+        {
+            return ActiveMod != null
+                && SelectedEvent != null
+                && SelectedEvent.Options.Any()
+                && opt != SelectedEvent.Options.Last();
         }
     }
 }

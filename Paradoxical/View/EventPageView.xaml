@@ -622,17 +622,32 @@
                                                     <Button
                                                         Margin="8"
                                                         Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                                        Command="{Binding DataContext.MoveOptionUpCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                        CommandParameter="{Binding}"
+                                                        Content="{materialDesign:PackIcon Kind=ArrowUp}"
+                                                        ToolTip="Move Option Up" />
+
+                                                    <Button
+                                                        Margin="8"
+                                                        Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                                        Command="{Binding DataContext.MoveOptionDownCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                        CommandParameter="{Binding}"
+                                                        Content="{materialDesign:PackIcon Kind=ArrowDown}"
+                                                        ToolTip="Move Option Down" />
+
+                                                    <Button
+                                                        Margin="8"
+                                                        Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                         Command="{Binding DataContext.DuplicateOptionCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                         CommandParameter="{Binding}"
-                                                        Content="{materialDesign:PackIcon Kind=PlaylistPlus}"
+                                                        Content="{materialDesign:PackIcon Kind=ContentDuplicate}"
                                                         ToolTip="Duplicate Option" />
-                                                    
                                                     <Button
                                                         Margin="8"
                                                         Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                         Command="{Binding DataContext.RemoveOptionCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                         CommandParameter="{Binding}"
-                                                        Content="{materialDesign:PackIcon Kind=PlaylistRemove}"
+                                                        Content="{materialDesign:PackIcon Kind=Delete}"
                                                         ToolTip="Remove Option" />
 
                                                 </StackPanel>
