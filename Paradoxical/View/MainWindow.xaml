@@ -10,7 +10,6 @@
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
     xmlns:model="clr-namespace:Paradoxical.Model"
-    xmlns:formatters="clr-namespace:Paradoxical.Formatters"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     mc:Ignorable="d"
@@ -40,611 +39,108 @@
             Command="{Binding NewModCommand}"
             Gesture="CTRL+N" />
     </Window.InputBindings>
-    <Window.Resources>
-    </Window.Resources>
     <materialDesign:DialogHost
         DialogTheme="Inherit"
         Identifier="RootDialog">
-        <DockPanel>
-            <!--#region Menu Bar -->
-            <materialDesign:ColorZone
-                DockPanel.Dock="Top"
-                Padding="16"
-                materialDesign:ElevationAssist.Elevation="Dp4"
-                Mode="PrimaryMid"
-                MouseDown="DragWindowMouseDownHandler">
-                <DockPanel>
-                    <materialDesign:PopupBox
-                        DockPanel.Dock="Right"
-                        PlacementMode="BottomAndAlignRightEdges"
-                        StaysOpen="False">
-                        <StackPanel>
-                            <MenuItem
-                                Header="New"
-                                Icon="{materialDesign:PackIcon Kind=Create}"
-                                Command="{Binding NewModCommand}"
-                                InputGestureText="CTRL+N" />
-                            <MenuItem
-                                Header="Open"
-                                Icon="{materialDesign:PackIcon Kind=FolderOpen}"
-                                Command="{Binding OpenModCommand}"
-                                InputGestureText="CTRL+O" />
-                            <MenuItem
-                                Header="Save"
-                                Icon="{materialDesign:PackIcon Kind=ContentSave}"
-                                Command="{Binding SaveModCommand}"
-                                InputGestureText="CTRL+S" />
-                            <MenuItem
-                                Header="Export"
-                                Icon="{materialDesign:PackIcon Kind=Export}"
-                                Command="{Binding ExportModCommand}" />
+        <materialDesign:DrawerHost
+            IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
 
-                            <Separator />
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <DockPanel
+                    MinWidth="220">
 
-                            <MenuItem
-                                Header="Exit"
-                                Icon="{materialDesign:PackIcon Kind=ExitToApp}"
-                                Command="{Binding ExitCommand}"
-                                InputGestureText="ALT+F4" />
-                        </StackPanel>
-                    </materialDesign:PopupBox>
+                    <ToggleButton
+                        Margin="16"
+                        HorizontalAlignment="Right"
+                        DockPanel.Dock="Top"
+                        IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}"
+                        Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
 
-                    <TextBlock
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        FontSize="22"
-                        Text="Paradoxical" />
+                    <ListBox
+                        Margin="0,16"
+                        ItemsSource="{Binding Pages}"
+                        SelectionChanged="ListBox_SelectionChanged"
+                        SelectedItem="{Binding SelectedPage, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate
+                                DataType="viewmodel:PageViewModel">
+                                <TextBlock
+                                    Margin="24,4,0,4"
+                                    Text="{Binding PageName}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
                 </DockPanel>
-            </materialDesign:ColorZone>
-            <!--#endregion-->
-            <TabControl
-                Margin="0,20,0,0"
-                Style="{StaticResource MaterialDesignNavigationRailTabControl}"
-                HorizontalContentAlignment="Center"
-                materialDesign:ColorZoneAssist.Mode="PrimaryLight"
-                materialDesign:NavigationRailAssist.SelectionCornerRadius="50"
-                materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
-                TabStripPlacement="Bottom">
-                <!--#region Mod Info Tab -->
-                <TabItem
-                    Margin="4">
-                    <TabItem.Header>
-                        <StackPanel
-                            Width="auto"
-                            Height="auto">
-                            <materialDesign:PackIcon
-                                Width="24"
-                                Height="24"
-                                HorizontalAlignment="Center"
-                                Kind="Information" />
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                Text="Info" />
-                        </StackPanel>
-                    </TabItem.Header>
+            </materialDesign:DrawerHost.LeftDrawerContent>
 
-                    <!--#region Mod Info Form -->
-                    <ScrollViewer
-                        VerticalScrollBarVisibility="Auto"
-                        HorizontalScrollBarVisibility="Disabled">
-                        <Grid
-                            Margin="20,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition
-                                    Width="*"
-                                    MinWidth="100" />
-                                <ColumnDefinition
-                                    Width="*"
-                                    MinWidth="100" />
-                                <ColumnDefinition
-                                    Width="*"
-                                    MinWidth="100" />
-                                <ColumnDefinition
-                                    Width="*"
-                                    MinWidth="100" />
-                                <ColumnDefinition
-                                    Width="*"
-                                    MinWidth="100" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition
-                                    Height="auto" />
-                                <RowDefinition
-                                    Height="auto" />
-                                <RowDefinition
-                                    Height="auto" />
-                                <RowDefinition
-                                    Height="auto" />
-                            </Grid.RowDefinitions>
+            <DockPanel>
 
-                            <TextBox
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                Grid.ColumnSpan="3"
-                                Margin="4"
-                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                Text="{Binding ActiveMod.Name, Mode=TwoWay}"
-                                materialDesign:HintAssist.Hint="Mod Name" />
+                <materialDesign:ColorZone
+                    DockPanel.Dock="Top"
+                    Padding="16"
+                    materialDesign:ElevationAssist.Elevation="Dp4"
+                    Mode="PrimaryMid"
+                    MouseDown="DragWindowMouseDownHandler">
 
-                            <TextBox
-                                Grid.Row="0"
-                                Grid.Column="3"
-                                Grid.ColumnSpan="1"
-                                Margin="4"
-                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                Text="{Binding ActiveMod.Version, Mode=TwoWay}"
-                                materialDesign:HintAssist.Hint="Mod Version" />
+                    <DockPanel>
 
-                            <TextBox
-                                Grid.Row="0"
-                                Grid.Column="4"
-                                Grid.ColumnSpan="1"
-                                Margin="4"
-                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                Text="{Binding ActiveMod.GameVersion, Mode=TwoWay}"
-                                materialDesign:HintAssist.Hint="Game Version" />
+                        <ToggleButton
+                            x:Name="MenuToggleButton"
+                            DockPanel.Dock="Left"
+                            IsChecked="False"
+                            Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
 
-                            <TextBox
-                                Grid.Row="1"
-                                Grid.Column="0"
-                                Grid.ColumnSpan="5"
-                                Margin="4"
-                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                Text="{Binding ActiveMod.EventNamespace, Mode=TwoWay}"
-                                materialDesign:HintAssist.Hint="Namespace"
-                                materialDesign:HintAssist.HelperText="Used for events, file names, etc." />
-                        </Grid>
-                    </ScrollViewer>
-                    <!--#endregion-->
-                </TabItem>
-                <!--#endregion-->
-                <!--#region Events Tab -->
-                <TabItem
-                    Margin="4"
-                    IsSelected="True">
-                    <TabItem.Header>
-                        <StackPanel
-                            Width="auto"
-                            Height="auto">
-                            <materialDesign:PackIcon
-                                Width="24"
-                                Height="24"
-                                HorizontalAlignment="Center"
-                                Kind="FileImage" />
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                Text="Events" />
-                        </StackPanel>
-                    </TabItem.Header>
-
-                    <DockPanel
-                        Margin="20,10">
-                        <!--#region Event Tool Bar -->
-                        <ToolBarTray
-                            DockPanel.Dock="Top">
-                            <ToolBar
-                                ClipToBounds="False"
-                                Style="{StaticResource MaterialDesignToolBar}">
-                                <Button
-                                    Command="{Binding AddEventCommand}"
-                                    Content="{materialDesign:PackIcon Kind=Add}"
-                                    ToolTip="Add Event" />
-                                <Button
-                                    Command="{Binding RemoveEventCommand}"
-                                    Content="{materialDesign:PackIcon Kind=Remove}"
-                                    ToolTip="Remove Event" />
+                        <materialDesign:PopupBox
+                            DockPanel.Dock="Right"
+                            PlacementMode="BottomAndAlignRightEdges"
+                            StaysOpen="False">
+                            <StackPanel>
+                                <MenuItem
+                                    Header="New"
+                                    Icon="{materialDesign:PackIcon Kind=Create}"
+                                    Command="{Binding NewModCommand}"
+                                    InputGestureText="CTRL+N" />
+                                <MenuItem
+                                    Header="Open"
+                                    Icon="{materialDesign:PackIcon Kind=FolderOpen}"
+                                    Command="{Binding OpenModCommand}"
+                                    InputGestureText="CTRL+O" />
+                                <MenuItem
+                                    Header="Save"
+                                    Icon="{materialDesign:PackIcon Kind=ContentSave}"
+                                    Command="{Binding SaveModCommand}"
+                                    InputGestureText="CTRL+S" />
+                                <MenuItem
+                                    Header="Export"
+                                    Icon="{materialDesign:PackIcon Kind=Export}"
+                                    Command="{Binding ExportModCommand}" />
 
                                 <Separator />
 
-                                <Button
-                                    Command="{Binding PreviousEventCommand}"
-                                    Content="{materialDesign:PackIcon Kind=NavigateBefore}"
-                                    ToolTip="Previous Event" />
-                                <Button
-                                    Command="{Binding FindEventCommand}"
-                                    Content="{materialDesign:PackIcon Kind=FileSearch}"
-                                    ToolTip="Find Event" />
-                                <Button
-                                    Command="{Binding NextEventCommand}"
-                                    Content="{materialDesign:PackIcon Kind=NavigateNext}"
-                                    ToolTip="Next Event" />
-                            </ToolBar>
-                        </ToolBarTray>
-                        <!--#endregion-->
-                        <!--#region Event Form -->
-                        <ScrollViewer
-                            Grid.Column="1"
-                            VerticalScrollBarVisibility="Hidden"
-                            HorizontalScrollBarVisibility="Disabled">
-                            <materialDesign:Card>
-                                <StackPanel>
-                                    <view:ScriptBox
-                                        Margin="4,24,4,24"
-                                        Style="{DynamicResource MaterialDesignRichTextBox}"
-                                        Text="{Binding SelectedEvent.Title, Mode=TwoWay}"
-                                        materialDesign:HintAssist.Hint="Title"
-                                        materialDesign:HintAssist.IsFloating="True"
-                                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
-                                        <view:ScriptBox.TextFormatter>
-                                            <formatters:EventTextFormatter />
-                                        </view:ScriptBox.TextFormatter>
-                                    </view:ScriptBox>
+                                <MenuItem
+                                    Header="Exit"
+                                    Icon="{materialDesign:PackIcon Kind=ExitToApp}"
+                                    Command="{Binding ExitCommand}"
+                                    InputGestureText="ALT+F4" />
+                            </StackPanel>
+                        </materialDesign:PopupBox>
 
-                                    <view:ScriptBox
-                                        Height="120"
-                                        Margin="4,24,4,24"
-                                        Style="{DynamicResource MaterialDesignRichTextBox}"
-                                        Text="{Binding SelectedEvent.Description, Mode=TwoWay}"
-                                        materialDesign:HintAssist.Hint="Description"
-                                        materialDesign:HintAssist.IsFloating="True"
-                                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
-                                        AcceptsReturn="True">
-                                        <view:ScriptBox.TextFormatter>
-                                            <formatters:EventTextFormatter />
-                                        </view:ScriptBox.TextFormatter>
-                                    </view:ScriptBox>
-
-                                    <!--#region Display Section -->
-                                    <Expander
-                                        Header="Display"
-                                        IsExpanded="True">
-                                        <StackPanel>
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition
-                                                        Height="auto" />
-                                                    <RowDefinition
-                                                        Height="auto" />
-                                                    <RowDefinition
-                                                        Height="auto" />
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition
-                                                        Width="*" />
-                                                </Grid.ColumnDefinitions>
-
-                                                <TextBox
-                                                    Grid.Row="0"
-                                                    Grid.Column="0"
-                                                    Margin="4"
-                                                    Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                    Text="{Binding SelectedEvent.Theme, Mode=TwoWay}"
-                                                    materialDesign:HintAssist.Hint="Theme" />
-
-                                                <TextBox
-                                                    Grid.Row="1"
-                                                    Grid.Column="0"
-                                                    Margin="4"
-                                                    Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                    Text="{Binding SelectedEvent.Background, Mode=TwoWay}"
-                                                    materialDesign:HintAssist.Hint="Background" />
-
-                                                <TextBox
-                                                    Grid.Row="2"
-                                                    Grid.Column="0"
-                                                    Margin="4"
-                                                    Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                    Text="{Binding SelectedEvent.Sound, Mode=TwoWay}"
-                                                    materialDesign:HintAssist.Hint="Background" />
-                                            </Grid>
-                                        </StackPanel>
-                                    </Expander>
-                                    <!--#endregion-->
-                                    <!--#region Main Portraits Section -->
-                                    <Expander
-                                        Header="Main Portraits"
-                                        IsExpanded="True">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition
-                                                    Height="auto" />
-                                                <RowDefinition
-                                                    Height="auto" />
-                                                <RowDefinition
-                                                    Height="auto" />
-                                                <RowDefinition
-                                                    Height="auto" />
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition
-                                                    Width="*"
-                                                    MinWidth="100" />
-                                                <ColumnDefinition
-                                                    Width="4" />
-                                                <ColumnDefinition
-                                                    Width="*"
-                                                    MinWidth="100" />
-                                            </Grid.ColumnDefinitions>
-
-                                            <TextBlock
-                                                Grid.Row="0"
-                                                Grid.Column="0"
-                                                Grid.ColumnSpan="2"
-                                                Margin="4,8,4,8"
-                                                VerticalAlignment="Center"
-                                                HorizontalAlignment="Center"
-                                                FontStyle="Italic"
-                                                Text="Left Portrait" />
-
-                                            <TextBox
-                                                Grid.Row="1"
-                                                Grid.Column="0"
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                Text="{Binding SelectedEvent.LeftPortrait.Character, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Character" />
-                                            <TextBox
-                                                Grid.Row="2"
-                                                Grid.Column="0"
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                Text="{Binding SelectedEvent.LeftPortrait.Animation, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Animation" />
-                                            <TextBox
-                                                Grid.Row="3"
-                                                Grid.Column="0"
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                Text="{Binding SelectedEvent.LeftPortrait.OutfitTags, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Outfit Tags" />
-
-                                            <TextBlock
-                                                Grid.Row="0"
-                                                Grid.Column="2"
-                                                Grid.ColumnSpan="2"
-                                                Margin="4,8,4,8"
-                                                VerticalAlignment="Center"
-                                                HorizontalAlignment="Center"
-                                                FontStyle="Italic"
-                                                Text="Right Portrait" />
-
-                                            <TextBox
-                                                Grid.Row="1"
-                                                Grid.Column="2"
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                Text="{Binding SelectedEvent.RightPortrait.Character, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Character" />
-                                            <TextBox
-                                                Grid.Row="2"
-                                                Grid.Column="2"
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                Text="{Binding SelectedEvent.RightPortrait.Animation, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Animation" />
-                                            <TextBox
-                                                Grid.Row="3"
-                                                Grid.Column="2"
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                Text="{Binding SelectedEvent.RightPortrait.OutfitTags, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Outfit Tags" />
-                                        </Grid>
-                                    </Expander>
-                                    <!--#endregion-->
-                                    <!--#region Lower Portraits Section -->
-                                    <Expander
-                                        Header="Lower Portraits"
-                                        IsExpanded="False">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition
-                                                    Height="auto" />
-                                                <RowDefinition
-                                                    Height="auto" />
-                                                <RowDefinition
-                                                    Height="auto" />
-                                                <RowDefinition
-                                                    Height="auto" />
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition
-                                                    Width="*"
-                                                    MinWidth="100" />
-                                                <ColumnDefinition
-                                                    Width="4" />
-                                                <ColumnDefinition
-                                                    Width="*"
-                                                    MinWidth="100" />
-                                                <ColumnDefinition
-                                                    Width="4" />
-                                                <ColumnDefinition
-                                                    Width="*"
-                                                    MinWidth="100" />
-                                            </Grid.ColumnDefinitions>
-
-                                            <TextBlock
-                                                Grid.Row="0"
-                                                Grid.Column="0"
-                                                Grid.ColumnSpan="2"
-                                                Margin="4,8,4,8"
-                                                VerticalAlignment="Center"
-                                                HorizontalAlignment="Center"
-                                                FontStyle="Italic"
-                                                Text="Lower Left Portrait" />
-
-                                            <TextBox
-                                                Grid.Row="1"
-                                                Grid.Column="0"
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                Text="{Binding SelectedEvent.LowerLeftPortrait.Character, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Character" />
-                                            <TextBox
-                                                Grid.Row="2"
-                                                Grid.Column="0"
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                Text="{Binding SelectedEvent.LowerLeftPortrait.Animation, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Animation" />
-                                            <TextBox
-                                                Grid.Row="3"
-                                                Grid.Column="0"
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                Text="{Binding SelectedEvent.LowerLeftPortrait.OutfitTags, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Outfit Tags" />
-
-                                            <TextBlock
-                                                Grid.Row="0"
-                                                Grid.Column="2"
-                                                Grid.ColumnSpan="2"
-                                                Margin="4,8,4,8"
-                                                VerticalAlignment="Center"
-                                                HorizontalAlignment="Center"
-                                                FontStyle="Italic"
-                                                Text="Lower Center Portrait" />
-
-                                            <TextBox
-                                                Grid.Row="1"
-                                                Grid.Column="2"
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                Text="{Binding SelectedEvent.LowerCenterPortrait.Character, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Character" />
-                                            <TextBox
-                                                Grid.Row="2"
-                                                Grid.Column="2"
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                Text="{Binding SelectedEvent.LowerCenterPortrait.Animation, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Animation" />
-                                            <TextBox
-                                                Grid.Row="3"
-                                                Grid.Column="2"
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                Text="{Binding SelectedEvent.LowerCenterPortrait.OutfitTags, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Outfit Tags" />
-
-                                            <TextBlock
-                                                Grid.Row="0"
-                                                Grid.Column="4"
-                                                Grid.ColumnSpan="2"
-                                                Margin="4,8,4,8"
-                                                VerticalAlignment="Center"
-                                                HorizontalAlignment="Center"
-                                                FontStyle="Italic"
-                                                Text="Lower Right Portrait" />
-
-                                            <TextBox
-                                                Grid.Row="1"
-                                                Grid.Column="4"
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                Text="{Binding SelectedEvent.LowerRightPortrait.Character, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Character" />
-                                            <TextBox
-                                                Grid.Row="2"
-                                                Grid.Column="4"
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                Text="{Binding SelectedEvent.LowerRightPortrait.Animation, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Animation" />
-                                            <TextBox
-                                                Grid.Row="3"
-                                                Grid.Column="4"
-                                                Margin="4"
-                                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                                Text="{Binding SelectedEvent.LowerRightPortrait.OutfitTags, Mode=TwoWay}"
-                                                materialDesign:HintAssist.Hint="Outfit Tags" />
-                                        </Grid>
-                                    </Expander>
-                                    <!--#endregion-->
-                                    <!--#region Options Section -->
-                                    <Expander
-                                        Header="Options"
-                                        IsExpanded="True">
-                                        <ScrollViewer>
-                                            <ItemsControl
-                                                ItemsSource="{Binding SelectedEvent.Options}">
-
-                                            </ItemsControl>
-                                        </ScrollViewer>
-                                    </Expander>
-                                    <!--#endregion-->
-                                    <!--#region Triggers Section -->
-                                    <Expander
-                                        Header="Triggers"
-                                        IsExpanded="False">
-                                        <Grid>
-                                        </Grid>
-                                    </Expander>
-                                    <!--#endregion-->
-                                    <!--#region Immediate Effects Section -->
-                                    <Expander
-                                        Header="Immediate Effects"
-                                        IsExpanded="False">
-                                        <Grid>
-                                        </Grid>
-                                    </Expander>
-                                    <!--#endregion-->
-                                    <!--#region After Effects Section -->
-                                    <Expander
-                                        Header="After Effects"
-                                        IsExpanded="False">
-                                        <Grid>
-                                        </Grid>
-                                    </Expander>
-                                    <!--#endregion-->
-                                </StackPanel>
-                            </materialDesign:Card>
-                        </ScrollViewer>
-                        <!--#endregion-->
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="22"
+                            Text="Paradoxical" />
                     </DockPanel>
-                </TabItem>
-                <!--#endregion-->
-                <!--#region Triggers Tab -->
-                <TabItem
-                    Margin="4">
-                    <TabItem.Header>
-                        <StackPanel
-                            Width="auto"
-                            Height="auto">
-                            <materialDesign:PackIcon
-                                Width="24"
-                                Height="24"
-                                HorizontalAlignment="Center"
-                                Kind="ArrowDecision" />
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                Text="Triggers" />
-                        </StackPanel>
-                    </TabItem.Header>
-                    <ScrollViewer
-                        VerticalScrollBarVisibility="Auto"
-                        HorizontalScrollBarVisibility="Disabled">
-                    </ScrollViewer>
-                </TabItem>
-                <!--#endregion-->
-                <!--#region Effects Tab -->
-                <TabItem
-                    Margin="4">
-                    <TabItem.Header>
-                        <StackPanel
-                            Width="auto"
-                            Height="auto">
-                            <materialDesign:PackIcon
-                                Width="24"
-                                Height="24"
-                                HorizontalAlignment="Center"
-                                Kind="Run" />
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                Text="Effects" />
-                        </StackPanel>
-                    </TabItem.Header>
-                    <ScrollViewer
-                        VerticalScrollBarVisibility="Auto"
-                        HorizontalScrollBarVisibility="Disabled">
-                    </ScrollViewer>
-                </TabItem>
-                <!--#endregion-->
-            </TabControl>
-        </DockPanel>
+
+                </materialDesign:ColorZone>
+
+                <ContentControl
+                    Margin="0,20,0,0"
+                    Content="{Binding SelectedPage}" />
+
+            </DockPanel>
+        </materialDesign:DrawerHost>
     </materialDesign:DialogHost>
 </Window>

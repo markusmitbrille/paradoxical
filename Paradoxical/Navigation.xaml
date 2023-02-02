@@ -1,0 +1,24 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Paradoxical"
+    xmlns:view="clr-namespace:Paradoxical.View"
+    xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
+    xmlns:model="clr-namespace:Paradoxical.Model">
+    <DataTemplate
+        DataType="{x:Type viewmodel:InfoPageViewModel}">
+        <view:InfoPageView />
+    </DataTemplate>
+    <DataTemplate
+        DataType="{x:Type viewmodel:EventPageViewModel}">
+        <view:EventPageView />
+    </DataTemplate>
+    <DataTemplate
+        DataType="{x:Type viewmodel:TriggerPageViewModel}">
+        <view:TriggerPageView />
+    </DataTemplate>
+    <DataTemplate
+        DataType="{x:Type viewmodel:EffectPageViewModel}">
+        <view:EffectPageView />
+    </DataTemplate>
+</ResourceDictionary>

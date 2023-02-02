@@ -31,5 +31,10 @@ namespace Paradoxical.View
             if (e.ChangedButton == MouseButton.Left)
             { DragMove(); }
         }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            MenuToggleButton.IsChecked = false;
+        }
     }
 }

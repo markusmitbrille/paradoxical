@@ -1,5 +1,4 @@
-﻿using MaterialDesignThemes.Wpf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,9 +15,12 @@ using System.Windows.Shapes;
 
 namespace Paradoxical.View
 {
-    public partial class FindEventDialog : UserControl
+    /// <summary>
+    /// Interaction logic for EventPageView.xaml
+    /// </summary>
+    public partial class EventPageView : UserControl
     {
-        public FindEventDialog()
+        public EventPageView()
         {
             InitializeComponent();
         }
