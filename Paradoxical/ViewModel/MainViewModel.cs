@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Windows.Input;
 using System.Windows;
-using Paradoxical.Model;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Windows.Data;
@@ -22,7 +21,7 @@ namespace Paradoxical.ViewModel
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveModCommand))]
-        private ParadoxMod? activeMod;
+        private ParadoxModViewModel? activeMod;
 
         [ObservableProperty]
         private ObservableObject? selectedPage;

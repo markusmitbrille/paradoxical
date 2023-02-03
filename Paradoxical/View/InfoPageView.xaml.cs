@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace Paradoxical.View
 {
-    /// <summary>
-    /// Interaction logic for InfoPageView.xaml
-    /// </summary>
     public partial class InfoPageView : UserControl
     {
         public InfoPageView()

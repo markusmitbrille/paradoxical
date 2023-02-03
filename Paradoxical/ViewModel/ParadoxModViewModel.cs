@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Paradoxical.Model
+namespace Paradoxical.ViewModel
 {
-    public partial class ParadoxMod : ObservableObject
+    public partial class ParadoxModViewModel : ObservableObject
     {
         [ObservableProperty]
         private string name = "";
@@ -15,8 +15,8 @@ namespace Paradoxical.Model
         [ObservableProperty]
         private string eventNamespace = "";
 
-        public ObservableCollection<ParadoxEvent> Events { get; } = new();
-        public ObservableCollection<ParadoxTrigger> Triggers { get; } = new();
-        public ObservableCollection<ParadoxEffect> Effects { get; } = new();
+        public ObservableCollection<ParadoxEventViewModel> Events { get; } = new();
+        public ObservableCollection<ParadoxTriggerViewModel> Triggers { get; } = new();
+        public ObservableCollection<ParadoxEffectViewModel> Effects { get; } = new();
     }
 }

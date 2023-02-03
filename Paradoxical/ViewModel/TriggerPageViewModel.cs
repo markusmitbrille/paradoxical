@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Paradoxical.Model;
 using CommunityToolkit.Mvvm.Input;
 using System.Linq;
 using MaterialDesignThemes.Wpf;
@@ -17,14 +16,14 @@ namespace Paradoxical.ViewModel
         [NotifyCanExecuteChangedFor(nameof(FindTriggerCommand))]
         [NotifyCanExecuteChangedFor(nameof(PreviousTriggerCommand))]
         [NotifyCanExecuteChangedFor(nameof(NextTriggerCommand))]
-        private ParadoxMod? activeMod;
+        private ParadoxModViewModel? activeMod;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsTriggerSelected))]
         [NotifyCanExecuteChangedFor(nameof(RemoveTriggerCommand))]
         [NotifyCanExecuteChangedFor(nameof(PreviousTriggerCommand))]
         [NotifyCanExecuteChangedFor(nameof(NextTriggerCommand))]
-        private ParadoxTrigger? selectedTrigger;
+        private ParadoxTriggerViewModel? selectedTrigger;
         public bool IsTriggerSelected => SelectedTrigger != null;
 
         [RelayCommand(CanExecute = nameof(CanAddTrigger))]
@@ -33,7 +32,7 @@ namespace Paradoxical.ViewModel
             if (ActiveMod == null)
             { return; }
 
-            ParadoxTrigger trg = new();
+            ParadoxTriggerViewModel trg = new();
             trg.Name = "New Trigger";
 
             ActiveMod.Triggers.Add(trg);
@@ -52,11 +51,11 @@ namespace Paradoxical.ViewModel
             if (SelectedTrigger == null)
             { return; }
 
-            foreach (ParadoxEvent evt in ActiveMod.Events)
+            foreach (ParadoxEventViewModel evt in ActiveMod.Events)
             {
                 evt.Triggers.Remove(SelectedTrigger);
 
-                foreach (ParadoxEventOption opt in evt.Options)
+                foreach (ParadoxEventOptionViewModel opt in evt.Options)
                 {
                     opt.Triggers.Remove(SelectedTrigger);
                 }

@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace Paradoxical.View
 {
-    /// <summary>
-    /// Interaction logic for EffectPageView.xaml
-    /// </summary>
     public partial class EffectPageView : UserControl
     {
         public EffectPageView()

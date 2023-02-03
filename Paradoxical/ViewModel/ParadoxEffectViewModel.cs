@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Paradoxical.Model
+namespace Paradoxical.ViewModel
 {
-    public partial class ParadoxEffect : ObservableObject
+    public partial class ParadoxEffectViewModel : ObservableObject
     {
         [ObservableProperty]
         private string name = "";

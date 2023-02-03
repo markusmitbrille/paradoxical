@@ -2,9 +2,6 @@
 
 namespace Paradoxical.View
 {
-    /// <summary>
-    /// Interaction logic for ScriptBox.xaml
-    /// </summary>
     public partial class ScriptBox : Xceed.Wpf.Toolkit.RichTextBox
     {
         public ScriptBox()

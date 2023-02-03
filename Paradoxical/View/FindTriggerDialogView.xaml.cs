@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace Paradoxical.View
 {
-    /// <summary>
-    /// Interaction logic for FindTriggerDialogView.xaml
-    /// </summary>
     public partial class FindTriggerDialogView : UserControl
     {
         public FindTriggerDialogView()

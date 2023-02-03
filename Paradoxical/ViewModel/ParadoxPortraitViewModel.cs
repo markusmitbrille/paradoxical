@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.Generic;
 
-namespace Paradoxical.Model
+namespace Paradoxical.ViewModel
 {
-    public partial class ParadoxPortrait : ObservableObject
+    public partial class ParadoxPortraitViewModel : ObservableObject
     {
         [ObservableProperty]
         private string character = "";

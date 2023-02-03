@@ -15,9 +15,12 @@ using System.Windows.Shapes;
 
 namespace Paradoxical.View
 {
-    public partial class EventPageView : UserControl
+    /// <summary>
+    /// Interaction logic for ParadoxEventOptionView.xaml
+    /// </summary>
+    public partial class ParadoxEventOptionView : UserControl
     {
-        public EventPageView()
+        public ParadoxEventOptionView()
         {
             InitializeComponent();
         }

@@ -1,0 +1,19 @@
+﻿<UserControl
+    x:Class="Paradoxical.View.ParadoxTriggerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Paradoxical"
+    xmlns:view="clr-namespace:Paradoxical.View"
+    xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
+    xmlns:model="clr-namespace:Paradoxical.Model"
+    xmlns:formatters="clr-namespace:Paradoxical.Formatters"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance model:ParadoxTriggerViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800">
+
+
+</UserControl>

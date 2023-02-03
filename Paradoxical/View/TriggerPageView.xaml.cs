@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace Paradoxical.View
 {
-    /// <summary>
-    /// Interaction logic for TriggerPageView.xaml
-    /// </summary>
     public partial class TriggerPageView : UserControl
     {
         public TriggerPageView()

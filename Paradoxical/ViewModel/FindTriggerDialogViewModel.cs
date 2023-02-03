@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
-using Paradoxical.Model;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
@@ -13,13 +12,13 @@ namespace Paradoxical.ViewModel
         private ICollectionView? view;
 
         [ObservableProperty]
-        private ObservableCollection<ParadoxTrigger>? items;
+        private ObservableCollection<ParadoxTriggerViewModel>? items;
 
         [ObservableProperty]
         private string? filter;
 
         [ObservableProperty]
-        private ParadoxTrigger? selected;
+        private ParadoxTriggerViewModel? selected;
 
         public FindTriggerDialogViewModel()
         {
@@ -52,7 +51,7 @@ namespace Paradoxical.ViewModel
             if (string.IsNullOrEmpty(Filter))
             { return true; }
 
-            if (obj is not ParadoxTrigger evt)
+            if (obj is not ParadoxTriggerViewModel evt)
             { return false; }
 
             if (evt.Name.ToString().Contains(Filter))

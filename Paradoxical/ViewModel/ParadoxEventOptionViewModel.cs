@@ -1,10 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Paradoxical.Model
+namespace Paradoxical.ViewModel
 {
-    public partial class ParadoxEventOption : ObservableObject
+    public partial class ParadoxEventOptionViewModel : ObservableObject
     {
         [ObservableProperty]
         private string name = "";
@@ -12,17 +13,17 @@ namespace Paradoxical.Model
         private string tooltip = "";
 
         [ObservableProperty]
-        private ParadoxEvent? triggeredEvent = null;
+        private ParadoxEventViewModel? triggeredEvent = null;
         [ObservableProperty]
         private string triggeredEventScope = "";
 
         [ObservableProperty]
         private string trigger = "";
-        public ObservableCollection<ParadoxTrigger> Triggers { get; } = new();
+        public ObservableCollection<ParadoxTriggerViewModel> Triggers { get; } = new();
 
         [ObservableProperty]
         private string effect = "";
-        public ObservableCollection<ParadoxEffect> Effects { get; } = new();
+        public ObservableCollection<ParadoxEffectViewModel> Effects { get; } = new();
 
         [ObservableProperty]
         private int aiBaseChance = 100;
@@ -49,5 +50,15 @@ namespace Paradoxical.Model
 
         [ObservableProperty]
         private string aiChance = "";
+
+        [RelayCommand]
+        private void AddTrigger()
+        {
+        }
+
+        [RelayCommand]
+        private void RemoveTrigger(ParadoxTriggerViewModel trg)
+        {
+        }
     }
 }
