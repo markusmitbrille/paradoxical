@@ -6,10 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-    xmlns:local="clr-namespace:Paradoxical"
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
-    xmlns:model="clr-namespace:Paradoxical.Model"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     mc:Ignorable="d"
@@ -33,14 +31,17 @@
     TextOptions.TextRenderingMode="Auto"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}">
+
     <Window.DataContext>
         <viewmodel:MainViewModel />
     </Window.DataContext>
+
     <Window.InputBindings>
         <KeyBinding
             Command="{Binding NewModCommand}"
             Gesture="CTRL+N" />
     </Window.InputBindings>
+
     <materialDesign:DialogHost
         DialogTheme="Inherit"
         Identifier="RootDialog">
@@ -145,4 +146,5 @@
             </DockPanel>
         </materialDesign:DrawerHost>
     </materialDesign:DialogHost>
+
 </Window>

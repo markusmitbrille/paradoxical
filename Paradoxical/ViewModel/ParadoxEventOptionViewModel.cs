@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MaterialDesignThemes.Wpf;
+using Paradoxical.View;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -52,8 +54,25 @@ namespace Paradoxical.ViewModel
         private string aiChance = "";
 
         [RelayCommand]
-        private void AddTrigger()
+        private async void AddTrigger()
         {
+            // TODO: somehow get the necessary data ... services? dependency injection? voodoo?
+
+            FindTriggerDialogViewModel vm = new()
+            {
+                //Items = ActiveMod.Triggers,
+            };
+            FindTriggerDialogView dlg = new()
+            {
+                DataContext = vm,
+            };
+
+            await DialogHost.Show(dlg, "RootDialog");
+
+            if (vm.Selected == null)
+            { return; }
+
+            Triggers.Add(vm.Selected);
         }
 
         [RelayCommand]

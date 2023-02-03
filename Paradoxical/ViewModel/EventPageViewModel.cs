@@ -19,10 +19,12 @@ namespace Paradoxical.ViewModel
         private ParadoxModViewModel? activeMod;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsEventSelected))]
         [NotifyCanExecuteChangedFor(nameof(RemoveEventCommand))]
         [NotifyCanExecuteChangedFor(nameof(PreviousEventCommand))]
         [NotifyCanExecuteChangedFor(nameof(NextEventCommand))]
         private ParadoxEventViewModel? selectedEvent;
+        public bool IsEventSelected => SelectedEvent != null;
 
         [RelayCommand(CanExecute = nameof(CanAddEvent))]
         private void AddEvent()

@@ -5,16 +5,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Paradoxical"
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
-    xmlns:model="clr-namespace:Paradoxical.Model"
     xmlns:formatters="clr-namespace:Paradoxical.Formatters"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance viewmodel:EventPageViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800">
+
     <DockPanel>
 
         <materialDesign:Card
@@ -55,7 +54,26 @@
 
         <view:ParadoxEventView
             Margin="20,10"
-            DataContext="{Binding SelectedEvent}" />
+            DataContext="{Binding SelectedEvent}">
+            <view:ParadoxEventView.Resources>
+                <Style
+                    TargetType="TextBox">
+                    <Setter
+                        Property="IsEnabled"
+                        Value="{Binding DataContext.IsEventSelected, RelativeSource={RelativeSource AncestorType=view:EventPageView}}" />
+                    <Setter
+                        Property="Margin"
+                        Value="50" />
+                </Style>
+                <Style
+                    TargetType="RichTextBox">
+                    <Setter
+                        Property="IsEnabled"
+                        Value="{Binding DataContext.IsEventSelected, RelativeSource={RelativeSource AncestorType=view:EventPageView}}" />
+                </Style>
+            </view:ParadoxEventView.Resources>
+        </view:ParadoxEventView>
 
     </DockPanel>
+
 </UserControl>
