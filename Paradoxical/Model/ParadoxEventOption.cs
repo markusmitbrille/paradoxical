@@ -4,10 +4,12 @@ using MaterialDesignThemes.Wpf;
 using Paradoxical.Data;
 using Paradoxical.View;
 using Paradoxical.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media.Effects;
 
 namespace Paradoxical.Model
 {
@@ -64,6 +66,37 @@ namespace Paradoxical.Model
         public ParadoxEventOption(ModContext context)
         {
             Context = context;
+
+            name = $"Option [{Guid.NewGuid().ToString()[0..4]}]";
+        }
+
+        public ParadoxEventOption(ModContext context, ParadoxEventOption other) : this(context)
+        {
+            name = other.name;
+            tooltip = other.tooltip;
+
+            triggeredEvent = other.triggeredEvent;
+            triggeredEventScope = other.triggeredEventScope;
+
+            trigger = other.trigger;
+            effect = other.effect;
+
+            // aggregate association, therefore shallow copy
+            Triggers = new(other.Triggers);
+            Effects = new(other.Effects);
+
+            aiBaseChance = other.aiBaseChance;
+            aiBoldnessTargetModifier = other.aiBoldnessTargetModifier;
+            aiCompassionTargetModifier = other.aiCompassionTargetModifier;
+            aiGreedTargetModifier = other.aiGreedTargetModifier;
+            aiEnergyTargetModifier = other.aiEnergyTargetModifier;
+            aiHonorTargetModifier = other.aiHonorTargetModifier;
+            aiRationalityTargetModifier = other.aiRationalityTargetModifier;
+            aiSociabilityTargetModifier = other.aiSociabilityTargetModifier;
+            aiVengefulnessTargetModifier = other.aiVengefulnessTargetModifier;
+            aiZealTargetModifier = other.aiZealTargetModifier;
+
+            aiChance = other.aiChance;
         }
 
         [RelayCommand]

@@ -47,6 +47,10 @@
                         Content="{materialDesign:PackIcon Kind=Add}"
                         ToolTip="Add Trigger" />
                     <Button
+                        Command="{Binding DuplicateTriggerCommand}"
+                        Content="{materialDesign:PackIcon Kind=ContentDuplicate}"
+                        ToolTip="Duplicate Trigger" />
+                    <Button
                         Command="{Binding RemoveTriggerCommand}"
                         Content="{materialDesign:PackIcon Kind=Remove}"
                         ToolTip="Remove Trigger" />

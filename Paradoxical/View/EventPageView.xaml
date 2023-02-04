@@ -48,6 +48,10 @@
                         Content="{materialDesign:PackIcon Kind=Add}"
                         ToolTip="Add Event" />
                     <Button
+                        Command="{Binding DuplicateEventCommand}"
+                        Content="{materialDesign:PackIcon Kind=ContentDuplicate}"
+                        ToolTip="Duplicate Event" />
+                    <Button
                         Command="{Binding RemoveEventCommand}"
                         Content="{materialDesign:PackIcon Kind=Remove}"
                         ToolTip="Remove Event" />

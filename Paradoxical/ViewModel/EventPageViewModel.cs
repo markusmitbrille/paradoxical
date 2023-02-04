@@ -6,6 +6,7 @@ using Paradoxical.View;
 using Paradoxical.Data;
 using Paradoxical.Model;
 using System;
+using System.Windows;
 
 namespace Paradoxical.ViewModel
 {
@@ -17,6 +18,7 @@ namespace Paradoxical.ViewModel
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsEventSelected))]
+        [NotifyCanExecuteChangedFor(nameof(DuplicateEventCommand))]
         [NotifyCanExecuteChangedFor(nameof(RemoveEventCommand))]
         [NotifyCanExecuteChangedFor(nameof(PreviousEventCommand))]
         [NotifyCanExecuteChangedFor(nameof(NextEventCommand))]
@@ -31,20 +33,40 @@ namespace Paradoxical.ViewModel
         [RelayCommand]
         private void AddEvent()
         {
-            ParadoxEvent evt = new(Context)
-            {
-                Id = Context.Events.Count == 0 ? 1 : Context.Events.Max(evt => evt.Id) + 1,
-                Title = $"Event [{Guid.NewGuid().ToString()[0..4]}]",
-            };
+            ParadoxEvent evt = new(Context);
 
             Context.Events.Add(evt);
             SelectedEvent = evt;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanDuplicateEvent))]
+        private void DuplicateEvent()
+        {
+            if (SelectedEvent == null)
+            { return; }
+
+            ParadoxEvent evt = new(Context, SelectedEvent);
+            Context.Events.Add(evt);
+
+            SelectedEvent = evt;
+        }
+        private bool CanDuplicateEvent()
+        {
+            return SelectedEvent != null;
         }
 
         [RelayCommand(CanExecute = nameof(CanRemoveEvent))]
         private void RemoveEvent()
         {
             if (SelectedEvent == null)
+            { return; }
+
+            if (MessageBox.Show(
+                "Are you sure?",
+                "Remove Event",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning,
+                MessageBoxResult.Yes) != MessageBoxResult.Yes)
             { return; }
 
             foreach (ParadoxEvent evt in Context.Events)

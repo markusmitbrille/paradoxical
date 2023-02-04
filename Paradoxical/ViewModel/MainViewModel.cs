@@ -65,14 +65,12 @@ namespace Paradoxical.ViewModel
         private void NewMod()
         {
             if (Context != null && MessageBox.Show(
-                "Do you want to continue? Unsaved changes will be discarded!",
-                "New Mod",
-                MessageBoxButton.OKCancel,
+                "Are you sure?",
+                "Exit Application",
+                MessageBoxButton.YesNo,
                 MessageBoxImage.Warning,
-                MessageBoxResult.OK) != MessageBoxResult.OK)
-            {
-                return;
-            }
+                MessageBoxResult.Yes) != MessageBoxResult.Yes)
+            { return; }
 
             ResetContext();
         }

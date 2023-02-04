@@ -47,6 +47,10 @@
                         Content="{materialDesign:PackIcon Kind=Add}"
                         ToolTip="Add Effect" />
                     <Button
+                        Command="{Binding DuplicateEffectCommand}"
+                        Content="{materialDesign:PackIcon Kind=ContentDuplicate}"
+                        ToolTip="Duplicate Effect" />
+                    <Button
                         Command="{Binding RemoveEffectCommand}"
                         Content="{materialDesign:PackIcon Kind=Remove}"
                         ToolTip="Remove Effect" />

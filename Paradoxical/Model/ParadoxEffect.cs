@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Paradoxical.Data;
+using System;
 
 namespace Paradoxical.Model
 {
@@ -16,6 +17,14 @@ namespace Paradoxical.Model
         public ParadoxEffect(ModContext context)
         {
             Context = context;
+
+            name = $"Effect [{Guid.NewGuid().ToString()[0..4]}]";
+        }
+
+        public ParadoxEffect(ModContext context, ParadoxEffect other):this(context)
+        {
+            name = other.name;
+            code = other.name;
         }
     }
 }

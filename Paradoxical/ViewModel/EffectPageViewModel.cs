@@ -6,6 +6,7 @@ using Paradoxical.Model;
 using Paradoxical.View;
 using System;
 using System.Linq;
+using System.Windows;
 using System.Xml.Linq;
 
 namespace Paradoxical.ViewModel
@@ -18,6 +19,7 @@ namespace Paradoxical.ViewModel
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsEffectSelected))]
+        [NotifyCanExecuteChangedFor(nameof(DuplicateEffectCommand))]
         [NotifyCanExecuteChangedFor(nameof(RemoveEffectCommand))]
         [NotifyCanExecuteChangedFor(nameof(PreviousEffectCommand))]
         [NotifyCanExecuteChangedFor(nameof(NextEffectCommand))]
@@ -32,19 +34,40 @@ namespace Paradoxical.ViewModel
         [RelayCommand]
         private void AddEffect()
         {
-            ParadoxEffect eff = new(Context)
-            {
-                Name = $"Effect [{Guid.NewGuid().ToString()[0..4]}]",
-            };
+            ParadoxEffect eff = new(Context);
 
             Context.Effects.Add(eff);
             SelectedEffect = eff;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanDuplicateEffect))]
+        private void DuplicateEffect()
+        {
+            if (SelectedEffect == null)
+            { return; }
+
+            ParadoxEffect evt = new(Context, SelectedEffect);
+            Context.Effects.Add(evt);
+
+            SelectedEffect = evt;
+        }
+        private bool CanDuplicateEffect()
+        {
+            return SelectedEffect != null;
         }
 
         [RelayCommand(CanExecute = nameof(CanRemoveEffect))]
         private void RemoveEffect()
         {
             if (SelectedEffect == null)
+            { return; }
+
+            if (MessageBox.Show(
+                "Are you sure?",
+                "Remove Trigger",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning,
+                MessageBoxResult.Yes) != MessageBoxResult.Yes)
             { return; }
 
             foreach (ParadoxEvent evt in Context.Events)

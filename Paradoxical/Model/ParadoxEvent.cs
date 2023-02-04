@@ -4,6 +4,7 @@ using MaterialDesignThemes.Wpf;
 using Paradoxical.Data;
 using Paradoxical.View;
 using Paradoxical.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -58,6 +59,9 @@ namespace Paradoxical.Model
         {
             Context = context;
 
+            id = context.Events.Count == 0 ? 1 : context.Events.Max(evt => evt.Id) + 1;
+            title = $"Event [{Guid.NewGuid().ToString()[0..4]}]";
+
             leftPortrait = new(context);
             rightPortrait = new(context);
             lowerLeftPortrait = new(context);
@@ -65,13 +69,39 @@ namespace Paradoxical.Model
             lowerRightPortrait = new(context);
         }
 
+        public ParadoxEvent(ModContext context, ParadoxEvent other) : this(context)
+        {
+            title = other.title;
+            description = other.description;
+
+            theme = other.theme;
+            background = other.background;
+            sound = other.sound;
+
+            // composite association, therefore deep copy
+            Options = new(other.Options.Select(e => new ParadoxEventOption(context, e)));
+
+            // composite associations, therefore deep copy
+            leftPortrait = new(context, other.leftPortrait);
+            rightPortrait = new(context, other.rightPortrait);
+            lowerLeftPortrait = new(context, other.lowerLeftPortrait);
+            lowerRightPortrait = new(context, other.lowerRightPortrait);
+            lowerCenterPortrait = new(context, other.lowerCenterPortrait);
+
+            trigger = other.trigger;
+            immediateEffect = other.immediateEffect;
+            afterEffect = other.afterEffect;
+
+            // aggregate association, therefore shallow copy
+            Triggers = new(other.Triggers);
+            ImmediateEffects = new(other.ImmediateEffects);
+            AfterEffects = new(other.AfterEffects);
+        }
+
         [RelayCommand]
         private void AddOption()
         {
-            ParadoxEventOption opt = new(Context)
-            {
-                Name = "New Option"
-            };
+            ParadoxEventOption opt = new(Context);
 
             Options.Add(opt);
 
@@ -91,37 +121,7 @@ namespace Paradoxical.Model
         [RelayCommand]
         private void DuplicateOption(ParadoxEventOption opt)
         {
-            ParadoxEventOption copy = new(Context)
-            {
-                Name = opt.Name,
-                Tooltip = opt.Tooltip,
-                TriggeredEvent = opt.TriggeredEvent,
-                TriggeredEventScope = opt.TriggeredEventScope,
-                Trigger = opt.Trigger,
-                Effect = opt.Effect,
-                AiChance = opt.AiChance,
-                AiBaseChance = opt.AiBaseChance,
-                AiBoldnessTargetModifier = opt.AiBoldnessTargetModifier,
-                AiGreedTargetModifier = opt.AiGreedTargetModifier,
-                AiCompassionTargetModifier = opt.AiCompassionTargetModifier,
-                AiEnergyTargetModifier = opt.AiEnergyTargetModifier,
-                AiHonorTargetModifier = opt.AiHonorTargetModifier,
-                AiRationalityTargetModifier = opt.AiRationalityTargetModifier,
-                AiSociabilityTargetModifier = opt.AiSociabilityTargetModifier,
-                AiVengefulnessTargetModifier = opt.AiVengefulnessTargetModifier,
-                AiZealTargetModifier = opt.AiZealTargetModifier,
-            };
-
-            foreach (var trigger in opt.Triggers)
-            {
-                copy.Triggers.Add(trigger);
-            }
-
-            foreach (var effect in opt.Effects)
-            {
-                copy.Effects.Add(effect);
-            }
-
+            ParadoxEventOption copy = new(Context, opt);
             Options.Add(copy);
 
             MoveOptionUpCommand.NotifyCanExecuteChanged();

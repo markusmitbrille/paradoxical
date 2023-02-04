@@ -19,5 +19,12 @@ namespace Paradoxical.Model
         {
             Context = context;
         }
+
+        public ParadoxPortrait(ModContext context, ParadoxPortrait other) : this(context)
+        {
+            character = other.character;
+            animation = other.animation;
+            outfitTags = other.outfitTags;
+        }
     }
 }
