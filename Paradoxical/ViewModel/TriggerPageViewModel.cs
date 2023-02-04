@@ -4,6 +4,7 @@ using System.Linq;
 using MaterialDesignThemes.Wpf;
 using Paradoxical.View;
 using Paradoxical.Data;
+using Paradoxical.Model;
 
 namespace Paradoxical.ViewModel
 {
@@ -18,7 +19,7 @@ namespace Paradoxical.ViewModel
         [NotifyCanExecuteChangedFor(nameof(RemoveTriggerCommand))]
         [NotifyCanExecuteChangedFor(nameof(PreviousTriggerCommand))]
         [NotifyCanExecuteChangedFor(nameof(NextTriggerCommand))]
-        private ParadoxTriggerViewModel? selectedTrigger;
+        private ParadoxTrigger? selectedTrigger;
         public bool IsTriggerSelected => SelectedTrigger != null;
 
         public TriggerPageViewModel(ModContext context)
@@ -29,7 +30,7 @@ namespace Paradoxical.ViewModel
         [RelayCommand]
         private void AddTrigger()
         {
-            ParadoxTriggerViewModel trg = new(Context);
+            ParadoxTrigger trg = new(Context);
             trg.Name = "New Trigger";
 
             Context.Triggers.Add(trg);
@@ -42,11 +43,11 @@ namespace Paradoxical.ViewModel
             if (SelectedTrigger == null)
             { return; }
 
-            foreach (ParadoxEventViewModel evt in Context.Events)
+            foreach (ParadoxEvent evt in Context.Events)
             {
                 evt.Triggers.Remove(SelectedTrigger);
 
-                foreach (ParadoxEventOptionViewModel opt in evt.Options)
+                foreach (ParadoxEventOption opt in evt.Options)
                 {
                     opt.Triggers.Remove(SelectedTrigger);
                 }

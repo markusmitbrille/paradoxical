@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Paradoxical.Data;
 
-namespace Paradoxical.ViewModel
+namespace Paradoxical.Model
 {
-    public partial class ParadoxTriggerViewModel : ObservableObject
+    public partial class ParadoxTrigger : ObservableObject
     {
         public ModContext Context { get; }
 
@@ -11,8 +11,8 @@ namespace Paradoxical.ViewModel
         private string name = "";
         [ObservableProperty]
         private string code = "";
-        
-        public ParadoxTriggerViewModel(ModContext context)
+
+        public ParadoxTrigger(ModContext context)
         {
             Context = context;
         }

@@ -3,12 +3,13 @@ using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
 using Paradoxical.Data;
 using Paradoxical.View;
+using Paradoxical.ViewModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Paradoxical.ViewModel
+namespace Paradoxical.Model
 {
-    public partial class ParadoxEventOptionViewModel : ObservableObject
+    public partial class ParadoxEventOption : ObservableObject
     {
         public ModContext Context { get; }
 
@@ -18,17 +19,17 @@ namespace Paradoxical.ViewModel
         private string tooltip = "";
 
         [ObservableProperty]
-        private ParadoxEventViewModel? triggeredEvent = null;
+        private ParadoxEvent? triggeredEvent = null;
         [ObservableProperty]
         private string triggeredEventScope = "";
 
         [ObservableProperty]
         private string trigger = "";
-        public ObservableCollection<ParadoxTriggerViewModel> Triggers { get; } = new();
+        public ObservableCollection<ParadoxTrigger> Triggers { get; } = new();
 
         [ObservableProperty]
         private string effect = "";
-        public ObservableCollection<ParadoxEffectViewModel> Effects { get; } = new();
+        public ObservableCollection<ParadoxEffect> Effects { get; } = new();
 
         [ObservableProperty]
         private int aiBaseChance = 100;
@@ -56,7 +57,7 @@ namespace Paradoxical.ViewModel
         [ObservableProperty]
         private string aiChance = "";
 
-        public ParadoxEventOptionViewModel(ModContext context)
+        public ParadoxEventOption(ModContext context)
         {
             Context = context;
         }
@@ -84,7 +85,7 @@ namespace Paradoxical.ViewModel
         }
 
         [RelayCommand]
-        private void RemoveTrigger(ParadoxTriggerViewModel trg)
+        private void RemoveTrigger(ParadoxTrigger trg)
         {
             Triggers.Remove(trg);
         }

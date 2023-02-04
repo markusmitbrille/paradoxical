@@ -1,4 +1,4 @@
-﻿using Paradoxical.ViewModel;
+﻿using Paradoxical.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,11 +10,11 @@ namespace Paradoxical.Data
 {
     public class ModContext
     {
-        public ParadoxModViewModel Info { get; }
+        public ParadoxMod Info { get; }
 
-        public ObservableCollection<ParadoxEventViewModel> Events { get; } = new();
-        public ObservableCollection<ParadoxTriggerViewModel> Triggers { get; } = new();
-        public ObservableCollection<ParadoxEffectViewModel> Effects { get; } = new();
+        public ObservableCollection<ParadoxEvent> Events { get; } = new();
+        public ObservableCollection<ParadoxTrigger> Triggers { get; } = new();
+        public ObservableCollection<ParadoxEffect> Effects { get; } = new();
 
         public ModContext()
         {

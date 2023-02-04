@@ -4,6 +4,7 @@ using System.Linq;
 using MaterialDesignThemes.Wpf;
 using Paradoxical.View;
 using Paradoxical.Data;
+using Paradoxical.Model;
 
 namespace Paradoxical.ViewModel
 {
@@ -18,7 +19,7 @@ namespace Paradoxical.ViewModel
         [NotifyCanExecuteChangedFor(nameof(RemoveEventCommand))]
         [NotifyCanExecuteChangedFor(nameof(PreviousEventCommand))]
         [NotifyCanExecuteChangedFor(nameof(NextEventCommand))]
-        private ParadoxEventViewModel? selectedEvent;
+        private ParadoxEvent? selectedEvent;
         public bool IsEventSelected => SelectedEvent != null;
 
         public EventPageViewModel(ModContext context)
@@ -29,7 +30,7 @@ namespace Paradoxical.ViewModel
         [RelayCommand]
         private void AddEvent()
         {
-            ParadoxEventViewModel evt = new(Context)
+            ParadoxEvent evt = new(Context)
             {
                 Id = Context.Events.Count == 0 ? 1 : Context.Events.Max(evt => evt.Id) + 1,
                 Title = "New Event"
@@ -45,9 +46,9 @@ namespace Paradoxical.ViewModel
             if (SelectedEvent == null)
             { return; }
 
-            foreach (ParadoxEventViewModel evt in Context.Events)
+            foreach (ParadoxEvent evt in Context.Events)
             {
-                foreach (ParadoxEventOptionViewModel opt in evt.Options)
+                foreach (ParadoxEventOption opt in evt.Options)
                 {
                     if (opt.TriggeredEvent == SelectedEvent)
                     {

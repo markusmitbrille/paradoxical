@@ -2,9 +2,9 @@
 using Paradoxical.Data;
 using System.Collections.Generic;
 
-namespace Paradoxical.ViewModel
+namespace Paradoxical.Model
 {
-    public partial class ParadoxPortraitViewModel : ObservableObject
+    public partial class ParadoxPortrait : ObservableObject
     {
         public ModContext Context { get; }
 
@@ -15,7 +15,7 @@ namespace Paradoxical.ViewModel
         [ObservableProperty]
         private string outfitTags = "";
 
-        public ParadoxPortraitViewModel(ModContext context)
+        public ParadoxPortrait(ModContext context)
         {
             Context = context;
         }

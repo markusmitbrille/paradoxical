@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Data;
+using Paradoxical.Model;
 using System.Linq;
 
 namespace Paradoxical.ViewModel
@@ -13,7 +14,7 @@ namespace Paradoxical.ViewModel
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(RemoveEffectCommand))]
-        private ParadoxEffectViewModel? selectedEffect;
+        private ParadoxEffect? selectedEffect;
 
         public EffectPageViewModel(ModContext context)
         {
@@ -23,7 +24,7 @@ namespace Paradoxical.ViewModel
         [RelayCommand]
         private void AddEffect()
         {
-            ParadoxEffectViewModel eff = new(Context);
+            ParadoxEffect eff = new(Context);
             eff.Name = "New Effect";
 
             Context.Effects.Add(eff);
@@ -36,12 +37,12 @@ namespace Paradoxical.ViewModel
             if (SelectedEffect == null)
             { return; }
 
-            foreach (ParadoxEventViewModel evt in Context.Events)
+            foreach (ParadoxEvent evt in Context.Events)
             {
                 evt.ImmediateEffects.Remove(SelectedEffect);
                 evt.AfterEffects.Remove(SelectedEffect);
 
-                foreach (ParadoxEventOptionViewModel opt in evt.Options)
+                foreach (ParadoxEventOption opt in evt.Options)
                 {
                     opt.Effects.Remove(SelectedEffect);
                 }

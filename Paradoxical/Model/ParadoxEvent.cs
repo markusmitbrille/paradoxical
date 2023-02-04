@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Paradoxical.ViewModel
+namespace Paradoxical.Model
 {
-    public partial class ParadoxEventViewModel : ObservableObject
+    public partial class ParadoxEvent : ObservableObject
     {
         public ModContext Context { get; }
 
@@ -25,32 +25,32 @@ namespace Paradoxical.ViewModel
         [ObservableProperty]
         private string sound = "";
 
-        public ObservableCollection<ParadoxEventOptionViewModel> Options { get; } = new();
+        public ObservableCollection<ParadoxEventOption> Options { get; } = new();
 
         [ObservableProperty]
-        private ParadoxPortraitViewModel leftPortrait;
+        private ParadoxPortrait leftPortrait;
         [ObservableProperty]
-        private ParadoxPortraitViewModel rightPortrait;
+        private ParadoxPortrait rightPortrait;
         [ObservableProperty]
-        private ParadoxPortraitViewModel lowerLeftPortrait;
+        private ParadoxPortrait lowerLeftPortrait;
         [ObservableProperty]
-        private ParadoxPortraitViewModel lowerRightPortrait;
+        private ParadoxPortrait lowerRightPortrait;
         [ObservableProperty]
-        private ParadoxPortraitViewModel lowerCenterPortrait;
+        private ParadoxPortrait lowerCenterPortrait;
 
         [ObservableProperty]
         private string trigger = "";
-        public ObservableCollection<ParadoxTriggerViewModel> Triggers { get; } = new();
+        public ObservableCollection<ParadoxTrigger> Triggers { get; } = new();
 
         [ObservableProperty]
         private string immediateEffect = "";
-        public ObservableCollection<ParadoxEffectViewModel> ImmediateEffects { get; } = new();
+        public ObservableCollection<ParadoxEffect> ImmediateEffects { get; } = new();
 
         [ObservableProperty]
         private string afterEffect = "";
-        public ObservableCollection<ParadoxEffectViewModel> AfterEffects { get; } = new();
+        public ObservableCollection<ParadoxEffect> AfterEffects { get; } = new();
 
-        public ParadoxEventViewModel(ModContext context)
+        public ParadoxEvent(ModContext context)
         {
             Context = context;
 
@@ -64,7 +64,7 @@ namespace Paradoxical.ViewModel
         [RelayCommand]
         private void AddOption()
         {
-            ParadoxEventOptionViewModel opt = new(Context)
+            ParadoxEventOption opt = new(Context)
             {
                 Name = "New Option"
             };
@@ -76,7 +76,7 @@ namespace Paradoxical.ViewModel
         }
 
         [RelayCommand]
-        private void RemoveOption(ParadoxEventOptionViewModel opt)
+        private void RemoveOption(ParadoxEventOption opt)
         {
             Options.Remove(opt);
 
@@ -85,9 +85,9 @@ namespace Paradoxical.ViewModel
         }
 
         [RelayCommand]
-        private void DuplicateOption(ParadoxEventOptionViewModel opt)
+        private void DuplicateOption(ParadoxEventOption opt)
         {
-            ParadoxEventOptionViewModel copy = new(Context)
+            ParadoxEventOption copy = new(Context)
             {
                 Name = opt.Name,
                 Tooltip = opt.Tooltip,
@@ -125,7 +125,7 @@ namespace Paradoxical.ViewModel
         }
 
         [RelayCommand(CanExecute = nameof(CanMoveOptionUp))]
-        private void MoveOptionUp(ParadoxEventOptionViewModel opt)
+        private void MoveOptionUp(ParadoxEventOption opt)
         {
             int index = Options.IndexOf(opt);
             Options.Move(index, index - 1);
@@ -133,14 +133,14 @@ namespace Paradoxical.ViewModel
             MoveOptionUpCommand.NotifyCanExecuteChanged();
             MoveOptionDownCommand.NotifyCanExecuteChanged();
         }
-        private bool CanMoveOptionUp(ParadoxEventOptionViewModel opt)
+        private bool CanMoveOptionUp(ParadoxEventOption opt)
         {
             return Options.Any()
                 && opt != Options.First();
         }
 
         [RelayCommand(CanExecute = nameof(CanMoveOptionDown))]
-        private void MoveOptionDown(ParadoxEventOptionViewModel opt)
+        private void MoveOptionDown(ParadoxEventOption opt)
         {
             int index = Options.IndexOf(opt);
             Options.Move(index, index + 1);
@@ -148,7 +148,7 @@ namespace Paradoxical.ViewModel
             MoveOptionUpCommand.NotifyCanExecuteChanged();
             MoveOptionDownCommand.NotifyCanExecuteChanged();
         }
-        private bool CanMoveOptionDown(ParadoxEventOptionViewModel opt)
+        private bool CanMoveOptionDown(ParadoxEventOption opt)
         {
             return Options.Any()
                 && opt != Options.Last();

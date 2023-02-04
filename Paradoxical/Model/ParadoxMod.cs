@@ -3,9 +3,9 @@ using Paradoxical.Data;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Paradoxical.ViewModel
+namespace Paradoxical.Model
 {
-    public partial class ParadoxModViewModel : ObservableObject
+    public partial class ParadoxMod : ObservableObject
     {
         public ModContext Context { get; }
 
@@ -18,7 +18,7 @@ namespace Paradoxical.ViewModel
         [ObservableProperty]
         private string eventNamespace = "";
 
-        public ParadoxModViewModel(ModContext context)
+        public ParadoxMod(ModContext context)
         {
             Context = context;
         }
