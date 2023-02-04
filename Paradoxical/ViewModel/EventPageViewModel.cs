@@ -72,6 +72,7 @@ namespace Paradoxical.ViewModel
             FindEventDialogViewModel vm = new()
             {
                 Items = Context.Events,
+                Selected = SelectedEvent,
             };
             FindEventDialogView dlg = new()
             {

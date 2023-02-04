@@ -15,18 +15,13 @@
     Height="400"
     Width="550">
 
-    <behaviors:Interaction.Triggers>
-        <behaviors:EventTrigger
-            EventName="LostFocus">
-            <behaviors:InvokeCommandAction
-                Command="{Binding CloseCommand}" />
-        </behaviors:EventTrigger>
-    </behaviors:Interaction.Triggers>
-
     <UserControl.InputBindings>
         <KeyBinding
             Command="{Binding CloseCommand}"
             Gesture="ESC" />
+        <KeyBinding
+            Command="{Binding CloseCommand}"
+            Gesture="Enter" />
     </UserControl.InputBindings>
 
     <StackPanel
@@ -48,26 +43,30 @@
                         <StackPanel
                             Margin="24,4,0,4"
                             Orientation="Horizontal">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger
+                                    EventName="MouseLeftButtonUp">
+                                    <behaviors:InvokeCommandAction
+                                        Command="{Binding DataContext.CloseCommand, RelativeSource={RelativeSource AncestorType=view:FindEventDialogView}}" />
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+
                             <TextBlock
                                 Style="{DynamicResource MaterialDesignButtonTextBlock}"
                                 Text="{Binding Id}"
                                 TextAlignment="Right" />
+                            
                             <TextBlock
                                 Style="{DynamicResource MaterialDesignButtonTextBlock}"
                                 Text=": " />
+                           
                             <TextBlock
                                 Style="{DynamicResource MaterialDesignButtonTextBlock}"
                                 Text="{Binding Title}" />
+                            
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
-                <behaviors:Interaction.Triggers>
-                    <behaviors:EventTrigger
-                        EventName="Selected">
-                        <behaviors:InvokeCommandAction
-                            Command="{Binding CloseCommand}" />
-                    </behaviors:EventTrigger>
-                </behaviors:Interaction.Triggers>
             </ListBox>
         </ScrollViewer>
     </StackPanel>

@@ -7,12 +7,17 @@
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
     xmlns:model="clr-namespace:Paradoxical.Model"
+    xmlns:converters="clr-namespace:Paradoxical.Converters"
     xmlns:formatters="clr-namespace:Paradoxical.Formatters"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     d:DataContext="{d:DesignInstance Type=model:ParadoxEvent}"
     mc:Ignorable="d"
     d:DesignHeight="450"
     d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:ObjectNullConverter
+            x:Key="ObjectNullConverter" />
+    </UserControl.Resources>
 
     <materialDesign:Card
         Padding="8"
@@ -28,7 +33,7 @@
                     <StackPanel>
                         <view:ScriptBox
                             Margin="4"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignRichTextBox}"
                             Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             AcceptsReturn="False"
@@ -45,7 +50,7 @@
                         <view:ScriptBox
                             Height="120"
                             Margin="4"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignRichTextBox}"
                             Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Description"
@@ -86,7 +91,7 @@
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Margin="4"
-                                IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                                IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding Theme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 materialDesign:HintAssist.Hint="Theme" />
@@ -95,7 +100,7 @@
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 Margin="4"
-                                IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                                IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding Background, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 materialDesign:HintAssist.Hint="Background" />
@@ -103,7 +108,7 @@
                             <TextBox
                                 Grid.Row="2"
                                 Grid.Column="0"
-                                IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                                IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding Sound, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -145,7 +150,7 @@
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
                             Margin="4,8,4,8"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center"
                             FontStyle="Italic"
@@ -155,7 +160,7 @@
                             Grid.Row="1"
                             Grid.Column="0"
                             Margin="4"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LeftPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Character" />
@@ -163,7 +168,7 @@
                             Grid.Row="2"
                             Grid.Column="0"
                             Margin="4"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LeftPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Animation" />
@@ -171,7 +176,7 @@
                             Grid.Row="3"
                             Grid.Column="0"
                             Margin="4"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LeftPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Outfit Tags" />
@@ -181,7 +186,7 @@
                             Grid.Column="2"
                             Grid.ColumnSpan="2"
                             Margin="4,8,4,8"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center"
                             FontStyle="Italic"
@@ -191,14 +196,14 @@
                             Grid.Row="1"
                             Grid.Column="2"
                             Margin="4"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding RightPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Character" />
                         <TextBox
                             Grid.Row="2"
                             Grid.Column="2"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Margin="4"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding RightPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -207,7 +212,7 @@
                             Grid.Row="3"
                             Grid.Column="2"
                             Margin="4"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding RightPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Outfit Tags" />
@@ -252,7 +257,7 @@
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
                             Margin="4,8,4,8"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center"
                             FontStyle="Italic"
@@ -262,7 +267,7 @@
                             Grid.Row="1"
                             Grid.Column="0"
                             Margin="4"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LowerLeftPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Character" />
@@ -270,7 +275,7 @@
                             Grid.Row="2"
                             Grid.Column="0"
                             Margin="4"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LowerLeftPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Animation" />
@@ -278,7 +283,7 @@
                             Grid.Row="3"
                             Grid.Column="0"
                             Margin="4"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LowerLeftPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Outfit Tags" />
@@ -288,7 +293,7 @@
                             Grid.Column="2"
                             Grid.ColumnSpan="2"
                             Margin="4,8,4,8"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center"
                             FontStyle="Italic"
@@ -298,7 +303,7 @@
                             Grid.Row="1"
                             Grid.Column="2"
                             Margin="4"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LowerCenterPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Character" />
@@ -306,7 +311,7 @@
                             Grid.Row="2"
                             Grid.Column="2"
                             Margin="4"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LowerCenterPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Animation" />
@@ -314,7 +319,7 @@
                             Grid.Row="3"
                             Grid.Column="2"
                             Margin="4"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LowerCenterPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Outfit Tags" />
@@ -324,7 +329,7 @@
                             Grid.Column="4"
                             Grid.ColumnSpan="2"
                             Margin="4,8,4,8"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center"
                             FontStyle="Italic"
@@ -334,7 +339,7 @@
                             Grid.Row="1"
                             Grid.Column="4"
                             Margin="4"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LowerRightPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Character" />
@@ -342,7 +347,7 @@
                             Grid.Row="2"
                             Grid.Column="4"
                             Margin="4"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LowerRightPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Animation" />
@@ -350,7 +355,7 @@
                             Grid.Row="3"
                             Grid.Column="4"
                             Margin="4"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LowerRightPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Outfit Tags" />
@@ -387,7 +392,7 @@
 
                                                 <Button
                                                     Margin="8"
-                                                    IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                                                    IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                                                     Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                     Command="{Binding DataContext.MoveOptionUpCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                     CommandParameter="{Binding}"
@@ -396,7 +401,7 @@
 
                                                 <Button
                                                     Margin="8"
-                                                    IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                                                    IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                                                     Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                     Command="{Binding DataContext.MoveOptionDownCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                     CommandParameter="{Binding}"
@@ -405,7 +410,7 @@
 
                                                 <Button
                                                     Margin="8"
-                                                    IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                                                    IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                                                     Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                     Command="{Binding DataContext.DuplicateOptionCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                     CommandParameter="{Binding}"
@@ -413,7 +418,7 @@
                                                     ToolTip="Duplicate Option" />
                                                 <Button
                                                     Margin="8"
-                                                    IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                                                    IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                                                     Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                     Command="{Binding DataContext.RemoveOptionCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                     CommandParameter="{Binding}"
@@ -433,7 +438,7 @@
 
                         <Button
                             Margin="8"
-                            IsEnabled="{Binding TargetNullValue=false, FallbackValue=true}"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                             Command="{Binding AddOptionCommand}"
                             Content="{materialDesign:PackIcon Kind=PlaylistAdd}"
