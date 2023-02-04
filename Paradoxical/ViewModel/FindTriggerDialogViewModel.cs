@@ -41,6 +41,7 @@ namespace Paradoxical.ViewModel
             { return; }
 
             view?.Refresh();
+            Selected = (ParadoxTrigger?)(view?.CurrentItem);
 
             if (Blacklist != null)
             {
@@ -51,6 +52,7 @@ namespace Paradoxical.ViewModel
         private void BlacklistCollectionChangedHandler(object? sender, NotifyCollectionChangedEventArgs e)
         {
             view?.Refresh();
+            Selected = (ParadoxTrigger?)(view?.CurrentItem);
         }
 
         private void FilterPropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
@@ -62,6 +64,7 @@ namespace Paradoxical.ViewModel
             { return; }
 
             view.Refresh();
+            Selected = (ParadoxTrigger?)(view?.CurrentItem);
         }
 
         private void ItemsPropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
@@ -72,7 +75,8 @@ namespace Paradoxical.ViewModel
             view = CollectionViewSource.GetDefaultView(Items);
             view.Filter = FilterItems;
 
-            Selected = view.Cast<ParadoxTrigger>().FirstOrDefault();
+            view?.Refresh();
+            Selected = (ParadoxTrigger?)(view?.CurrentItem);
         }
 
         private bool FilterItems(object obj)
