@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Paradoxical.Data;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,6 +9,8 @@ namespace Paradoxical.ViewModel
 {
     public partial class ParadoxEventViewModel : ObservableObject
     {
+        public ModContext Context { get; }
+
         [ObservableProperty]
         private int id = 0;
 
@@ -25,15 +28,15 @@ namespace Paradoxical.ViewModel
         public ObservableCollection<ParadoxEventOptionViewModel> Options { get; } = new();
 
         [ObservableProperty]
-        private ParadoxPortraitViewModel leftPortrait = new();
+        private ParadoxPortraitViewModel leftPortrait;
         [ObservableProperty]
-        private ParadoxPortraitViewModel rightPortrait = new();
+        private ParadoxPortraitViewModel rightPortrait;
         [ObservableProperty]
-        private ParadoxPortraitViewModel lowerLeftPortrait = new();
+        private ParadoxPortraitViewModel lowerLeftPortrait;
         [ObservableProperty]
-        private ParadoxPortraitViewModel lowerRightPortrait = new();
+        private ParadoxPortraitViewModel lowerRightPortrait;
         [ObservableProperty]
-        private ParadoxPortraitViewModel lowerCenterPortrait = new();
+        private ParadoxPortraitViewModel lowerCenterPortrait;
 
         [ObservableProperty]
         private string trigger = "";
@@ -47,10 +50,21 @@ namespace Paradoxical.ViewModel
         private string afterEffect = "";
         public ObservableCollection<ParadoxEffectViewModel> AfterEffects { get; } = new();
 
+        public ParadoxEventViewModel(ModContext context)
+        {
+            Context = context;
+
+            leftPortrait = new(context);
+            rightPortrait = new(context);
+            lowerLeftPortrait = new(context);
+            lowerCenterPortrait = new(context);
+            lowerRightPortrait = new(context);
+        }
+
         [RelayCommand]
         private void AddOption()
         {
-            ParadoxEventOptionViewModel opt = new()
+            ParadoxEventOptionViewModel opt = new(Context)
             {
                 Name = "New Option"
             };
@@ -73,7 +87,7 @@ namespace Paradoxical.ViewModel
         [RelayCommand]
         private void DuplicateOption(ParadoxEventOptionViewModel opt)
         {
-            ParadoxEventOptionViewModel copy = new()
+            ParadoxEventOptionViewModel copy = new(Context)
             {
                 Name = opt.Name,
                 Tooltip = opt.Tooltip,

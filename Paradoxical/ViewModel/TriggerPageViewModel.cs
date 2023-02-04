@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Linq;
 using MaterialDesignThemes.Wpf;
 using Paradoxical.View;
+using Paradoxical.Data;
 
 namespace Paradoxical.ViewModel
 {
@@ -10,13 +11,7 @@ namespace Paradoxical.ViewModel
     {
         public override string PageName => "Triggers";
 
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(AddTriggerCommand))]
-        [NotifyCanExecuteChangedFor(nameof(RemoveTriggerCommand))]
-        [NotifyCanExecuteChangedFor(nameof(FindTriggerCommand))]
-        [NotifyCanExecuteChangedFor(nameof(PreviousTriggerCommand))]
-        [NotifyCanExecuteChangedFor(nameof(NextTriggerCommand))]
-        private ParadoxModViewModel? activeMod;
+        public ModContext Context { get; }
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsTriggerSelected))]
@@ -26,32 +21,28 @@ namespace Paradoxical.ViewModel
         private ParadoxTriggerViewModel? selectedTrigger;
         public bool IsTriggerSelected => SelectedTrigger != null;
 
-        [RelayCommand(CanExecute = nameof(CanAddTrigger))]
+        public TriggerPageViewModel(ModContext context)
+        {
+            Context = context;
+        }
+
+        [RelayCommand]
         private void AddTrigger()
         {
-            if (ActiveMod == null)
-            { return; }
-
-            ParadoxTriggerViewModel trg = new();
+            ParadoxTriggerViewModel trg = new(Context);
             trg.Name = "New Trigger";
 
-            ActiveMod.Triggers.Add(trg);
+            Context.Triggers.Add(trg);
             SelectedTrigger = trg;
-        }
-        private bool CanAddTrigger()
-        {
-            return ActiveMod != null;
         }
 
         [RelayCommand(CanExecute = nameof(CanRemoveTrigger))]
         private void RemoveTrigger()
         {
-            if (ActiveMod == null)
-            { return; }
             if (SelectedTrigger == null)
             { return; }
 
-            foreach (ParadoxEventViewModel evt in ActiveMod.Events)
+            foreach (ParadoxEventViewModel evt in Context.Events)
             {
                 evt.Triggers.Remove(SelectedTrigger);
 
@@ -61,23 +52,20 @@ namespace Paradoxical.ViewModel
                 }
             }
 
-            ActiveMod.Triggers.Remove(SelectedTrigger);
-            SelectedTrigger = ActiveMod.Triggers.FirstOrDefault();
+            Context.Triggers.Remove(SelectedTrigger);
+            SelectedTrigger = Context.Triggers.FirstOrDefault();
         }
         private bool CanRemoveTrigger()
         {
-            return ActiveMod != null && SelectedTrigger != null;
+            return SelectedTrigger != null;
         }
 
-        [RelayCommand(CanExecute = nameof(CanFindTrigger))]
+        [RelayCommand]
         private async void FindTrigger()
         {
-            if (ActiveMod == null)
-            { return; }
-
             FindTriggerDialogViewModel vm = new()
             {
-                Items = ActiveMod.Triggers,
+                Items = Context.Triggers,
             };
             FindTriggerDialogView dlg = new()
             {
@@ -91,49 +79,37 @@ namespace Paradoxical.ViewModel
 
             SelectedTrigger = vm.Selected;
         }
-        private bool CanFindTrigger()
-        {
-            return ActiveMod != null;
-        }
 
         [RelayCommand(CanExecute = nameof(CanPreviousTrigger))]
         private void PreviousTrigger()
         {
-            if (ActiveMod == null)
-            { return; }
-
             if (SelectedTrigger == null)
             { return; }
 
-            int index = ActiveMod.Triggers.IndexOf(SelectedTrigger);
-            SelectedTrigger = ActiveMod.Triggers[index - 1];
+            int index = Context.Triggers.IndexOf(SelectedTrigger);
+            SelectedTrigger = Context.Triggers[index - 1];
         }
         private bool CanPreviousTrigger()
         {
-            return ActiveMod != null
-                && SelectedTrigger != null
-                && ActiveMod.Triggers.Any()
-                && SelectedTrigger != ActiveMod.Triggers.First();
+            return SelectedTrigger != null
+                && Context.Triggers.Any()
+                && SelectedTrigger != Context.Triggers.First();
         }
 
         [RelayCommand(CanExecute = nameof(CanNextTrigger))]
         private void NextTrigger()
         {
-            if (ActiveMod == null)
-            { return; }
-
             if (SelectedTrigger == null)
             { return; }
 
-            int index = ActiveMod.Triggers.IndexOf(SelectedTrigger);
-            SelectedTrigger = ActiveMod.Triggers[index + 1];
+            int index = Context.Triggers.IndexOf(SelectedTrigger);
+            SelectedTrigger = Context.Triggers[index + 1];
         }
         private bool CanNextTrigger()
         {
-            return ActiveMod != null
-                && SelectedTrigger != null
-                && ActiveMod.Triggers.Any()
-                && SelectedTrigger != ActiveMod.Triggers.Last();
+            return SelectedTrigger != null
+                && Context.Triggers.Any()
+                && SelectedTrigger != Context.Triggers.Last();
         }
     }
 }

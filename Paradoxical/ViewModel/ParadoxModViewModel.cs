@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Paradoxical.Data;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -6,6 +7,8 @@ namespace Paradoxical.ViewModel
 {
     public partial class ParadoxModViewModel : ObservableObject
     {
+        public ModContext Context { get; }
+
         [ObservableProperty]
         private string name = "";
         [ObservableProperty]
@@ -15,8 +18,9 @@ namespace Paradoxical.ViewModel
         [ObservableProperty]
         private string eventNamespace = "";
 
-        public ObservableCollection<ParadoxEventViewModel> Events { get; } = new();
-        public ObservableCollection<ParadoxTriggerViewModel> Triggers { get; } = new();
-        public ObservableCollection<ParadoxEffectViewModel> Effects { get; } = new();
+        public ParadoxModViewModel(ModContext context)
+        {
+            Context = context;
+        }
     }
 }

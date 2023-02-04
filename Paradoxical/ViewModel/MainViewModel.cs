@@ -7,42 +7,56 @@ using System.Windows.Data;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Paradoxical.Data;
 
 namespace Paradoxical.ViewModel
 {
     public partial class MainViewModel : ObservableObject
     {
-        public InfoPageViewModel InfoPageViewModel { get; } = new();
-        public EventPageViewModel EventPageViewModel { get; } = new();
-        public TriggerPageViewModel TriggerPageViewModel { get; } = new();
-        public EffectPageViewModel EffectPageViewModel { get; } = new();
-
-        public IEnumerable<ObservableObject> Pages { get; }
-
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveModCommand))]
-        private ParadoxModViewModel? activeMod;
+        private ModContext? context;
+
+        public ObservableCollection<PageViewModel> Pages { get; } = new();
+
+        [ObservableProperty]
+        private InfoPageViewModel? infoPage;
+        [ObservableProperty]
+        private EventPageViewModel? eventPage;
+        [ObservableProperty]
+        private TriggerPageViewModel? triggerPage;
+        [ObservableProperty]
+        private EffectPageViewModel? effectPage;
 
         [ObservableProperty]
         private ObservableObject? selectedPage;
 
         public MainViewModel()
         {
-            Pages = new List<ObservableObject>()
-            {
-                InfoPageViewModel,
-                EventPageViewModel,
-                TriggerPageViewModel,
-                EffectPageViewModel,
-            };
+            ResetContext();
+        }
 
-            SelectedPage = EventPageViewModel;
+        private void ResetContext()
+        {
+            Context = new();
+
+            InfoPage = new(Context);
+            EventPage = new(Context);
+            TriggerPage = new(Context);
+            EffectPage = new(Context);
+
+            Pages.Clear();
+            Pages.Add(InfoPage);
+            Pages.Add(EventPage);
+            Pages.Add(TriggerPage);
+            Pages.Add(EffectPage);
         }
 
         [RelayCommand]
         private void NewMod()
         {
-            if (ActiveMod != null && MessageBox.Show(
+            if (Context != null && MessageBox.Show(
                 "Do you want to continue? Unsaved changes will be discarded!",
                 "New Mod",
                 MessageBoxButton.OKCancel,
@@ -52,18 +66,13 @@ namespace Paradoxical.ViewModel
                 return;
             }
 
-            ActiveMod = new();
-
-            InfoPageViewModel.ActiveMod = ActiveMod;
-            EventPageViewModel.ActiveMod = ActiveMod;
-            TriggerPageViewModel.ActiveMod = ActiveMod;
-            EffectPageViewModel.ActiveMod = ActiveMod;
+            ResetContext();
         }
 
         [RelayCommand]
         private void OpenMod()
         {
-            if (ActiveMod != null && MessageBox.Show(
+            if (Context != null && MessageBox.Show(
                 "Do you want to continue? Unsaved changes will be discarded!",
                 "New Mod",
                 MessageBoxButton.OKCancel,
@@ -83,7 +92,7 @@ namespace Paradoxical.ViewModel
         }
         private bool CanSaveMod()
         {
-            return ActiveMod != null;
+            return Context != null;
         }
 
         [RelayCommand(CanExecute = nameof(CanExportMod))]
@@ -93,13 +102,13 @@ namespace Paradoxical.ViewModel
         }
         private bool CanExportMod()
         {
-            return ActiveMod != null;
+            return Context != null;
         }
 
         [RelayCommand]
         private void Exit()
         {
-            if (ActiveMod != null && MessageBox.Show(
+            if (Context != null && MessageBox.Show(
                 "Do you want to continue? Unsaved changes will be discarded!",
                 "New Mod",
                 MessageBoxButton.OKCancel,

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Paradoxical.Data;
 using System.Linq;
 
 namespace Paradoxical.ViewModel
@@ -8,41 +9,34 @@ namespace Paradoxical.ViewModel
     {
         public override string PageName => "Effects";
 
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(AddEffectCommand))]
-        [NotifyCanExecuteChangedFor(nameof(RemoveEffectCommand))]
-        private ParadoxModViewModel? activeMod;
+        public ModContext Context { get; }
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(RemoveEffectCommand))]
         private ParadoxEffectViewModel? selectedEffect;
 
-        [RelayCommand(CanExecute = nameof(CanAddEffect))]
+        public EffectPageViewModel(ModContext context)
+        {
+            Context = context;
+        }
+
+        [RelayCommand]
         private void AddEffect()
         {
-            if (ActiveMod == null)
-            { return; }
-
-            ParadoxEffectViewModel eff = new();
+            ParadoxEffectViewModel eff = new(Context);
             eff.Name = "New Effect";
 
-            ActiveMod.Effects.Add(eff);
+            Context.Effects.Add(eff);
             SelectedEffect = eff;
-        }
-        private bool CanAddEffect()
-        {
-            return ActiveMod != null;
         }
 
         [RelayCommand(CanExecute = nameof(CanRemoveEffect))]
         private void RemoveEffect()
         {
-            if (ActiveMod == null)
-            { return; }
             if (SelectedEffect == null)
             { return; }
 
-            foreach (ParadoxEventViewModel evt in ActiveMod.Events)
+            foreach (ParadoxEventViewModel evt in Context.Events)
             {
                 evt.ImmediateEffects.Remove(SelectedEffect);
                 evt.AfterEffects.Remove(SelectedEffect);
@@ -53,12 +47,12 @@ namespace Paradoxical.ViewModel
                 }
             }
 
-            ActiveMod.Effects.Remove(SelectedEffect);
-            SelectedEffect = ActiveMod.Effects.FirstOrDefault();
+            Context.Effects.Remove(SelectedEffect);
+            SelectedEffect = Context.Effects.FirstOrDefault();
         }
         private bool CanRemoveEffect()
         {
-            return ActiveMod != null && SelectedEffect != null;
+            return SelectedEffect != null;
         }
     }
 }

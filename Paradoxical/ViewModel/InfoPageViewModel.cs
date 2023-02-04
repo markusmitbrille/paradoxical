@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Paradoxical.Data;
 
 namespace Paradoxical.ViewModel
 {
@@ -6,7 +7,11 @@ namespace Paradoxical.ViewModel
     {
         public override string PageName => "Mod Info";
 
-        [ObservableProperty]
-        private ParadoxModViewModel? activeMod;
+        public ModContext Context { get; }
+
+        public InfoPageViewModel(ModContext context)
+        {
+            Context = context;
+        }
     }
 }

@@ -55,7 +55,7 @@
                     Grid.ColumnSpan="3"
                     Margin="4"
                     Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                    Text="{Binding ActiveMod.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding Context.Info.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     materialDesign:HintAssist.Hint="Mod Name" />
 
                 <TextBox
@@ -64,7 +64,7 @@
                     Grid.ColumnSpan="1"
                     Margin="4"
                     Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                    Text="{Binding ActiveMod.Version, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding Context.Info.Version, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     materialDesign:HintAssist.Hint="Mod Version" />
 
                 <TextBox
@@ -73,7 +73,7 @@
                     Grid.ColumnSpan="1"
                     Margin="4"
                     Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                    Text="{Binding ActiveMod.GameVersion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding Context.Info.GameVersion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     materialDesign:HintAssist.Hint="Game Version" />
 
                 <TextBox
@@ -82,7 +82,7 @@
                     Grid.ColumnSpan="5"
                     Margin="4"
                     Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                    Text="{Binding ActiveMod.EventNamespace, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding Context.Info.EventNamespace, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     materialDesign:HintAssist.Hint="Namespace"
                     materialDesign:HintAssist.HelperText="Used for events, file names, etc." />
             </Grid>

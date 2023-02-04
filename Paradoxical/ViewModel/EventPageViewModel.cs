@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Linq;
 using MaterialDesignThemes.Wpf;
 using Paradoxical.View;
+using Paradoxical.Data;
 
 namespace Paradoxical.ViewModel
 {
@@ -10,13 +11,7 @@ namespace Paradoxical.ViewModel
     {
         public override string PageName => "Events";
 
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(AddEventCommand))]
-        [NotifyCanExecuteChangedFor(nameof(RemoveEventCommand))]
-        [NotifyCanExecuteChangedFor(nameof(FindEventCommand))]
-        [NotifyCanExecuteChangedFor(nameof(PreviousEventCommand))]
-        [NotifyCanExecuteChangedFor(nameof(NextEventCommand))]
-        private ParadoxModViewModel? activeMod;
+        public ModContext Context { get; }
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsEventSelected))]
@@ -26,35 +21,31 @@ namespace Paradoxical.ViewModel
         private ParadoxEventViewModel? selectedEvent;
         public bool IsEventSelected => SelectedEvent != null;
 
-        [RelayCommand(CanExecute = nameof(CanAddEvent))]
+        public EventPageViewModel(ModContext context)
+        {
+            Context = context;
+        }
+
+        [RelayCommand]
         private void AddEvent()
         {
-            if (ActiveMod == null)
-            { return; }
-
-            ParadoxEventViewModel evt = new()
+            ParadoxEventViewModel evt = new(Context)
             {
-                Id = ActiveMod.Events.Count == 0 ? 1 : ActiveMod.Events.Max(evt => evt.Id) + 1,
+                Id = Context.Events.Count == 0 ? 1 : Context.Events.Max(evt => evt.Id) + 1,
                 Title = "New Event"
             };
 
-            ActiveMod.Events.Add(evt);
+            Context.Events.Add(evt);
             SelectedEvent = evt;
-        }
-        private bool CanAddEvent()
-        {
-            return ActiveMod != null;
         }
 
         [RelayCommand(CanExecute = nameof(CanRemoveEvent))]
         private void RemoveEvent()
         {
-            if (ActiveMod == null)
-            { return; }
             if (SelectedEvent == null)
             { return; }
 
-            foreach (ParadoxEventViewModel evt in ActiveMod.Events)
+            foreach (ParadoxEventViewModel evt in Context.Events)
             {
                 foreach (ParadoxEventOptionViewModel opt in evt.Options)
                 {
@@ -65,23 +56,20 @@ namespace Paradoxical.ViewModel
                 }
             }
 
-            ActiveMod.Events.Remove(SelectedEvent);
-            SelectedEvent = ActiveMod.Events.FirstOrDefault();
+            Context.Events.Remove(SelectedEvent);
+            SelectedEvent = Context.Events.FirstOrDefault();
         }
         private bool CanRemoveEvent()
         {
-            return ActiveMod != null && SelectedEvent != null;
+            return SelectedEvent != null;
         }
 
-        [RelayCommand(CanExecute = nameof(CanFindEvent))]
+        [RelayCommand]
         private async void FindEvent()
         {
-            if (ActiveMod == null)
-            { return; }
-
             FindEventDialogViewModel vm = new()
             {
-                Items = ActiveMod.Events,
+                Items = Context.Events,
             };
             FindEventDialogView dlg = new()
             {
@@ -95,49 +83,37 @@ namespace Paradoxical.ViewModel
 
             SelectedEvent = vm.Selected;
         }
-        private bool CanFindEvent()
-        {
-            return ActiveMod != null;
-        }
 
         [RelayCommand(CanExecute = nameof(CanPreviousEvent))]
         private void PreviousEvent()
         {
-            if (ActiveMod == null)
-            { return; }
-
             if (SelectedEvent == null)
             { return; }
 
-            int index = ActiveMod.Events.IndexOf(SelectedEvent);
-            SelectedEvent = ActiveMod.Events[index - 1];
+            int index = Context.Events.IndexOf(SelectedEvent);
+            SelectedEvent = Context.Events[index - 1];
         }
         private bool CanPreviousEvent()
         {
-            return ActiveMod != null
-                && SelectedEvent != null
-                && ActiveMod.Events.Any()
-                && SelectedEvent != ActiveMod.Events.First();
+            return SelectedEvent != null
+                && Context.Events.Any()
+                && SelectedEvent != Context.Events.First();
         }
 
         [RelayCommand(CanExecute = nameof(CanNextEvent))]
         private void NextEvent()
         {
-            if (ActiveMod == null)
-            { return; }
-
             if (SelectedEvent == null)
             { return; }
 
-            int index = ActiveMod.Events.IndexOf(SelectedEvent);
-            SelectedEvent = ActiveMod.Events[index + 1];
+            int index = Context.Events.IndexOf(SelectedEvent);
+            SelectedEvent = Context.Events[index + 1];
         }
         private bool CanNextEvent()
         {
-            return ActiveMod != null
-                && SelectedEvent != null
-                && ActiveMod.Events.Any()
-                && SelectedEvent != ActiveMod.Events.Last();
+            return SelectedEvent != null
+                && Context.Events.Any()
+                && SelectedEvent != Context.Events.Last();
         }
     }
 }

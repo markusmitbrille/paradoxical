@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
+using Paradoxical.Data;
 using Paradoxical.View;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +10,8 @@ namespace Paradoxical.ViewModel
 {
     public partial class ParadoxEventOptionViewModel : ObservableObject
     {
+        public ModContext Context { get; }
+
         [ObservableProperty]
         private string name = "";
         [ObservableProperty]
@@ -53,6 +56,11 @@ namespace Paradoxical.ViewModel
         [ObservableProperty]
         private string aiChance = "";
 
+        public ParadoxEventOptionViewModel(ModContext context)
+        {
+            Context = context;
+        }
+
         [RelayCommand]
         private async void AddTrigger()
         {
@@ -78,6 +86,7 @@ namespace Paradoxical.ViewModel
         [RelayCommand]
         private void RemoveTrigger(ParadoxTriggerViewModel trg)
         {
+            Triggers.Remove(trg);
         }
     }
 }
