@@ -1,9 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MaterialDesignThemes.Wpf;
 using Paradoxical.Data;
+using Paradoxical.View;
+using Paradoxical.ViewModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Media.Effects;
 
 namespace Paradoxical.Model
 {
@@ -152,6 +156,87 @@ namespace Paradoxical.Model
         {
             return Options.Any()
                 && opt != Options.Last();
+        }
+
+        [RelayCommand]
+        private async void AddTrigger()
+        {
+            FindTriggerDialogViewModel vm = new()
+            {
+                Items = Context.Triggers,
+                Blacklist = new(Triggers),
+            };
+            FindTriggerDialogView dlg = new()
+            {
+                DataContext = vm,
+            };
+
+            await DialogHost.Show(dlg, "RootDialog");
+
+            if (vm.Selected == null)
+            { return; }
+
+            Triggers.Add(vm.Selected);
+        }
+
+        [RelayCommand]
+        private void RemoveTrigger(ParadoxTrigger trg)
+        {
+            Triggers.Remove(trg);
+        }
+
+        [RelayCommand]
+        private async void AddImmediateEffect()
+        {
+            FindEffectDialogViewModel vm = new()
+            {
+                Items = Context.Effects,
+                Blacklist = new(ImmediateEffects),
+            };
+            FindEffectDialogView dlg = new()
+            {
+                DataContext = vm,
+            };
+
+            await DialogHost.Show(dlg, "RootDialog");
+
+            if (vm.Selected == null)
+            { return; }
+
+            ImmediateEffects.Add(vm.Selected);
+        }
+
+        [RelayCommand]
+        private void RemoveImmediateEffect(ParadoxEffect eff)
+        {
+            ImmediateEffects.Remove(eff);
+        }
+
+        [RelayCommand]
+        private async void AddAfterEffect()
+        {
+            FindEffectDialogViewModel vm = new()
+            {
+                Items = Context.Effects,
+                Blacklist = new(AfterEffects),
+            };
+            FindEffectDialogView dlg = new()
+            {
+                DataContext = vm,
+            };
+
+            await DialogHost.Show(dlg, "RootDialog");
+
+            if (vm.Selected == null)
+            { return; }
+
+            AfterEffects.Add(vm.Selected);
+        }
+
+        [RelayCommand]
+        private void RemoveAfterEffect(ParadoxEffect eff)
+        {
+            AfterEffects.Remove(eff);
         }
     }
 }
