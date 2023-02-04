@@ -51,6 +51,9 @@ namespace Paradoxical.ViewModel
             Pages.Add(EventPage);
             Pages.Add(TriggerPage);
             Pages.Add(EffectPage);
+
+            // navigate to info page
+            SelectedPage = InfoPage;
         }
 
         [RelayCommand]
