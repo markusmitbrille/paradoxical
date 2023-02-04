@@ -74,6 +74,7 @@ namespace Paradoxical.Model
             FindTriggerDialogViewModel vm = new()
             {
                 Items = Context.Triggers,
+                Blacklist = new(Triggers),
             };
             FindTriggerDialogView dlg = new()
             {
@@ -104,6 +105,7 @@ namespace Paradoxical.Model
             FindEffectDialogViewModel vm = new()
             {
                 Items = Context.Effects,
+                Blacklist = new(Effects),
             };
             FindEffectDialogView dlg = new()
             {

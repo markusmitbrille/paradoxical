@@ -5,6 +5,7 @@ using Paradoxical.Model;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
@@ -22,12 +23,34 @@ namespace Paradoxical.ViewModel
         private string? filter;
 
         [ObservableProperty]
+        private ObservableCollection<ParadoxEvent>? blacklist;
+
+        [ObservableProperty]
         private ParadoxEvent? selected;
 
         public FindEventDialogViewModel()
         {
             PropertyChanged += ItemsPropertyChangedHandler;
             PropertyChanged += FilterPropertyChangedHandler;
+            PropertyChanged += BlacklistPropertyChangedHandler;
+        }
+
+        private void BlacklistPropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(Blacklist))
+            { return; }
+
+            view?.Refresh();
+
+            if (Blacklist != null)
+            {
+                Blacklist.CollectionChanged += BlacklistCollectionChangedHandler;
+            }
+        }
+
+        private void BlacklistCollectionChangedHandler(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            view?.Refresh();
         }
 
         private void FilterPropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
@@ -48,15 +71,20 @@ namespace Paradoxical.ViewModel
 
             view = CollectionViewSource.GetDefaultView(Items);
             view.Filter = FilterItems;
+
+            Selected = view.Cast<ParadoxEvent>().FirstOrDefault();
         }
 
         private bool FilterItems(object obj)
         {
-            if (string.IsNullOrEmpty(Filter))
-            { return true; }
-
             if (obj is not ParadoxEvent evt)
             { return false; }
+
+            if (Blacklist != null && Blacklist.Contains(evt))
+            { return false; }
+
+            if (string.IsNullOrEmpty(Filter))
+            { return true; }
 
             if (evt.Id.ToString().Contains(Filter))
             { return true; }

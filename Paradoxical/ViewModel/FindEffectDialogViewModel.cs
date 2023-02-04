@@ -4,6 +4,7 @@ using MaterialDesignThemes.Wpf;
 using Paradoxical.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
@@ -21,12 +22,34 @@ namespace Paradoxical.ViewModel
         private string? filter;
 
         [ObservableProperty]
+        private ObservableCollection<ParadoxEffect>? blacklist;
+
+        [ObservableProperty]
         private ParadoxEffect? selected;
 
         public FindEffectDialogViewModel()
         {
             PropertyChanged += ItemsPropertyChangedHandler;
             PropertyChanged += FilterPropertyChangedHandler;
+            PropertyChanged += BlacklistPropertyChangedHandler;
+        }
+
+        private void BlacklistPropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(Blacklist))
+            { return; }
+
+            view?.Refresh();
+
+            if (Blacklist != null)
+            {
+                Blacklist.CollectionChanged += BlacklistCollectionChangedHandler;
+            }
+        }
+
+        private void BlacklistCollectionChangedHandler(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            view?.Refresh();
         }
 
         private void FilterPropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
@@ -47,17 +70,22 @@ namespace Paradoxical.ViewModel
 
             view = CollectionViewSource.GetDefaultView(Items);
             view.Filter = FilterItems;
+
+            Selected = view.Cast<ParadoxEffect>().FirstOrDefault();
         }
 
         private bool FilterItems(object obj)
         {
+            if (obj is not ParadoxEffect eff)
+            { return false; }
+
+            if (Blacklist != null && Blacklist.Contains(eff))
+            { return false; }
+
             if (string.IsNullOrEmpty(Filter))
             { return true; }
 
-            if (obj is not ParadoxEffect evt)
-            { return false; }
-
-            if (evt.Name.ToString().Contains(Filter))
+            if (eff.Name.ToString().Contains(Filter))
             { return true; }
 
             return false;

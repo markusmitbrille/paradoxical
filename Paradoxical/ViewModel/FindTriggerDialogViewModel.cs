@@ -2,8 +2,10 @@
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
 using Paradoxical.Model;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
@@ -21,12 +23,34 @@ namespace Paradoxical.ViewModel
         private string? filter;
 
         [ObservableProperty]
+        private ObservableCollection<ParadoxTrigger>? blacklist;
+
+        [ObservableProperty]
         private ParadoxTrigger? selected;
 
         public FindTriggerDialogViewModel()
         {
             PropertyChanged += ItemsPropertyChangedHandler;
             PropertyChanged += FilterPropertyChangedHandler;
+            PropertyChanged += BlacklistPropertyChangedHandler;
+        }
+
+        private void BlacklistPropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(Blacklist))
+            { return; }
+
+            view?.Refresh();
+
+            if (Blacklist != null)
+            {
+                Blacklist.CollectionChanged += BlacklistCollectionChangedHandler;
+            }
+        }
+
+        private void BlacklistCollectionChangedHandler(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            view?.Refresh();
         }
 
         private void FilterPropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
@@ -47,17 +71,22 @@ namespace Paradoxical.ViewModel
 
             view = CollectionViewSource.GetDefaultView(Items);
             view.Filter = FilterItems;
+
+            Selected = view.Cast<ParadoxTrigger>().FirstOrDefault();
         }
 
         private bool FilterItems(object obj)
         {
+            if (obj is not ParadoxTrigger trg)
+            { return false; }
+
+            if (Blacklist != null && Blacklist.Contains(trg))
+            { return false; }
+
             if (string.IsNullOrEmpty(Filter))
             { return true; }
 
-            if (obj is not ParadoxTrigger evt)
-            { return false; }
-
-            if (evt.Name.ToString().Contains(Filter))
+            if (trg.Name.ToString().Contains(Filter))
             { return true; }
 
             return false;
