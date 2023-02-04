@@ -4,10 +4,8 @@ using MaterialDesignThemes.Wpf;
 using Paradoxical.Data;
 using Paradoxical.Model;
 using Paradoxical.View;
-using System;
 using System.Linq;
 using System.Windows;
-using System.Xml.Linq;
 
 namespace Paradoxical.ViewModel
 {

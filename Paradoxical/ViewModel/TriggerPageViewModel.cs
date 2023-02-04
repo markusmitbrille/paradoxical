@@ -1,11 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Linq;
 using MaterialDesignThemes.Wpf;
-using Paradoxical.View;
 using Paradoxical.Data;
 using Paradoxical.Model;
-using System;
+using Paradoxical.View;
+using System.Linq;
 using System.Windows;
 
 namespace Paradoxical.ViewModel

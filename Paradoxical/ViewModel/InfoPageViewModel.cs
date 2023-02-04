@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Paradoxical.Data;
+﻿using Paradoxical.Data;
 
 namespace Paradoxical.ViewModel
 {

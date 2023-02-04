@@ -1,7 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Paradoxical.Data;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace Paradoxical.Model
 {
