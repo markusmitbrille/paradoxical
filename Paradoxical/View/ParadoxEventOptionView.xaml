@@ -58,7 +58,7 @@
             materialDesign:HintAssist.Hint="Tooltip" />
 
         <!-- TODO: control for selection of triggered event -->
-        
+
         <TextBox
             Grid.Row="1"
             Grid.Column="1"
@@ -83,6 +83,7 @@
 
             <ScrollViewer
                 Grid.Row="0">
+               
                 <ScrollViewer.Resources>
                     <Style
                         TargetType="ScrollBar"
@@ -92,6 +93,32 @@
                 <ItemsControl
                     Margin="0,-4"
                     ItemsSource="{Binding Triggers}">
+
+                    <ItemsControl.Style>
+                        <Style
+                            TargetType="ItemsControl">
+                            <Style.Triggers>
+                                <Trigger
+                                    Property="HasItems"
+                                    Value="false">
+                                    <Setter
+                                        Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Center"
+                                                    Foreground="LightGray"
+                                                    FontStyle="Italic"
+                                                    Text="No triggers selected ..." />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ItemsControl.Style>
+
                     <ItemsControl.ItemTemplate>
                         <DataTemplate
                             DataType="model:ParadoxTrigger">
@@ -114,13 +141,13 @@
 
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
+
                 </ItemsControl>
-            
+
             </ScrollViewer>
-            
+
             <Separator
                 Grid.Row="1"
-                Visibility="{Binding TriggersSeparatorVisibililty}"
                 Style="{DynamicResource MaterialDesignDarkSeparator}" />
 
             <Button
@@ -166,6 +193,7 @@
 
             <ScrollViewer
                 Grid.Row="0">
+               
                 <ScrollViewer.Resources>
                     <Style
                         TargetType="ScrollBar"
@@ -175,6 +203,32 @@
                 <ItemsControl
                     Margin="0,-4"
                     ItemsSource="{Binding Effects}">
+
+                    <ItemsControl.Style>
+                        <Style
+                            TargetType="ItemsControl">
+                            <Style.Triggers>
+                                <Trigger
+                                    Property="HasItems"
+                                    Value="false">
+                                    <Setter
+                                        Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Center"
+                                                    Foreground="LightGray"
+                                                    FontStyle="Italic"
+                                                    Text="No effects selected ..." />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ItemsControl.Style>
+
                     <ItemsControl.ItemTemplate>
                         <DataTemplate
                             DataType="model:ParadoxEffect">
@@ -197,13 +251,13 @@
 
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
+              
                 </ItemsControl>
 
             </ScrollViewer>
 
             <Separator
                 Grid.Row="1"
-                Visibility="{Binding TriggersSeparatorVisibililty}"
                 Style="{DynamicResource MaterialDesignDarkSeparator}" />
 
             <Button

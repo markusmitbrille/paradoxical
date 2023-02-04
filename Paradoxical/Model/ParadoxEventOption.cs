@@ -29,13 +29,11 @@ namespace Paradoxical.Model
         private string trigger = "";
 
         public ObservableCollection<ParadoxTrigger> Triggers { get; } = new();
-        public Visibility TriggersSeparatorVisibililty => Triggers.Any() ? Visibility.Visible : Visibility.Collapsed;
 
         [ObservableProperty]
         private string effect = "";
 
         public ObservableCollection<ParadoxEffect> Effects { get; } = new();
-        public Visibility EffectsSeparatorVisibililty => Effects.Any() ? Visibility.Visible : Visibility.Collapsed;
 
         [ObservableProperty]
         private int aiBaseChance = 100;
@@ -87,16 +85,12 @@ namespace Paradoxical.Model
             { return; }
 
             Triggers.Add(vm.Selected);
-
-            OnPropertyChanged(nameof(TriggersSeparatorVisibililty));
         }
 
         [RelayCommand]
         private void RemoveTrigger(ParadoxTrigger trg)
         {
             Triggers.Remove(trg);
-
-            OnPropertyChanged(nameof(TriggersSeparatorVisibililty));
         }
 
         [RelayCommand]
@@ -118,16 +112,12 @@ namespace Paradoxical.Model
             { return; }
 
             Effects.Add(vm.Selected);
-
-            OnPropertyChanged(nameof(EffectsSeparatorVisibililty));
         }
 
         [RelayCommand]
         private void RemoveEffect(ParadoxEffect eff)
         {
             Effects.Remove(eff);
-
-            OnPropertyChanged(nameof(EffectsSeparatorVisibililty));
         }
     }
 }

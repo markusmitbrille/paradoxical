@@ -112,7 +112,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 Text="{Binding Sound, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                materialDesign:HintAssist.Hint="Background" />
+                                materialDesign:HintAssist.Hint="Sound" />
                         </Grid>
                     </StackPanel>
                 </Expander>
@@ -139,22 +139,24 @@
                                 Width="*"
                                 MinWidth="100" />
                             <ColumnDefinition
-                                Width="4" />
-                            <ColumnDefinition
                                 Width="*"
                                 MinWidth="100" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock
+                        <materialDesign:ColorZone
                             Grid.Row="0"
                             Grid.Column="0"
-                            Grid.ColumnSpan="2"
-                            Margin="4,8,4,8"
-                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                            FontStyle="Italic"
-                            Text="Left Portrait" />
+                            Margin="16,8,16,8"
+                            Padding="12"
+                            materialDesign:ElevationAssist.Elevation="Dp4"
+                            ClipToBounds="False"
+                            CornerRadius="8"
+                            Mode="SecondaryMid">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Text="Left Portrait" />
+                        </materialDesign:ColorZone>
 
                         <TextBox
                             Grid.Row="1"
@@ -181,20 +183,24 @@
                             Text="{Binding LeftPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Outfit Tags" />
 
-                        <TextBlock
+                        <materialDesign:ColorZone
                             Grid.Row="0"
-                            Grid.Column="2"
-                            Grid.ColumnSpan="2"
-                            Margin="4,8,4,8"
-                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                            FontStyle="Italic"
-                            Text="Right Portrait" />
+                            Grid.Column="1"
+                            Margin="16,8,16,8"
+                            Padding="12"
+                            materialDesign:ElevationAssist.Elevation="Dp4"
+                            ClipToBounds="False"
+                            CornerRadius="8"
+                            Mode="SecondaryMid">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Text="Right Portrait" />
+                        </materialDesign:ColorZone>
 
                         <TextBox
                             Grid.Row="1"
-                            Grid.Column="2"
+                            Grid.Column="1"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
@@ -202,7 +208,7 @@
                             materialDesign:HintAssist.Hint="Character" />
                         <TextBox
                             Grid.Row="2"
-                            Grid.Column="2"
+                            Grid.Column="1"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Margin="4"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
@@ -210,7 +216,7 @@
                             materialDesign:HintAssist.Hint="Animation" />
                         <TextBox
                             Grid.Row="3"
-                            Grid.Column="2"
+                            Grid.Column="1"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
@@ -241,27 +247,27 @@
                                 Width="*"
                                 MinWidth="100" />
                             <ColumnDefinition
-                                Width="4" />
-                            <ColumnDefinition
                                 Width="*"
                                 MinWidth="100" />
-                            <ColumnDefinition
-                                Width="4" />
                             <ColumnDefinition
                                 Width="*"
                                 MinWidth="100" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock
+                        <materialDesign:ColorZone
                             Grid.Row="0"
                             Grid.Column="0"
-                            Grid.ColumnSpan="2"
-                            Margin="4,8,4,8"
-                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                            FontStyle="Italic"
-                            Text="Lower Left Portrait" />
+                            Margin="16,8,16,8"
+                            Padding="12"
+                            materialDesign:ElevationAssist.Elevation="Dp4"
+                            ClipToBounds="False"
+                            CornerRadius="8"
+                            Mode="SecondaryMid">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Text="Lower Left Portrait" />
+                        </materialDesign:ColorZone>
 
                         <TextBox
                             Grid.Row="1"
@@ -288,20 +294,24 @@
                             Text="{Binding LowerLeftPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Outfit Tags" />
 
-                        <TextBlock
+                        <materialDesign:ColorZone
                             Grid.Row="0"
-                            Grid.Column="2"
-                            Grid.ColumnSpan="2"
-                            Margin="4,8,4,8"
-                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                            FontStyle="Italic"
-                            Text="Lower Center Portrait" />
+                            Grid.Column="1"
+                            Margin="16,8,16,8"
+                            Padding="12"
+                            materialDesign:ElevationAssist.Elevation="Dp4"
+                            ClipToBounds="False"
+                            CornerRadius="8"
+                            Mode="SecondaryMid">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Text="Lower Center Portrait" />
+                        </materialDesign:ColorZone>
 
                         <TextBox
                             Grid.Row="1"
-                            Grid.Column="2"
+                            Grid.Column="1"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
@@ -309,7 +319,7 @@
                             materialDesign:HintAssist.Hint="Character" />
                         <TextBox
                             Grid.Row="2"
-                            Grid.Column="2"
+                            Grid.Column="1"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
@@ -317,27 +327,31 @@
                             materialDesign:HintAssist.Hint="Animation" />
                         <TextBox
                             Grid.Row="3"
-                            Grid.Column="2"
+                            Grid.Column="1"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LowerCenterPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Outfit Tags" />
 
-                        <TextBlock
+                        <materialDesign:ColorZone
                             Grid.Row="0"
-                            Grid.Column="4"
-                            Grid.ColumnSpan="2"
-                            Margin="4,8,4,8"
-                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                            FontStyle="Italic"
-                            Text="Lower Right Portrait" />
+                            Grid.Column="2"
+                            Margin="16,8,16,8"
+                            Padding="12"
+                            materialDesign:ElevationAssist.Elevation="Dp4"
+                            ClipToBounds="False"
+                            CornerRadius="8"
+                            Mode="SecondaryMid">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Text="Lower Right Portrait" />
+                        </materialDesign:ColorZone>
 
                         <TextBox
                             Grid.Row="1"
-                            Grid.Column="4"
+                            Grid.Column="2"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
@@ -345,7 +359,7 @@
                             materialDesign:HintAssist.Hint="Character" />
                         <TextBox
                             Grid.Row="2"
-                            Grid.Column="4"
+                            Grid.Column="2"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
@@ -353,7 +367,7 @@
                             materialDesign:HintAssist.Hint="Animation" />
                         <TextBox
                             Grid.Row="3"
-                            Grid.Column="4"
+                            Grid.Column="2"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
@@ -369,6 +383,7 @@
                     Header="Options"
                     IsExpanded="True">
                     <StackPanel>
+
                         <ItemsControl
                             ItemsSource="{Binding Options}">
                             <ItemsControl.ItemTemplate>
