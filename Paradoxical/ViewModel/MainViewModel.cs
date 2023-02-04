@@ -21,6 +21,9 @@ namespace Paradoxical.ViewModel
         public ObservableCollection<PageViewModel> Pages { get; } = new();
 
         [ObservableProperty]
+        private AboutPageViewModel? aboutPage;
+
+        [ObservableProperty]
         private InfoPageViewModel? infoPage;
         [ObservableProperty]
         private EventPageViewModel? eventPage;
@@ -39,6 +42,8 @@ namespace Paradoxical.ViewModel
 
         private void ResetContext()
         {
+            AboutPage = new();
+
             Context = new();
 
             InfoPage = new(Context);
@@ -125,6 +130,15 @@ namespace Paradoxical.ViewModel
         }
 
         [RelayCommand]
+        private void GoToAboutPage()
+        {
+            if (AboutPage != null)
+            {
+                SelectedPage = AboutPage;
+            }
+        }
+
+        [RelayCommand]
         private void GoToInfoPage()
         {
             if (InfoPage != null)
@@ -136,7 +150,7 @@ namespace Paradoxical.ViewModel
         [RelayCommand]
         private void GoToEventPage()
         {
-            if (InfoPage != null)
+            if (EventPage != null)
             {
                 SelectedPage = EventPage;
             }
@@ -145,7 +159,7 @@ namespace Paradoxical.ViewModel
         [RelayCommand]
         private void GoToTriggerPage()
         {
-            if (InfoPage != null)
+            if (TriggerPage != null)
             {
                 SelectedPage = TriggerPage;
             }
@@ -154,7 +168,7 @@ namespace Paradoxical.ViewModel
         [RelayCommand]
         private void GoToEffectPage()
         {
-            if (InfoPage != null)
+            if (EffectPage != null)
             {
                 SelectedPage = EffectPage;
             }

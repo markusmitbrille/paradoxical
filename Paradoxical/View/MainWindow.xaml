@@ -135,6 +135,13 @@
                                 <Separator />
 
                                 <MenuItem
+                                    Header="About"
+                                    Icon="{materialDesign:PackIcon Kind=Information}"
+                                    Command="{Binding GoToAboutPageCommand}"/>
+
+                                <Separator />
+
+                                <MenuItem
                                     Header="Exit"
                                     Icon="{materialDesign:PackIcon Kind=ExitToApp}"
                                     Command="{Binding ExitCommand}"
