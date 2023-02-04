@@ -11,7 +11,8 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance viewmodel:TriggerPageViewModel}"
     d:DesignHeight="450"
-    d:DesignWidth="800">
+    d:DesignWidth="800"
+    FocusVisualStyle="{x:Null}">
 
     <UserControl.InputBindings>
         <KeyBinding
@@ -30,7 +31,7 @@
             Command="{Binding NextTriggerCommand}"
             Gesture="ALT+Down" />
     </UserControl.InputBindings>
-    
+
     <DockPanel>
 
         <materialDesign:Card

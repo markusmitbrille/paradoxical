@@ -20,6 +20,9 @@ namespace Paradoxical.View
         public FindTriggerDialogView()
         {
             InitializeComponent();
+
+            Focusable = true;
+            Loaded += (s, e) => Keyboard.Focus(this);
         }
     }
 }
