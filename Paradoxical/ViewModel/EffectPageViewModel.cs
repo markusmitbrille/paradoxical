@@ -72,6 +72,7 @@ namespace Paradoxical.ViewModel
             FindEffectDialogViewModel vm = new()
             {
                 Items = Context.Effects,
+                Selected = SelectedEffect,
             };
             FindEffectDialogView dlg = new()
             {

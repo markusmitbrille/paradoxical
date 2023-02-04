@@ -15,54 +15,93 @@
     Height="400"
     Width="550">
 
-    <behaviors:Interaction.Triggers>
-        <behaviors:EventTrigger
-            EventName="LostFocus">
-            <behaviors:InvokeCommandAction
-                Command="{Binding CloseCommand}" />
-        </behaviors:EventTrigger>
-    </behaviors:Interaction.Triggers>
-
     <UserControl.InputBindings>
         <KeyBinding
             Command="{Binding CloseCommand}"
             Gesture="ESC" />
+        <KeyBinding
+            Command="{Binding CloseCommand}"
+            Gesture="Enter" />
+        <KeyBinding
+            Command="{Binding PreviousCommand}"
+            Gesture="Up" />
+        <KeyBinding
+            Command="{Binding NextCommand}"
+            Gesture="Down" />
     </UserControl.InputBindings>
 
-    <StackPanel
+    <Grid
         Margin="16">
+
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="auto" />
+            <RowDefinition
+                Height="*" />
+        </Grid.RowDefinitions>
+
         <TextBox
+            Grid.Row="0"
             Style="{DynamicResource MaterialDesignFilledTextBox}"
             Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             materialDesign:HintAssist.Hint="Filter"
-            materialDesign:TextFieldAssist.HasClearButton="True" />
-        <ScrollViewer
-            Margin="0,20,0,0">
-            <ListBox
-                Style="{StaticResource MaterialDesignNavigationPrimaryListBox}"
-                ItemsSource="{Binding Items}"
-                SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate
-                        DataType="model:ParadoxEffect">
-                        <StackPanel
-                            Margin="24,4,0,4"
-                            Orientation="Horizontal">
-                            <TextBlock
-                                Style="{DynamicResource MaterialDesignButtonTextBlock}"
-                                Text="{Binding Name}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-                <behaviors:Interaction.Triggers>
-                    <behaviors:EventTrigger
-                        EventName="Selected">
-                        <behaviors:InvokeCommandAction
-                            Command="{Binding CloseCommand}" />
-                    </behaviors:EventTrigger>
-                </behaviors:Interaction.Triggers>
-            </ListBox>
-        </ScrollViewer>
-    </StackPanel>
+            materialDesign:TextFieldAssist.HasClearButton="True">
+
+            <behaviors:Interaction.Triggers>
+                <behaviors:EventTrigger
+                    EventName="TextChanged">
+                    <behaviors:InvokeCommandAction
+                        Command="{Binding UpdateSelectionCommand}" />
+                </behaviors:EventTrigger>
+            </behaviors:Interaction.Triggers>
+
+            <TextBox.InputBindings>
+                <KeyBinding
+                    Command="{Binding CloseCommand}"
+                    Gesture="ESC" />
+                <KeyBinding
+                    Command="{Binding CloseCommand}"
+                    Gesture="Enter" />
+                <KeyBinding
+                    Command="{Binding PreviousCommand}"
+                    Gesture="Up" />
+                <KeyBinding
+                    Command="{Binding NextCommand}"
+                    Gesture="Down" />
+            </TextBox.InputBindings>
+
+        </TextBox>
+
+        <ListBox
+            Grid.Row="1"
+            Margin="0,20,0,0"
+            Style="{StaticResource MaterialDesignNavigationPrimaryListBox}"
+            ItemsSource="{Binding Items}"
+            SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+            <ListBox.Resources>
+                <Style
+                    TargetType="ScrollBar"
+                    BasedOn="{StaticResource MaterialDesignScrollBarMinimal}" />
+            </ListBox.Resources>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate
+                    DataType="model:ParadoxEffect">
+
+                    <StackPanel
+                        Margin="24,4,0,4"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Style="{DynamicResource MaterialDesignButtonTextBlock}"
+                            Text="{Binding Name}" />
+                    </StackPanel>
+
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+        </ListBox>
+
+    </Grid>
 
 </UserControl>

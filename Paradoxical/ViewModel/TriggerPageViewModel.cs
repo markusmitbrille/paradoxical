@@ -70,6 +70,7 @@ namespace Paradoxical.ViewModel
             FindTriggerDialogViewModel vm = new()
             {
                 Items = Context.Triggers,
+                Selected = SelectedTrigger,
             };
             FindTriggerDialogView dlg = new()
             {

@@ -123,5 +123,41 @@ namespace Paradoxical.ViewModel
 
             Application.Current.Shutdown();
         }
+
+        [RelayCommand]
+        private void GoToInfoPage()
+        {
+            if (InfoPage != null)
+            {
+                SelectedPage = InfoPage;
+            }
+        }
+
+        [RelayCommand]
+        private void GoToEventPage()
+        {
+            if (InfoPage != null)
+            {
+                SelectedPage = EventPage;
+            }
+        }
+
+        [RelayCommand]
+        private void GoToTriggerPage()
+        {
+            if (InfoPage != null)
+            {
+                SelectedPage = TriggerPage;
+            }
+        }
+
+        [RelayCommand]
+        private void GoToEffectPage()
+        {
+            if (InfoPage != null)
+            {
+                SelectedPage = EffectPage;
+            }
+        }
     }
 }

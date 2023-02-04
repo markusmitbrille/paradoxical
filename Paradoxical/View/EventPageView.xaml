@@ -13,6 +13,24 @@
     d:DataContext="{d:DesignInstance viewmodel:EventPageViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800">
+    
+    <UserControl.InputBindings>
+        <KeyBinding
+            Command="{Binding FindEventCommand}"
+            Gesture="CTRL+F" />
+        <KeyBinding
+            Command="{Binding PreviousEventCommand}"
+            Gesture="ALT+Left" />
+        <KeyBinding
+            Command="{Binding PreviousEventCommand}"
+            Gesture="ALT+Up" />
+        <KeyBinding
+            Command="{Binding NextEventCommand}"
+            Gesture="ALT+Right" />
+        <KeyBinding
+            Command="{Binding NextEventCommand}"
+            Gesture="ALT+Down" />
+    </UserControl.InputBindings>
 
     <DockPanel>
 

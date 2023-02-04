@@ -13,6 +13,24 @@
     d:DesignHeight="450"
     d:DesignWidth="800">
 
+    <UserControl.InputBindings>
+        <KeyBinding
+            Command="{Binding FindTriggerCommand}"
+            Gesture="CTRL+F" />
+        <KeyBinding
+            Command="{Binding PreviousTriggerCommand}"
+            Gesture="ALT+Left" />
+        <KeyBinding
+            Command="{Binding PreviousTriggerCommand}"
+            Gesture="ALT+Up" />
+        <KeyBinding
+            Command="{Binding NextTriggerCommand}"
+            Gesture="ALT+Right" />
+        <KeyBinding
+            Command="{Binding NextTriggerCommand}"
+            Gesture="ALT+Down" />
+    </UserControl.InputBindings>
+    
     <DockPanel>
 
         <materialDesign:Card

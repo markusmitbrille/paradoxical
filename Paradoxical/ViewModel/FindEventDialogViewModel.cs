@@ -2,8 +2,11 @@
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
 using Paradoxical.Model;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 
 namespace Paradoxical.ViewModel
@@ -69,6 +72,51 @@ namespace Paradoxical.ViewModel
         {
             if (DialogHost.IsDialogOpen("RootDialog"))
             { DialogHost.Close("RootDialog"); }
+        }
+
+        [RelayCommand]
+        private void UpdateSelection()
+        {
+            if (Selected == null && view != null)
+            {
+                Selected = view.Cast<ParadoxEvent>().FirstOrDefault();
+            }
+        }
+
+        [RelayCommand]
+        private void Previous()
+        {
+            if (Selected == null)
+            { return; }
+
+            if (view == null)
+            { return; }
+
+            List<ParadoxEvent> filteredItems = new(view.Cast<ParadoxEvent>());
+
+            if (Selected == filteredItems.First())
+            { return; }
+
+            int index = filteredItems.IndexOf(Selected);
+            Selected = filteredItems[index - 1];
+        }
+
+        [RelayCommand]
+        private void Next()
+        {
+            if (Selected == null)
+            { return; }
+
+            if (view == null)
+            { return; }
+
+            List<ParadoxEvent> filteredItems = new(view.Cast<ParadoxEvent>());
+
+            if (Selected == filteredItems.Last())
+            { return; }
+
+            int index = filteredItems.IndexOf(Selected);
+            Selected = filteredItems[index + 1];
         }
     }
 }

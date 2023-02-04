@@ -40,6 +40,18 @@
         <KeyBinding
             Command="{Binding NewModCommand}"
             Gesture="CTRL+N" />
+        <KeyBinding
+            Command="{Binding GoToInfoPageCommand}"
+            Gesture="ALT+1" />
+        <KeyBinding
+            Command="{Binding GoToEventPageCommand}"
+            Gesture="ALT+2" />
+        <KeyBinding
+            Command="{Binding GoToTriggerPageCommand}"
+            Gesture="ALT+3" />
+        <KeyBinding
+            Command="{Binding GoToEffectPageCommand}"
+            Gesture="ALT+4" />
     </Window.InputBindings>
 
     <materialDesign:DialogHost
