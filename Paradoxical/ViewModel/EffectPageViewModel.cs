@@ -1,8 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MaterialDesignThemes.Wpf;
 using Paradoxical.Data;
 using Paradoxical.Model;
+using Paradoxical.View;
+using System;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace Paradoxical.ViewModel
 {
@@ -13,8 +17,12 @@ namespace Paradoxical.ViewModel
         public ModContext Context { get; }
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsEffectSelected))]
         [NotifyCanExecuteChangedFor(nameof(RemoveEffectCommand))]
+        [NotifyCanExecuteChangedFor(nameof(PreviousEffectCommand))]
+        [NotifyCanExecuteChangedFor(nameof(NextEffectCommand))]
         private ParadoxEffect? selectedEffect;
+        public bool IsEffectSelected => SelectedEffect != null;
 
         public EffectPageViewModel(ModContext context)
         {
@@ -24,8 +32,10 @@ namespace Paradoxical.ViewModel
         [RelayCommand]
         private void AddEffect()
         {
-            ParadoxEffect eff = new(Context);
-            eff.Name = "New Effect";
+            ParadoxEffect eff = new(Context)
+            {
+                Name = $"Effect [{Guid.NewGuid().ToString()[0..4]}]",
+            };
 
             Context.Effects.Add(eff);
             SelectedEffect = eff;
@@ -54,6 +64,58 @@ namespace Paradoxical.ViewModel
         private bool CanRemoveEffect()
         {
             return SelectedEffect != null;
+        }
+
+        [RelayCommand]
+        private async void FindEffect()
+        {
+            FindEffectDialogViewModel vm = new()
+            {
+                Items = Context.Effects,
+            };
+            FindEffectDialogView dlg = new()
+            {
+                DataContext = vm,
+            };
+
+            await DialogHost.Show(dlg, "RootDialog");
+
+            if (vm.Selected == null)
+            { return; }
+
+            SelectedEffect = vm.Selected;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanPreviousEffect))]
+        private void PreviousEffect()
+        {
+            if (SelectedEffect == null)
+            { return; }
+
+            int index = Context.Effects.IndexOf(SelectedEffect);
+            SelectedEffect = Context.Effects[index - 1];
+        }
+        private bool CanPreviousEffect()
+        {
+            return SelectedEffect != null
+                && Context.Effects.Any()
+                && SelectedEffect != Context.Effects.First();
+        }
+
+        [RelayCommand(CanExecute = nameof(CanNextEffect))]
+        private void NextEffect()
+        {
+            if (SelectedEffect == null)
+            { return; }
+
+            int index = Context.Effects.IndexOf(SelectedEffect);
+            SelectedEffect = Context.Effects[index + 1];
+        }
+        private bool CanNextEffect()
+        {
+            return SelectedEffect != null
+                && Context.Effects.Any()
+                && SelectedEffect != Context.Effects.Last();
         }
     }
 }

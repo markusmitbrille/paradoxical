@@ -27,9 +27,9 @@
             <RowDefinition
                 Height="auto" />
             <RowDefinition
-                Height="auto" />
+                Height="236" />
             <RowDefinition
-                Height="auto" />
+                Height="236" />
             <RowDefinition
                 Height="auto" />
         </Grid.RowDefinitions>
@@ -52,55 +52,8 @@
             Text="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             materialDesign:HintAssist.Hint="Tooltip" />
 
-        <StackPanel
-            Grid.Row="1"
-            Grid.Column="0">
-
-            <StackPanel
-                HorizontalAlignment="Stretch"
-                Orientation="Horizontal">
-
-                <ItemsControl
-                    ItemsSource="{Binding Triggers}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate
-                            DataType="model:ParadoxTrigger">
-                            <StackPanel
-                                Orientation="Horizontal">
-
-                                <Button
-                                    IsEnabled="{Binding TargetNullValue=false}"
-                                    Style="{DynamicResource MaterialDesignOutlinedButton}"
-                                    Command="{Binding RemoveTriggerCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                    CommandParameter="{Binding SelectedItem, ElementName=OptionTriggers}"
-                                    ToolTip="Click To Remove">
-
-                                    <TextBlock
-                                        Style="{DynamicResource MaterialDesignButtonTextBlock}"
-                                        Text="{Binding Name}" />
-
-                                </Button>
-
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-
-                <Separator
-                    Style="{DynamicResource MaterialDesignDarkSeparator}" />
-
-                <Button
-                    Margin="8"
-                    IsEnabled="{Binding TargetNullValue=false}"
-                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
-                    Command="{Binding AddTriggerCommand}"
-                    Content="{materialDesign:PackIcon Kind=Plus}"
-                    ToolTip="Add Trigger" />
-
-            </StackPanel>
-
-        </StackPanel>
-
+        <!-- TODO: control for selection of triggered event -->
+        
         <TextBox
             Grid.Row="1"
             Grid.Column="1"
@@ -110,7 +63,71 @@
             Text="{Binding TriggeredEventScope, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             materialDesign:HintAssist.Hint="Triggered Event Scope" />
 
-        <!-- TODO: control for selection of triggers -->
+        <Grid
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="4">
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="*" />
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="auto" />
+            </Grid.RowDefinitions>
+
+            <ScrollViewer
+                Grid.Row="0">
+                <ScrollViewer.Resources>
+                    <Style
+                        TargetType="ScrollBar"
+                        BasedOn="{StaticResource MaterialDesignScrollBarMinimal}" />
+                </ScrollViewer.Resources>
+
+                <ItemsControl
+                    Margin="0,-4"
+                    ItemsSource="{Binding Triggers}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate
+                            DataType="model:ParadoxTrigger">
+
+                            <Button
+                                Margin="0,4"
+                                Style="{DynamicResource MaterialDesignOutlinedButton}"
+                                Command="{Binding DataContext.RemoveTriggerCommand, RelativeSource={RelativeSource AncestorType={x:Type view:ParadoxEventOptionView}}}"
+                                CommandParameter="{Binding}"
+                                ToolTip="Remove Trigger">
+
+                                <StackPanel
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        Style="{DynamicResource MaterialDesignButtonTextBlock}"
+                                        Text="{Binding Name}" />
+                                </StackPanel>
+
+                            </Button>
+
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            
+            </ScrollViewer>
+            
+            <Separator
+                Grid.Row="1"
+                Visibility="{Binding TriggersSeparatorVisibililty}"
+                Style="{DynamicResource MaterialDesignDarkSeparator}" />
+
+            <Button
+                Grid.Row="2"
+                Margin="8"
+                IsEnabled="{Binding TargetNullValue=false}"
+                Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                Command="{Binding AddTriggerCommand}"
+                Content="{materialDesign:PackIcon Kind=Plus}"
+                ToolTip="Add Trigger" />
+
+        </Grid>
 
         <view:ScriptBox
             Grid.Row="2"
@@ -129,7 +146,71 @@
             </view:ScriptBox.TextFormatter>
         </view:ScriptBox>
 
-        <!-- TODO: control for selection of effects -->
+        <Grid
+            Grid.Row="3"
+            Grid.Column="0"
+            Margin="4">
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="*" />
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="auto" />
+            </Grid.RowDefinitions>
+
+            <ScrollViewer
+                Grid.Row="0">
+                <ScrollViewer.Resources>
+                    <Style
+                        TargetType="ScrollBar"
+                        BasedOn="{StaticResource MaterialDesignScrollBarMinimal}" />
+                </ScrollViewer.Resources>
+
+                <ItemsControl
+                    Margin="0,-4"
+                    ItemsSource="{Binding Effects}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate
+                            DataType="model:ParadoxEffect">
+
+                            <Button
+                                Margin="0,4"
+                                Style="{DynamicResource MaterialDesignOutlinedButton}"
+                                Command="{Binding DataContext.RemoveEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type view:ParadoxEventOptionView}}}"
+                                CommandParameter="{Binding}"
+                                ToolTip="Remove Effect">
+
+                                <StackPanel
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        Style="{DynamicResource MaterialDesignButtonTextBlock}"
+                                        Text="{Binding Name}" />
+                                </StackPanel>
+
+                            </Button>
+
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+            </ScrollViewer>
+
+            <Separator
+                Grid.Row="1"
+                Visibility="{Binding TriggersSeparatorVisibililty}"
+                Style="{DynamicResource MaterialDesignDarkSeparator}" />
+
+            <Button
+                Grid.Row="2"
+                Margin="8"
+                IsEnabled="{Binding TargetNullValue=false}"
+                Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                Command="{Binding AddEffectCommand}"
+                Content="{materialDesign:PackIcon Kind=Plus}"
+                ToolTip="Add Effect" />
+
+        </Grid>
 
         <view:ScriptBox
             Grid.Row="3"

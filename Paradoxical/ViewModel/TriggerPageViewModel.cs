@@ -5,6 +5,7 @@ using MaterialDesignThemes.Wpf;
 using Paradoxical.View;
 using Paradoxical.Data;
 using Paradoxical.Model;
+using System;
 
 namespace Paradoxical.ViewModel
 {
@@ -30,8 +31,10 @@ namespace Paradoxical.ViewModel
         [RelayCommand]
         private void AddTrigger()
         {
-            ParadoxTrigger trg = new(Context);
-            trg.Name = "New Trigger";
+            ParadoxTrigger trg = new(Context)
+            {
+                Name = $"Trigger [{Guid.NewGuid().ToString()[0..4]}]",
+            };
 
             Context.Triggers.Add(trg);
             SelectedTrigger = trg;

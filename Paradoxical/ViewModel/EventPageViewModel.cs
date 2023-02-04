@@ -5,6 +5,7 @@ using MaterialDesignThemes.Wpf;
 using Paradoxical.View;
 using Paradoxical.Data;
 using Paradoxical.Model;
+using System;
 
 namespace Paradoxical.ViewModel
 {
@@ -33,7 +34,7 @@ namespace Paradoxical.ViewModel
             ParadoxEvent evt = new(Context)
             {
                 Id = Context.Events.Count == 0 ? 1 : Context.Events.Max(evt => evt.Id) + 1,
-                Title = "New Event"
+                Title = $"Event [{Guid.NewGuid().ToString()[0..4]}]",
             };
 
             Context.Events.Add(evt);

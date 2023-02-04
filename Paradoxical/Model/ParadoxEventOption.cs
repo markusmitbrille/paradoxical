@@ -6,6 +6,8 @@ using Paradoxical.View;
 using Paradoxical.ViewModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows;
 
 namespace Paradoxical.Model
 {
@@ -25,11 +27,15 @@ namespace Paradoxical.Model
 
         [ObservableProperty]
         private string trigger = "";
+
         public ObservableCollection<ParadoxTrigger> Triggers { get; } = new();
+        public Visibility TriggersSeparatorVisibililty => Triggers.Any() ? Visibility.Visible : Visibility.Collapsed;
 
         [ObservableProperty]
         private string effect = "";
+
         public ObservableCollection<ParadoxEffect> Effects { get; } = new();
+        public Visibility EffectsSeparatorVisibililty => Effects.Any() ? Visibility.Visible : Visibility.Collapsed;
 
         [ObservableProperty]
         private int aiBaseChance = 100;
@@ -65,11 +71,9 @@ namespace Paradoxical.Model
         [RelayCommand]
         private async void AddTrigger()
         {
-            // TODO: somehow get the necessary data ... services? dependency injection? voodoo?
-
             FindTriggerDialogViewModel vm = new()
             {
-                //Items = ActiveMod.Triggers,
+                Items = Context.Triggers,
             };
             FindTriggerDialogView dlg = new()
             {
@@ -82,12 +86,46 @@ namespace Paradoxical.Model
             { return; }
 
             Triggers.Add(vm.Selected);
+
+            OnPropertyChanged(nameof(TriggersSeparatorVisibililty));
         }
 
         [RelayCommand]
         private void RemoveTrigger(ParadoxTrigger trg)
         {
             Triggers.Remove(trg);
+
+            OnPropertyChanged(nameof(TriggersSeparatorVisibililty));
+        }
+
+        [RelayCommand]
+        private async void AddEffect()
+        {
+            FindEffectDialogViewModel vm = new()
+            {
+                Items = Context.Effects,
+            };
+            FindEffectDialogView dlg = new()
+            {
+                DataContext = vm,
+            };
+
+            await DialogHost.Show(dlg, "RootDialog");
+
+            if (vm.Selected == null)
+            { return; }
+
+            Effects.Add(vm.Selected);
+
+            OnPropertyChanged(nameof(EffectsSeparatorVisibililty));
+        }
+
+        [RelayCommand]
+        private void RemoveEffect(ParadoxEffect eff)
+        {
+            Effects.Remove(eff);
+
+            OnPropertyChanged(nameof(EffectsSeparatorVisibililty));
         }
     }
 }
