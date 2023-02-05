@@ -102,6 +102,7 @@ namespace Paradoxical.Model
         {
             FindTriggerDialogViewModel vm = new()
             {
+                DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
                 Items = Context.Triggers,
                 Blacklist = new(Triggers),
             };
@@ -110,7 +111,7 @@ namespace Paradoxical.Model
                 DataContext = vm,
             };
 
-            await DialogHost.Show(dlg, "RootDialog");
+            await DialogHost.Show(dlg, MainWindow.ROOT_DIALOG_IDENTIFIER);
 
             if (vm.Selected == null)
             { return; }
@@ -129,6 +130,7 @@ namespace Paradoxical.Model
         {
             FindEffectDialogViewModel vm = new()
             {
+                DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
                 Items = Context.Effects,
                 Blacklist = new(Effects),
             };
@@ -137,7 +139,7 @@ namespace Paradoxical.Model
                 DataContext = vm,
             };
 
-            await DialogHost.Show(dlg, "RootDialog");
+            await DialogHost.Show(dlg, MainWindow.ROOT_DIALOG_IDENTIFIER);
 
             if (vm.Selected == null)
             { return; }

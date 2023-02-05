@@ -106,7 +106,7 @@ namespace Paradoxical.ViewModel
                 DataContext = vm,
             };
 
-            await DialogHost.Show(dlg, "RootDialog");
+            await DialogHost.Show(dlg, MainWindow.ROOT_DIALOG_IDENTIFIER);
 
             if (vm.DialogResult != true)
             { return; }
