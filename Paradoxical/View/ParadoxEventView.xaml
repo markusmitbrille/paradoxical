@@ -12,7 +12,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     d:DataContext="{d:DesignInstance Type=model:ParadoxEvent}"
     mc:Ignorable="d"
-    d:DesignHeight="450"
+    d:DesignHeight="1400"
     d:DesignWidth="800">
   
     <UserControl.Resources>
@@ -132,8 +132,6 @@
                                 Height="auto" />
                             <RowDefinition
                                 Height="auto" />
-                            <RowDefinition
-                                Height="auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition
@@ -144,85 +142,55 @@
                                 MinWidth="100" />
                         </Grid.ColumnDefinitions>
 
-                        <materialDesign:ColorZone
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Margin="16,8,16,8"
-                            Padding="12"
-                            materialDesign:ElevationAssist.Elevation="Dp4"
-                            ClipToBounds="False"
-                            CornerRadius="8"
-                            Mode="SecondaryMid">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                Text="Left Portrait" />
-                        </materialDesign:ColorZone>
-
                         <TextBox
-                            Grid.Row="1"
+                            Grid.Row="0"
                             Grid.Column="0"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LeftPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Character" />
+                            materialDesign:HintAssist.Hint="Left Character" />
                         <TextBox
-                            Grid.Row="2"
+                            Grid.Row="1"
                             Grid.Column="0"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LeftPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Animation" />
+                            materialDesign:HintAssist.Hint="Left Animation" />
                         <TextBox
-                            Grid.Row="3"
+                            Grid.Row="2"
                             Grid.Column="0"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LeftPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Outfit Tags" />
-
-                        <materialDesign:ColorZone
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Margin="16,8,16,8"
-                            Padding="12"
-                            materialDesign:ElevationAssist.Elevation="Dp4"
-                            ClipToBounds="False"
-                            CornerRadius="8"
-                            Mode="SecondaryMid">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                Text="Right Portrait" />
-                        </materialDesign:ColorZone>
+                            materialDesign:HintAssist.Hint="Left Outfit Tags" />
 
                         <TextBox
-                            Grid.Row="1"
+                            Grid.Row="0"
                             Grid.Column="1"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding RightPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Character" />
+                            materialDesign:HintAssist.Hint="Right Character" />
                         <TextBox
-                            Grid.Row="2"
+                            Grid.Row="1"
                             Grid.Column="1"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Margin="4"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding RightPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Animation" />
+                            materialDesign:HintAssist.Hint="Right Animation" />
                         <TextBox
-                            Grid.Row="3"
+                            Grid.Row="2"
                             Grid.Column="1"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding RightPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Outfit Tags" />
+                            materialDesign:HintAssist.Hint="Right Outfit Tags" />
                     </Grid>
                 </Expander>
 
@@ -240,8 +208,6 @@
                                 Height="auto" />
                             <RowDefinition
                                 Height="auto" />
-                            <RowDefinition
-                                Height="auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition
@@ -255,125 +221,80 @@
                                 MinWidth="100" />
                         </Grid.ColumnDefinitions>
 
-                        <materialDesign:ColorZone
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Margin="16,8,16,8"
-                            Padding="12"
-                            materialDesign:ElevationAssist.Elevation="Dp4"
-                            ClipToBounds="False"
-                            CornerRadius="8"
-                            Mode="SecondaryMid">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                Text="Lower Left Portrait" />
-                        </materialDesign:ColorZone>
-
                         <TextBox
-                            Grid.Row="1"
+                            Grid.Row="0"
                             Grid.Column="0"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LowerLeftPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Character" />
+                            materialDesign:HintAssist.Hint="Left Character" />
                         <TextBox
-                            Grid.Row="2"
+                            Grid.Row="1"
                             Grid.Column="0"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LowerLeftPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Animation" />
+                            materialDesign:HintAssist.Hint="Left Animation" />
                         <TextBox
-                            Grid.Row="3"
+                            Grid.Row="2"
                             Grid.Column="0"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LowerLeftPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Outfit Tags" />
-
-                        <materialDesign:ColorZone
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Margin="16,8,16,8"
-                            Padding="12"
-                            materialDesign:ElevationAssist.Elevation="Dp4"
-                            ClipToBounds="False"
-                            CornerRadius="8"
-                            Mode="SecondaryMid">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                Text="Lower Center Portrait" />
-                        </materialDesign:ColorZone>
+                            materialDesign:HintAssist.Hint="Left Outfit Tags" />
 
                         <TextBox
-                            Grid.Row="1"
+                            Grid.Row="0"
                             Grid.Column="1"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LowerCenterPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Character" />
+                            materialDesign:HintAssist.Hint="Center Character" />
+                        <TextBox
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="4"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
+                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            Text="{Binding LowerCenterPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Center Animation" />
                         <TextBox
                             Grid.Row="2"
                             Grid.Column="1"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                            Text="{Binding LowerCenterPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Animation" />
+                            Text="{Binding LowerCenterPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Center Outfit Tags" />
+
                         <TextBox
-                            Grid.Row="3"
-                            Grid.Column="1"
+                            Grid.Row="0"
+                            Grid.Column="2"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                            Text="{Binding LowerCenterPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Outfit Tags" />
-
-                        <materialDesign:ColorZone
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            Margin="16,8,16,8"
-                            Padding="12"
-                            materialDesign:ElevationAssist.Elevation="Dp4"
-                            ClipToBounds="False"
-                            CornerRadius="8"
-                            Mode="SecondaryMid">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                Text="Lower Right Portrait" />
-                        </materialDesign:ColorZone>
-
+                            Text="{Binding LowerRightPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Right Character" />
                         <TextBox
                             Grid.Row="1"
                             Grid.Column="2"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                            Text="{Binding LowerRightPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Character" />
+                            Text="{Binding LowerRightPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Right Animation" />
                         <TextBox
                             Grid.Row="2"
                             Grid.Column="2"
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                            Text="{Binding LowerRightPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Animation" />
-                        <TextBox
-                            Grid.Row="3"
-                            Grid.Column="2"
-                            Margin="4"
-                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LowerRightPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Outfit Tags" />
+                            materialDesign:HintAssist.Hint="Right Outfit Tags" />
                     </Grid>
                 </Expander>
 
