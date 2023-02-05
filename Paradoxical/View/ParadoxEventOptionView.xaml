@@ -12,9 +12,9 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     d:DataContext="{d:DesignInstance Type=model:ParadoxEventOption}"
     mc:Ignorable="d"
-    d:DesignHeight="450"
+    d:DesignHeight="900"
     d:DesignWidth="800">
-    
+
     <UserControl.Resources>
         <converters:ObjectNullConverter
             x:Key="ObjectNullConverter" />
@@ -33,11 +33,11 @@
             <RowDefinition
                 Height="auto" />
             <RowDefinition
-                Height="236" />
-            <RowDefinition
-                Height="236" />
-            <RowDefinition
                 Height="auto" />
+            <RowDefinition
+                Height="236" />
+            <RowDefinition
+                Height="236" />
         </Grid.RowDefinitions>
 
         <TextBox
@@ -70,7 +70,7 @@
             materialDesign:HintAssist.Hint="Triggered Event Scope" />
 
         <Grid
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="0"
             Margin="4">
             <Grid.RowDefinitions>
@@ -84,7 +84,7 @@
 
             <ScrollViewer
                 Grid.Row="0">
-               
+
                 <ScrollViewer.Resources>
                     <Style
                         TargetType="ScrollBar"
@@ -163,7 +163,7 @@
         </Grid>
 
         <view:ScriptBox
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="1"
             Margin="4"
             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
@@ -180,7 +180,7 @@
         </view:ScriptBox>
 
         <Grid
-            Grid.Row="3"
+            Grid.Row="4"
             Grid.Column="0"
             Margin="4">
             <Grid.RowDefinitions>
@@ -194,7 +194,7 @@
 
             <ScrollViewer
                 Grid.Row="0">
-               
+
                 <ScrollViewer.Resources>
                     <Style
                         TargetType="ScrollBar"
@@ -252,7 +252,7 @@
 
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
-              
+
                 </ItemsControl>
 
             </ScrollViewer>
@@ -273,7 +273,7 @@
         </Grid>
 
         <view:ScriptBox
-            Grid.Row="3"
+            Grid.Row="4"
             Grid.Column="1"
             Margin="4"
             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
@@ -290,7 +290,7 @@
         </view:ScriptBox>
 
         <Grid
-            Grid.Row="4"
+            Grid.Row="2"
             Grid.Column="0">
 
             <Grid.ColumnDefinitions>
@@ -406,7 +406,7 @@
         </Grid>
 
         <view:ScriptBox
-            Grid.Row="4"
+            Grid.Row="2"
             Grid.Column="1"
             Margin="4"
             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
