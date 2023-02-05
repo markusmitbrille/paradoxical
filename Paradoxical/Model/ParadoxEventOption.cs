@@ -19,6 +19,8 @@ namespace Paradoxical.Model
         private string tooltip = "";
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(CreateTriggeredEventCommand))]
+        [NotifyCanExecuteChangedFor(nameof(ResetTriggeredEventCommand))]
         private ParadoxEvent? triggeredEvent = null;
         [ObservableProperty]
         private string triggeredEventScope = "";
@@ -147,6 +149,54 @@ namespace Paradoxical.Model
         private void RemoveEffect(ParadoxEffect eff)
         {
             Effects.Remove(eff);
+        }
+
+        [RelayCommand(CanExecute = nameof(CanCreateTriggeredEvent))]
+        private void CreateTriggeredEvent()
+        {
+            ParadoxEvent evt = new(Context);
+
+            Context.Events.Add(evt);
+            TriggeredEvent = evt;
+        }
+        private bool CanCreateTriggeredEvent()
+        {
+            return TriggeredEvent == null;
+        }
+
+        [RelayCommand]
+        private async void FindTriggeredEvent()
+        {
+            FindEventDialogViewModel vm = new()
+            {
+                DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
+                Items = Context.Events,
+                Selected = TriggeredEvent,
+            };
+            FindEventDialogView dlg = new()
+            {
+                DataContext = vm,
+            };
+
+            await DialogHost.Show(dlg, MainWindow.ROOT_DIALOG_IDENTIFIER);
+
+            if (vm.DialogResult != true)
+            { return; }
+
+            if (vm.Selected == null)
+            { return; }
+
+            TriggeredEvent = vm.Selected;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanResetTriggeredEvent))]
+        private void ResetTriggeredEvent()
+        {
+            TriggeredEvent = null;
+        }
+        private bool CanResetTriggeredEvent()
+        {
+            return TriggeredEvent != null;
         }
     }
 }

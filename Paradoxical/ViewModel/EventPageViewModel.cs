@@ -153,5 +153,15 @@ namespace Paradoxical.ViewModel
                 && Context.Events.Any()
                 && SelectedEvent != Context.Events.Last();
         }
+
+        [RelayCommand(CanExecute = nameof(CanGoToEvent))]
+        private void GoToEvent(ParadoxEvent evt)
+        {
+            SelectedEvent = evt;
+        }
+        private bool CanGoToEvent(ParadoxEvent evt)
+        {
+            return SelectedEvent != evt && Context.Events.Contains(evt);
+        }
     }
 }
