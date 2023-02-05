@@ -94,6 +94,11 @@ namespace Paradoxical.ViewModel
             return false;
         }
 
+        protected override bool CanSubmit()
+        {
+            return Selected != null;
+        }
+
         [RelayCommand]
         private void UpdateSelection()
         {

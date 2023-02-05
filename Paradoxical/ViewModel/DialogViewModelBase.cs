@@ -12,12 +12,16 @@ namespace Paradoxical.ViewModel
         [ObservableProperty]
         private string? dialogIdentifier;
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanSubmit))]
         private void Submit()
         {
             DialogResult = true;
 
             Close();
+        }
+        protected virtual bool CanSubmit()
+        {
+            return true;
         }
 
         [RelayCommand]

@@ -1,5 +1,4 @@
 ﻿<UserControl
-    x:Class="Paradoxical.View.FindEventDialogView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,15 +6,22 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
+    xmlns:converters="clr-namespace:Paradoxical.Converters"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    x:Class="Paradoxical.View.FindEventDialogView"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance viewmodel:FindEventDialogViewModel}"
+    d:DataContext="{d:DesignInstance {x:Type viewmodel:FindEventDialogViewModel}}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     Height="400"
     Width="550"
     FocusVisualStyle="{x:Null}">
-   
+    
+    <UserControl.Resources>
+        <converters:MathConverter
+            x:Key="MathConverter" />
+    </UserControl.Resources>
+
     <UserControl.InputBindings>
         <KeyBinding
             Command="{Binding CancelCommand}"
@@ -31,89 +37,126 @@
             Gesture="Down" />
     </UserControl.InputBindings>
 
-    <Grid
-        Margin="16">
+    <DockPanel>
 
-        <Grid.RowDefinitions>
-            <RowDefinition
-                Height="auto" />
-            <RowDefinition
-                Height="*" />
-        </Grid.RowDefinitions>
+        <DockPanel
+            DockPanel.Dock="Bottom"
+            Margin="{Binding ActualHeight, ConverterParameter=16|8|16|-x/2, Converter={StaticResource MathConverter}, RelativeSource={RelativeSource Self}}">
 
-        <TextBox
-            Grid.Row="0"
-            Style="{DynamicResource MaterialDesignFilledTextBox}"
-            Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            materialDesign:HintAssist.Hint="Filter"
-            materialDesign:TextFieldAssist.HasClearButton="True">
+            <Button
+                DockPanel.Dock="Right"
+                Margin="8"
+                Style="{DynamicResource MaterialDesignFloatingActionSecondaryButton}"
+                Command="{Binding SubmitCommand}"
+                CommandParameter="{Binding}"
+                Content="{materialDesign:PackIcon Kind=Check}"
+                ToolTip="Submit"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center" />
 
-            <behaviors:Interaction.Triggers>
-                <behaviors:EventTrigger
-                    EventName="TextChanged">
-                    <behaviors:InvokeCommandAction
-                        Command="{Binding UpdateSelectionCommand}" />
-                </behaviors:EventTrigger>
-            </behaviors:Interaction.Triggers>
+            <Button
+                DockPanel.Dock="Left"
+                Style="{DynamicResource MaterialDesignFloatingActionSecondaryButton}"
+                Command="{Binding CancelCommand}"
+                CommandParameter="{Binding}"
+                Content="{materialDesign:PackIcon Kind=Close}"
+                ToolTip="Cancel"
+                Margin="8,8,8,8"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center" />
 
-            <TextBox.InputBindings>
-                <KeyBinding
-                    Command="{Binding CancelCommand}"
-                    Gesture="ESC" />
-                <KeyBinding
-                    Command="{Binding SubmitCommand}"
-                    Gesture="Enter" />
-                <KeyBinding
-                    Command="{Binding PreviousCommand}"
-                    Gesture="Up" />
-                <KeyBinding
-                    Command="{Binding NextCommand}"
-                    Gesture="Down" />
-            </TextBox.InputBindings>
+        </DockPanel>
 
-        </TextBox>
+        <Grid
+            Margin="16,16,16,8">
 
-        <ListBox
-            Grid.Row="1"
-            Margin="0,20,0,0"
-            Style="{StaticResource MaterialDesignNavigationPrimaryListBox}"
-            ItemsSource="{Binding Items}"
-            SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="*" />
+            </Grid.RowDefinitions>
 
-            <ListBox.Resources>
-                <Style
-                    TargetType="ScrollBar"
-                    BasedOn="{StaticResource MaterialDesignScrollBarMinimal}" />
-            </ListBox.Resources>
+            <TextBox
+                Grid.Row="0"
+                Style="{DynamicResource MaterialDesignFilledTextBox}"
+                Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                materialDesign:HintAssist.Hint="Filter"
+                materialDesign:TextFieldAssist.HasClearButton="True">
 
-            <ListBox.ItemTemplate>
-                <DataTemplate
-                    DataType="model:ParadoxEvent">
+                <behaviors:Interaction.Triggers>
+                    <behaviors:EventTrigger
+                        EventName="TextChanged">
+                        <behaviors:InvokeCommandAction
+                            Command="{Binding UpdateSelectionCommand}" />
+                    </behaviors:EventTrigger>
+                </behaviors:Interaction.Triggers>
 
-                    <StackPanel
-                        Margin="24,4,0,4"
-                        Orientation="Horizontal">
+                <TextBox.InputBindings>
+                    <KeyBinding
+                        Command="{Binding CancelCommand}"
+                        Gesture="ESC" />
+                    <KeyBinding
+                        Command="{Binding SubmitCommand}"
+                        Gesture="Enter" />
+                    <KeyBinding
+                        Command="{Binding PreviousCommand}"
+                        Gesture="Up" />
+                    <KeyBinding
+                        Command="{Binding NextCommand}"
+                        Gesture="Down" />
+                </TextBox.InputBindings>
 
-                        <TextBlock
-                            Style="{DynamicResource MaterialDesignButtonTextBlock}"
-                            Text="{Binding Id}"
-                            TextAlignment="Right" />
+            </TextBox>
 
-                        <TextBlock
-                            Style="{DynamicResource MaterialDesignButtonTextBlock}"
-                            Text=": " />
+            <ListBox
+                Grid.Row="1"
+                Margin="0,20,0,0"
+                ItemsSource="{Binding Items}"
+                SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                d:ItemsSource="{d:SampleData ItemCount=5}">
 
-                        <TextBlock
-                            Style="{DynamicResource MaterialDesignButtonTextBlock}"
-                            Text="{Binding Title}" />
+                <ListBox.Resources>
+                    <Style
+                        TargetType="{x:Type ScrollBar}"
+                        BasedOn="{StaticResource MaterialDesignScrollBarMinimal}" />
+                </ListBox.Resources>
 
-                    </StackPanel>
+                <ListBox.Style>
+                    <StaticResource
+                        ResourceKey="MaterialDesignNavigationPrimaryListBox" />
+                </ListBox.Style>
 
-                </DataTemplate>
-            </ListBox.ItemTemplate>
+                <ListBox.ItemTemplate>
+                    <DataTemplate
+                        DataType="model:ParadoxEvent">
 
-        </ListBox>
+                        <StackPanel
+                            Margin="24,4,0,4"
+                            Orientation="Horizontal">
 
-    </Grid>
+                            <TextBlock
+                                Style="{DynamicResource MaterialDesignButtonTextBlock}"
+                                Text="{Binding Id}"
+                                TextAlignment="Right" />
+
+                            <TextBlock
+                                Style="{DynamicResource MaterialDesignButtonTextBlock}"
+                                Text=": " />
+
+                            <TextBlock
+                                Style="{DynamicResource MaterialDesignButtonTextBlock}"
+                                Text="{Binding Title}" />
+
+                        </StackPanel>
+
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+            </ListBox>
+
+        </Grid>
+
+    </DockPanel>
 
 </UserControl>
