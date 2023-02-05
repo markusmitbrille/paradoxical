@@ -36,6 +36,8 @@ namespace Paradoxical.ViewModel
 
             Context.Effects.Add(eff);
             SelectedEffect = eff;
+
+            FindEffectCommand.NotifyCanExecuteChanged();
         }
 
         [RelayCommand(CanExecute = nameof(CanDuplicateEffect))]
@@ -45,9 +47,11 @@ namespace Paradoxical.ViewModel
             { return; }
 
             ParadoxEffect evt = new(Context, SelectedEffect);
-            Context.Effects.Add(evt);
 
+            Context.Effects.Add(evt);
             SelectedEffect = evt;
+
+            FindEffectCommand.NotifyCanExecuteChanged();
         }
         private bool CanDuplicateEffect()
         {
@@ -81,13 +85,15 @@ namespace Paradoxical.ViewModel
 
             Context.Effects.Remove(SelectedEffect);
             SelectedEffect = Context.Effects.FirstOrDefault();
+
+            FindEffectCommand.NotifyCanExecuteChanged();
         }
         private bool CanRemoveEffect()
         {
             return SelectedEffect != null;
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanFindEffect))]
         private async void FindEffect()
         {
             FindEffectDialogViewModel vm = new()
@@ -110,6 +116,10 @@ namespace Paradoxical.ViewModel
             { return; }
 
             SelectedEffect = vm.Selected;
+        }
+        private bool CanFindEffect()
+        {
+            return Context.Effects.Any();
         }
 
         [RelayCommand(CanExecute = nameof(CanPreviousEffect))]

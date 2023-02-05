@@ -36,6 +36,8 @@ namespace Paradoxical.ViewModel
 
             Context.Events.Add(evt);
             SelectedEvent = evt;
+
+            FindEventCommand.NotifyCanExecuteChanged();
         }
 
         [RelayCommand(CanExecute = nameof(CanDuplicateEvent))]
@@ -45,9 +47,11 @@ namespace Paradoxical.ViewModel
             { return; }
 
             ParadoxEvent evt = new(Context, SelectedEvent);
-            Context.Events.Add(evt);
 
+            Context.Events.Add(evt);
             SelectedEvent = evt;
+
+            FindEventCommand.NotifyCanExecuteChanged();
         }
         private bool CanDuplicateEvent()
         {
@@ -81,13 +85,15 @@ namespace Paradoxical.ViewModel
 
             Context.Events.Remove(SelectedEvent);
             SelectedEvent = Context.Events.FirstOrDefault();
+
+            FindEventCommand.NotifyCanExecuteChanged();
         }
         private bool CanRemoveEvent()
         {
             return SelectedEvent != null;
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanFindEvent))]
         private async void FindEvent()
         {
             FindEventDialogViewModel vm = new()
@@ -110,6 +116,10 @@ namespace Paradoxical.ViewModel
             { return; }
 
             SelectedEvent = vm.Selected;
+        }
+        private bool CanFindEvent()
+        {
+            return Context.Events.Any();
         }
 
         [RelayCommand(CanExecute = nameof(CanPreviousEvent))]

@@ -36,6 +36,8 @@ namespace Paradoxical.ViewModel
 
             Context.Triggers.Add(trg);
             SelectedTrigger = trg;
+
+            FindTriggerCommand.NotifyCanExecuteChanged();
         }
 
         [RelayCommand(CanExecute = nameof(CanDuplicateTrigger))]
@@ -45,9 +47,11 @@ namespace Paradoxical.ViewModel
             { return; }
 
             ParadoxTrigger evt = new(Context, SelectedTrigger);
-            Context.Triggers.Add(evt);
 
+            Context.Triggers.Add(evt);
             SelectedTrigger = evt;
+
+            FindTriggerCommand.NotifyCanExecuteChanged();
         }
         private bool CanDuplicateTrigger()
         {
@@ -80,13 +84,15 @@ namespace Paradoxical.ViewModel
 
             Context.Triggers.Remove(SelectedTrigger);
             SelectedTrigger = Context.Triggers.FirstOrDefault();
+
+            FindTriggerCommand.NotifyCanExecuteChanged();
         }
         private bool CanRemoveTrigger()
         {
             return SelectedTrigger != null;
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanFindTrigger))]
         private async void FindTrigger()
         {
             FindTriggerDialogViewModel vm = new()
@@ -109,6 +115,10 @@ namespace Paradoxical.ViewModel
             { return; }
 
             SelectedTrigger = vm.Selected;
+        }
+        private bool CanFindTrigger()
+        {
+            return Context.Triggers.Any();
         }
 
         [RelayCommand(CanExecute = nameof(CanPreviousTrigger))]
