@@ -28,7 +28,7 @@ namespace Paradoxical.ViewModel
         private EffectPageViewModel? effectPage;
 
         [ObservableProperty]
-        private ObservableObject? selectedPage;
+        private PageViewModelBase? selectedPage;
 
         public MainViewModel()
         {
