@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace Paradoxical.ViewModel
 {
-    public partial class EventPageViewModel : PageViewModel
+    public partial class EventPageViewModel : PageViewModelBase
     {
         public override string PageName => "Events";
 

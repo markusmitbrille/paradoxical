@@ -2,7 +2,7 @@
 
 namespace Paradoxical.ViewModel
 {
-    public abstract partial class PageViewModel : ObservableObject
+    public abstract partial class PageViewModelBase : ObservableObject
     {
         public abstract string PageName { get; }
     }

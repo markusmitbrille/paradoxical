@@ -2,7 +2,7 @@
 
 namespace Paradoxical.ViewModel
 {
-    public partial class InfoPageViewModel : PageViewModel
+    public partial class InfoPageViewModel : PageViewModelBase
     {
         public override string PageName => "Mod Info";
 

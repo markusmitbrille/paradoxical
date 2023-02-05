@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace Paradoxical.ViewModel
 {
-    public partial class TriggerPageViewModel : PageViewModel
+    public partial class TriggerPageViewModel : PageViewModelBase
     {
         public override string PageName => "Triggers";
 

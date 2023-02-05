@@ -13,7 +13,7 @@ namespace Paradoxical.ViewModel
         [NotifyCanExecuteChangedFor(nameof(SaveModCommand))]
         private ModContext? context;
 
-        public ObservableCollection<PageViewModel> Pages { get; } = new();
+        public ObservableCollection<PageViewModelBase> Pages { get; } = new();
 
         [ObservableProperty]
         private AboutPageViewModel? aboutPage;
