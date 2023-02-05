@@ -18,10 +18,10 @@
 
     <UserControl.InputBindings>
         <KeyBinding
-            Command="{Binding CloseCommand}"
+            Command="{Binding CancelCommand}"
             Gesture="ESC" />
         <KeyBinding
-            Command="{Binding CloseCommand}"
+            Command="{Binding SubmitCommand}"
             Gesture="Enter" />
         <KeyBinding
             Command="{Binding PreviousCommand}"
@@ -58,10 +58,10 @@
 
             <TextBox.InputBindings>
                 <KeyBinding
-                    Command="{Binding CloseCommand}"
+                    Command="{Binding CancelCommand}"
                     Gesture="ESC" />
                 <KeyBinding
-                    Command="{Binding CloseCommand}"
+                    Command="{Binding SubmitCommand}"
                     Gesture="Enter" />
                 <KeyBinding
                     Command="{Binding PreviousCommand}"

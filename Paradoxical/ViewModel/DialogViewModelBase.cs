@@ -1,0 +1,38 @@
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using MaterialDesignThemes.Wpf;
+
+namespace Paradoxical.ViewModel
+{
+    public abstract partial class DialogViewModelBase : ObservableObject
+    {
+        [ObservableProperty]
+        private bool? dialogResult;
+
+        [ObservableProperty]
+        private string? dialogIdentifier;
+
+        [RelayCommand]
+        private void Submit()
+        {
+            DialogResult = true;
+
+            Close();
+        }
+
+        [RelayCommand]
+        private void Cancel()
+        {
+            DialogResult = false;
+
+            Close();
+        }
+
+        [RelayCommand]
+        private void Close()
+        {
+            if (DialogHost.IsDialogOpen(DialogIdentifier))
+            { DialogHost.Close(DialogIdentifier); }
+        }
+    }
+}

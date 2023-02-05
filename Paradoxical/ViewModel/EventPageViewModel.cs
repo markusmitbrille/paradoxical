@@ -92,6 +92,7 @@ namespace Paradoxical.ViewModel
         {
             FindEventDialogViewModel vm = new()
             {
+                DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
                 Items = Context.Events,
                 Selected = SelectedEvent,
             };
@@ -100,7 +101,10 @@ namespace Paradoxical.ViewModel
                 DataContext = vm,
             };
 
-            await DialogHost.Show(dlg, "RootDialog");
+            await DialogHost.Show(dlg, MainWindow.ROOT_DIALOG_IDENTIFIER);
+
+            if (vm.DialogResult != true)
+            { return; }
 
             if (vm.Selected == null)
             { return; }

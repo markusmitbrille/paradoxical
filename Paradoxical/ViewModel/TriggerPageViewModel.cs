@@ -91,6 +91,7 @@ namespace Paradoxical.ViewModel
         {
             FindTriggerDialogViewModel vm = new()
             {
+                DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
                 Items = Context.Triggers,
                 Selected = SelectedTrigger,
             };
@@ -100,6 +101,9 @@ namespace Paradoxical.ViewModel
             };
 
             await DialogHost.Show(dlg, "RootDialog");
+
+            if (vm.DialogResult != true)
+            { return; }
 
             if (vm.Selected == null)
             { return; }

@@ -5,6 +5,8 @@ namespace Paradoxical.View
 {
     public partial class MainWindow
     {
+        public const string ROOT_DIALOG_IDENTIFIER = "RootDialog";
+
         public MainWindow()
         {
             InitializeComponent();

@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using MaterialDesignThemes.Wpf;
 using Paradoxical.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +10,7 @@ using System.Windows.Data;
 
 namespace Paradoxical.ViewModel
 {
-    public partial class FindTriggerDialogViewModel : ObservableObject
+    public partial class FindTriggerDialogViewModel : DialogViewModelBase
     {
         private ICollectionView? view;
 
@@ -93,13 +92,6 @@ namespace Paradoxical.ViewModel
             { return true; }
 
             return false;
-        }
-
-        [RelayCommand]
-        private void Close()
-        {
-            if (DialogHost.IsDialogOpen("RootDialog"))
-            { DialogHost.Close("RootDialog"); }
         }
 
         [RelayCommand]

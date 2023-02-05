@@ -92,6 +92,7 @@ namespace Paradoxical.ViewModel
         {
             FindEffectDialogViewModel vm = new()
             {
+                DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
                 Items = Context.Effects,
                 Selected = SelectedEffect,
             };
@@ -101,6 +102,9 @@ namespace Paradoxical.ViewModel
             };
 
             await DialogHost.Show(dlg, "RootDialog");
+
+            if (vm.DialogResult != true)
+            { return; }
 
             if (vm.Selected == null)
             { return; }
