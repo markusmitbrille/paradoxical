@@ -41,7 +41,7 @@
 
         <DockPanel
             DockPanel.Dock="Bottom"
-            Margin="{Binding ActualHeight, ConverterParameter=16|8|16|-x/2, Converter={StaticResource MathConverter}, RelativeSource={RelativeSource Self}}">
+            Margin="{Binding ActualHeight, ConverterParameter=16|8|16|-x*0.3, Converter={StaticResource MathConverter}, RelativeSource={RelativeSource Self}}">
 
             <Button
                 DockPanel.Dock="Right"
