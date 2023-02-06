@@ -41,7 +41,7 @@ namespace Paradoxical.ViewModel
 
         private void ResetContext()
         {
-            AboutPage = new();
+            AboutPage ??= new();
 
             Context = new();
 
@@ -55,6 +55,7 @@ namespace Paradoxical.ViewModel
             Pages.Add(EventPage);
             Pages.Add(TriggerPage);
             Pages.Add(EffectPage);
+            Pages.Add(AboutPage);
 
             // navigate to info page
             SelectedPage = InfoPage;
