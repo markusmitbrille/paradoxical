@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Data;
+using Paradoxical.Model;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -21,10 +22,13 @@ namespace Paradoxical.ViewModel
         [ObservableProperty]
         private InfoPageViewModel? infoPage;
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(GoToEventCommand))]
         private EventPageViewModel? eventPage;
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(GoToTriggerCommand))]
         private TriggerPageViewModel? triggerPage;
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(GoToEffectCommand))]
         private EffectPageViewModel? effectPage;
 
         [ObservableProperty]
@@ -125,46 +129,106 @@ namespace Paradoxical.ViewModel
         [RelayCommand]
         private void GoToAboutPage()
         {
-            if (AboutPage != null)
-            {
-                SelectedPage = AboutPage;
-            }
+            if (AboutPage == null)
+            { return; }
+
+            SelectedPage = AboutPage;
         }
 
         [RelayCommand]
         private void GoToInfoPage()
         {
-            if (InfoPage != null)
-            {
-                SelectedPage = InfoPage;
-            }
+            if (InfoPage == null)
+            { return; }
+
+            SelectedPage = InfoPage;
         }
 
         [RelayCommand]
         private void GoToEventPage()
         {
-            if (EventPage != null)
-            {
-                SelectedPage = EventPage;
-            }
+            if (EventPage == null)
+            { return; }
+
+            SelectedPage = EventPage;
         }
 
         [RelayCommand]
         private void GoToTriggerPage()
         {
-            if (TriggerPage != null)
-            {
-                SelectedPage = TriggerPage;
-            }
+            if (TriggerPage == null)
+            { return; }
+
+            SelectedPage = TriggerPage;
         }
 
         [RelayCommand]
         private void GoToEffectPage()
         {
-            if (EffectPage != null)
-            {
-                SelectedPage = EffectPage;
-            }
+            if (EffectPage == null)
+            { return; }
+
+            SelectedPage = EffectPage;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanGoToEvent))]
+        private void GoToEvent(ParadoxEvent evt)
+        {
+            if (EventPage == null)
+            { return; }
+
+            SelectedPage = EventPage;
+            EventPage.SelectedEvent = evt;
+        }
+        private bool CanGoToEvent(ParadoxEvent evt)
+        {
+            if (EventPage == null)
+            { return false; }
+
+            if (SelectedPage == EventPage && EventPage.SelectedEvent == evt)
+            { return false; }
+
+            return true;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanGoToTrigger))]
+        private void GoToTrigger(ParadoxTrigger trg)
+        {
+            if (TriggerPage == null)
+            { return; }
+
+            SelectedPage = TriggerPage;
+            TriggerPage.SelectedTrigger = trg;
+        }
+        private bool CanGoToTrigger(ParadoxTrigger trg)
+        {
+            if (TriggerPage == null)
+            { return false; }
+
+            if (SelectedPage == TriggerPage && TriggerPage.SelectedTrigger == trg)
+            { return false; }
+
+            return true;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanGoToEffect))]
+        private void GoToEffect(ParadoxEffect eff)
+        {
+            if (EffectPage == null)
+            { return; }
+
+            SelectedPage = EffectPage;
+            EffectPage.SelectedEffect = eff;
+        }
+        private bool CanGoToEffect(ParadoxEffect eff)
+        {
+            if (EffectPage == null)
+            { return false; }
+
+            if (SelectedPage == EffectPage && EffectPage.SelectedEffect == eff)
+            { return false; }
+
+            return true;
         }
     }
 }

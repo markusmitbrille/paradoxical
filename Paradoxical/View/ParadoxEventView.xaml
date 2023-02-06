@@ -462,21 +462,49 @@
                                         <DataTemplate
                                             DataType="model:ParadoxTrigger">
 
-                                            <Button
-                                                Margin="0,4"
-                                                Style="{DynamicResource MaterialDesignOutlinedButton}"
-                                                Command="{Binding DataContext.RemoveTriggerCommand, RelativeSource={RelativeSource AncestorType={x:Type view:ParadoxEventView}}}"
-                                                CommandParameter="{Binding}"
-                                                ToolTip="Remove Trigger">
+                                            <Grid
+                                                Margin="0,4">
 
-                                                <StackPanel
-                                                    Orientation="Horizontal">
-                                                    <TextBlock
-                                                        Style="{DynamicResource MaterialDesignButtonTextBlock}"
-                                                        Text="{Binding Name}" />
-                                                </StackPanel>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition />
+                                                    <ColumnDefinition
+                                                        Width="Auto" />
+                                                    <ColumnDefinition
+                                                        Width="Auto" />
+                                                </Grid.ColumnDefinitions>
 
-                                            </Button>
+                                                <TextBlock
+                                                    Grid.Column="0"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Style="{DynamicResource MaterialDesignButtonTextBlock}"
+                                                    Text="{Binding Name}" />
+
+                                                <Button
+                                                    Grid.Column="1"
+                                                    Width="25"
+                                                    Height="25"
+                                                    Margin="4"
+                                                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                                    materialDesign:ElevationAssist.Elevation="Dp3"
+                                                    Command="{Binding DataContext.GoToTriggerCommand, RelativeSource={RelativeSource AncestorType=view:MainWindow}}"
+                                                    CommandParameter="{Binding}"
+                                                    Content="{materialDesign:PackIcon Kind=ArrowRight}"
+                                                    ToolTip="Go to Trigger" />
+
+                                                <Button
+                                                    Grid.Column="2"
+                                                    Width="25"
+                                                    Height="25"
+                                                    Margin="4"
+                                                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                                    materialDesign:ElevationAssist.Elevation="Dp3"
+                                                    Command="{Binding DataContext.RemoveTriggerCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                    CommandParameter="{Binding}"
+                                                    Content="{materialDesign:PackIcon Kind=Remove}"
+                                                    ToolTip="Remove Trigger" />
+
+                                            </Grid>
 
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -489,17 +517,35 @@
                                 Grid.Row="1"
                                 Style="{DynamicResource MaterialDesignDarkSeparator}" />
 
-                            <Button
+                            <StackPanel
                                 Grid.Row="2"
-                                Margin="4"
-                                Width="25"
-                                Height="25"
-                                IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
-                                Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
-                                materialDesign:ElevationAssist.Elevation="Dp3"
-                                Command="{Binding AddTriggerCommand}"
-                                Content="{materialDesign:PackIcon Kind=Plus}"
-                                ToolTip="Add Trigger" />
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+
+                                <Button
+                                    Width="25"
+                                    Height="25"
+                                    Margin="4"
+                                    IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
+                                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                    materialDesign:ElevationAssist.Elevation="Dp3"
+                                    Command="{Binding FindTriggerCommand}"
+                                    Content="{materialDesign:PackIcon Kind=Search}"
+                                    ToolTip="Find Trigger" />
+
+                                <Button
+                                    Width="25"
+                                    Height="25"
+                                    Margin="4"
+                                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                    materialDesign:ElevationAssist.Elevation="Dp3"
+                                    Command="{Binding CreateTriggerCommand}"
+                                    CommandParameter="{Binding}"
+                                    Content="{materialDesign:PackIcon Kind=Add}"
+                                    ToolTip="Create Trigger" />
+
+                            </StackPanel>
 
                         </Grid>
 
@@ -600,21 +646,49 @@
                                         <DataTemplate
                                             DataType="model:ParadoxEffect">
 
-                                            <Button
-                                                Margin="0,4"
-                                                Style="{DynamicResource MaterialDesignOutlinedButton}"
-                                                Command="{Binding DataContext.RemoveImmediateEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type view:ParadoxEventView}}}"
-                                                CommandParameter="{Binding}"
-                                                ToolTip="Remove Effect">
+                                            <Grid
+                                                Margin="0,4">
 
-                                                <StackPanel
-                                                    Orientation="Horizontal">
-                                                    <TextBlock
-                                                        Style="{DynamicResource MaterialDesignButtonTextBlock}"
-                                                        Text="{Binding Name}" />
-                                                </StackPanel>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition />
+                                                    <ColumnDefinition
+                                                        Width="Auto" />
+                                                    <ColumnDefinition
+                                                        Width="Auto" />
+                                                </Grid.ColumnDefinitions>
 
-                                            </Button>
+                                                <TextBlock
+                                                    Grid.Column="0"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Style="{DynamicResource MaterialDesignButtonTextBlock}"
+                                                    Text="{Binding Name}" />
+
+                                                <Button
+                                                    Grid.Column="1"
+                                                    Width="25"
+                                                    Height="25"
+                                                    Margin="4"
+                                                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                                    materialDesign:ElevationAssist.Elevation="Dp3"
+                                                    Command="{Binding DataContext.GoToEffectCommand, RelativeSource={RelativeSource AncestorType=view:MainWindow}}"
+                                                    CommandParameter="{Binding}"
+                                                    Content="{materialDesign:PackIcon Kind=ArrowRight}"
+                                                    ToolTip="Go to Effect" />
+
+                                                <Button
+                                                    Grid.Column="2"
+                                                    Width="25"
+                                                    Height="25"
+                                                    Margin="4"
+                                                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                                    materialDesign:ElevationAssist.Elevation="Dp3"
+                                                    Command="{Binding DataContext.RemoveImmediateEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                    CommandParameter="{Binding}"
+                                                    Content="{materialDesign:PackIcon Kind=Remove}"
+                                                    ToolTip="Remove Effect" />
+
+                                            </Grid>
 
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -627,17 +701,34 @@
                                 Grid.Row="1"
                                 Style="{DynamicResource MaterialDesignDarkSeparator}" />
 
-                            <Button
+                            <StackPanel
                                 Grid.Row="2"
-                                Margin="4"
-                                Width="25"
-                                Height="25"
-                                IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
-                                Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
-                                materialDesign:ElevationAssist.Elevation="Dp3"
-                                Command="{Binding AddImmediateEffectCommand}"
-                                Content="{materialDesign:PackIcon Kind=Plus}"
-                                ToolTip="Add Effect" />
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+
+                                <Button
+                                    Width="25"
+                                    Height="25"
+                                    Margin="4"
+                                    IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
+                                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                    materialDesign:ElevationAssist.Elevation="Dp3"
+                                    Command="{Binding FindImmediateEffectCommand}"
+                                    Content="{materialDesign:PackIcon Kind=Search}"
+                                    ToolTip="Find Effect" />
+
+                                <Button
+                                    Width="25"
+                                    Height="25"
+                                    Margin="4"
+                                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                    materialDesign:ElevationAssist.Elevation="Dp3"
+                                    Command="{Binding CreateImmediateEffectCommand}"
+                                    Content="{materialDesign:PackIcon Kind=Add}"
+                                    ToolTip="Create Effect" />
+
+                            </StackPanel>
 
                         </Grid>
 
@@ -738,21 +829,49 @@
                                         <DataTemplate
                                             DataType="model:ParadoxEffect">
 
-                                            <Button
-                                                Margin="0,4"
-                                                Style="{DynamicResource MaterialDesignOutlinedButton}"
-                                                Command="{Binding DataContext.RemoveAfterEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type view:ParadoxEventView}}}"
-                                                CommandParameter="{Binding}"
-                                                ToolTip="Remove Effect">
+                                            <Grid
+                                                Margin="0,4">
 
-                                                <StackPanel
-                                                    Orientation="Horizontal">
-                                                    <TextBlock
-                                                        Style="{DynamicResource MaterialDesignButtonTextBlock}"
-                                                        Text="{Binding Name}" />
-                                                </StackPanel>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition />
+                                                    <ColumnDefinition
+                                                        Width="Auto" />
+                                                    <ColumnDefinition
+                                                        Width="Auto" />
+                                                </Grid.ColumnDefinitions>
 
-                                            </Button>
+                                                <TextBlock
+                                                    Grid.Column="0"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Style="{DynamicResource MaterialDesignButtonTextBlock}"
+                                                    Text="{Binding Name}" />
+
+                                                <Button
+                                                    Grid.Column="1"
+                                                    Width="25"
+                                                    Height="25"
+                                                    Margin="4"
+                                                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                                    materialDesign:ElevationAssist.Elevation="Dp3"
+                                                    Command="{Binding DataContext.GoToEffectCommand, RelativeSource={RelativeSource AncestorType=view:MainWindow}}"
+                                                    CommandParameter="{Binding}"
+                                                    Content="{materialDesign:PackIcon Kind=ArrowRight}"
+                                                    ToolTip="Go to Effect" />
+
+                                                <Button
+                                                    Grid.Column="2"
+                                                    Width="25"
+                                                    Height="25"
+                                                    Margin="4"
+                                                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                                    materialDesign:ElevationAssist.Elevation="Dp3"
+                                                    Command="{Binding DataContext.RemoveAfterEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                    CommandParameter="{Binding}"
+                                                    Content="{materialDesign:PackIcon Kind=Remove}"
+                                                    ToolTip="Remove Effect" />
+
+                                            </Grid>
 
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -765,17 +884,34 @@
                                 Grid.Row="1"
                                 Style="{DynamicResource MaterialDesignDarkSeparator}" />
 
-                            <Button
+                            <StackPanel
                                 Grid.Row="2"
-                                Margin="4"
-                                Width="25"
-                                Height="25"
-                                IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
-                                Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
-                                materialDesign:ElevationAssist.Elevation="Dp3"
-                                Command="{Binding AddAfterEffectCommand}"
-                                Content="{materialDesign:PackIcon Kind=Plus}"
-                                ToolTip="Add Effect" />
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+
+                                <Button
+                                    Width="25"
+                                    Height="25"
+                                    Margin="4"
+                                    IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
+                                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                    materialDesign:ElevationAssist.Elevation="Dp3"
+                                    Command="{Binding FindAfterEffectCommand}"
+                                    Content="{materialDesign:PackIcon Kind=Search}"
+                                    ToolTip="Find Effect" />
+
+                                <Button
+                                    Width="25"
+                                    Height="25"
+                                    Margin="4"
+                                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                    materialDesign:ElevationAssist.Elevation="Dp3"
+                                    Command="{Binding CreateAfterEffectCommand}"
+                                    Content="{materialDesign:PackIcon Kind=Add}"
+                                    ToolTip="Create Effect" />
+
+                            </StackPanel>
 
                         </Grid>
 

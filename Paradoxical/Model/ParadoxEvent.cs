@@ -157,7 +157,22 @@ namespace Paradoxical.Model
         }
 
         [RelayCommand]
-        private async void AddTrigger()
+        private void CreateTrigger()
+        {
+            ParadoxTrigger trg = new(Context);
+
+            Context.Triggers.Add(trg);
+            Triggers.Add(trg);
+        }
+
+        [RelayCommand]
+        private void RemoveTrigger(ParadoxTrigger trg)
+        {
+            Triggers.Remove(trg);
+        }
+
+        [RelayCommand]
+        private async void FindTrigger()
         {
             FindTriggerDialogViewModel vm = new()
             {
@@ -172,6 +187,9 @@ namespace Paradoxical.Model
 
             await DialogHost.Show(dlg, MainWindow.ROOT_DIALOG_IDENTIFIER);
 
+            if (vm.DialogResult != true)
+            { return; }
+
             if (vm.Selected == null)
             { return; }
 
@@ -179,13 +197,22 @@ namespace Paradoxical.Model
         }
 
         [RelayCommand]
-        private void RemoveTrigger(ParadoxTrigger trg)
+        private void CreateImmediateEffect()
         {
-            Triggers.Remove(trg);
+            ParadoxEffect eff = new(Context);
+
+            Context.Effects.Add(eff);
+            ImmediateEffects.Add(eff);
         }
 
         [RelayCommand]
-        private async void AddImmediateEffect()
+        private void RemoveImmediateEffect(ParadoxEffect eff)
+        {
+            ImmediateEffects.Remove(eff);
+        }
+
+        [RelayCommand]
+        private async void FindImmediateEffect()
         {
             FindEffectDialogViewModel vm = new()
             {
@@ -200,6 +227,9 @@ namespace Paradoxical.Model
 
             await DialogHost.Show(dlg, MainWindow.ROOT_DIALOG_IDENTIFIER);
 
+            if (vm.DialogResult != true)
+            { return; }
+
             if (vm.Selected == null)
             { return; }
 
@@ -207,13 +237,22 @@ namespace Paradoxical.Model
         }
 
         [RelayCommand]
-        private void RemoveImmediateEffect(ParadoxEffect eff)
+        private void CreateAfterEffect()
         {
-            ImmediateEffects.Remove(eff);
+            ParadoxEffect eff = new(Context);
+
+            Context.Effects.Add(eff);
+            AfterEffects.Add(eff);
         }
 
         [RelayCommand]
-        private async void AddAfterEffect()
+        private void RemoveAfterEffect(ParadoxEffect eff)
+        {
+            AfterEffects.Remove(eff);
+        }
+
+        [RelayCommand]
+        private async void FindAfterEffect()
         {
             FindEffectDialogViewModel vm = new()
             {
@@ -228,16 +267,13 @@ namespace Paradoxical.Model
 
             await DialogHost.Show(dlg, MainWindow.ROOT_DIALOG_IDENTIFIER);
 
+            if (vm.DialogResult != true)
+            { return; }
+
             if (vm.Selected == null)
             { return; }
 
             AfterEffects.Add(vm.Selected);
-        }
-
-        [RelayCommand]
-        private void RemoveAfterEffect(ParadoxEffect eff)
-        {
-            AfterEffects.Remove(eff);
         }
     }
 }
