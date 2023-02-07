@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 using Paradoxical.Data;
 using Paradoxical.Model;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 
 namespace Paradoxical.ViewModel
@@ -12,6 +14,9 @@ namespace Paradoxical.ViewModel
     {
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveModCommand))]
+        [NotifyCanExecuteChangedFor(nameof(SaveModAsCommand))]
+        [NotifyCanExecuteChangedFor(nameof(BuildModCommand))]
+        [NotifyCanExecuteChangedFor(nameof(BuildModAsCommand))]
         private ModContext? context;
 
         public ObservableCollection<PageViewModelBase> Pages { get; } = new();
@@ -33,6 +38,9 @@ namespace Paradoxical.ViewModel
 
         [ObservableProperty]
         private PageViewModelBase? selectedPage;
+
+        private string ModDir { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        private string ModFile { get; set; } = string.Empty;
 
         public MainViewModel()
         {
@@ -101,12 +109,87 @@ namespace Paradoxical.ViewModel
             return Context != null;
         }
 
-        [RelayCommand(CanExecute = nameof(CanExportMod))]
-        private void ExportMod()
+        [RelayCommand(CanExecute = nameof(CanSaveModAs))]
+        private void SaveModAs()
         {
             throw new NotImplementedException();
         }
-        private bool CanExportMod()
+        private bool CanSaveModAs()
+        {
+            return Context != null;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanBuildMod))]
+        private void BuildMod()
+        {
+            if (Context == null)
+            { return; }
+
+            if (Directory.Exists(ModDir) == false || ModFile == string.Empty)
+            {
+                SaveFileDialog dlg = new()
+                {
+                    CreatePrompt = false,
+                    OverwritePrompt = true,
+                    Filter = "Paradox Mod File|*.mod",
+                    DefaultExt = ".mod",
+                    AddExtension = true,
+                    InitialDirectory = ModDir,
+                    FileName = ModFile,
+                };
+
+                if (dlg.ShowDialog() != true)
+                { return; }
+
+                ModDir = Path.GetDirectoryName(dlg.FileName) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                ModFile = Path.GetFileNameWithoutExtension(dlg.FileName) ?? string.Empty;
+            }
+
+            if (Directory.Exists(ModDir) == false)
+            { return; }
+
+            if (ModFile == string.Empty)
+            { return; }
+
+            Context.Export(ModDir, ModFile);
+        }
+        private bool CanBuildMod()
+        {
+            return Context != null;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanBuildModAs))]
+        private void BuildModAs()
+        {
+            if (Context == null)
+            { return; }
+
+            SaveFileDialog dlg = new()
+            {
+                CreatePrompt = false,
+                OverwritePrompt = true,
+                Filter = "Paradox Mod File|*.mod",
+                DefaultExt = ".mod",
+                AddExtension = true,
+                InitialDirectory = ModDir,
+                FileName = ModFile,
+            };
+
+            if (dlg.ShowDialog() != true)
+            { return; }
+
+            ModDir = Path.GetDirectoryName(dlg.FileName) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            ModFile = Path.GetFileNameWithoutExtension(dlg.FileName) ?? string.Empty;
+
+            if (Directory.Exists(ModDir) == false)
+            { return; }
+
+            if (ModFile == string.Empty)
+            { return; }
+
+            Context.Export(ModDir, ModFile);
+        }
+        private bool CanBuildModAs()
         {
             return Context != null;
         }

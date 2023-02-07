@@ -41,6 +41,15 @@
             Command="{Binding NewModCommand}"
             Gesture="CTRL+N" />
         <KeyBinding
+            Command="{Binding OpenModCommand}"
+            Gesture="CTRL+O" />
+        <KeyBinding
+            Command="{Binding SaveModCommand}"
+            Gesture="CTRL+S" />
+        <KeyBinding
+            Command="{Binding BuildModCommand}"
+            Gesture="CTRL+B" />
+        <KeyBinding
             Command="{Binding GoToInfoPageCommand}"
             Gesture="ALT+1" />
         <KeyBinding
@@ -130,7 +139,7 @@
                                     Command="{Binding NewModCommand}"
                                     InputGestureText="CTRL+N" />
                                 <MenuItem
-                                    Header="Open"
+                                    Header="Open..."
                                     Icon="{materialDesign:PackIcon Kind=FolderOpen}"
                                     Command="{Binding OpenModCommand}"
                                     InputGestureText="CTRL+O" />
@@ -140,9 +149,18 @@
                                     Command="{Binding SaveModCommand}"
                                     InputGestureText="CTRL+S" />
                                 <MenuItem
-                                    Header="Export"
+                                    Header="Save As..."
+                                    Icon="{materialDesign:PackIcon Kind=ContentSaveEdit}"
+                                    Command="{Binding SaveModAsCommand}"/>
+                                <MenuItem
+                                    Header="Build"
                                     Icon="{materialDesign:PackIcon Kind=Export}"
-                                    Command="{Binding ExportModCommand}" />
+                                    Command="{Binding BuildModCommand}"
+                                    InputGestureText="CTRL+B"/>
+                                <MenuItem
+                                    Header="Build As..."
+                                    Icon="{materialDesign:PackIcon Kind=Export}"
+                                    Command="{Binding BuildModAsCommand}" />
 
                                 <Separator />
 
