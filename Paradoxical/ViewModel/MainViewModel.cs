@@ -5,6 +5,7 @@ using Paradoxical.Data;
 using Paradoxical.Model;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 
@@ -127,29 +128,9 @@ namespace Paradoxical.ViewModel
 
             if (Directory.Exists(ModDir) == false || ModFile == string.Empty)
             {
-                SaveFileDialog dlg = new()
-                {
-                    CreatePrompt = false,
-                    OverwritePrompt = true,
-                    Filter = "Paradox Mod File|*.mod",
-                    DefaultExt = ".mod",
-                    AddExtension = true,
-                    InitialDirectory = ModDir,
-                    FileName = ModFile,
-                };
-
-                if (dlg.ShowDialog() != true)
-                { return; }
-
-                ModDir = Path.GetDirectoryName(dlg.FileName) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                ModFile = Path.GetFileNameWithoutExtension(dlg.FileName) ?? string.Empty;
+                BuildModAs();
+                return;
             }
-
-            if (Directory.Exists(ModDir) == false)
-            { return; }
-
-            if (ModFile == string.Empty)
-            { return; }
 
             Context.Export(ModDir, ModFile);
         }
@@ -166,6 +147,7 @@ namespace Paradoxical.ViewModel
 
             SaveFileDialog dlg = new()
             {
+                Title = "Build Mod",
                 CreatePrompt = false,
                 OverwritePrompt = true,
                 Filter = "Paradox Mod File|*.mod",
@@ -188,6 +170,8 @@ namespace Paradoxical.ViewModel
             { return; }
 
             Context.Export(ModDir, ModFile);
+
+            Process.Start("explorer.exe", ModDir);
         }
         private bool CanBuildModAs()
         {
