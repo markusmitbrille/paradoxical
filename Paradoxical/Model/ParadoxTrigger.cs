@@ -13,6 +13,8 @@ namespace Paradoxical.Model
         private string name = "";
         [ObservableProperty]
         private string code = "";
+        [ObservableProperty]
+        private string tooltip = "";
 
         public ParadoxTrigger(ModContext context)
         {
@@ -34,9 +36,23 @@ namespace Paradoxical.Model
             writer.Indent().WriteLine($"{prefix}_{Name.Namify()} = {{");
             ParadoxText.IndentLevel++;
 
+            if (Tooltip != string.Empty)
+            {
+                writer.Indent().WriteLine($"custom_tooltip = {prefix}.{Name.Namify()}.tt");
+
+                writer.Indent().WriteLine("hidden_effect = {");
+                ParadoxText.IndentLevel++;
+            }
+
             foreach (string line in Code.Split(Environment.NewLine))
             {
                 writer.Indent().WriteLine(line);
+            }
+
+            if (Tooltip != string.Empty)
+            {
+                ParadoxText.IndentLevel--;
+                writer.Indent().WriteLine("}");
             }
 
             ParadoxText.IndentLevel--;
