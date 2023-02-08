@@ -48,7 +48,7 @@
             Gesture="CTRL+S" />
         <KeyBinding
             Command="{Binding BuildModCommand}"
-            Gesture="CTRL+B" />
+            Gesture="F5" />
         <KeyBinding
             Command="{Binding GoToInfoPageCommand}"
             Gesture="ALT+1" />
@@ -156,7 +156,7 @@
                                     Header="Build"
                                     Icon="{materialDesign:PackIcon Kind=Export}"
                                     Command="{Binding BuildModCommand}"
-                                    InputGestureText="CTRL+B"/>
+                                    InputGestureText="F5"/>
                                 <MenuItem
                                     Header="Build As..."
                                     Icon="{materialDesign:PackIcon Kind=Export}"
