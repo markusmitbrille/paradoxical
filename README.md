@@ -8,3 +8,4 @@ TODO:
 + additional fields
   + event cooldown?
   + event mtth?
++ project saving
