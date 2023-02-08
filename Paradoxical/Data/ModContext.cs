@@ -28,65 +28,93 @@ namespace Paradoxical.Data
 
         public void Export(string dir, string file)
         {
+            using (StreamWriter writer = new(Path.Combine(dir, $"{file}.mod"), false))
+            {
+                WriteModFile(writer, dir, file);
+            }
+
             using FileStream stream = new(Path.Combine(dir, $"{file}.zip"), FileMode.Create);
             using ZipArchive archive = new(stream, ZipArchiveMode.Update, false, Encoding.UTF8);
 
             ZipArchiveEntry descriptorEntry = archive.CreateEntry("descriptor.mod");
             using (StreamWriter writer = new(descriptorEntry.Open()))
             {
-                writer.Write(CompileModFile());
+                WriteModFile(writer, dir, file);
             }
 
             ZipArchiveEntry eventEntry = archive.CreateEntry(EventFileEntryName);
             using (StreamWriter writer = new(eventEntry.Open()))
             {
-                writer.Write(CompileEventFile());
+                WriteEventFile(writer);
             }
 
             ZipArchiveEntry triggerEntry = archive.CreateEntry(TriggerFileEntryName);
             using (StreamWriter writer = new(triggerEntry.Open()))
             {
-                writer.Write(CompileTriggerFile());
+                WriteTriggerFile(writer);
             }
 
             ZipArchiveEntry effectEntry = archive.CreateEntry(EffectFileEntryName);
             using (StreamWriter writer = new(effectEntry.Open()))
             {
-                writer.Write(CompileEffectFile());
+                WriteEffectFile(writer);
             }
 
             ZipArchiveEntry localizationEntry = archive.CreateEntry(LocalizationFileEntryName);
             using (StreamWriter writer = new(localizationEntry.Open()))
             {
-                writer.Write(CompileLocalizationFile());
+                WriteLocalizationFile(writer);
             }
-
-            File.WriteAllText(Path.Combine(dir, $"{file}.mod"), CompileModFile());
         }
 
-        private string CompileModFile()
+        private void WriteModFile(TextWriter writer, string dir, string file)
         {
-            return "Mod File Content";
+            Info.Write(writer, dir, file);
         }
 
-        private string CompileEventFile()
+        private void WriteEventFile(TextWriter writer)
         {
-            return "Event File Content";
+            writer.WriteLine($"# {Info.Name} Events");
+            writer.WriteLine($"namespace = {Info.EventNamespace.Namify()}");
+            writer.WriteLine();
+
+            foreach (ParadoxEvent evt in Events)
+            {
+                ParadoxText.IndentLevel = 0;
+
+                evt.Write(writer);
+                writer.WriteLine();
+            }
         }
 
-        private string CompileTriggerFile()
+        private void WriteTriggerFile(TextWriter writer)
         {
-            return "Trigger File Content";
+            writer.WriteLine($"# {Info.Name} Triggers");
+
+            foreach (ParadoxTrigger trg in Triggers)
+            {
+                ParadoxText.IndentLevel = 0;
+
+                trg.Write(writer);
+                writer.WriteLine();
+            }
         }
 
-        private string CompileEffectFile()
+        private void WriteEffectFile(TextWriter writer)
         {
-            return "Effect File Content";
+            writer.WriteLine($"# {Info.Name} Effects");
+
+            foreach (ParadoxEffect eff in Effects)
+            {
+                ParadoxText.IndentLevel = 0;
+
+                eff.Write(writer);
+                writer.WriteLine();
+            }
         }
 
-        private string CompileLocalizationFile()
+        private void WriteLocalizationFile(TextWriter writer)
         {
-            return "Localization File Content";
         }
     }
 }

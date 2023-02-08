@@ -6,6 +6,7 @@ using Paradoxical.View;
 using Paradoxical.ViewModel;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace Paradoxical.Model
 {
@@ -24,6 +25,10 @@ namespace Paradoxical.Model
         private ParadoxEvent? triggeredEvent = null;
         [ObservableProperty]
         private string triggeredEventScope = "";
+        [ObservableProperty]
+        private int triggeredEventMinDays = 0;
+        [ObservableProperty]
+        private int triggeredEventMaxDays = 0;
 
         [ObservableProperty]
         private string trigger = "";
@@ -231,6 +236,246 @@ namespace Paradoxical.Model
             { return; }
 
             TriggeredEvent = vm.Selected;
+        }
+
+        public void Write(TextWriter writer, ParadoxEvent parent, int index)
+        {
+            string prefix = Context.Info.EventNamespace.Namify();
+
+            writer.Indent().WriteLine("option = {");
+            ParadoxText.IndentLevel++;
+
+            writer.Indent().WriteLine($"name = {prefix}.{parent.Id}.o.{index}");
+            WriteTooltip(writer, parent, index, prefix);
+
+            writer.WriteLine();
+
+            WriteTrigger(writer);
+
+            writer.WriteLine();
+
+            WriteAiChance(writer);
+
+            writer.WriteLine();
+
+            WriteTriggeredEvent(writer);
+
+            writer.WriteLine();
+
+            WriteEffect(writer);
+
+            ParadoxText.IndentLevel--;
+            writer.Indent().WriteLine("}");
+        }
+
+        private void WriteTooltip(TextWriter writer, ParadoxEvent parent, int index, string prefix)
+        {
+            if (Tooltip == string.Empty)
+            {
+                writer.Indent().WriteLine("# no custom tooltip");
+                return;
+            }
+
+            writer.Indent().WriteLine($"custom_tooltip = {prefix}.{parent.Id}.o.{index}.tt");
+        }
+
+        private void WriteTrigger(TextWriter writer)
+        {
+            string prefix = Context.Info.EventNamespace.Namify();
+
+            if (Trigger == string.Empty && Triggers.Count == 0)
+            {
+                writer.Indent().WriteLine("# no trigger");
+                return;
+            }
+
+            writer.Indent().WriteLine("trigger = {");
+            ParadoxText.IndentLevel++;
+
+            if (Trigger == string.Empty)
+            {
+                writer.Indent().WriteLine("# no custom trigger");
+            }
+            else
+            {
+                foreach (string line in Trigger.Split(Environment.NewLine))
+                {
+                    writer.Indent().WriteLine(line);
+                }
+            }
+
+            if (Triggers.Count == 0)
+            {
+                writer.WriteLine();
+                writer.Indent().WriteLine("# no scripted triggers");
+            }
+            else
+            {
+                writer.WriteLine();
+                writer.Indent().WriteLine("# scripted triggers");
+
+                foreach (ParadoxTrigger trg in Triggers)
+                {
+                    writer.Indent().WriteLine($"{prefix}_{trg.Name.Namify()} = yes");
+                }
+            }
+
+            ParadoxText.IndentLevel--;
+            writer.Indent().WriteLine("}");
+        }
+
+        private void WriteAiChance(TextWriter writer)
+        {
+            writer.Indent().WriteLine("ai_chance = {");
+            ParadoxText.IndentLevel++;
+
+            writer.Indent().WriteLine($"base = {AiBaseChance}");
+
+            if (AiBoldnessTargetModifier == 0
+                && AiCompassionTargetModifier == 0
+                && AiGreedTargetModifier == 0
+                && AiEnergyTargetModifier == 0
+                && AiHonorTargetModifier == 0
+                && AiRationalityTargetModifier == 0
+                && AiSociabilityTargetModifier == 0
+                && AiVengefulnessTargetModifier == 0
+                && AiZealTargetModifier == 0)
+            {
+                writer.WriteLine();
+                writer.Indent().WriteLine("# no ai target modifiers");
+            }
+            else
+            {
+                writer.WriteLine();
+                writer.Indent().WriteLine("# no ai target modifiers");
+            }
+
+            if (AiBoldnessTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_boldness_target_modifier = {{ VALUE = {AiBoldnessTargetModifier} }}");
+            }
+            if (AiCompassionTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_compassion_target_modifier = {{ VALUE = {AiCompassionTargetModifier} }}");
+            }
+            if (AiGreedTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_greed_target_modifier = {{ VALUE = {AiGreedTargetModifier} }}");
+            }
+            if (AiEnergyTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_energy_target_modifier = {{ VALUE = {AiEnergyTargetModifier} }}");
+            }
+            if (AiHonorTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_honor_target_modifier = {{ VALUE = {AiHonorTargetModifier} }}");
+            }
+            if (AiRationalityTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_rationality_target_modifier = {{ VALUE = {AiRationalityTargetModifier} }}");
+            }
+            if (AiSociabilityTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_sociability_target_modifier = {{ VALUE = {AiSociabilityTargetModifier} }}");
+            }
+            if (AiVengefulnessTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_vengefulness_target_modifier = {{ VALUE = {AiVengefulnessTargetModifier} }}");
+            }
+            if (AiZealTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_zeal_target_modifier = {{ VALUE = {AiZealTargetModifier} }}");
+            }
+
+            if (AiChance == string.Empty)
+            {
+                writer.WriteLine();
+                writer.Indent().WriteLine("# no custom ai chance");
+            }
+            else
+            {
+                writer.WriteLine();
+                foreach (string line in AiChance.Split(Environment.NewLine))
+                {
+                    writer.Indent().WriteLine(line);
+                }
+            }
+
+            ParadoxText.IndentLevel--;
+            writer.Indent().WriteLine("}");
+        }
+
+        private void WriteTriggeredEvent(TextWriter writer)
+        {
+            string prefix = Context.Info.EventNamespace.Namify();
+
+            if (TriggeredEvent == null)
+            {
+                writer.Indent().WriteLine("# no follow-up event");
+                return;
+            }
+
+            writer.Indent().WriteLine("# follow-up event");
+
+            if (TriggeredEventScope != string.Empty)
+            {
+                writer.Indent().WriteLine($"{TriggeredEventScope} = {{");
+                ParadoxText.IndentLevel++;
+            }
+
+            writer.Indent().WriteLine("trigger_event = {");
+            ParadoxText.IndentLevel++;
+
+            writer.Indent().WriteLine($"id = {prefix}.{TriggeredEvent.Id}");
+            writer.Indent().WriteLine($"days = {{ {TriggeredEventMinDays} {TriggeredEventMaxDays} }}");
+
+            ParadoxText.IndentLevel--;
+            writer.Indent().WriteLine("}");
+
+            if (TriggeredEventScope != string.Empty)
+            {
+                ParadoxText.IndentLevel--;
+                writer.Indent().WriteLine("}");
+            }
+        }
+
+        private void WriteEffect(TextWriter writer)
+        {
+            string prefix = Context.Info.EventNamespace.Namify();
+
+            if (Effect == string.Empty && Effects.Count == 0)
+            {
+                writer.Indent().WriteLine("# no special effect");
+                return;
+            }
+
+            if (Effect == string.Empty)
+            {
+                writer.Indent().WriteLine("# no custom effect");
+            }
+            else
+            {
+                foreach (string line in Effect.Split(Environment.NewLine))
+                {
+                    writer.Indent().WriteLine(line);
+                }
+            }
+
+            if (Effects.Count == 0)
+            {
+                writer.WriteLine();
+                writer.Indent().WriteLine("# no scripted effects");
+            }
+            else
+            {
+                writer.WriteLine();
+                writer.Indent().WriteLine("# scripted effects");
+
+                foreach (ParadoxEffect eff in Effects)
+                {
+                    writer.Indent().WriteLine($"{prefix}_{eff.Name.Namify()} = yes");
+                }
+            }
         }
     }
 }

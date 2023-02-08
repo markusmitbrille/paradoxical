@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Paradoxical.Data;
+using System.IO;
 
 namespace Paradoxical.Model
 {
@@ -24,6 +25,28 @@ namespace Paradoxical.Model
             character = other.character;
             animation = other.animation;
             outfitTags = other.outfitTags;
+        }
+
+        internal void Write(TextWriter writer)
+        {
+            if (Character == string.Empty)
+            {
+                writer.Indent().WriteLine("character = ROOT");
+            }
+            else
+            {
+                writer.Indent().WriteLine($"character = {Character}");
+            }
+
+            if (Animation != string.Empty)
+            {
+                writer.Indent().WriteLine($"animation = {Animation}");
+            }
+
+            if (OutfitTags != string.Empty)
+            {
+                writer.Indent().WriteLine($"outfit_tags = {{ {OutfitTags} }}");
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Paradoxical.Data;
+using System.IO;
 
 namespace Paradoxical.Model
 {
@@ -19,6 +20,19 @@ namespace Paradoxical.Model
         public ParadoxMod(ModContext context)
         {
             Context = context;
+        }
+
+        public void Write(TextWriter writer, string dir, string file)
+        {
+            writer.WriteLine(
+$@"version=""{Version}""
+tags={{
+    ""Events""
+}}
+name=""{Name}""
+supported_version=""{GameVersion}""
+path=""mod/{file}.zip"""
+                );
         }
     }
 }

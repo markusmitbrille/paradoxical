@@ -6,6 +6,7 @@ using Paradoxical.View;
 using Paradoxical.ViewModel;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 
 namespace Paradoxical.Model
@@ -23,10 +24,6 @@ namespace Paradoxical.Model
         private string description = "";
         [ObservableProperty]
         private string theme = "";
-        [ObservableProperty]
-        private string background = "";
-        [ObservableProperty]
-        private string sound = "";
 
         public ObservableCollection<ParadoxEventOption> Options { get; } = new();
 
@@ -58,7 +55,7 @@ namespace Paradoxical.Model
             Context = context;
 
             id = context.Events.Count == 0 ? 1 : context.Events.Max(evt => evt.Id) + 1;
-            title = $"Event [{Guid.NewGuid().ToString()[0..4]}]";
+            title = $"Event {Guid.NewGuid().ToString()[0..4]}";
 
             leftPortrait = new(context);
             rightPortrait = new(context);
@@ -71,10 +68,7 @@ namespace Paradoxical.Model
         {
             title = other.title;
             description = other.description;
-
             theme = other.theme;
-            background = other.background;
-            sound = other.sound;
 
             // composite association, therefore deep copy
             Options = new(other.Options.Select(e => new ParadoxEventOption(context, e)));
@@ -274,6 +268,297 @@ namespace Paradoxical.Model
             { return; }
 
             AfterEffects.Add(vm.Selected);
+        }
+
+        public void Write(TextWriter writer)
+        {
+            string prefix = Context.Info.EventNamespace.Namify();
+
+            writer.Indent().WriteLine($"{prefix}.{Id} = {{");
+            ParadoxText.IndentLevel++;
+
+            writer.Indent().WriteLine($"type = character_event");
+
+            writer.WriteLine();
+
+            writer.Indent().WriteLine($"title = {prefix}.{Id}.t");
+            writer.Indent().WriteLine($"desc = {prefix}.{Id}.d");
+
+            writer.WriteLine();
+
+            WriteTheme(writer);
+
+            writer.WriteLine();
+
+            WriteLeftPortrait(writer);
+            WriteRightPortrait(writer);
+            WriteLowerLeftPortrait(writer);
+            WriteLowerCenterPortrait(writer);
+            WriteLowerRightPortrait(writer);
+
+            writer.WriteLine();
+
+            WriteTrigger(writer);
+
+            writer.WriteLine();
+
+            WriteImmediate(writer);
+
+            writer.WriteLine();
+
+            WriteAfter(writer);
+
+            writer.WriteLine();
+
+            WriteOptions(writer);
+
+            ParadoxText.IndentLevel--;
+            writer.Indent().WriteLine("}");
+        }
+
+        private void WriteTheme(TextWriter writer)
+        {
+            if (Theme == string.Empty)
+            {
+                writer.Indent().WriteLine("# no theme");
+                return;
+            }
+
+            writer.Indent().WriteLine($"theme = {Theme}");
+        }
+
+        private void WriteLeftPortrait(TextWriter writer)
+        {
+            if (LeftPortrait.Character == string.Empty)
+            {
+                writer.Indent().WriteLine("# no left portrait");
+                return;
+            }
+
+            writer.Indent().WriteLine("left_portrait = {");
+            ParadoxText.IndentLevel++;
+
+            LeftPortrait.Write(writer);
+
+            ParadoxText.IndentLevel--;
+            writer.Indent().WriteLine("}");
+        }
+
+        private void WriteRightPortrait(TextWriter writer)
+        {
+            if (RightPortrait.Character == string.Empty)
+            {
+                writer.Indent().WriteLine("# no right portrait");
+                return;
+            }
+
+            writer.Indent().WriteLine("right_portrait = {");
+            ParadoxText.IndentLevel++;
+
+            RightPortrait.Write(writer);
+
+            ParadoxText.IndentLevel--;
+            writer.Indent().WriteLine("}");
+        }
+
+        private void WriteLowerLeftPortrait(TextWriter writer)
+        {
+            if (LowerLeftPortrait.Character == string.Empty)
+            {
+                writer.Indent().WriteLine("# no lower left portrait");
+                return;
+            }
+
+            writer.Indent().WriteLine("lower_left_portrait = {");
+            ParadoxText.IndentLevel++;
+
+            LowerLeftPortrait.Write(writer);
+
+            ParadoxText.IndentLevel--;
+            writer.Indent().WriteLine("}");
+        }
+
+        private void WriteLowerCenterPortrait(TextWriter writer)
+        {
+            if (LowerCenterPortrait.Character == string.Empty)
+            {
+                writer.Indent().WriteLine("# no lower center portrait");
+                return;
+            }
+
+            writer.Indent().WriteLine("lower_center_portrait = {");
+            ParadoxText.IndentLevel++;
+
+            LowerCenterPortrait.Write(writer);
+
+            ParadoxText.IndentLevel--;
+            writer.Indent().WriteLine("}");
+        }
+
+        private void WriteLowerRightPortrait(TextWriter writer)
+        {
+            if (LowerRightPortrait.Character == string.Empty)
+            {
+                writer.Indent().WriteLine("# no lower right portrait");
+                return;
+            }
+
+            writer.Indent().WriteLine("lower_right_portrait = {");
+            ParadoxText.IndentLevel++;
+
+            LowerRightPortrait.Write(writer);
+
+            ParadoxText.IndentLevel--;
+            writer.Indent().WriteLine("}");
+        }
+
+        private void WriteTrigger(TextWriter writer)
+        {
+            string prefix = Context.Info.EventNamespace.Namify();
+
+            if (Trigger == string.Empty && Triggers.Count == 0)
+            {
+                writer.Indent().WriteLine("# no trigger");
+                return;
+            }
+
+            writer.Indent().WriteLine("trigger = {");
+            ParadoxText.IndentLevel++;
+
+            if (Trigger == string.Empty)
+            {
+                writer.Indent().WriteLine("# no custom trigger");
+            }
+            else
+            {
+                foreach (string line in Trigger.Split(Environment.NewLine))
+                {
+                    writer.Indent().WriteLine(line);
+                }
+            }
+
+            if (Triggers.Count == 0)
+            {
+                writer.WriteLine();
+                writer.Indent().WriteLine("# no scripted triggers");
+            }
+            else
+            {
+                writer.WriteLine();
+                writer.Indent().WriteLine("# scripted triggers");
+
+                foreach (ParadoxTrigger trg in Triggers)
+                {
+                    writer.Indent().WriteLine($"{prefix}_{trg.Name.Namify()} = yes");
+                }
+            }
+
+            ParadoxText.IndentLevel--;
+            writer.Indent().WriteLine("}");
+        }
+
+        private void WriteImmediate(TextWriter writer)
+        {
+            string prefix = Context.Info.EventNamespace.Namify();
+
+            if (ImmediateEffect == string.Empty && ImmediateEffects.Count == 0)
+            {
+                writer.Indent().WriteLine("# no immediate");
+                return;
+            }
+
+            writer.Indent().WriteLine("immediate = {");
+            ParadoxText.IndentLevel++;
+
+            if (ImmediateEffect == string.Empty)
+            {
+                writer.Indent().WriteLine("# no custom effect");
+            }
+            else
+            {
+                foreach (string line in ImmediateEffect.Split(Environment.NewLine))
+                {
+                    writer.Indent().WriteLine(line);
+                }
+            }
+
+            if (ImmediateEffects.Count == 0)
+            {
+                writer.WriteLine();
+                writer.Indent().WriteLine("# no scripted effects");
+            }
+            else
+            {
+                writer.WriteLine();
+                writer.Indent().WriteLine("# scripted effects");
+
+                foreach (ParadoxEffect eff in ImmediateEffects)
+                {
+                    writer.Indent().WriteLine($"{prefix}_{eff.Name.Namify()} = yes");
+                }
+            }
+
+            ParadoxText.IndentLevel--;
+            writer.Indent().WriteLine("}");
+        }
+
+        private void WriteAfter(TextWriter writer)
+        {
+            string prefix = Context.Info.EventNamespace.Namify();
+
+            if (AfterEffect == string.Empty && AfterEffects.Count == 0)
+            {
+                writer.Indent().WriteLine("# no after");
+                return;
+            }
+
+            writer.Indent().WriteLine("after = {");
+            ParadoxText.IndentLevel++;
+
+            if (AfterEffect == string.Empty)
+            {
+                writer.Indent().WriteLine("# no custom effect");
+            }
+            else
+            {
+                foreach (string line in AfterEffect.Split(Environment.NewLine))
+                {
+                    writer.Indent().WriteLine(line);
+                }
+            }
+
+            if (AfterEffects.Count == 0)
+            {
+                writer.WriteLine();
+                writer.Indent().WriteLine("# no scripted effects");
+            }
+            else
+            {
+                writer.WriteLine();
+                writer.Indent().WriteLine("# scripted effects");
+
+                foreach (ParadoxEffect eff in AfterEffects)
+                {
+                    writer.Indent().WriteLine($"{prefix}_{eff.Name.Namify()} = yes");
+                }
+            }
+
+            ParadoxText.IndentLevel--;
+            writer.Indent().WriteLine("}");
+        }
+
+        private void WriteOptions(TextWriter writer)
+        {
+            if (Options.Count == 0)
+            {
+                writer.Indent().WriteLine("# no options");
+                return;
+            }
+
+            foreach (ParadoxEventOption opt in Options)
+            {
+                opt.Write(writer, this, Options.IndexOf(opt));
+            }
         }
     }
 }

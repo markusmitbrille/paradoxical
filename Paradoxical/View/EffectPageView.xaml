@@ -112,7 +112,7 @@
                         materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
                         AcceptsReturn="True">
                         <view:ScriptBox.TextFormatter>
-                            <formatters:EventTextFormatter />
+                            <formatters:CodeFormatter />
                         </view:ScriptBox.TextFormatter>
                     </view:ScriptBox>
                 </StackPanel>

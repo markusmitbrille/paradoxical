@@ -8,7 +8,7 @@ namespace Paradoxical.Formatters
 {
     public class EventTextFormatter : ITextFormatter
     {
-        private StringBuilder builder = new();
+        private readonly StringBuilder builder = new();
 
         public string GetText(FlowDocument document)
         {
@@ -30,7 +30,6 @@ namespace Paradoxical.Formatters
 
         public void SetText(FlowDocument document, string text)
         {
-
             List<Paragraph> paragraphs = new();
             foreach (var pText in text.Split(ParadoxText.NewParagraph))
             {

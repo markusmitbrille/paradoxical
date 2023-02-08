@@ -29,9 +29,10 @@
             HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
                 <Expander
-                    Header="Text"
+                    Header="Display"
                     IsExpanded="True">
                     <StackPanel>
+                        
                         <view:ScriptBox
                             Margin="4"
                             IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
@@ -64,57 +65,14 @@
                                 <formatters:EventTextFormatter />
                             </view:ScriptBox.TextFormatter>
                         </view:ScriptBox>
-                    </StackPanel>
-                </Expander>
-
-                <Separator
-                    Style="{DynamicResource MaterialDesignDarkSeparator}" />
-
-                <Expander
-                    Header="Display"
-                    IsExpanded="True">
-                    <StackPanel>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition
-                                    Height="auto" />
-                                <RowDefinition
-                                    Height="auto" />
-                                <RowDefinition
-                                    Height="auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition
-                                    Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <TextBox
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                Margin="4"
-                                IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
-                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                Text="{Binding Theme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                materialDesign:HintAssist.Hint="Theme" />
-
-                            <TextBox
-                                Grid.Row="1"
-                                Grid.Column="0"
-                                Margin="4"
-                                IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
-                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                Text="{Binding Background, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                materialDesign:HintAssist.Hint="Background" />
-
-                            <TextBox
-                                Grid.Row="2"
-                                Grid.Column="0"
-                                IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
-                                Margin="4"
-                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                Text="{Binding Sound, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                materialDesign:HintAssist.Hint="Sound" />
-                        </Grid>
+                       
+                        <TextBox
+                            Margin="4"
+                            IsEnabled="{Binding Converter={StaticResource ObjectNullConverter}}"
+                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            Text="{Binding Theme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Theme" />
+                    
                     </StackPanel>
                 </Expander>
 
