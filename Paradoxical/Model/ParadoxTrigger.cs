@@ -37,10 +37,11 @@ namespace Paradoxical.Model
 
             if (Tooltip != string.Empty)
             {
-                writer.Indent().WriteLine($"custom_tooltip = {Context.Info.EventNamespace}.{Name}.tt");
-
-                writer.Indent().WriteLine("hidden_effect = {");
+                writer.Indent().WriteLine("custom_tooltip = {");
                 ParadoxText.IndentLevel++;
+
+                writer.Indent().WriteLine($"text = {Context.Info.EventNamespace}.{Name}.tt");
+                writer.WriteLine();
             }
 
             foreach (string line in Code.Split(Environment.NewLine))
@@ -56,6 +57,11 @@ namespace Paradoxical.Model
 
             ParadoxText.IndentLevel--;
             writer.Indent().WriteLine("}");
+        }
+
+        public void WriteLoc(TextWriter writer)
+        {
+            writer.WriteLocLine($"{Context.Info.EventNamespace}.{Name}.tt", Tooltip);
         }
     }
 }

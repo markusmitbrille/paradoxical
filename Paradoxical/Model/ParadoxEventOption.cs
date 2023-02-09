@@ -469,5 +469,11 @@ namespace Paradoxical.Model
                 }
             }
         }
+
+        public void WriteLoc(TextWriter writer, ParadoxEvent parent, int index)
+        {
+            writer.WriteLocLine($"{Context.Info.EventNamespace}.{parent.Id}.o.{index}", Name);
+            writer.WriteLocLine($"{Context.Info.EventNamespace}.{parent.Id}.o.{index}.tt", Tooltip);
+        }
     }
 }

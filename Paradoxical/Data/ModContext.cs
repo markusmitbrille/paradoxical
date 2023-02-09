@@ -61,7 +61,7 @@ namespace Paradoxical.Data
             ZipArchiveEntry localizationEntry = archive.CreateEntry(LocalizationFileEntryName);
             using (StreamWriter writer = new(localizationEntry.Open()))
             {
-                WriteLocalizationFile(writer);
+                WriteLocFile(writer);
             }
         }
 
@@ -111,8 +111,34 @@ namespace Paradoxical.Data
             }
         }
 
-        private void WriteLocalizationFile(TextWriter writer)
+        private void WriteLocFile(TextWriter writer)
         {
+            writer.WriteLine("l_english:");
+            writer.WriteLine();
+
+            writer.WriteLine("# triggers");
+
+            foreach (ParadoxTrigger trg in Triggers)
+            {
+                trg.WriteLoc(writer);
+                writer.WriteLine();
+            }
+
+            writer.WriteLine("# effects");
+
+            foreach (ParadoxEffect eff in Effects)
+            {
+                eff.WriteLoc(writer);
+                writer.WriteLine();
+            }
+
+            writer.WriteLine("# events");
+
+            foreach (ParadoxEvent evt in Events)
+            {
+                evt.WriteLoc(writer);
+                writer.WriteLine();
+            }
         }
     }
 }

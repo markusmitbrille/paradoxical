@@ -552,5 +552,16 @@ namespace Paradoxical.Model
                 opt.Write(writer, this, Options.IndexOf(opt));
             }
         }
+
+        public void WriteLoc(TextWriter writer)
+        {
+            writer.WriteLocLine($"{Context.Info.EventNamespace}.{Id}.t", Title);
+            writer.WriteLocLine($"{Context.Info.EventNamespace}.{Id}.d", Description);
+
+            foreach (ParadoxEventOption opt in Options)
+            {
+                opt.WriteLoc(writer, this, Options.IndexOf(opt));
+            }
+        }
     }
 }

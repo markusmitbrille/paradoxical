@@ -26,5 +26,10 @@ namespace Paradoxical.Model
 
             return writer;
         }
+
+        public static void WriteLocLine(this TextWriter writer, string key, string loc)
+        {
+            writer.WriteLine($@" {key}:0 ""{loc}""");
+        }
     }
 }
