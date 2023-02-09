@@ -359,12 +359,15 @@
 
                         <Grid.RowDefinitions>
                             <RowDefinition
-                                Height="472" />
+                                Height="400" />
+                            <RowDefinition
+                                Height="auto" />
                         </Grid.RowDefinitions>
 
                         <Grid
                             Grid.Row="0"
                             Grid.Column="0"
+                            Grid.RowSpan="2"
                             Margin="4">
                          
                             <Grid.RowDefinitions>
@@ -520,6 +523,14 @@
                             </view:ScriptBox.TextFormatter>
                         </view:ScriptBox>
 
+                        <TextBox
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="6,12"
+                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            Text="{Binding TriggerTooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Tooltip" />
+
                     </Grid>
                     
                 </Expander>
@@ -543,12 +554,15 @@
 
                         <Grid.RowDefinitions>
                             <RowDefinition
-                                Height="472" />
+                                Height="400" />
+                            <RowDefinition
+                                Height="auto" />
                         </Grid.RowDefinitions>
 
                         <Grid
                             Grid.Row="0"
                             Grid.Column="0"
+                            Grid.RowSpan="2"
                             Margin="4">
                             <Grid.RowDefinitions>
                                 <RowDefinition
@@ -702,6 +716,14 @@
                             </view:ScriptBox.TextFormatter>
                         </view:ScriptBox>
 
+                        <TextBox
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="6,12"
+                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            Text="{Binding ImmediateTooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Tooltip" />
+
                     </Grid>
                     
                 </Expander>
@@ -725,12 +747,15 @@
 
                         <Grid.RowDefinitions>
                             <RowDefinition
-                                Height="472" />
+                                Height="400" />
+                            <RowDefinition
+                                Height="auto" />
                         </Grid.RowDefinitions>
 
                         <Grid
                             Grid.Row="0"
                             Grid.Column="0"
+                            Grid.RowSpan="2"
                             Margin="4">
                             <Grid.RowDefinitions>
                                 <RowDefinition
@@ -883,6 +908,14 @@
                                 <formatters:CodeFormatter />
                             </view:ScriptBox.TextFormatter>
                         </view:ScriptBox>
+
+                        <TextBox
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="6,12"
+                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            Text="{Binding AfterTooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Tooltip" />
 
                     </Grid>
 
