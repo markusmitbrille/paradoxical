@@ -25,6 +25,7 @@ namespace Paradoxical.ViewModel
 
         public TriggerPageViewModel()
         {
+            selectedTrigger = CurrentContext.Triggers.FirstOrDefault();
         }
 
         [RelayCommand]

@@ -25,6 +25,7 @@ namespace Paradoxical.ViewModel
 
         public EventPageViewModel()
         {
+            selectedEvent = CurrentContext.Events.FirstOrDefault();
         }
 
         [RelayCommand]

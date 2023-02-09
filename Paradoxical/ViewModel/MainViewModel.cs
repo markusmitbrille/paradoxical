@@ -48,8 +48,6 @@ namespace Paradoxical.ViewModel
 
         private void Reset()
         {
-            Context.Current = new();
-
             InfoPage = new();
             EventPage = new();
             TriggerPage = new();
@@ -107,6 +105,8 @@ namespace Paradoxical.ViewModel
 
                 string json = File.ReadAllText(path);
                 Context.Current = JsonSerializer.Deserialize<Context>(json, options) ?? new();
+
+                Reset();
             }
             catch (Exception)
             {

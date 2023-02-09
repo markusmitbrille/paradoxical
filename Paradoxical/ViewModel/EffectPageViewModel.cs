@@ -25,6 +25,7 @@ namespace Paradoxical.ViewModel
 
         public EffectPageViewModel()
         {
+            selectedEffect = CurrentContext.Effects.FirstOrDefault();
         }
 
         [RelayCommand]
