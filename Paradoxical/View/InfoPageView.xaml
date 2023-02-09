@@ -67,8 +67,6 @@
                             <Binding.ValidationRules>
                                 <rules:RequiredRule
                                     ValidatesOnTargetUpdated="True" />
-                                <rules:NameRule
-                                    ValidatesOnTargetUpdated="True" />
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox.Text>
