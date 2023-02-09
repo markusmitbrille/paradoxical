@@ -70,7 +70,7 @@ namespace Paradoxical.Model
         {
             Context = context;
 
-            name = $"Option [{Guid.NewGuid().ToString()[0..4]}]";
+            name = $"New Option";
         }
 
         public ParadoxEventOption(ModContext context, ParadoxEventOption other) : this(context)
