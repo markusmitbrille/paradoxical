@@ -6,7 +6,7 @@ namespace Paradoxical.Model
 {
     public partial class ParadoxMod : ObservableObject
     {
-        public ModContext Context { get; }
+        public Context Context { get; }
 
         [ObservableProperty]
         private string name = "";
@@ -17,7 +17,7 @@ namespace Paradoxical.Model
         [ObservableProperty]
         private string eventNamespace = "";
 
-        public ParadoxMod(ModContext context)
+        public ParadoxMod(Context context)
         {
             Context = context;
 

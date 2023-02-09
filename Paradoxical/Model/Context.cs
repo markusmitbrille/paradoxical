@@ -1,12 +1,11 @@
-﻿using Paradoxical.Model;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
 
-namespace Paradoxical.Data
+namespace Paradoxical.Model
 {
-    public class ModContext
+    public class Context
     {
         public ParadoxMod Info { get; }
 
@@ -19,7 +18,7 @@ namespace Paradoxical.Data
         public string EffectFileEntryName => $"common/scripted_effects/{Info.EventNamespace}_effects.txt";
         public string LocalizationFileEntryName => $"localization/english/{Info.EventNamespace}_l_english.yml";
 
-        public ModContext()
+        public Context()
         {
             Info = new(this);
         }

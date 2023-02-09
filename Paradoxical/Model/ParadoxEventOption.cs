@@ -12,7 +12,7 @@ namespace Paradoxical.Model
 {
     public partial class ParadoxEventOption : ObservableObject
     {
-        public ModContext Context { get; }
+        public Context Context { get; }
 
         [ObservableProperty]
         private string name = "";
@@ -66,14 +66,14 @@ namespace Paradoxical.Model
         [ObservableProperty]
         private string aiChance = "";
 
-        public ParadoxEventOption(ModContext context)
+        public ParadoxEventOption(Context context)
         {
             Context = context;
 
             name = $"New Option";
         }
 
-        public ParadoxEventOption(ModContext context, ParadoxEventOption other) : this(context)
+        public ParadoxEventOption(Context context, ParadoxEventOption other) : this(context)
         {
             name = other.name;
             tooltip = other.tooltip;

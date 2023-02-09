@@ -13,7 +13,7 @@ namespace Paradoxical.ViewModel
     {
         public override string PageName => "Events";
 
-        public ModContext Context { get; }
+        public Context Context { get; }
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsEventSelected))]
@@ -24,7 +24,7 @@ namespace Paradoxical.ViewModel
         private ParadoxEvent? selectedEvent;
         public bool IsEventSelected => SelectedEvent != null;
 
-        public EventPageViewModel(ModContext context)
+        public EventPageViewModel(Context context)
         {
             Context = context;
         }

@@ -6,7 +6,7 @@ namespace Paradoxical.Model
 {
     public partial class ParadoxPortrait : ObservableObject
     {
-        public ModContext Context { get; }
+        public Context Context { get; }
 
         [ObservableProperty]
         private string character = "";
@@ -15,12 +15,12 @@ namespace Paradoxical.Model
         [ObservableProperty]
         private string outfitTags = "";
 
-        public ParadoxPortrait(ModContext context)
+        public ParadoxPortrait(Context context)
         {
             Context = context;
         }
 
-        public ParadoxPortrait(ModContext context, ParadoxPortrait other) : this(context)
+        public ParadoxPortrait(Context context, ParadoxPortrait other) : this(context)
         {
             character = other.character;
             animation = other.animation;

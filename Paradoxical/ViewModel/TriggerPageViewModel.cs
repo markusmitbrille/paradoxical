@@ -13,7 +13,7 @@ namespace Paradoxical.ViewModel
     {
         public override string PageName => "Triggers";
 
-        public ModContext Context { get; }
+        public Context Context { get; }
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsTriggerSelected))]
@@ -24,7 +24,7 @@ namespace Paradoxical.ViewModel
         private ParadoxTrigger? selectedTrigger;
         public bool IsTriggerSelected => SelectedTrigger != null;
 
-        public TriggerPageViewModel(ModContext context)
+        public TriggerPageViewModel(Context context)
         {
             Context = context;
         }

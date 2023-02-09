@@ -13,7 +13,7 @@ namespace Paradoxical.Model
 {
     public partial class ParadoxEvent : ObservableObject
     {
-        public ModContext Context { get; }
+        public Context Context { get; }
 
         [ObservableProperty]
         private int id = 0;
@@ -50,7 +50,7 @@ namespace Paradoxical.Model
         private string afterEffect = "";
         public ObservableCollection<ParadoxEffect> AfterEffects { get; } = new();
 
-        public ParadoxEvent(ModContext context)
+        public ParadoxEvent(Context context)
         {
             Context = context;
 
@@ -64,7 +64,7 @@ namespace Paradoxical.Model
             lowerRightPortrait = new(context);
         }
 
-        public ParadoxEvent(ModContext context, ParadoxEvent other) : this(context)
+        public ParadoxEvent(Context context, ParadoxEvent other) : this(context)
         {
             title = other.title;
             description = other.description;

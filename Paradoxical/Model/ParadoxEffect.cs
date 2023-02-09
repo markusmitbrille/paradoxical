@@ -7,7 +7,7 @@ namespace Paradoxical.Model
 {
     public partial class ParadoxEffect : ObservableObject
     {
-        public ModContext Context { get; }
+        public Context Context { get; }
 
         [ObservableProperty]
         private string name = "";
@@ -16,7 +16,7 @@ namespace Paradoxical.Model
         [ObservableProperty]
         private string tooltip = "";
 
-        public ParadoxEffect(ModContext context)
+        public ParadoxEffect(Context context)
         {
             Context = context;
 
@@ -24,7 +24,7 @@ namespace Paradoxical.Model
             code = "# some effect";
         }
 
-        public ParadoxEffect(ModContext context, ParadoxEffect other) : this(context)
+        public ParadoxEffect(Context context, ParadoxEffect other) : this(context)
         {
             name = other.name;
             code = other.name;

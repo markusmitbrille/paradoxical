@@ -13,7 +13,7 @@ namespace Paradoxical.ViewModel
     {
         public override string PageName => "Effects";
 
-        public ModContext Context { get; }
+        public Context Context { get; }
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsEffectSelected))]
@@ -24,7 +24,7 @@ namespace Paradoxical.ViewModel
         private ParadoxEffect? selectedEffect;
         public bool IsEffectSelected => SelectedEffect != null;
 
-        public EffectPageViewModel(ModContext context)
+        public EffectPageViewModel(Context context)
         {
             Context = context;
         }

@@ -1,4 +1,4 @@
-﻿using Paradoxical.Data;
+﻿using Paradoxical.Model;
 
 namespace Paradoxical.ViewModel
 {
@@ -6,9 +6,9 @@ namespace Paradoxical.ViewModel
     {
         public override string PageName => "Mod Info";
 
-        public ModContext Context { get; }
+        public Context Context { get; }
 
-        public InfoPageViewModel(ModContext context)
+        public InfoPageViewModel(Context context)
         {
             Context = context;
         }

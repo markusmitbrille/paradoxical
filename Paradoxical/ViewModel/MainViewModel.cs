@@ -18,7 +18,7 @@ namespace Paradoxical.ViewModel
         [NotifyCanExecuteChangedFor(nameof(SaveModAsCommand))]
         [NotifyCanExecuteChangedFor(nameof(BuildModCommand))]
         [NotifyCanExecuteChangedFor(nameof(BuildModAsCommand))]
-        private ModContext? context;
+        private Context? context;
 
         public ObservableCollection<PageViewModelBase> Pages { get; } = new();
 
