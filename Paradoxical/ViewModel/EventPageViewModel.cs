@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
-using Paradoxical.Data;
 using Paradoxical.Model;
 using Paradoxical.View;
 using System.Linq;
@@ -13,7 +12,7 @@ namespace Paradoxical.ViewModel
     {
         public override string PageName => "Events";
 
-        public Context Context { get; }
+        public Context CurrentContext => Context.Current;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsEventSelected))]
@@ -24,17 +23,16 @@ namespace Paradoxical.ViewModel
         private ParadoxEvent? selectedEvent;
         public bool IsEventSelected => SelectedEvent != null;
 
-        public EventPageViewModel(Context context)
+        public EventPageViewModel()
         {
-            Context = context;
         }
 
         [RelayCommand]
         private void AddEvent()
         {
-            ParadoxEvent evt = new(Context);
+            ParadoxEvent evt = new();
 
-            Context.Events.Add(evt);
+            Context.Current.Events.Add(evt);
             SelectedEvent = evt;
 
             FindEventCommand.NotifyCanExecuteChanged();
@@ -46,9 +44,9 @@ namespace Paradoxical.ViewModel
             if (SelectedEvent == null)
             { return; }
 
-            ParadoxEvent evt = new(Context, SelectedEvent);
+            ParadoxEvent evt = new(SelectedEvent);
 
-            Context.Events.Add(evt);
+            Context.Current.Events.Add(evt);
             SelectedEvent = evt;
 
             FindEventCommand.NotifyCanExecuteChanged();
@@ -72,7 +70,7 @@ namespace Paradoxical.ViewModel
                 MessageBoxResult.Yes) != MessageBoxResult.Yes)
             { return; }
 
-            foreach (ParadoxEvent evt in Context.Events)
+            foreach (ParadoxEvent evt in Context.Current.Events)
             {
                 foreach (ParadoxEventOption opt in evt.Options)
                 {
@@ -83,8 +81,8 @@ namespace Paradoxical.ViewModel
                 }
             }
 
-            Context.Events.Remove(SelectedEvent);
-            SelectedEvent = Context.Events.FirstOrDefault();
+            Context.Current.Events.Remove(SelectedEvent);
+            SelectedEvent = Context.Current.Events.FirstOrDefault();
 
             FindEventCommand.NotifyCanExecuteChanged();
         }
@@ -99,7 +97,7 @@ namespace Paradoxical.ViewModel
             FindEventDialogViewModel vm = new()
             {
                 DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
-                Items = Context.Events,
+                Items = Context.Current.Events,
                 Selected = SelectedEvent,
             };
             FindEventDialogView dlg = new()
@@ -119,7 +117,7 @@ namespace Paradoxical.ViewModel
         }
         private bool CanFindEvent()
         {
-            return Context.Events.Any();
+            return Context.Current.Events.Any();
         }
 
         [RelayCommand(CanExecute = nameof(CanPreviousEvent))]
@@ -128,14 +126,14 @@ namespace Paradoxical.ViewModel
             if (SelectedEvent == null)
             { return; }
 
-            int index = Context.Events.IndexOf(SelectedEvent);
-            SelectedEvent = Context.Events[index - 1];
+            int index = Context.Current.Events.IndexOf(SelectedEvent);
+            SelectedEvent = Context.Current.Events[index - 1];
         }
         private bool CanPreviousEvent()
         {
             return SelectedEvent != null
-                && Context.Events.Any()
-                && SelectedEvent != Context.Events.First();
+                && Context.Current.Events.Any()
+                && SelectedEvent != Context.Current.Events.First();
         }
 
         [RelayCommand(CanExecute = nameof(CanNextEvent))]
@@ -144,14 +142,14 @@ namespace Paradoxical.ViewModel
             if (SelectedEvent == null)
             { return; }
 
-            int index = Context.Events.IndexOf(SelectedEvent);
-            SelectedEvent = Context.Events[index + 1];
+            int index = Context.Current.Events.IndexOf(SelectedEvent);
+            SelectedEvent = Context.Current.Events[index + 1];
         }
         private bool CanNextEvent()
         {
             return SelectedEvent != null
-                && Context.Events.Any()
-                && SelectedEvent != Context.Events.Last();
+                && Context.Current.Events.Any()
+                && SelectedEvent != Context.Current.Events.Last();
         }
     }
 }

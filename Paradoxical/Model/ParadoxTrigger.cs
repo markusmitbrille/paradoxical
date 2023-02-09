@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Paradoxical.Data;
 using System;
 using System.IO;
 
@@ -7,7 +6,7 @@ namespace Paradoxical.Model
 {
     public partial class ParadoxTrigger : ObservableObject
     {
-        public Context Context { get; }
+        public Context CurrentContext => Context.Current;
 
         [ObservableProperty]
         private string name = "";
@@ -16,15 +15,13 @@ namespace Paradoxical.Model
         [ObservableProperty]
         private string tooltip = "";
 
-        public ParadoxTrigger(Context context)
+        public ParadoxTrigger()
         {
-            Context = context;
-
             name = $"Trigger_{Guid.NewGuid().ToString()[0..4]}";
             code = "# some trigger";
         }
 
-        public ParadoxTrigger(Context context, ParadoxTrigger other) : this(context)
+        public ParadoxTrigger(ParadoxTrigger other) : this()
         {
             name = other.name;
             code = other.name;
@@ -32,7 +29,7 @@ namespace Paradoxical.Model
 
         public void Write(TextWriter writer)
         {
-            writer.Indent().WriteLine($"{Context.Info.EventNamespace}_{Name} = {{");
+            writer.Indent().WriteLine($"{Context.Current.Info.EventNamespace}_{Name} = {{");
             ParadoxText.IndentLevel++;
 
             if (Tooltip != string.Empty)
@@ -40,7 +37,7 @@ namespace Paradoxical.Model
                 writer.Indent().WriteLine("custom_tooltip = {");
                 ParadoxText.IndentLevel++;
 
-                writer.Indent().WriteLine($"text = {Context.Info.EventNamespace}.{Name}.tt");
+                writer.Indent().WriteLine($"text = {Context.Current.Info.EventNamespace}.{Name}.tt");
                 writer.WriteLine();
             }
 
@@ -61,7 +58,7 @@ namespace Paradoxical.Model
 
         public void WriteLoc(TextWriter writer)
         {
-            writer.WriteLocLine($"{Context.Info.EventNamespace}.{Name}.tt", Tooltip);
+            writer.WriteLocLine($"{Context.Current.Info.EventNamespace}.{Name}.tt", Tooltip);
         }
     }
 }

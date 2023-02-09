@@ -82,7 +82,7 @@
                 Grid.Column="0"
                 Margin="6,12"
                 Style="{DynamicResource MaterialDesignOutlinedComboBox}"
-                ItemsSource="{Binding Context.Events}"
+                ItemsSource="{Binding CurrentContext.Events}"
                 SelectedItem="{Binding TriggeredEvent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 DisplayMemberPath="Id"
                 IsEditable="True"

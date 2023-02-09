@@ -1,27 +1,29 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
 
 namespace Paradoxical.Model
 {
-    public class Context
+    public partial class Context : ObservableObject
     {
-        public ParadoxMod Info { get; }
+        public static Context Current { get; set; } = new();
 
-        public ObservableCollection<ParadoxEvent> Events { get; } = new();
-        public ObservableCollection<ParadoxTrigger> Triggers { get; } = new();
-        public ObservableCollection<ParadoxEffect> Effects { get; } = new();
+        [ObservableProperty]
+        private ParadoxMod info = new();
+
+        [ObservableProperty]
+        private ObservableCollection<ParadoxEvent> events = new();
+        [ObservableProperty]
+        private ObservableCollection<ParadoxTrigger> triggers = new();
+        [ObservableProperty]
+        private ObservableCollection<ParadoxEffect> effects = new();
 
         public string EventFileEntryName => $"events/{Info.EventNamespace}_events.txt";
         public string TriggerFileEntryName => $"common/scripted_triggers/{Info.EventNamespace}_triggers.txt";
         public string EffectFileEntryName => $"common/scripted_effects/{Info.EventNamespace}_effects.txt";
         public string LocalizationFileEntryName => $"localization/english/{Info.EventNamespace}_l_english.yml";
-
-        public Context()
-        {
-            Info = new(this);
-        }
 
         public void Export(string dir, string file)
         {
@@ -66,6 +68,9 @@ namespace Paradoxical.Model
 
         private void WriteModFile(TextWriter writer, string dir, string file)
         {
+            if (Info == null)
+            { return; }
+
             Info.Write(writer, dir, file);
         }
 

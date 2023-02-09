@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
-using Paradoxical.Data;
 using Paradoxical.View;
 using Paradoxical.ViewModel;
 using System;
@@ -12,7 +11,7 @@ namespace Paradoxical.Model
 {
     public partial class ParadoxEventOption : ObservableObject
     {
-        public Context Context { get; }
+        public Context CurrentContext => Context.Current;
 
         [ObservableProperty]
         private string name = "";
@@ -33,12 +32,14 @@ namespace Paradoxical.Model
         [ObservableProperty]
         private string trigger = "";
 
-        public ObservableCollection<ParadoxTrigger> Triggers { get; } = new();
+        [ObservableProperty]
+        private ObservableCollection<ParadoxTrigger> triggers = new();
 
         [ObservableProperty]
         private string effect = "";
 
-        public ObservableCollection<ParadoxEffect> Effects { get; } = new();
+        [ObservableProperty]
+        private ObservableCollection<ParadoxEffect> effects = new();
 
         [ObservableProperty]
         private int aiBaseChance = 100;
@@ -66,14 +67,12 @@ namespace Paradoxical.Model
         [ObservableProperty]
         private string aiChance = "";
 
-        public ParadoxEventOption(Context context)
+        public ParadoxEventOption()
         {
-            Context = context;
-
             name = $"New Option";
         }
 
-        public ParadoxEventOption(Context context, ParadoxEventOption other) : this(context)
+        public ParadoxEventOption(ParadoxEventOption other) : this()
         {
             name = other.name;
             tooltip = other.tooltip;
@@ -105,9 +104,9 @@ namespace Paradoxical.Model
         [RelayCommand]
         private void CreateTrigger()
         {
-            ParadoxTrigger trg = new(Context);
+            ParadoxTrigger trg = new();
 
-            Context.Triggers.Add(trg);
+            Context.Current.Triggers.Add(trg);
             Triggers.Add(trg);
         }
 
@@ -127,7 +126,7 @@ namespace Paradoxical.Model
             FindTriggerDialogViewModel vm = new()
             {
                 DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
-                Items = Context.Triggers,
+                Items = Context.Current.Triggers,
                 Blacklist = new(Triggers),
             };
             FindTriggerDialogView dlg = new()
@@ -149,9 +148,9 @@ namespace Paradoxical.Model
         [RelayCommand]
         private void CreateEffect()
         {
-            ParadoxEffect eff = new(Context);
+            ParadoxEffect eff = new();
 
-            Context.Effects.Add(eff);
+            Context.Current.Effects.Add(eff);
             Effects.Add(eff);
         }
 
@@ -171,7 +170,7 @@ namespace Paradoxical.Model
             FindEffectDialogViewModel vm = new()
             {
                 DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
-                Items = Context.Effects,
+                Items = Context.Current.Effects,
                 Blacklist = new(Effects),
             };
             FindEffectDialogView dlg = new()
@@ -193,9 +192,9 @@ namespace Paradoxical.Model
         [RelayCommand(CanExecute = nameof(CanCreateTriggeredEvent))]
         private void CreateTriggeredEvent()
         {
-            ParadoxEvent evt = new(Context);
+            ParadoxEvent evt = new();
 
-            Context.Events.Add(evt);
+            Context.Current.Events.Add(evt);
             TriggeredEvent = evt;
         }
         private bool CanCreateTriggeredEvent()
@@ -219,7 +218,7 @@ namespace Paradoxical.Model
             FindEventDialogViewModel vm = new()
             {
                 DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
-                Items = Context.Events,
+                Items = Context.Current.Events,
                 Selected = TriggeredEvent,
             };
             FindEventDialogView dlg = new()
@@ -243,7 +242,7 @@ namespace Paradoxical.Model
             writer.Indent().WriteLine("option = {");
             ParadoxText.IndentLevel++;
 
-            writer.Indent().WriteLine($"name = {Context.Info.EventNamespace}.{parent.Id}.o.{index}");
+            writer.Indent().WriteLine($"name = {Context.Current.Info.EventNamespace}.{parent.Id}.o.{index}");
             WriteTooltip(writer, parent, index);
 
             writer.WriteLine();
@@ -274,7 +273,7 @@ namespace Paradoxical.Model
                 return;
             }
 
-            writer.Indent().WriteLine($"custom_tooltip = {Context.Info.EventNamespace}.{parent.Id}.o.{index}.tt");
+            writer.Indent().WriteLine($"custom_tooltip = {Context.Current.Info.EventNamespace}.{parent.Id}.o.{index}.tt");
         }
 
         private void WriteTrigger(TextWriter writer)
@@ -312,7 +311,7 @@ namespace Paradoxical.Model
 
                 foreach (ParadoxTrigger trg in Triggers)
                 {
-                    writer.Indent().WriteLine($"{Context.Info.EventNamespace}_{trg.Name} = yes");
+                    writer.Indent().WriteLine($"{Context.Current.Info.EventNamespace}_{trg.Name} = yes");
                 }
             }
 
@@ -420,7 +419,7 @@ namespace Paradoxical.Model
             writer.Indent().WriteLine("trigger_event = {");
             ParadoxText.IndentLevel++;
 
-            writer.Indent().WriteLine($"id = {Context.Info.EventNamespace}.{TriggeredEvent.Id}");
+            writer.Indent().WriteLine($"id = {Context.Current.Info.EventNamespace}.{TriggeredEvent.Id}");
             writer.Indent().WriteLine($"days = {{ {TriggeredEventMinDays} {TriggeredEventMaxDays} }}");
 
             ParadoxText.IndentLevel--;
@@ -465,15 +464,15 @@ namespace Paradoxical.Model
 
                 foreach (ParadoxEffect eff in Effects)
                 {
-                    writer.Indent().WriteLine($"{Context.Info.EventNamespace}_{eff.Name} = yes");
+                    writer.Indent().WriteLine($"{Context.Current.Info.EventNamespace}_{eff.Name} = yes");
                 }
             }
         }
 
         public void WriteLoc(TextWriter writer, ParadoxEvent parent, int index)
         {
-            writer.WriteLocLine($"{Context.Info.EventNamespace}.{parent.Id}.o.{index}", Name);
-            writer.WriteLocLine($"{Context.Info.EventNamespace}.{parent.Id}.o.{index}.tt", Tooltip);
+            writer.WriteLocLine($"{Context.Current.Info.EventNamespace}.{parent.Id}.o.{index}", Name);
+            writer.WriteLocLine($"{Context.Current.Info.EventNamespace}.{parent.Id}.o.{index}.tt", Tooltip);
         }
     }
 }

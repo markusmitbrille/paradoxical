@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
-using Paradoxical.Data;
 using Paradoxical.Model;
 using Paradoxical.View;
 using System.Linq;
@@ -13,7 +12,7 @@ namespace Paradoxical.ViewModel
     {
         public override string PageName => "Triggers";
 
-        public Context Context { get; }
+        public Context CurrentContext => Context.Current;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsTriggerSelected))]
@@ -24,17 +23,16 @@ namespace Paradoxical.ViewModel
         private ParadoxTrigger? selectedTrigger;
         public bool IsTriggerSelected => SelectedTrigger != null;
 
-        public TriggerPageViewModel(Context context)
+        public TriggerPageViewModel()
         {
-            Context = context;
         }
 
         [RelayCommand]
         private void AddTrigger()
         {
-            ParadoxTrigger trg = new(Context);
+            ParadoxTrigger trg = new();
 
-            Context.Triggers.Add(trg);
+            Context.Current.Triggers.Add(trg);
             SelectedTrigger = trg;
 
             FindTriggerCommand.NotifyCanExecuteChanged();
@@ -46,9 +44,9 @@ namespace Paradoxical.ViewModel
             if (SelectedTrigger == null)
             { return; }
 
-            ParadoxTrigger evt = new(Context, SelectedTrigger);
+            ParadoxTrigger evt = new(SelectedTrigger);
 
-            Context.Triggers.Add(evt);
+            Context.Current.Triggers.Add(evt);
             SelectedTrigger = evt;
 
             FindTriggerCommand.NotifyCanExecuteChanged();
@@ -72,7 +70,7 @@ namespace Paradoxical.ViewModel
                 MessageBoxResult.Yes) != MessageBoxResult.Yes)
             { return; }
 
-            foreach (ParadoxEvent evt in Context.Events)
+            foreach (ParadoxEvent evt in Context.Current.Events)
             {
                 evt.Triggers.Remove(SelectedTrigger);
 
@@ -82,8 +80,8 @@ namespace Paradoxical.ViewModel
                 }
             }
 
-            Context.Triggers.Remove(SelectedTrigger);
-            SelectedTrigger = Context.Triggers.FirstOrDefault();
+            Context.Current.Triggers.Remove(SelectedTrigger);
+            SelectedTrigger = Context.Current.Triggers.FirstOrDefault();
 
             FindTriggerCommand.NotifyCanExecuteChanged();
         }
@@ -98,7 +96,7 @@ namespace Paradoxical.ViewModel
             FindTriggerDialogViewModel vm = new()
             {
                 DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
-                Items = Context.Triggers,
+                Items = Context.Current.Triggers,
                 Selected = SelectedTrigger,
             };
             FindTriggerDialogView dlg = new()
@@ -118,7 +116,7 @@ namespace Paradoxical.ViewModel
         }
         private bool CanFindTrigger()
         {
-            return Context.Triggers.Any();
+            return Context.Current.Triggers.Any();
         }
 
         [RelayCommand(CanExecute = nameof(CanPreviousTrigger))]
@@ -127,14 +125,14 @@ namespace Paradoxical.ViewModel
             if (SelectedTrigger == null)
             { return; }
 
-            int index = Context.Triggers.IndexOf(SelectedTrigger);
-            SelectedTrigger = Context.Triggers[index - 1];
+            int index = Context.Current.Triggers.IndexOf(SelectedTrigger);
+            SelectedTrigger = Context.Current.Triggers[index - 1];
         }
         private bool CanPreviousTrigger()
         {
             return SelectedTrigger != null
-                && Context.Triggers.Any()
-                && SelectedTrigger != Context.Triggers.First();
+                && Context.Current.Triggers.Any()
+                && SelectedTrigger != Context.Current.Triggers.First();
         }
 
         [RelayCommand(CanExecute = nameof(CanNextTrigger))]
@@ -143,14 +141,14 @@ namespace Paradoxical.ViewModel
             if (SelectedTrigger == null)
             { return; }
 
-            int index = Context.Triggers.IndexOf(SelectedTrigger);
-            SelectedTrigger = Context.Triggers[index + 1];
+            int index = Context.Current.Triggers.IndexOf(SelectedTrigger);
+            SelectedTrigger = Context.Current.Triggers[index + 1];
         }
         private bool CanNextTrigger()
         {
             return SelectedTrigger != null
-                && Context.Triggers.Any()
-                && SelectedTrigger != Context.Triggers.Last();
+                && Context.Current.Triggers.Any()
+                && SelectedTrigger != Context.Current.Triggers.Last();
         }
     }
 }

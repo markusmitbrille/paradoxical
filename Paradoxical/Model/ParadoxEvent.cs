@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
-using Paradoxical.Data;
 using Paradoxical.View;
 using Paradoxical.ViewModel;
 using System;
@@ -13,7 +12,7 @@ namespace Paradoxical.Model
 {
     public partial class ParadoxEvent : ObservableObject
     {
-        public Context Context { get; }
+        public Context CurrentContext => Context.Current;
 
         [ObservableProperty]
         private int id = 0;
@@ -25,60 +24,56 @@ namespace Paradoxical.Model
         [ObservableProperty]
         private string theme = "";
 
-        public ObservableCollection<ParadoxEventOption> Options { get; } = new();
+        [ObservableProperty]
+        private ObservableCollection<ParadoxEventOption> options = new();
 
         [ObservableProperty]
-        private ParadoxPortrait leftPortrait;
+        private ParadoxPortrait leftPortrait = new();
         [ObservableProperty]
-        private ParadoxPortrait rightPortrait;
+        private ParadoxPortrait rightPortrait = new();
         [ObservableProperty]
-        private ParadoxPortrait lowerLeftPortrait;
+        private ParadoxPortrait lowerLeftPortrait = new();
         [ObservableProperty]
-        private ParadoxPortrait lowerRightPortrait;
+        private ParadoxPortrait lowerRightPortrait = new();
         [ObservableProperty]
-        private ParadoxPortrait lowerCenterPortrait;
+        private ParadoxPortrait lowerCenterPortrait = new();
 
         [ObservableProperty]
         private string trigger = "";
-        public ObservableCollection<ParadoxTrigger> Triggers { get; } = new();
+        [ObservableProperty]
+        private ObservableCollection<ParadoxTrigger> triggers = new();
 
         [ObservableProperty]
         private string immediateEffect = "";
-        public ObservableCollection<ParadoxEffect> ImmediateEffects { get; } = new();
+        [ObservableProperty]
+        private ObservableCollection<ParadoxEffect> immediateEffects = new();
 
         [ObservableProperty]
         private string afterEffect = "";
-        public ObservableCollection<ParadoxEffect> AfterEffects { get; } = new();
+        [ObservableProperty]
+        private ObservableCollection<ParadoxEffect> afterEffects = new();
 
-        public ParadoxEvent(Context context)
+        public ParadoxEvent()
         {
-            Context = context;
-
-            id = context.Events.Count == 0 ? 1 : context.Events.Max(evt => evt.Id) + 1;
+            id = Context.Current.Events.Count == 0 ? 1 : Context.Current.Events.Max(evt => evt.Id) + 1;
             title = $"Event_{Guid.NewGuid().ToString()[0..4]}";
-
-            leftPortrait = new(context);
-            rightPortrait = new(context);
-            lowerLeftPortrait = new(context);
-            lowerCenterPortrait = new(context);
-            lowerRightPortrait = new(context);
         }
 
-        public ParadoxEvent(Context context, ParadoxEvent other) : this(context)
+        public ParadoxEvent(ParadoxEvent other) : this()
         {
             title = other.title;
             description = other.description;
             theme = other.theme;
 
             // composite association, therefore deep copy
-            Options = new(other.Options.Select(e => new ParadoxEventOption(context, e)));
+            Options = new(other.Options.Select(e => new ParadoxEventOption(e)));
 
             // composite associations, therefore deep copy
-            leftPortrait = new(context, other.leftPortrait);
-            rightPortrait = new(context, other.rightPortrait);
-            lowerLeftPortrait = new(context, other.lowerLeftPortrait);
-            lowerRightPortrait = new(context, other.lowerRightPortrait);
-            lowerCenterPortrait = new(context, other.lowerCenterPortrait);
+            leftPortrait = new(other.leftPortrait);
+            rightPortrait = new(other.rightPortrait);
+            lowerLeftPortrait = new(other.lowerLeftPortrait);
+            lowerRightPortrait = new(other.lowerRightPortrait);
+            lowerCenterPortrait = new(other.lowerCenterPortrait);
 
             trigger = other.trigger;
             immediateEffect = other.immediateEffect;
@@ -93,7 +88,7 @@ namespace Paradoxical.Model
         [RelayCommand]
         private void AddOption()
         {
-            ParadoxEventOption opt = new(Context);
+            ParadoxEventOption opt = new();
 
             Options.Add(opt);
 
@@ -113,7 +108,7 @@ namespace Paradoxical.Model
         [RelayCommand]
         private void DuplicateOption(ParadoxEventOption opt)
         {
-            ParadoxEventOption copy = new(Context, opt);
+            ParadoxEventOption copy = new(opt);
             Options.Add(copy);
 
             MoveOptionUpCommand.NotifyCanExecuteChanged();
@@ -153,9 +148,9 @@ namespace Paradoxical.Model
         [RelayCommand]
         private void CreateTrigger()
         {
-            ParadoxTrigger trg = new(Context);
+            ParadoxTrigger trg = new();
 
-            Context.Triggers.Add(trg);
+            Context.Current.Triggers.Add(trg);
             Triggers.Add(trg);
         }
 
@@ -171,7 +166,7 @@ namespace Paradoxical.Model
             FindTriggerDialogViewModel vm = new()
             {
                 DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
-                Items = Context.Triggers,
+                Items = Context.Current.Triggers,
                 Blacklist = new(Triggers),
             };
             FindTriggerDialogView dlg = new()
@@ -193,9 +188,9 @@ namespace Paradoxical.Model
         [RelayCommand]
         private void CreateImmediateEffect()
         {
-            ParadoxEffect eff = new(Context);
+            ParadoxEffect eff = new();
 
-            Context.Effects.Add(eff);
+            Context.Current.Effects.Add(eff);
             ImmediateEffects.Add(eff);
         }
 
@@ -211,7 +206,7 @@ namespace Paradoxical.Model
             FindEffectDialogViewModel vm = new()
             {
                 DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
-                Items = Context.Effects,
+                Items = Context.Current.Effects,
                 Blacklist = new(ImmediateEffects),
             };
             FindEffectDialogView dlg = new()
@@ -233,9 +228,9 @@ namespace Paradoxical.Model
         [RelayCommand]
         private void CreateAfterEffect()
         {
-            ParadoxEffect eff = new(Context);
+            ParadoxEffect eff = new();
 
-            Context.Effects.Add(eff);
+            Context.Current.Effects.Add(eff);
             AfterEffects.Add(eff);
         }
 
@@ -251,7 +246,7 @@ namespace Paradoxical.Model
             FindEffectDialogViewModel vm = new()
             {
                 DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
-                Items = Context.Effects,
+                Items = Context.Current.Effects,
                 Blacklist = new(AfterEffects),
             };
             FindEffectDialogView dlg = new()
@@ -272,15 +267,15 @@ namespace Paradoxical.Model
 
         public void Write(TextWriter writer)
         {
-            writer.Indent().WriteLine($"{Context.Info.EventNamespace}.{Id} = {{");
+            writer.Indent().WriteLine($"{Context.Current.Info.EventNamespace}.{Id} = {{");
             ParadoxText.IndentLevel++;
 
             writer.Indent().WriteLine($"type = character_event");
 
             writer.WriteLine();
 
-            writer.Indent().WriteLine($"title = {Context.Info.EventNamespace}.{Id}.t");
-            writer.Indent().WriteLine($"desc = {Context.Info.EventNamespace}.{Id}.d");
+            writer.Indent().WriteLine($"title = {Context.Current.Info.EventNamespace}.{Id}.t");
+            writer.Indent().WriteLine($"desc = {Context.Current.Info.EventNamespace}.{Id}.d");
 
             writer.WriteLine();
 
@@ -445,7 +440,7 @@ namespace Paradoxical.Model
 
                 foreach (ParadoxTrigger trg in Triggers)
                 {
-                    writer.Indent().WriteLine($"{Context.Info.EventNamespace}_{trg.Name} = yes");
+                    writer.Indent().WriteLine($"{Context.Current.Info.EventNamespace}_{trg.Name} = yes");
                 }
             }
 
@@ -488,7 +483,7 @@ namespace Paradoxical.Model
 
                 foreach (ParadoxEffect eff in ImmediateEffects)
                 {
-                    writer.Indent().WriteLine($"{Context.Info.EventNamespace}_{eff.Name} = yes");
+                    writer.Indent().WriteLine($"{Context.Current.Info.EventNamespace}_{eff.Name} = yes");
                 }
             }
 
@@ -531,7 +526,7 @@ namespace Paradoxical.Model
 
                 foreach (ParadoxEffect eff in AfterEffects)
                 {
-                    writer.Indent().WriteLine($"{Context.Info.EventNamespace}_{eff.Name} = yes");
+                    writer.Indent().WriteLine($"{Context.Current.Info.EventNamespace}_{eff.Name} = yes");
                 }
             }
 
@@ -555,8 +550,8 @@ namespace Paradoxical.Model
 
         public void WriteLoc(TextWriter writer)
         {
-            writer.WriteLocLine($"{Context.Info.EventNamespace}.{Id}.t", Title);
-            writer.WriteLocLine($"{Context.Info.EventNamespace}.{Id}.d", Description);
+            writer.WriteLocLine($"{Context.Current.Info.EventNamespace}.{Id}.t", Title);
+            writer.WriteLocLine($"{Context.Current.Info.EventNamespace}.{Id}.d", Description);
 
             foreach (ParadoxEventOption opt in Options)
             {

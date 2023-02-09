@@ -1,12 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Paradoxical.Data;
 using System.IO;
 
 namespace Paradoxical.Model
 {
     public partial class ParadoxMod : ObservableObject
     {
-        public Context Context { get; }
+        public Context CurrentContext => Context.Current;
 
         [ObservableProperty]
         private string name = "";
@@ -17,10 +16,8 @@ namespace Paradoxical.Model
         [ObservableProperty]
         private string eventNamespace = "";
 
-        public ParadoxMod(Context context)
+        public ParadoxMod()
         {
-            Context = context;
-
             name = "My Mod";
             version = "1.0";
             gameVersion = "1.8.*";

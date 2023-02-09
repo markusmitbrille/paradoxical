@@ -6,11 +6,10 @@ namespace Paradoxical.ViewModel
     {
         public override string PageName => "Mod Info";
 
-        public Context Context { get; }
+        public Context CurrentContext => Context.Current;
 
-        public InfoPageViewModel(Context context)
+        public InfoPageViewModel()
         {
-            Context = context;
         }
     }
 }

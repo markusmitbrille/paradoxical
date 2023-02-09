@@ -1,63 +1,59 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using Paradoxical.Data;
 using Paradoxical.Model;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Windows;
 
 namespace Paradoxical.ViewModel
 {
     public partial class MainViewModel : ObservableObject
     {
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveModCommand))]
-        [NotifyCanExecuteChangedFor(nameof(SaveModAsCommand))]
-        [NotifyCanExecuteChangedFor(nameof(BuildModCommand))]
-        [NotifyCanExecuteChangedFor(nameof(BuildModAsCommand))]
-        private Context? context;
-
         public ObservableCollection<PageViewModelBase> Pages { get; } = new();
 
         [ObservableProperty]
-        private AboutPageViewModel? aboutPage;
+        private AboutPageViewModel aboutPage = new();
 
         [ObservableProperty]
-        private InfoPageViewModel? infoPage;
+        private InfoPageViewModel infoPage = new();
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(GoToEventCommand))]
-        private EventPageViewModel? eventPage;
+        private EventPageViewModel eventPage = new();
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(GoToTriggerCommand))]
-        private TriggerPageViewModel? triggerPage;
+        private TriggerPageViewModel triggerPage = new();
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(GoToEffectCommand))]
-        private EffectPageViewModel? effectPage;
+        private EffectPageViewModel effectPage = new();
 
         [ObservableProperty]
-        private PageViewModelBase? selectedPage;
+        private PageViewModelBase selectedPage;
+
+        private string SaveDir { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        private string SaveFile { get; set; } = string.Empty;
+        private string SavePath { get; set; } = string.Empty;
 
         private string ModDir { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         private string ModFile { get; set; } = string.Empty;
 
         public MainViewModel()
         {
-            ResetContext();
+            selectedPage = infoPage;
         }
 
-        private void ResetContext()
+        private void Reset()
         {
-            AboutPage ??= new();
+            Context.Current = new();
 
-            Context = new();
-
-            InfoPage = new(Context);
-            EventPage = new(Context);
-            TriggerPage = new(Context);
-            EffectPage = new(Context);
+            InfoPage = new();
+            EventPage = new();
+            TriggerPage = new();
+            EffectPage = new();
 
             Pages.Clear();
             Pages.Add(InfoPage);
@@ -70,10 +66,64 @@ namespace Paradoxical.ViewModel
             SelectedPage = InfoPage;
         }
 
+        private void Save(string path)
+        {
+            try
+            {
+                JsonSerializerOptions options = new()
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                    IgnoreReadOnlyFields = true,
+                    IgnoreReadOnlyProperties = true,
+                    WriteIndented = true,
+                };
+
+                string json = JsonSerializer.Serialize(Context.Current, options);
+                File.WriteAllText(path, json);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Could not save mod!",
+                    "Save Mod",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error,
+                    MessageBoxResult.Yes);
+
+                throw;
+            }
+        }
+
+        private void Load(string path)
+        {
+            try
+            {
+                JsonSerializerOptions options = new()
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                    IgnoreReadOnlyFields = true,
+                    IgnoreReadOnlyProperties = true,
+                    WriteIndented = true,
+                };
+
+                string json = File.ReadAllText(path);
+                Context.Current = JsonSerializer.Deserialize<Context>(json, options) ?? new();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Could not load mod!",
+                    "Load Mod",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error,
+                    MessageBoxResult.Yes);
+
+                throw;
+            }
+        }
+
         [RelayCommand]
         private void NewMod()
         {
-            if (Context != null && MessageBox.Show(
+            if (MessageBox.Show(
                 "Are you sure?",
                 "Exit Application",
                 MessageBoxButton.YesNo,
@@ -81,13 +131,13 @@ namespace Paradoxical.ViewModel
                 MessageBoxResult.Yes) != MessageBoxResult.Yes)
             { return; }
 
-            ResetContext();
+            Reset();
         }
 
         [RelayCommand]
         private void OpenMod()
         {
-            if (Context != null && MessageBox.Show(
+            if (MessageBox.Show(
                 "Do you want to continue? Unsaved changes will be discarded!",
                 "New Mod",
                 MessageBoxButton.OKCancel,
@@ -97,54 +147,87 @@ namespace Paradoxical.ViewModel
                 return;
             }
 
-            throw new NotImplementedException();
-        }
+            OpenFileDialog dlg = new()
+            {
+                Title = "Open Mod",
+                Filter = "Paradoxical Mod|*.paradoxical",
+                DefaultExt = ".paradoxical",
+                AddExtension = true,
+                InitialDirectory = SaveDir,
+                FileName = SaveFile,
+            };
 
-        [RelayCommand(CanExecute = nameof(CanSaveMod))]
-        private void SaveMod()
-        {
-            throw new NotImplementedException();
-        }
-        private bool CanSaveMod()
-        {
-            return Context != null;
-        }
-
-        [RelayCommand(CanExecute = nameof(CanSaveModAs))]
-        private void SaveModAs()
-        {
-            throw new NotImplementedException();
-        }
-        private bool CanSaveModAs()
-        {
-            return Context != null;
-        }
-
-        [RelayCommand(CanExecute = nameof(CanBuildMod))]
-        private void BuildMod()
-        {
-            if (Context == null)
+            if (dlg.ShowDialog() != true)
             { return; }
 
+            SaveDir = Path.GetDirectoryName(dlg.FileName) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            SaveFile = Path.GetFileNameWithoutExtension(dlg.FileName) ?? string.Empty;
+            SavePath = dlg.FileName;
+
+            if (File.Exists(SavePath) == false)
+            { return; }
+
+            Load(SavePath);
+        }
+
+        [RelayCommand]
+        private void SaveMod()
+        {
+            if (File.Exists(SavePath) == false)
+            {
+                SaveModAs();
+                return;
+            }
+
+            Save(SavePath);
+        }
+
+        [RelayCommand]
+        private void SaveModAs()
+        {
+            SaveFileDialog dlg = new()
+            {
+                Title = "Save Mod",
+                CreatePrompt = false,
+                OverwritePrompt = true,
+                Filter = "Paradoxical Mod|*.paradoxical",
+                DefaultExt = ".paradoxical",
+                AddExtension = true,
+                InitialDirectory = SaveDir,
+                FileName = SaveFile,
+            };
+
+            if (dlg.ShowDialog() != true)
+            { return; }
+
+            SaveDir = Path.GetDirectoryName(dlg.FileName) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            SaveFile = Path.GetFileNameWithoutExtension(dlg.FileName) ?? string.Empty;
+            SavePath = dlg.FileName;
+
+            if (Directory.Exists(SaveDir) == false)
+            { return; }
+
+            if (SaveFile == string.Empty)
+            { return; }
+
+            Save(SavePath);
+        }
+
+        [RelayCommand]
+        private void BuildMod()
+        {
             if (Directory.Exists(ModDir) == false || ModFile == string.Empty)
             {
                 BuildModAs();
                 return;
             }
 
-            Context.Export(ModDir, ModFile);
-        }
-        private bool CanBuildMod()
-        {
-            return Context != null;
+            Context.Current.Export(ModDir, ModFile);
         }
 
-        [RelayCommand(CanExecute = nameof(CanBuildModAs))]
+        [RelayCommand]
         private void BuildModAs()
         {
-            if (Context == null)
-            { return; }
-
             SaveFileDialog dlg = new()
             {
                 Title = "Build Mod",
@@ -169,19 +252,15 @@ namespace Paradoxical.ViewModel
             if (ModFile == string.Empty)
             { return; }
 
-            Context.Export(ModDir, ModFile);
+            Context.Current.Export(ModDir, ModFile);
 
             Process.Start("explorer.exe", ModDir);
-        }
-        private bool CanBuildModAs()
-        {
-            return Context != null;
         }
 
         [RelayCommand]
         private void Exit()
         {
-            if (Context != null && MessageBox.Show(
+            if (MessageBox.Show(
                 "Do you want to continue? Unsaved changes will be discarded!",
                 "New Mod",
                 MessageBoxButton.OKCancel,
@@ -242,17 +321,11 @@ namespace Paradoxical.ViewModel
         [RelayCommand(CanExecute = nameof(CanGoToEvent))]
         private void GoToEvent(ParadoxEvent evt)
         {
-            if (EventPage == null)
-            { return; }
-
             SelectedPage = EventPage;
             EventPage.SelectedEvent = evt;
         }
         private bool CanGoToEvent(ParadoxEvent evt)
         {
-            if (EventPage == null)
-            { return false; }
-
             if (SelectedPage == EventPage && EventPage.SelectedEvent == evt)
             { return false; }
 
@@ -262,17 +335,11 @@ namespace Paradoxical.ViewModel
         [RelayCommand(CanExecute = nameof(CanGoToTrigger))]
         private void GoToTrigger(ParadoxTrigger trg)
         {
-            if (TriggerPage == null)
-            { return; }
-
             SelectedPage = TriggerPage;
             TriggerPage.SelectedTrigger = trg;
         }
         private bool CanGoToTrigger(ParadoxTrigger trg)
         {
-            if (TriggerPage == null)
-            { return false; }
-
             if (SelectedPage == TriggerPage && TriggerPage.SelectedTrigger == trg)
             { return false; }
 
@@ -282,17 +349,11 @@ namespace Paradoxical.ViewModel
         [RelayCommand(CanExecute = nameof(CanGoToEffect))]
         private void GoToEffect(ParadoxEffect eff)
         {
-            if (EffectPage == null)
-            { return; }
-
             SelectedPage = EffectPage;
             EffectPage.SelectedEffect = eff;
         }
         private bool CanGoToEffect(ParadoxEffect eff)
         {
-            if (EffectPage == null)
-            { return false; }
-
             if (SelectedPage == EffectPage && EffectPage.SelectedEffect == eff)
             { return false; }
 

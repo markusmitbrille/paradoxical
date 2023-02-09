@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
-using Paradoxical.Data;
 using Paradoxical.Model;
 using Paradoxical.View;
 using System.Linq;
@@ -13,7 +12,7 @@ namespace Paradoxical.ViewModel
     {
         public override string PageName => "Effects";
 
-        public Context Context { get; }
+        public Context CurrentContext => Context.Current;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsEffectSelected))]
@@ -24,17 +23,16 @@ namespace Paradoxical.ViewModel
         private ParadoxEffect? selectedEffect;
         public bool IsEffectSelected => SelectedEffect != null;
 
-        public EffectPageViewModel(Context context)
+        public EffectPageViewModel()
         {
-            Context = context;
         }
 
         [RelayCommand]
         private void AddEffect()
         {
-            ParadoxEffect eff = new(Context);
+            ParadoxEffect eff = new();
 
-            Context.Effects.Add(eff);
+            Context.Current.Effects.Add(eff);
             SelectedEffect = eff;
 
             FindEffectCommand.NotifyCanExecuteChanged();
@@ -46,9 +44,9 @@ namespace Paradoxical.ViewModel
             if (SelectedEffect == null)
             { return; }
 
-            ParadoxEffect evt = new(Context, SelectedEffect);
+            ParadoxEffect evt = new(SelectedEffect);
 
-            Context.Effects.Add(evt);
+            Context.Current.Effects.Add(evt);
             SelectedEffect = evt;
 
             FindEffectCommand.NotifyCanExecuteChanged();
@@ -72,7 +70,7 @@ namespace Paradoxical.ViewModel
                 MessageBoxResult.Yes) != MessageBoxResult.Yes)
             { return; }
 
-            foreach (ParadoxEvent evt in Context.Events)
+            foreach (ParadoxEvent evt in Context.Current.Events)
             {
                 evt.ImmediateEffects.Remove(SelectedEffect);
                 evt.AfterEffects.Remove(SelectedEffect);
@@ -83,8 +81,8 @@ namespace Paradoxical.ViewModel
                 }
             }
 
-            Context.Effects.Remove(SelectedEffect);
-            SelectedEffect = Context.Effects.FirstOrDefault();
+            Context.Current.Effects.Remove(SelectedEffect);
+            SelectedEffect = Context.Current.Effects.FirstOrDefault();
 
             FindEffectCommand.NotifyCanExecuteChanged();
         }
@@ -99,7 +97,7 @@ namespace Paradoxical.ViewModel
             FindEffectDialogViewModel vm = new()
             {
                 DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
-                Items = Context.Effects,
+                Items = Context.Current.Effects,
                 Selected = SelectedEffect,
             };
             FindEffectDialogView dlg = new()
@@ -119,7 +117,7 @@ namespace Paradoxical.ViewModel
         }
         private bool CanFindEffect()
         {
-            return Context.Effects.Any();
+            return Context.Current.Effects.Any();
         }
 
         [RelayCommand(CanExecute = nameof(CanPreviousEffect))]
@@ -128,14 +126,14 @@ namespace Paradoxical.ViewModel
             if (SelectedEffect == null)
             { return; }
 
-            int index = Context.Effects.IndexOf(SelectedEffect);
-            SelectedEffect = Context.Effects[index - 1];
+            int index = Context.Current.Effects.IndexOf(SelectedEffect);
+            SelectedEffect = Context.Current.Effects[index - 1];
         }
         private bool CanPreviousEffect()
         {
             return SelectedEffect != null
-                && Context.Effects.Any()
-                && SelectedEffect != Context.Effects.First();
+                && Context.Current.Effects.Any()
+                && SelectedEffect != Context.Current.Effects.First();
         }
 
         [RelayCommand(CanExecute = nameof(CanNextEffect))]
@@ -144,14 +142,14 @@ namespace Paradoxical.ViewModel
             if (SelectedEffect == null)
             { return; }
 
-            int index = Context.Effects.IndexOf(SelectedEffect);
-            SelectedEffect = Context.Effects[index + 1];
+            int index = Context.Current.Effects.IndexOf(SelectedEffect);
+            SelectedEffect = Context.Current.Effects[index + 1];
         }
         private bool CanNextEffect()
         {
             return SelectedEffect != null
-                && Context.Effects.Any()
-                && SelectedEffect != Context.Effects.Last();
+                && Context.Current.Effects.Any()
+                && SelectedEffect != Context.Current.Effects.Last();
         }
     }
 }

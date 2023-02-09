@@ -61,7 +61,7 @@
                     
                     <TextBox.Text>
                         <Binding
-                            Path="Context.Info.Name"
+                            Path="CurrentContext.Info.Name"
                             Mode="TwoWay"
                             UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
@@ -83,7 +83,7 @@
                     
                     <TextBox.Text>
                         <Binding
-                            Path="Context.Info.Version"
+                            Path="CurrentContext.Info.Version"
                             Mode="TwoWay"
                             UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
@@ -107,7 +107,7 @@
 
                     <TextBox.Text>
                         <Binding
-                            Path="Context.Info.GameVersion"
+                            Path="CurrentContext.Info.GameVersion"
                             Mode="TwoWay"
                             UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
@@ -132,7 +132,7 @@
                  
                     <TextBox.Text>
                         <Binding
-                            Path="Context.Info.EventNamespace"
+                            Path="CurrentContext.Info.EventNamespace"
                             Mode="TwoWay"
                             UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>

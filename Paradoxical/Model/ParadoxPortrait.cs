@@ -1,12 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Paradoxical.Data;
 using System.IO;
 
 namespace Paradoxical.Model
 {
     public partial class ParadoxPortrait : ObservableObject
     {
-        public Context Context { get; }
+        public Context CurrentContext => Context.Current;
 
         [ObservableProperty]
         private string character = "";
@@ -15,12 +14,11 @@ namespace Paradoxical.Model
         [ObservableProperty]
         private string outfitTags = "";
 
-        public ParadoxPortrait(Context context)
+        public ParadoxPortrait()
         {
-            Context = context;
         }
 
-        public ParadoxPortrait(Context context, ParadoxPortrait other) : this(context)
+        public ParadoxPortrait(ParadoxPortrait other) : this()
         {
             character = other.character;
             animation = other.animation;
