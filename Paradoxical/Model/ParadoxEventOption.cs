@@ -240,13 +240,11 @@ namespace Paradoxical.Model
 
         public void Write(TextWriter writer, ParadoxEvent parent, int index)
         {
-            string prefix = Context.Info.EventNamespace.Namify();
-
             writer.Indent().WriteLine("option = {");
             ParadoxText.IndentLevel++;
 
-            writer.Indent().WriteLine($"name = {prefix}.{parent.Id}.o.{index}");
-            WriteTooltip(writer, parent, index, prefix);
+            writer.Indent().WriteLine($"name = {Context.Info.EventNamespace}.{parent.Id}.o.{index}");
+            WriteTooltip(writer, parent, index);
 
             writer.WriteLine();
 
@@ -268,7 +266,7 @@ namespace Paradoxical.Model
             writer.Indent().WriteLine("}");
         }
 
-        private void WriteTooltip(TextWriter writer, ParadoxEvent parent, int index, string prefix)
+        private void WriteTooltip(TextWriter writer, ParadoxEvent parent, int index)
         {
             if (Tooltip == string.Empty)
             {
@@ -276,13 +274,11 @@ namespace Paradoxical.Model
                 return;
             }
 
-            writer.Indent().WriteLine($"custom_tooltip = {prefix}.{parent.Id}.o.{index}.tt");
+            writer.Indent().WriteLine($"custom_tooltip = {Context.Info.EventNamespace}.{parent.Id}.o.{index}.tt");
         }
 
         private void WriteTrigger(TextWriter writer)
         {
-            string prefix = Context.Info.EventNamespace.Namify();
-
             if (Trigger == string.Empty && Triggers.Count == 0)
             {
                 writer.Indent().WriteLine("# no trigger");
@@ -316,7 +312,7 @@ namespace Paradoxical.Model
 
                 foreach (ParadoxTrigger trg in Triggers)
                 {
-                    writer.Indent().WriteLine($"{prefix}_{trg.Name.Namify()} = yes");
+                    writer.Indent().WriteLine($"{Context.Info.EventNamespace}_{trg.Name} = yes");
                 }
             }
 
@@ -407,8 +403,6 @@ namespace Paradoxical.Model
 
         private void WriteTriggeredEvent(TextWriter writer)
         {
-            string prefix = Context.Info.EventNamespace.Namify();
-
             if (TriggeredEvent == null)
             {
                 writer.Indent().WriteLine("# no follow-up event");
@@ -426,7 +420,7 @@ namespace Paradoxical.Model
             writer.Indent().WriteLine("trigger_event = {");
             ParadoxText.IndentLevel++;
 
-            writer.Indent().WriteLine($"id = {prefix}.{TriggeredEvent.Id}");
+            writer.Indent().WriteLine($"id = {Context.Info.EventNamespace}.{TriggeredEvent.Id}");
             writer.Indent().WriteLine($"days = {{ {TriggeredEventMinDays} {TriggeredEventMaxDays} }}");
 
             ParadoxText.IndentLevel--;
@@ -441,8 +435,6 @@ namespace Paradoxical.Model
 
         private void WriteEffect(TextWriter writer)
         {
-            string prefix = Context.Info.EventNamespace.Namify();
-
             if (Effect == string.Empty && Effects.Count == 0)
             {
                 writer.Indent().WriteLine("# no special effect");
@@ -473,7 +465,7 @@ namespace Paradoxical.Model
 
                 foreach (ParadoxEffect eff in Effects)
                 {
-                    writer.Indent().WriteLine($"{prefix}_{eff.Name.Namify()} = yes");
+                    writer.Indent().WriteLine($"{Context.Info.EventNamespace}_{eff.Name} = yes");
                 }
             }
         }

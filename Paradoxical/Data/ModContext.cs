@@ -14,12 +14,10 @@ namespace Paradoxical.Data
         public ObservableCollection<ParadoxTrigger> Triggers { get; } = new();
         public ObservableCollection<ParadoxEffect> Effects { get; } = new();
 
-        public string Prefix => Info.EventNamespace.Trim().Replace(" ", "_");
-
-        public string EventFileEntryName => $"events/{Prefix}_events.txt";
-        public string TriggerFileEntryName => $"common/scripted_triggers/{Prefix}_triggers.txt";
-        public string EffectFileEntryName => $"common/scripted_effects/{Prefix}_effects.txt";
-        public string LocalizationFileEntryName => $"localization/english/{Prefix}_l_english.yml";
+        public string EventFileEntryName => $"events/{Info.EventNamespace}_events.txt";
+        public string TriggerFileEntryName => $"common/scripted_triggers/{Info.EventNamespace}_triggers.txt";
+        public string EffectFileEntryName => $"common/scripted_effects/{Info.EventNamespace}_effects.txt";
+        public string LocalizationFileEntryName => $"localization/english/{Info.EventNamespace}_l_english.yml";
 
         public ModContext()
         {
@@ -75,7 +73,7 @@ namespace Paradoxical.Data
         private void WriteEventFile(TextWriter writer)
         {
             writer.WriteLine($"# {Info.Name} Events");
-            writer.WriteLine($"namespace = {Info.EventNamespace.Namify()}");
+            writer.WriteLine($"namespace = {Info.EventNamespace}");
             writer.WriteLine();
 
             foreach (ParadoxEvent evt in Events)

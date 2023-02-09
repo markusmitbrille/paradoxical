@@ -20,6 +20,11 @@ namespace Paradoxical.Model
         public ParadoxMod(ModContext context)
         {
             Context = context;
+
+            name = "My Mod";
+            version = "1.0";
+            gameVersion = "1.8.*";
+            eventNamespace = "mymod";
         }
 
         public void Write(TextWriter writer, string dir, string file)

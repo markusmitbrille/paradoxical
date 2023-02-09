@@ -20,7 +20,8 @@ namespace Paradoxical.Model
         {
             Context = context;
 
-            name = $"Effect {Guid.NewGuid().ToString()[0..4]}";
+            name = $"Effect_{Guid.NewGuid().ToString()[0..4]}";
+            code = "# some effect";
         }
 
         public ParadoxEffect(ModContext context, ParadoxEffect other) : this(context)
@@ -31,14 +32,12 @@ namespace Paradoxical.Model
 
         public void Write(TextWriter writer)
         {
-            string prefix = Context.Info.EventNamespace.Namify();
-
-            writer.Indent().WriteLine($"{prefix}_{Name.Namify()} = {{");
+            writer.Indent().WriteLine($"{Context.Info.EventNamespace}_{Name} = {{");
             ParadoxText.IndentLevel++;
 
             if (Tooltip != string.Empty)
             {
-                writer.Indent().WriteLine($"custom_tooltip = {prefix}.{Name.Namify()}.tt");
+                writer.Indent().WriteLine($"custom_tooltip = {Context.Info.EventNamespace}.{Name}.tt");
 
                 writer.Indent().WriteLine("hidden_effect = {");
                 ParadoxText.IndentLevel++;

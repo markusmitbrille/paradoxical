@@ -55,7 +55,7 @@ namespace Paradoxical.Model
             Context = context;
 
             id = context.Events.Count == 0 ? 1 : context.Events.Max(evt => evt.Id) + 1;
-            title = $"Event {Guid.NewGuid().ToString()[0..4]}";
+            title = $"Event_{Guid.NewGuid().ToString()[0..4]}";
 
             leftPortrait = new(context);
             rightPortrait = new(context);
@@ -272,17 +272,15 @@ namespace Paradoxical.Model
 
         public void Write(TextWriter writer)
         {
-            string prefix = Context.Info.EventNamespace.Namify();
-
-            writer.Indent().WriteLine($"{prefix}.{Id} = {{");
+            writer.Indent().WriteLine($"{Context.Info.EventNamespace}.{Id} = {{");
             ParadoxText.IndentLevel++;
 
             writer.Indent().WriteLine($"type = character_event");
 
             writer.WriteLine();
 
-            writer.Indent().WriteLine($"title = {prefix}.{Id}.t");
-            writer.Indent().WriteLine($"desc = {prefix}.{Id}.d");
+            writer.Indent().WriteLine($"title = {Context.Info.EventNamespace}.{Id}.t");
+            writer.Indent().WriteLine($"desc = {Context.Info.EventNamespace}.{Id}.d");
 
             writer.WriteLine();
 
@@ -414,8 +412,6 @@ namespace Paradoxical.Model
 
         private void WriteTrigger(TextWriter writer)
         {
-            string prefix = Context.Info.EventNamespace.Namify();
-
             if (Trigger == string.Empty && Triggers.Count == 0)
             {
                 writer.Indent().WriteLine("# no trigger");
@@ -449,7 +445,7 @@ namespace Paradoxical.Model
 
                 foreach (ParadoxTrigger trg in Triggers)
                 {
-                    writer.Indent().WriteLine($"{prefix}_{trg.Name.Namify()} = yes");
+                    writer.Indent().WriteLine($"{Context.Info.EventNamespace}_{trg.Name} = yes");
                 }
             }
 
@@ -459,8 +455,6 @@ namespace Paradoxical.Model
 
         private void WriteImmediate(TextWriter writer)
         {
-            string prefix = Context.Info.EventNamespace.Namify();
-
             if (ImmediateEffect == string.Empty && ImmediateEffects.Count == 0)
             {
                 writer.Indent().WriteLine("# no immediate");
@@ -494,7 +488,7 @@ namespace Paradoxical.Model
 
                 foreach (ParadoxEffect eff in ImmediateEffects)
                 {
-                    writer.Indent().WriteLine($"{prefix}_{eff.Name.Namify()} = yes");
+                    writer.Indent().WriteLine($"{Context.Info.EventNamespace}_{eff.Name} = yes");
                 }
             }
 
@@ -504,8 +498,6 @@ namespace Paradoxical.Model
 
         private void WriteAfter(TextWriter writer)
         {
-            string prefix = Context.Info.EventNamespace.Namify();
-
             if (AfterEffect == string.Empty && AfterEffects.Count == 0)
             {
                 writer.Indent().WriteLine("# no after");
@@ -539,7 +531,7 @@ namespace Paradoxical.Model
 
                 foreach (ParadoxEffect eff in AfterEffects)
                 {
-                    writer.Indent().WriteLine($"{prefix}_{eff.Name.Namify()} = yes");
+                    writer.Indent().WriteLine($"{Context.Info.EventNamespace}_{eff.Name} = yes");
                 }
             }
 

@@ -7,13 +7,18 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
-    xmlns:formatters="clr-namespace:Paradoxical.Formatters"
+    xmlns:converters="clr-namespace:Paradoxical.Converters"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance viewmodel:EventPageViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     FocusVisualStyle="{x:Null}">
+
+    <UserControl.Resources>
+        <converters:VisibilityConverter
+            x:Key="VisibilityConverter" />
+    </UserControl.Resources>
 
     <UserControl.InputBindings>
         <KeyBinding
@@ -77,25 +82,8 @@
 
         <view:ParadoxEventView
             Margin="20,10"
-            DataContext="{Binding SelectedEvent}">
-            <view:ParadoxEventView.Resources>
-                <Style
-                    TargetType="TextBox">
-                    <Setter
-                        Property="IsEnabled"
-                        Value="{Binding DataContext.IsEventSelected, RelativeSource={RelativeSource AncestorType=view:EventPageView}}" />
-                    <Setter
-                        Property="Margin"
-                        Value="50" />
-                </Style>
-                <Style
-                    TargetType="RichTextBox">
-                    <Setter
-                        Property="IsEnabled"
-                        Value="{Binding DataContext.IsEventSelected, RelativeSource={RelativeSource AncestorType=view:EventPageView}}" />
-                </Style>
-            </view:ParadoxEventView.Resources>
-        </view:ParadoxEventView>
+            DataContext="{Binding SelectedEvent}"
+            Visibility="{Binding Converter={StaticResource VisibilityConverter}}" />
 
     </DockPanel>
 

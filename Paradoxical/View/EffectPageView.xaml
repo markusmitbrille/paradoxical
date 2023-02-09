@@ -8,6 +8,7 @@
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
     xmlns:converters="clr-namespace:Paradoxical.Converters"
     xmlns:formatters="clr-namespace:Paradoxical.Formatters"
+    xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance viewmodel:EffectPageViewModel}"
@@ -16,8 +17,8 @@
     FocusVisualStyle="{x:Null}">
 
     <UserControl.Resources>
-        <converters:ObjectNullConverter
-            x:Key="ObjectNullConverter" />
+        <converters:VisibilityConverter
+            x:Key="VisibilityConverter" />
     </UserControl.Resources>
 
     <UserControl.InputBindings>
@@ -80,59 +81,10 @@
             </ToolBarTray>
         </materialDesign:Card>
 
-        <materialDesign:Card
+        <view:ParadoxEffectView
             Margin="20,10"
-            Padding="8"
-            materialDesign:ElevationAssist.Elevation="Dp4">
-            <ScrollViewer
-                Grid.Column="1"
-                VerticalScrollBarVisibility="Hidden"
-                HorizontalScrollBarVisibility="Disabled">
-                <StackPanel>
-                   
-                    <view:ScriptBox
-                        Margin="4"
-                        Style="{DynamicResource MaterialDesignRichTextBox}"
-                        Text="{Binding SelectedEffect.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        IsEnabled="{Binding IsEffectSelected}"
-                        AcceptsReturn="False"
-                        materialDesign:HintAssist.Hint="Name"
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
-                        <view:ScriptBox.TextFormatter>
-                            <formatters:CodeFormatter />
-                        </view:ScriptBox.TextFormatter>
-                    </view:ScriptBox>
-
-                    <view:ScriptBox
-                        Height="120"
-                        Margin="4"
-                        Style="{DynamicResource MaterialDesignRichTextBox}"
-                        Text="{Binding SelectedEffect.Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        IsEnabled="{Binding IsEffectSelected}"
-                        materialDesign:HintAssist.Hint="Code"
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
-                        AcceptsReturn="True">
-                        <view:ScriptBox.TextFormatter>
-                            <formatters:CodeFormatter />
-                        </view:ScriptBox.TextFormatter>
-                    </view:ScriptBox>
-
-                    <TextBox
-                        Margin="4"
-                        IsEnabled="{Binding IsEffectSelected}"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                        Text="{Binding SelectedEffect.Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        materialDesign:HintAssist.Hint="Tooltip" />
-
-                </StackPanel>
-            </ScrollViewer>
-        </materialDesign:Card>
+            DataContext="{Binding SelectedEffect}"
+            Visibility="{Binding Converter={StaticResource VisibilityConverter}}" />
 
     </DockPanel>
 

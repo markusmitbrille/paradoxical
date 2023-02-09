@@ -28,6 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="View\ParadoxEffectView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Resources\icon.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>

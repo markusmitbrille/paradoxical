@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
+    xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance viewmodel:InfoPageViewModel}"
@@ -54,38 +55,98 @@
                     Grid.Row="0"
                     Grid.Column="0"
                     Grid.ColumnSpan="3"
-                    Margin="4"
+                    Margin="6,12"
                     Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                    Text="{Binding Context.Info.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    materialDesign:HintAssist.Hint="Mod Name" />
+                    materialDesign:HintAssist.Hint="Mod Name">
+                    
+                    <TextBox.Text>
+                        <Binding
+                            Path="Context.Info.Name"
+                            Mode="TwoWay"
+                            UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <rules:RequiredRule
+                                    ValidatesOnTargetUpdated="True" />
+                                <rules:NameRule
+                                    ValidatesOnTargetUpdated="True" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+              
+                </TextBox>
 
                 <TextBox
                     Grid.Row="0"
                     Grid.Column="3"
                     Grid.ColumnSpan="1"
-                    Margin="4"
+                    Margin="6,12"
                     Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                    Text="{Binding Context.Info.Version, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    materialDesign:HintAssist.Hint="Mod Version" />
+                    materialDesign:HintAssist.Hint="Mod Version">
+                    
+                    <TextBox.Text>
+                        <Binding
+                            Path="Context.Info.Version"
+                            Mode="TwoWay"
+                            UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <rules:RequiredRule
+                                    ValidatesOnTargetUpdated="True" />
+                                <rules:VersionRule
+                                    ValidatesOnTargetUpdated="True" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                    
+                </TextBox>
 
                 <TextBox
                     Grid.Row="0"
                     Grid.Column="4"
                     Grid.ColumnSpan="1"
-                    Margin="4"
+                    Margin="6,12"
                     Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                    Text="{Binding Context.Info.GameVersion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    materialDesign:HintAssist.Hint="Game Version" />
+                    materialDesign:HintAssist.Hint="Game Version">
+
+                    <TextBox.Text>
+                        <Binding
+                            Path="Context.Info.GameVersion"
+                            Mode="TwoWay"
+                            UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <rules:RequiredRule
+                                    ValidatesOnTargetUpdated="True" />
+                                <rules:VersionRule
+                                    ValidatesOnTargetUpdated="True" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+
+                </TextBox>
 
                 <TextBox
                     Grid.Row="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="5"
-                    Margin="4"
+                    Margin="6,12"
                     Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                    Text="{Binding Context.Info.EventNamespace, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     materialDesign:HintAssist.Hint="Namespace"
-                    materialDesign:HintAssist.HelperText="Used for events, file names, etc." />
+                    materialDesign:HintAssist.HelperText="Used for events, file names, etc.">
+                 
+                    <TextBox.Text>
+                        <Binding
+                            Path="Context.Info.EventNamespace"
+                            Mode="TwoWay"
+                            UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <rules:RequiredRule
+                                    ValidatesOnTargetUpdated="True" />
+                                <rules:NameRule
+                                    ValidatesOnTargetUpdated="True" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+
+                </TextBox>
             </Grid>
         </ScrollViewer>
     </materialDesign:Card>
