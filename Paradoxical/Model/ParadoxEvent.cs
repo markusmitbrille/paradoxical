@@ -69,7 +69,7 @@ namespace Paradoxical.Model
         public ParadoxEvent()
         {
             id = Context.Current.Events.Count == 0 ? 1 : Context.Current.Events.Max(evt => evt.Id) + 1;
-            name = $"Event_{Guid.NewGuid().ToString()[0..4]}";
+            name = $"event_{Guid.NewGuid().ToString()[0..4]}";
             title = "Hello World";
             description = "Hello World!";
         }

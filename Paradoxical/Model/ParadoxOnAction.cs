@@ -41,7 +41,7 @@ namespace Paradoxical.Model
 
         public ParadoxOnAction()
         {
-            name = $"OnAction_{Guid.NewGuid().ToString()[0..4]}";
+            name = $"on_action_{Guid.NewGuid().ToString()[0..4]}";
         }
 
         public ParadoxOnAction(ParadoxOnAction other) : this()

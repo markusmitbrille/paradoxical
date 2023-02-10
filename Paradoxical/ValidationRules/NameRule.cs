@@ -26,7 +26,7 @@ namespace Paradoxical.ValidationRules
             return ValidationResult.ValidResult;
         }
 
-        [GeneratedRegex(@"^[a-zA-Z]\w+$")]
+        [GeneratedRegex(@"^[a-z][a-z0-9_]*$")]
         private static partial Regex GetNameRegex();
     }
 }

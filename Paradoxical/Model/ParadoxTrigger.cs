@@ -17,7 +17,7 @@ namespace Paradoxical.Model
 
         public ParadoxTrigger()
         {
-            name = $"Trigger_{Guid.NewGuid().ToString()[0..4]}";
+            name = $"trigger_{Guid.NewGuid().ToString()[0..4]}";
             code = "# some trigger";
         }
 

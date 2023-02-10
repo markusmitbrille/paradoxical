@@ -17,7 +17,7 @@ namespace Paradoxical.Model
 
         public ParadoxEffect()
         {
-            name = $"Effect_{Guid.NewGuid().ToString()[0..4]}";
+            name = $"effect_{Guid.NewGuid().ToString()[0..4]}";
             code = "# some effect";
         }
 
