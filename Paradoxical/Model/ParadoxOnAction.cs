@@ -19,6 +19,9 @@ namespace Paradoxical.Model
         private bool vanilla = false;
 
         [ObservableProperty]
+        private int chance = 100;
+
+        [ObservableProperty]
         private ObservableCollection<ParadoxEvent> events = new();
 
         [ObservableProperty]
@@ -45,6 +48,7 @@ namespace Paradoxical.Model
         {
             name = other.name;
             vanilla = other.vanilla;
+            chance = other.chance;
 
             // aggregate association, therefore shallow copy
             Events = new(other.Events);
@@ -345,6 +349,9 @@ namespace Paradoxical.Model
 
             writer.Indent().WriteLine("random_events = {");
             ParadoxText.IndentLevel++;
+
+            writer.Indent().WriteLine($"chance_to_happen = {Chance}");
+            writer.WriteLine();
 
             foreach (ParadoxEvent evt in Events)
             {

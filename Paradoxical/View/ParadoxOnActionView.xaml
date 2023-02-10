@@ -80,26 +80,61 @@
                 materialDesign:ElevationAssist.Elevation="Dp4">
                 <Expander
                     Padding="8"
-                    Header="Events &amp; On-Actions"
+                    Header="Events"
                     IsExpanded="True">
 
-                    <Grid>
+                    <StackPanel>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
-                                Width="*" />
-                            <ColumnDefinition
-                                Width="*" />
-                        </Grid.ColumnDefinitions>
+                        <Grid>
 
-                        <Grid.RowDefinitions>
-                            <RowDefinition
-                                Height="400" />
-                        </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="2*" />
+                                <ColumnDefinition
+                                    Width="3*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox
+                                Grid.Column="0"
+                                Margin="6,12"
+                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                materialDesign:HintAssist.Hint="Chance"
+                                materialDesign:HintAssist.HelperText="Chance for any random event to happen.">
+                              
+                                <TextBox.Text>
+                                    <Binding
+                                        Path="Chance"
+                                        Mode="TwoWay"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <rules:RequiredRule
+                                                ValidatesOnTargetUpdated="True" />
+                                            <rules:IntRule
+                                                ValidatesOnTargetUpdated="True" />
+                                            <rules:IntRangeRule
+                                                Min="0"
+                                                Max="100"
+                                                ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            
+                            </TextBox>
+
+                            <Slider
+                                Grid.Column="1"
+                                Margin="6,12"
+                                VerticalAlignment="Center"
+                                Style="{DynamicResource MaterialDesignDiscreteSlider}"
+                                Minimum="0"
+                                Maximum="100"
+                                TickFrequency="1"
+                                TickPlacement="None"
+                                Value="{Binding Chance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        </Grid>
 
                         <Grid
-                            Grid.Row="0"
-                            Grid.Column="0"
                             Margin="4">
 
                             <Grid.RowDefinitions>
@@ -122,6 +157,7 @@
 
                                 <ItemsControl
                                     Margin="0,-4"
+                                    MinHeight="100"
                                     ItemsSource="{Binding Events}">
 
                                     <ItemsControl.Style>
@@ -239,9 +275,23 @@
 
                         </Grid>
 
+                    </StackPanel>
+
+                </Expander>
+            </materialDesign:Card>
+
+            <materialDesign:Card
+                Margin="20,10"
+                Padding="8,14"
+                materialDesign:ElevationAssist.Elevation="Dp4">
+                <Expander
+                    Padding="8"
+                    Header="On-Actions"
+                    IsExpanded="False">
+
+                    <StackPanel>
+
                         <Grid
-                            Grid.Row="0"
-                            Grid.Column="1"
                             Margin="4">
 
                             <Grid.RowDefinitions>
@@ -264,6 +314,7 @@
 
                                 <ItemsControl
                                     Margin="0,-4"
+                                    MinHeight="100"
                                     ItemsSource="{Binding OnActions}">
 
                                     <ItemsControl.Style>
@@ -381,7 +432,7 @@
 
                         </Grid>
 
-                    </Grid>
+                    </StackPanel>
 
                 </Expander>
             </materialDesign:Card>
