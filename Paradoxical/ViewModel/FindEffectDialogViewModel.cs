@@ -24,6 +24,7 @@ namespace Paradoxical.ViewModel
         private ObservableCollection<ParadoxEffect>? blacklist;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SubmitCommand))]
         private ParadoxEffect? selected;
 
         public FindEffectDialogViewModel()
@@ -39,7 +40,7 @@ namespace Paradoxical.ViewModel
             { return; }
 
             view?.Refresh();
-            Selected = (ParadoxEffect?)(view?.CurrentItem);
+            Selected = view?.Cast<ParadoxEffect>().FirstOrDefault();
 
             if (Blacklist != null)
             {
@@ -50,7 +51,7 @@ namespace Paradoxical.ViewModel
         private void BlacklistCollectionChangedHandler(object? sender, NotifyCollectionChangedEventArgs e)
         {
             view?.Refresh();
-            Selected = (ParadoxEffect?)(view?.CurrentItem);
+            Selected = view?.Cast<ParadoxEffect>().FirstOrDefault();
         }
 
         private void FilterPropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
@@ -62,7 +63,7 @@ namespace Paradoxical.ViewModel
             { return; }
 
             view?.Refresh();
-            Selected = (ParadoxEffect?)(view?.CurrentItem);
+            Selected = view?.Cast<ParadoxEffect>().FirstOrDefault();
         }
 
         private void ItemsPropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
@@ -74,7 +75,7 @@ namespace Paradoxical.ViewModel
             view.Filter = FilterItems;
 
             view?.Refresh();
-            Selected = (ParadoxEffect?)(view?.CurrentItem);
+            Selected = view?.Cast<ParadoxEffect>().FirstOrDefault();
         }
 
         private bool FilterItems(object obj)

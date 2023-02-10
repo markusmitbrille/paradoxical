@@ -20,6 +20,8 @@
     <UserControl.Resources>
         <converters:MathConverter
             x:Key="MathConverter" />
+        <converters:VisibilityConverter
+            x:Key="VisibilityConverter" />
     </UserControl.Resources>
 
     <UserControl.InputBindings>
@@ -47,8 +49,8 @@
                 DockPanel.Dock="Right"
                 Margin="8"
                 Style="{DynamicResource MaterialDesignFloatingActionSecondaryButton}"
+                Visibility="{Binding Selected, Converter={StaticResource VisibilityConverter}, FallbackValue=Collapsed}"
                 Command="{Binding SubmitCommand}"
-                CommandParameter="{Binding}"
                 Content="{materialDesign:PackIcon Kind=Check}"
                 ToolTip="Submit"
                 HorizontalAlignment="Right"
@@ -56,12 +58,11 @@
 
             <Button
                 DockPanel.Dock="Left"
+                Margin="8"
                 Style="{DynamicResource MaterialDesignFloatingActionSecondaryButton}"
                 Command="{Binding CancelCommand}"
-                CommandParameter="{Binding}"
                 Content="{materialDesign:PackIcon Kind=Close}"
                 ToolTip="Cancel"
-                Margin="8,8,8,8"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center" />
 
@@ -113,7 +114,8 @@
                 Grid.Row="1"
                 Margin="0,20,0,0"
                 ItemsSource="{Binding Items}"
-                SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                IsSynchronizedWithCurrentItem="True">
 
                 <ListBox.Resources>
                     <Style
