@@ -30,6 +30,9 @@ namespace Paradoxical.ViewModel
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(GoToEffectCommand))]
         private EffectPageViewModel effectPage = new();
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(GoToOnActionCommand))]
+        private OnActionPageViewModel onActionPage = new();
 
         [ObservableProperty]
         private PageViewModelBase selectedPage;
@@ -43,6 +46,14 @@ namespace Paradoxical.ViewModel
 
         public MainViewModel()
         {
+            Pages.Add(infoPage);
+            Pages.Add(eventPage);
+            Pages.Add(triggerPage);
+            Pages.Add(effectPage);
+            Pages.Add(onActionPage);
+            Pages.Add(aboutPage);
+
+            // navigate to info page
             selectedPage = infoPage;
         }
 
@@ -52,12 +63,14 @@ namespace Paradoxical.ViewModel
             EventPage = new();
             TriggerPage = new();
             EffectPage = new();
+            OnActionPage = new();
 
             Pages.Clear();
             Pages.Add(InfoPage);
             Pages.Add(EventPage);
             Pages.Add(TriggerPage);
             Pages.Add(EffectPage);
+            Pages.Add(OnActionPage);
             Pages.Add(AboutPage);
 
             // navigate to info page
@@ -318,6 +331,15 @@ namespace Paradoxical.ViewModel
             SelectedPage = EffectPage;
         }
 
+        [RelayCommand]
+        private void GoToOnActionPage()
+        {
+            if (OnActionPage == null)
+            { return; }
+
+            SelectedPage = OnActionPage;
+        }
+
         [RelayCommand(CanExecute = nameof(CanGoToEvent))]
         private void GoToEvent(ParadoxEvent evt)
         {
@@ -355,6 +377,20 @@ namespace Paradoxical.ViewModel
         private bool CanGoToEffect(ParadoxEffect eff)
         {
             if (SelectedPage == EffectPage && EffectPage.SelectedEffect == eff)
+            { return false; }
+
+            return true;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanGoToOnAction))]
+        private void GoToOnAction(ParadoxOnAction act)
+        {
+            SelectedPage = OnActionPage;
+            OnActionPage.SelectedOnAction = act;
+        }
+        private bool CanGoToOnAction(ParadoxOnAction act)
+        {
+            if (SelectedPage == OnActionPage && OnActionPage.SelectedOnAction == act)
             { return false; }
 
             return true;

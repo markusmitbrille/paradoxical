@@ -28,7 +28,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="View\OnActionPageView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\ParadoxEffectView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\ParadoxOnActionView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

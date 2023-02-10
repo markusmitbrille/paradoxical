@@ -19,6 +19,8 @@ namespace Paradoxical.Model
         private ObservableCollection<ParadoxTrigger> triggers = new();
         [ObservableProperty]
         private ObservableCollection<ParadoxEffect> effects = new();
+        [ObservableProperty]
+        private ObservableCollection<ParadoxOnAction> onActions = new();
 
         public string EventFileEntryName => $"events/{Info.EventNamespace}_events.txt";
         public string TriggerFileEntryName => $"common/scripted_triggers/{Info.EventNamespace}_triggers.txt";

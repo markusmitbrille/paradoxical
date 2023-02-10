@@ -24,5 +24,9 @@
         DataType="{x:Type viewmodel:EffectPageViewModel}">
         <view:EffectPageView />
     </DataTemplate>
+    <DataTemplate
+        DataType="{x:Type viewmodel:OnActionPageViewModel}">
+        <view:OnActionPageView />
+    </DataTemplate>
 
 </ResourceDictionary>

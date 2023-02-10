@@ -61,6 +61,9 @@
         <KeyBinding
             Command="{Binding GoToEffectPageCommand}"
             Gesture="ALT+4" />
+        <KeyBinding
+            Command="{Binding GoToOnActionPageCommand}"
+            Gesture="ALT+5" />
     </Window.InputBindings>
 
     <materialDesign:DialogHost
