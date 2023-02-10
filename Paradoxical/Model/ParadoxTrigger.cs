@@ -25,6 +25,7 @@ namespace Paradoxical.Model
         {
             name = other.name;
             code = other.name;
+            tooltip = other.tooltip;
         }
 
         public void Write(TextWriter writer)

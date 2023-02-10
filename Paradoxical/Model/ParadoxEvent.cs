@@ -76,6 +76,8 @@ namespace Paradoxical.Model
 
         public ParadoxEvent(ParadoxEvent other) : this()
         {
+            name = other.name;
+            weight = other.weight;
             title = other.title;
             description = other.description;
             theme = other.theme;
@@ -91,8 +93,13 @@ namespace Paradoxical.Model
             lowerCenterPortrait = new(other.lowerCenterPortrait);
 
             trigger = other.trigger;
+            triggerTooltip = other.triggerTooltip;
+
             immediateEffect = other.immediateEffect;
+            immediateTooltip = other.immediateTooltip;
+
             afterEffect = other.afterEffect;
+            afterTooltip = other.afterTooltip;
 
             // aggregate association, therefore shallow copy
             Triggers = new(other.Triggers);

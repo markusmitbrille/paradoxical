@@ -79,6 +79,8 @@ namespace Paradoxical.Model
 
             triggeredEvent = other.triggeredEvent;
             triggeredEventScope = other.triggeredEventScope;
+            triggeredEventMinDays = other.triggeredEventMinDays;
+            triggeredEventMaxDays = other.triggeredEventMaxDays;
 
             trigger = other.trigger;
             effect = other.effect;
