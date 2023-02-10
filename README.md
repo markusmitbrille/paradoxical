@@ -2,8 +2,6 @@
 An unofficial content creation toolkit for PDX games, specifically CK III.
 
 TODO:
-+ on actions
-  + chance to happen
 + decisions
 + find dialog polish
   + add visibility binding and converter to submit button (so it turns invisible, not just transparent, when canexecute = false)
