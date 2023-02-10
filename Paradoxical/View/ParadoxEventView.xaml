@@ -27,6 +27,62 @@
                     Header="Display"
                     IsExpanded="True">
                     <StackPanel>
+
+                        <Grid
+                            >
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="3*" />
+                                <ColumnDefinition
+                                    Width="2*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox
+                                Grid.Column="0"
+                                Margin="6,12"
+                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                materialDesign:HintAssist.Hint="Name"
+                                materialDesign:HintAssist.HelperText="Element name, only used by Paradoxical.">
+
+                                <TextBox.Text>
+                                    <Binding
+                                        Path="Name"
+                                        Mode="TwoWay"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <rules:RequiredRule
+                                                ValidatesOnTargetUpdated="True" />
+                                            <rules:NameRule
+                                                ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                                
+                            </TextBox>
+
+                            <TextBox
+                                Grid.Column="1"
+                                Margin="6,12"
+                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                materialDesign:HintAssist.Hint="Weight"
+                                materialDesign:HintAssist.HelperText="Random weight in on_actions.">
+
+                                <TextBox.Text>
+                                    <Binding
+                                        Path="Weight"
+                                        Mode="TwoWay"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <rules:RequiredRule
+                                                ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+
+                            </TextBox>
+
+                        </Grid>
                         
                         <view:ScriptBox
                             Margin="6,12"
@@ -76,6 +132,10 @@
                                     Path="Description"
                                     Mode="TwoWay"
                                     UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <rules:RequiredRule
+                                            ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
                                 </Binding>
                             </view:ScriptBox.Text>
 

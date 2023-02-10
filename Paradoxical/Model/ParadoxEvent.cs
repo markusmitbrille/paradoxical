@@ -18,6 +18,10 @@ namespace Paradoxical.Model
         private int id = 0;
 
         [ObservableProperty]
+        private string name = "";
+        [ObservableProperty]
+        private int weight = 100;
+        [ObservableProperty]
         private string title = "";
         [ObservableProperty]
         private string description = "";
@@ -65,7 +69,9 @@ namespace Paradoxical.Model
         public ParadoxEvent()
         {
             id = Context.Current.Events.Count == 0 ? 1 : Context.Current.Events.Max(evt => evt.Id) + 1;
-            title = $"Event_{Guid.NewGuid().ToString()[0..4]}";
+            name = $"Event_{Guid.NewGuid().ToString()[0..4]}";
+            title = "Hello World";
+            description = "Hello World!";
         }
 
         public ParadoxEvent(ParadoxEvent other) : this()
