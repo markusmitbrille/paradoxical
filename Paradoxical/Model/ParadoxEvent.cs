@@ -335,7 +335,7 @@ namespace Paradoxical.Model
         {
             if (Theme == string.Empty)
             {
-                writer.Indent().WriteLine("# no theme");
+                writer.Indent().WriteLine($"theme = default");
                 return;
             }
 
