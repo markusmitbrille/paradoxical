@@ -23,22 +23,13 @@
             HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
 
-                <view:ScriptBox
+                <TextBox
                     Margin="6,12"
-                    Style="{DynamicResource MaterialDesignRichTextBox}"
-                    AcceptsReturn="False"
+                    Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                     materialDesign:HintAssist.Hint="Name"
-                    materialDesign:HintAssist.IsFloating="True"
-                    materialDesign:HintAssist.HelperText="Element name, used in script."
-                    materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                    materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                    materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                    materialDesign:HintAssist.HelperText="Element name, used in script.">
 
-                    <view:ScriptBox.TextFormatter>
-                        <formatters:CodeFormatter />
-                    </view:ScriptBox.TextFormatter>
-
-                    <view:ScriptBox.Text>
+                    <TextBox.Text>
                         <Binding
                             Path="Name"
                             Mode="TwoWay"
@@ -50,9 +41,9 @@
                                     ValidatesOnTargetUpdated="True" />
                             </Binding.ValidationRules>
                         </Binding>
-                    </view:ScriptBox.Text>
+                    </TextBox.Text>
 
-                </view:ScriptBox>
+                </TextBox>
 
                 <view:ScriptBox
                     Height="120"
