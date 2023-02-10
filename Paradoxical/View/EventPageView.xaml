@@ -81,7 +81,6 @@
         </materialDesign:Card>
 
         <view:ParadoxEventView
-            Margin="20,10"
             DataContext="{Binding SelectedEvent}"
             Visibility="{Binding Converter={StaticResource VisibilityConverter}}" />
 
