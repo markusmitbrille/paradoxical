@@ -145,7 +145,8 @@
                             Margin="6,12"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding Theme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Theme" />
+                            materialDesign:HintAssist.Hint="Theme"
+                            materialDesign:HintAssist.HelperText="Determines background, icon, sound, and environment."/>
                     
                     </StackPanel>
                 </Expander>
@@ -589,7 +590,8 @@
                             Margin="6,12"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding TriggerTooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Tooltip" />
+                            materialDesign:HintAssist.Hint="Tooltip"
+                            materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated trigger text." />
 
                     </Grid>
                     
@@ -782,7 +784,8 @@
                             Margin="6,12"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding ImmediateTooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Tooltip" />
+                            materialDesign:HintAssist.Hint="Tooltip"
+                            materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated effect text." />
 
                     </Grid>
                     
@@ -975,7 +978,8 @@
                             Margin="6,12"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding AfterTooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Tooltip" />
+                            materialDesign:HintAssist.Hint="Tooltip"
+                            materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated effect text." />
 
                     </Grid>
 

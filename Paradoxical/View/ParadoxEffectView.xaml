@@ -29,6 +29,7 @@
                     AcceptsReturn="False"
                     materialDesign:HintAssist.Hint="Name"
                     materialDesign:HintAssist.IsFloating="True"
+                    materialDesign:HintAssist.HelperText="Element name, used in script."
                     materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
                     materialDesign:TextFieldAssist.HasOutlinedTextField="True"
                     materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
@@ -86,7 +87,8 @@
                     Margin="6,12"
                     Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                     Text="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    materialDesign:HintAssist.Hint="Tooltip">
+                    materialDesign:HintAssist.Hint="Tooltip"
+                    materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated effect text.">
                 </TextBox>
 
             </StackPanel>
