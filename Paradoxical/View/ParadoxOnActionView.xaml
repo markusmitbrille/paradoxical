@@ -29,27 +29,46 @@
                     IsExpanded="True">
                     <StackPanel>
 
-                        <TextBox
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                            materialDesign:HintAssist.Hint="Name"
-                            materialDesign:HintAssist.HelperText="Element name, used in script.">
+                        <Grid>
 
-                            <TextBox.Text>
-                                <Binding
-                                    Path="Name"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <rules:RequiredRule
-                                            ValidatesOnTargetUpdated="True" />
-                                        <rules:NameRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="*" />
+                                <ColumnDefinition
+                                    Width="auto" />
+                            </Grid.ColumnDefinitions>
 
-                        </TextBox>
+                            <TextBox
+                                Grid.Column="0"
+                                Margin="6,12"
+                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                                materialDesign:HintAssist.Hint="Name"
+                                materialDesign:HintAssist.HelperText="Element name, used in script.">
+
+                                <TextBox.Text>
+                                    <Binding
+                                        Path="Name"
+                                        Mode="TwoWay"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <rules:RequiredRule
+                                                ValidatesOnTargetUpdated="True" />
+                                            <rules:NameRule
+                                                ValidatesOnTargetUpdated="True" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+
+                            </TextBox>
+
+                            <CheckBox
+                                Grid.Column="1"
+                                Margin="6,12"
+                                Content="Vanilla"
+                                IsChecked="{Binding Vanilla, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=false}"
+                                ToolTip="If checked, no prefix will be added to the name, allowing for vanilla elements to be overwritten. This should only be used to add events or on-actions to vanilla on-actions." />
+
+                        </Grid>
 
                     </StackPanel>
                 </Expander>

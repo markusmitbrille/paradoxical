@@ -25,6 +25,7 @@ namespace Paradoxical.Model
         public string EventFileEntryName => $"events/{Info.EventNamespace}_events.txt";
         public string TriggerFileEntryName => $"common/scripted_triggers/{Info.EventNamespace}_triggers.txt";
         public string EffectFileEntryName => $"common/scripted_effects/{Info.EventNamespace}_effects.txt";
+        public string OnActionFileEntryName => $"common/on_action/{Info.EventNamespace}_on_actions.txt";
         public string LocalizationFileEntryName => $"localization/english/{Info.EventNamespace}_l_english.yml";
 
         public void Export(string dir, string file)
@@ -59,6 +60,12 @@ namespace Paradoxical.Model
             using (StreamWriter writer = new(effectEntry.Open()))
             {
                 WriteEffectFile(writer);
+            }
+
+            ZipArchiveEntry onActionEntry = archive.CreateEntry(OnActionFileEntryName);
+            using (StreamWriter writer = new(onActionEntry.Open()))
+            {
+                WriteOnActionFile(writer);
             }
 
             ZipArchiveEntry localizationEntry = archive.CreateEntry(LocalizationFileEntryName);
@@ -113,6 +120,19 @@ namespace Paradoxical.Model
                 ParadoxText.IndentLevel = 0;
 
                 eff.Write(writer);
+                writer.WriteLine();
+            }
+        }
+
+        private void WriteOnActionFile(TextWriter writer)
+        {
+            writer.WriteLine($"# {Info.Name} On-Actions");
+
+            foreach (ParadoxOnAction act in OnActions)
+            {
+                ParadoxText.IndentLevel = 0;
+
+                act.Write(writer);
                 writer.WriteLine();
             }
         }
