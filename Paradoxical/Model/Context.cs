@@ -1,13 +1,20 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.IO.Compression;
 using System.Text;
 
 namespace Paradoxical.Model
 {
     public partial class Context : ObservableObject
     {
+        private const string EVENTS_DIR = "events";
+        private const string COMMON_DIR = "common";
+        private const string SCRIPTED_TRIGGERS_DIR = "common/scripted_triggers";
+        private const string SCRIPTED_EFFECTS_DIR = "common/scripted_effects";
+        private const string ON_ACTION_DIR = "common/on_action";
+        private const string LOCALIZATION_DIR = "localization";
+        private const string LOCALIZATION_ENGLISH_DIR = "localization/english";
+
         public static Context Current { get; set; } = new();
 
         [ObservableProperty]
@@ -22,57 +29,139 @@ namespace Paradoxical.Model
         [ObservableProperty]
         private ObservableCollection<ParadoxOnAction> onActions = new();
 
-        public string EventFileEntryName => $"events/{Info.EventNamespace}_events.txt";
-        public string TriggerFileEntryName => $"common/scripted_triggers/{Info.EventNamespace}_triggers.txt";
-        public string EffectFileEntryName => $"common/scripted_effects/{Info.EventNamespace}_effects.txt";
-        public string OnActionFileEntryName => $"common/on_action/{Info.EventNamespace}_on_actions.txt";
-        public string LocalizationFileEntryName => $"localization/english/{Info.EventNamespace}_l_english.yml";
+        public string EventsFile => $"{Info.EventNamespace}_events.txt";
+        public string TriggersFile => $"{Info.EventNamespace}_triggers.txt";
+        public string EffectsFile => $"{Info.EventNamespace}_effects.txt";
+        public string OnActionsFile => $"{Info.EventNamespace}_on_actions.txt";
+        public string LocFile => $"{Info.EventNamespace}_l_english.yml";
 
         public void Export(string dir, string file)
         {
-            using (StreamWriter writer = new(Path.Combine(dir, $"{file}.mod"), false))
+            UTF8Encoding encoding = new(true);
+            FileStreamOptions options = new()
+            {
+                Mode = FileMode.Create,
+                Access = FileAccess.Write,
+            };
+
+            Directory.CreateDirectory(GetModDir(dir, file));
+            Directory.CreateDirectory(GetEventsDir(dir, file));
+            Directory.CreateDirectory(GetCommonDir(dir, file));
+            Directory.CreateDirectory(GetScriptedTriggersDir(dir, file));
+            Directory.CreateDirectory(GetScriptedEffectsDir(dir, file));
+            Directory.CreateDirectory(GetOnActionDir(dir, file));
+            Directory.CreateDirectory(GetLocDir(dir, file));
+            Directory.CreateDirectory(GetEnglishLocDir(dir, file));
+
+            using (StreamWriter writer = new(GetModFilePath(dir, file), encoding, options))
             {
                 WriteModFile(writer, dir, file);
             }
 
-            using FileStream stream = new(Path.Combine(dir, $"{file}.zip"), FileMode.Create);
-            using ZipArchive archive = new(stream, ZipArchiveMode.Update, false, Encoding.UTF8);
-
-            ZipArchiveEntry descriptorEntry = archive.CreateEntry("descriptor.mod");
-            using (StreamWriter writer = new(descriptorEntry.Open()))
+            using (StreamWriter writer = new(GetDescriptorFilePath(dir, file), encoding, options))
             {
                 WriteModFile(writer, dir, file);
             }
 
-            ZipArchiveEntry eventEntry = archive.CreateEntry(EventFileEntryName);
-            using (StreamWriter writer = new(eventEntry.Open()))
+            using (StreamWriter writer = new(GetEventsFilePath(dir, file), encoding, options))
             {
-                WriteEventFile(writer);
+                WriteEventsFile(writer);
             }
 
-            ZipArchiveEntry triggerEntry = archive.CreateEntry(TriggerFileEntryName);
-            using (StreamWriter writer = new(triggerEntry.Open()))
+            using (StreamWriter writer = new(GetTriggersFilePath(dir, file), encoding, options))
             {
-                WriteTriggerFile(writer);
+                WriteTriggersFile(writer);
             }
 
-            ZipArchiveEntry effectEntry = archive.CreateEntry(EffectFileEntryName);
-            using (StreamWriter writer = new(effectEntry.Open()))
+            using (StreamWriter writer = new(GetEffectsFilePath(dir, file), encoding, options))
             {
-                WriteEffectFile(writer);
+                WriteEffectsFile(writer);
             }
 
-            ZipArchiveEntry onActionEntry = archive.CreateEntry(OnActionFileEntryName);
-            using (StreamWriter writer = new(onActionEntry.Open()))
+            using (StreamWriter writer = new(GetOnActionsFilePath(dir, file), encoding, options))
             {
-                WriteOnActionFile(writer);
+                WriteOnActionsFile(writer);
             }
 
-            ZipArchiveEntry localizationEntry = archive.CreateEntry(LocalizationFileEntryName);
-            using (StreamWriter writer = new(localizationEntry.Open()))
+            using (StreamWriter writer = new(GetLocFilePath(dir, file), encoding, options))
             {
                 WriteLocFile(writer);
             }
+        }
+
+        private static string GetModDir(string dir, string file)
+        {
+            return Path.Combine(dir, file);
+        }
+
+        private static string GetEventsDir(string dir, string file)
+        {
+            return Path.Combine(dir, file, EVENTS_DIR);
+        }
+
+        private static string GetCommonDir(string dir, string file)
+        {
+            return Path.Combine(dir, file, COMMON_DIR);
+        }
+
+        private static string GetScriptedTriggersDir(string dir, string file)
+        {
+            return Path.Combine(dir, file, SCRIPTED_TRIGGERS_DIR);
+        }
+
+        private static string GetScriptedEffectsDir(string dir, string file)
+        {
+            return Path.Combine(dir, file, SCRIPTED_EFFECTS_DIR);
+        }
+
+        private static string GetOnActionDir(string dir, string file)
+        {
+            return Path.Combine(dir, file, ON_ACTION_DIR);
+        }
+
+        private static string GetLocDir(string dir, string file)
+        {
+            return Path.Combine(dir, file, LOCALIZATION_DIR);
+        }
+
+        private static string GetEnglishLocDir(string dir, string file)
+        {
+            return Path.Combine(dir, file, LOCALIZATION_ENGLISH_DIR);
+        }
+
+        private static string GetModFilePath(string dir, string file)
+        {
+            return Path.Combine(dir, $"{file}.mod");
+        }
+
+        private static string GetDescriptorFilePath(string dir, string file)
+        {
+            return Path.Combine(dir, file, "descriptor.mod");
+        }
+
+        private string GetEventsFilePath(string dir, string file)
+        {
+            return Path.Combine(GetEventsDir(dir, file), EventsFile);
+        }
+
+        private string GetTriggersFilePath(string dir, string file)
+        {
+            return Path.Combine(GetScriptedTriggersDir(dir, file), TriggersFile);
+        }
+
+        private string GetEffectsFilePath(string dir, string file)
+        {
+            return Path.Combine(GetScriptedEffectsDir(dir, file), EffectsFile);
+        }
+
+        private string GetOnActionsFilePath(string dir, string file)
+        {
+            return Path.Combine(GetOnActionDir(dir, file), OnActionsFile);
+        }
+
+        private string GetLocFilePath(string dir, string file)
+        {
+            return Path.Combine(GetEnglishLocDir(dir, file), LocFile);
         }
 
         private void WriteModFile(TextWriter writer, string dir, string file)
@@ -83,7 +172,7 @@ namespace Paradoxical.Model
             Info.Write(writer, dir, file);
         }
 
-        private void WriteEventFile(TextWriter writer)
+        private void WriteEventsFile(TextWriter writer)
         {
             writer.WriteLine($"# {Info.Name} Events");
             writer.WriteLine($"namespace = {Info.EventNamespace}");
@@ -98,7 +187,7 @@ namespace Paradoxical.Model
             }
         }
 
-        private void WriteTriggerFile(TextWriter writer)
+        private void WriteTriggersFile(TextWriter writer)
         {
             writer.WriteLine($"# {Info.Name} Triggers");
 
@@ -111,7 +200,7 @@ namespace Paradoxical.Model
             }
         }
 
-        private void WriteEffectFile(TextWriter writer)
+        private void WriteEffectsFile(TextWriter writer)
         {
             writer.WriteLine($"# {Info.Name} Effects");
 
@@ -124,7 +213,7 @@ namespace Paradoxical.Model
             }
         }
 
-        private void WriteOnActionFile(TextWriter writer)
+        private void WriteOnActionsFile(TextWriter writer)
         {
             writer.WriteLine($"# {Info.Name} On-Actions");
 

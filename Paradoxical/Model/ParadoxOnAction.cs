@@ -378,12 +378,10 @@ namespace Paradoxical.Model
                 if (act.Vanilla == false)
                 {
                     writer.Indent().WriteLine($"{Context.Current.Info.EventNamespace}_{act.Name}");
-                    ParadoxText.IndentLevel++;
                 }
                 else
                 {
                     writer.Indent().WriteLine($"{act.Name}");
-                    ParadoxText.IndentLevel++;
                 }
             }
 

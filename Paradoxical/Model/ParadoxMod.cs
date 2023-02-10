@@ -33,7 +33,7 @@ tags={{
 }}
 name=""{Name}""
 supported_version=""{GameVersion}""
-path=""mod/{file}.zip"""
+path=""mod/{file}"""
                 );
         }
     }
