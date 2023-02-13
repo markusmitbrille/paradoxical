@@ -28,5 +28,9 @@
         DataType="{x:Type viewmodel:OnActionPageViewModel}">
         <view:OnActionPageView />
     </DataTemplate>
+    <DataTemplate
+        DataType="{x:Type viewmodel:DecisionPageViewModel}">
+        <view:DecisionPageView />
+    </DataTemplate>
 
 </ResourceDictionary>

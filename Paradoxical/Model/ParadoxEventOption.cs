@@ -69,7 +69,7 @@ namespace Paradoxical.Model
 
         public ParadoxEventOption()
         {
-            name = $"New Option";
+            name = $"Hello World";
         }
 
         public ParadoxEventOption(ParadoxEventOption other) : this()
@@ -90,6 +90,7 @@ namespace Paradoxical.Model
             Effects = new(other.Effects);
 
             aiBaseChance = other.aiBaseChance;
+
             aiBoldnessTargetModifier = other.aiBoldnessTargetModifier;
             aiCompassionTargetModifier = other.aiCompassionTargetModifier;
             aiGreedTargetModifier = other.aiGreedTargetModifier;

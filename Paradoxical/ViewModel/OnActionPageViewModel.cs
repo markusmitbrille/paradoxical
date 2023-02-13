@@ -65,7 +65,7 @@ namespace Paradoxical.ViewModel
 
             if (MessageBox.Show(
                 "Are you sure?",
-                "Remove Trigger",
+                "Remove On-Action",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning,
                 MessageBoxResult.Yes) != MessageBoxResult.Yes)

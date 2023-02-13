@@ -33,6 +33,9 @@ namespace Paradoxical.ViewModel
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(GoToOnActionCommand))]
         private OnActionPageViewModel onActionPage = new();
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(GoToDecisionCommand))]
+        private DecisionPageViewModel decisionPage = new();
 
         [ObservableProperty]
         private PageViewModelBase selectedPage;
@@ -51,6 +54,7 @@ namespace Paradoxical.ViewModel
             Pages.Add(triggerPage);
             Pages.Add(effectPage);
             Pages.Add(onActionPage);
+            Pages.Add(decisionPage);
             Pages.Add(aboutPage);
 
             // navigate to info page
@@ -64,6 +68,7 @@ namespace Paradoxical.ViewModel
             TriggerPage = new();
             EffectPage = new();
             OnActionPage = new();
+            DecisionPage = new();
 
             Pages.Clear();
             Pages.Add(InfoPage);
@@ -71,6 +76,7 @@ namespace Paradoxical.ViewModel
             Pages.Add(TriggerPage);
             Pages.Add(EffectPage);
             Pages.Add(OnActionPage);
+            Pages.Add(DecisionPage);
             Pages.Add(AboutPage);
 
             // navigate to info page
@@ -340,6 +346,15 @@ namespace Paradoxical.ViewModel
             SelectedPage = OnActionPage;
         }
 
+        [RelayCommand]
+        private void GoToDecisionPage()
+        {
+            if (DecisionPage == null)
+            { return; }
+
+            SelectedPage = DecisionPage;
+        }
+
         [RelayCommand(CanExecute = nameof(CanGoToEvent))]
         private void GoToEvent(ParadoxEvent evt)
         {
@@ -391,6 +406,20 @@ namespace Paradoxical.ViewModel
         private bool CanGoToOnAction(ParadoxOnAction act)
         {
             if (SelectedPage == OnActionPage && OnActionPage.SelectedOnAction == act)
+            { return false; }
+
+            return true;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanGoToDecision))]
+        private void GoToDecision(ParadoxDecision dec)
+        {
+            SelectedPage = DecisionPage;
+            DecisionPage.SelectedDecision = dec;
+        }
+        private bool CanGoToDecision(ParadoxDecision dec)
+        {
+            if (SelectedPage == DecisionPage && DecisionPage.SelectedDecision == dec)
             { return false; }
 
             return true;

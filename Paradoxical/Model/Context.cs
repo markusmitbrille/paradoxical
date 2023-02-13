@@ -12,6 +12,7 @@ namespace Paradoxical.Model
         private const string SCRIPTED_TRIGGERS_DIR = "common/scripted_triggers";
         private const string SCRIPTED_EFFECTS_DIR = "common/scripted_effects";
         private const string ON_ACTION_DIR = "common/on_action";
+        private const string DECISIONS_DIR = "common/decisions";
         private const string LOCALIZATION_DIR = "localization";
         private const string LOCALIZATION_ENGLISH_DIR = "localization/english";
 
@@ -28,11 +29,14 @@ namespace Paradoxical.Model
         private ObservableCollection<ParadoxEffect> effects = new();
         [ObservableProperty]
         private ObservableCollection<ParadoxOnAction> onActions = new();
+        [ObservableProperty]
+        private ObservableCollection<ParadoxDecision> decisions = new();
 
         public string EventsFile => $"{Info.EventNamespace}_events.txt";
         public string TriggersFile => $"{Info.EventNamespace}_triggers.txt";
         public string EffectsFile => $"{Info.EventNamespace}_effects.txt";
         public string OnActionsFile => $"{Info.EventNamespace}_on_actions.txt";
+        public string DecisionsFile => $"{Info.EventNamespace}_decisions.txt";
         public string LocFile => $"{Info.EventNamespace}_l_english.yml";
 
         public void Export(string dir, string file)
@@ -50,6 +54,7 @@ namespace Paradoxical.Model
             Directory.CreateDirectory(GetScriptedTriggersDir(dir, file));
             Directory.CreateDirectory(GetScriptedEffectsDir(dir, file));
             Directory.CreateDirectory(GetOnActionDir(dir, file));
+            Directory.CreateDirectory(GetDecisionsDir(dir, file));
             Directory.CreateDirectory(GetLocDir(dir, file));
             Directory.CreateDirectory(GetEnglishLocDir(dir, file));
 
@@ -81,6 +86,11 @@ namespace Paradoxical.Model
             using (StreamWriter writer = new(GetOnActionsFilePath(dir, file), encoding, options))
             {
                 WriteOnActionsFile(writer);
+            }
+
+            using (StreamWriter writer = new(GetDecisionsFilePath(dir, file), encoding, options))
+            {
+                WriteDecisionsFile(writer);
             }
 
             using (StreamWriter writer = new(GetLocFilePath(dir, file), encoding, options))
@@ -117,6 +127,11 @@ namespace Paradoxical.Model
         private static string GetOnActionDir(string dir, string file)
         {
             return Path.Combine(dir, file, ON_ACTION_DIR);
+        }
+
+        private static string GetDecisionsDir(string dir, string file)
+        {
+            return Path.Combine(dir, file, DECISIONS_DIR);
         }
 
         private static string GetLocDir(string dir, string file)
@@ -157,6 +172,11 @@ namespace Paradoxical.Model
         private string GetOnActionsFilePath(string dir, string file)
         {
             return Path.Combine(GetOnActionDir(dir, file), OnActionsFile);
+        }
+
+        private string GetDecisionsFilePath(string dir, string file)
+        {
+            return Path.Combine(GetDecisionsDir(dir, file), DecisionsFile);
         }
 
         private string GetLocFilePath(string dir, string file)
@@ -226,6 +246,19 @@ namespace Paradoxical.Model
             }
         }
 
+        private void WriteDecisionsFile(TextWriter writer)
+        {
+            writer.WriteLine($"# {Info.Name} Decisions");
+
+            foreach (ParadoxDecision dec in Decisions)
+            {
+                ParadoxText.IndentLevel = 0;
+
+                dec.Write(writer);
+                writer.WriteLine();
+            }
+        }
+
         private void WriteLocFile(TextWriter writer)
         {
             writer.WriteLine("l_english:");
@@ -252,6 +285,14 @@ namespace Paradoxical.Model
             foreach (ParadoxEvent evt in Events)
             {
                 evt.WriteLoc(writer);
+                writer.WriteLine();
+            }
+
+            writer.WriteLine("# decisions");
+
+            foreach (ParadoxDecision dec in Decisions)
+            {
+                dec.WriteLoc(writer);
                 writer.WriteLine();
             }
         }

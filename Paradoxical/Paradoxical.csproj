@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.7.1" />
@@ -28,10 +32,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="View\DecisionPageView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\OnActionPageView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\ParadoxEffectView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\ParadoxDecisionView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\ParadoxOnActionView.xaml.cs">
