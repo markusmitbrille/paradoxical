@@ -1,4 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using MaterialDesignThemes.Wpf;
+using Paradoxical.View;
+using Paradoxical.ViewModel;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -36,6 +40,13 @@ namespace Paradoxical.Model
         private int prestigeCost;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(CreateTriggeredEventCommand))]
+        [NotifyCanExecuteChangedFor(nameof(RemoveTriggeredEventCommand))]
+        private ParadoxEvent? triggeredEvent = null;
+        [ObservableProperty]
+        private string triggeredEventScope = "";
+
+        [ObservableProperty]
         private string isShownTrigger = "";
         [ObservableProperty]
         private ObservableCollection<ParadoxTrigger> isShownTriggers = new();
@@ -51,14 +62,11 @@ namespace Paradoxical.Model
         private ObservableCollection<ParadoxEffect> effects = new();
 
         [ObservableProperty]
+        private bool aiPotential = true;
+        [ObservableProperty]
         private bool aiGoal = false;
         [ObservableProperty]
         private int aiCheckFrequency = 0;
-
-        [ObservableProperty]
-        private string aiPotentialTrigger = "";
-        [ObservableProperty]
-        private ObservableCollection<ParadoxTrigger> aiPotentialTriggers = new();
 
         [ObservableProperty]
         private int aiBaseChance = 0;
@@ -111,6 +119,9 @@ namespace Paradoxical.Model
             pietyCost = other.pietyCost;
             prestigeCost = other.prestigeCost;
 
+            triggeredEvent = other.triggeredEvent;
+            triggeredEventScope = other.triggeredEventScope;
+
             isShownTrigger = other.isShownTrigger;
             isValidTrigger = other.isValidTrigger;
             effect = other.effect;
@@ -123,12 +134,7 @@ namespace Paradoxical.Model
             aiGoal = other.aiGoal;
             aiCheckFrequency = other.aiCheckFrequency;
 
-            aiPotentialTrigger = other.aiPotentialTrigger;
-
             aiBaseChance = other.aiBaseChance;
-
-            // aggregate association, therefore shallow copy
-            aiPotentialTriggers = new(other.aiPotentialTriggers);
 
             aiBoldnessTargetModifier = other.aiBoldnessTargetModifier;
             aiCompassionTargetModifier = other.aiCompassionTargetModifier;
@@ -141,6 +147,178 @@ namespace Paradoxical.Model
             aiZealTargetModifier = other.aiZealTargetModifier;
 
             aiChance = other.aiChance;
+        }
+
+        [RelayCommand]
+        private void CreateIsShownTrigger()
+        {
+            ParadoxTrigger trg = new();
+
+            Context.Current.Triggers.Add(trg);
+            IsShownTriggers.Add(trg);
+        }
+
+        [RelayCommand]
+        private void RemoveIsShownTrigger(ParadoxTrigger trg)
+        {
+            IsShownTriggers.Remove(trg);
+        }
+
+        [RelayCommand]
+        private async void FindIsShownTrigger()
+        {
+            FindTriggerDialogViewModel vm = new()
+            {
+                DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
+                Items = Context.Current.Triggers,
+                Blacklist = new(IsShownTriggers),
+            };
+            FindTriggerDialogView dlg = new()
+            {
+                DataContext = vm,
+            };
+
+            await DialogHost.Show(dlg, MainWindow.ROOT_DIALOG_IDENTIFIER);
+
+            if (vm.DialogResult != true)
+            { return; }
+
+            if (vm.Selected == null)
+            { return; }
+
+            IsShownTriggers.Add(vm.Selected);
+        }
+
+        [RelayCommand]
+        private void CreateIsValidTrigger()
+        {
+            ParadoxTrigger trg = new();
+
+            Context.Current.Triggers.Add(trg);
+            IsValidTriggers.Add(trg);
+        }
+
+        [RelayCommand]
+        private void RemoveIsValidTrigger(ParadoxTrigger trg)
+        {
+            IsValidTriggers.Remove(trg);
+        }
+
+        [RelayCommand]
+        private async void FindIsValidTrigger()
+        {
+            FindTriggerDialogViewModel vm = new()
+            {
+                DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
+                Items = Context.Current.Triggers,
+                Blacklist = new(IsValidTriggers),
+            };
+            FindTriggerDialogView dlg = new()
+            {
+                DataContext = vm,
+            };
+
+            await DialogHost.Show(dlg, MainWindow.ROOT_DIALOG_IDENTIFIER);
+
+            if (vm.DialogResult != true)
+            { return; }
+
+            if (vm.Selected == null)
+            { return; }
+
+            IsValidTriggers.Add(vm.Selected);
+        }
+
+        [RelayCommand]
+        private void CreateEffect()
+        {
+            ParadoxEffect eff = new();
+
+            Context.Current.Effects.Add(eff);
+            Effects.Add(eff);
+        }
+
+        [RelayCommand(CanExecute = nameof(CanRemoveEffect))]
+        private void RemoveEffect(ParadoxEffect eff)
+        {
+            Effects.Remove(eff);
+        }
+        private bool CanRemoveEffect(ParadoxEffect eff)
+        {
+            return Effects.Contains(eff);
+        }
+
+        [RelayCommand]
+        private async void FindEffect()
+        {
+            FindEffectDialogViewModel vm = new()
+            {
+                DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
+                Items = Context.Current.Effects,
+                Blacklist = new(Effects),
+            };
+            FindEffectDialogView dlg = new()
+            {
+                DataContext = vm,
+            };
+
+            await DialogHost.Show(dlg, MainWindow.ROOT_DIALOG_IDENTIFIER);
+
+            if (vm.DialogResult != true)
+            { return; }
+
+            if (vm.Selected == null)
+            { return; }
+
+            Effects.Add(vm.Selected);
+        }
+
+        [RelayCommand(CanExecute = nameof(CanCreateTriggeredEvent))]
+        private void CreateTriggeredEvent()
+        {
+            ParadoxEvent evt = new();
+
+            Context.Current.Events.Add(evt);
+            TriggeredEvent = evt;
+        }
+        private bool CanCreateTriggeredEvent()
+        {
+            return TriggeredEvent == null;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanRemoveTriggeredEvent))]
+        private void RemoveTriggeredEvent()
+        {
+            TriggeredEvent = null;
+        }
+        private bool CanRemoveTriggeredEvent()
+        {
+            return TriggeredEvent != null;
+        }
+
+        [RelayCommand]
+        private async void FindTriggeredEvent()
+        {
+            FindEventDialogViewModel vm = new()
+            {
+                DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
+                Items = Context.Current.Events,
+                Selected = TriggeredEvent,
+            };
+            FindEventDialogView dlg = new()
+            {
+                DataContext = vm,
+            };
+
+            await DialogHost.Show(dlg, MainWindow.ROOT_DIALOG_IDENTIFIER);
+
+            if (vm.DialogResult != true)
+            { return; }
+
+            if (vm.Selected == null)
+            { return; }
+
+            TriggeredEvent = vm.Selected;
         }
 
         public void Write(TextWriter writer)
