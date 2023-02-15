@@ -74,13 +74,23 @@
 
                 </view:ScriptBox>
 
-                <TextBox
+                <view:ScriptBox
                     Margin="6,12"
-                    Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                    Style="{DynamicResource MaterialDesignRichTextBox}"
                     Text="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    AcceptsReturn="False"
                     materialDesign:HintAssist.Hint="Tooltip"
-                    materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated effect text.">
-                </TextBox>
+                    materialDesign:HintAssist.IsFloating="True"
+                    materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated effect text."
+                    materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                    materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+                    materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+
+                    <view:ScriptBox.TextFormatter>
+                        <formatters:EventTextFormatter />
+                    </view:ScriptBox.TextFormatter>
+
+                </view:ScriptBox>
 
             </StackPanel>
         </ScrollViewer>

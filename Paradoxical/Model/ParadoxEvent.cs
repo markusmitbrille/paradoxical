@@ -45,24 +45,15 @@ namespace Paradoxical.Model
         [ObservableProperty]
         private string trigger = "";
         [ObservableProperty]
-        private string triggerTooltip = "";
-
-        [ObservableProperty]
         private ObservableCollection<ParadoxTrigger> triggers = new();
 
         [ObservableProperty]
         private string immediateEffect = "";
         [ObservableProperty]
-        private string immediateTooltip = "";
-
-        [ObservableProperty]
         private ObservableCollection<ParadoxEffect> immediateEffects = new();
 
         [ObservableProperty]
         private string afterEffect = "";
-        [ObservableProperty]
-        private string afterTooltip = "";
-
         [ObservableProperty]
         private ObservableCollection<ParadoxEffect> afterEffects = new();
 
@@ -93,13 +84,8 @@ namespace Paradoxical.Model
             lowerCenterPortrait = new(other.lowerCenterPortrait);
 
             trigger = other.trigger;
-            triggerTooltip = other.triggerTooltip;
-
             immediateEffect = other.immediateEffect;
-            immediateTooltip = other.immediateTooltip;
-
             afterEffect = other.afterEffect;
-            afterTooltip = other.afterTooltip;
 
             // aggregate association, therefore shallow copy
             Triggers = new(other.Triggers);
@@ -444,24 +430,9 @@ namespace Paradoxical.Model
             }
             else
             {
-                if (TriggerTooltip != string.Empty)
-                {
-                    writer.Indent().WriteLine("custom_tooltip = {");
-                    ParadoxText.IndentLevel++;
-
-                    writer.Indent().WriteLine($"text = {Context.Current.Info.EventNamespace}.{Id}.trigger.tt");
-                    writer.WriteLine();
-                }
-
                 foreach (string line in Trigger.Split(Environment.NewLine))
                 {
                     writer.Indent().WriteLine(line);
-                }
-
-                if (TriggerTooltip != string.Empty)
-                {
-                    ParadoxText.IndentLevel--;
-                    writer.Indent().WriteLine("}");
                 }
             }
 
@@ -502,24 +473,9 @@ namespace Paradoxical.Model
             }
             else
             {
-                if (ImmediateTooltip != string.Empty)
-                {
-                    writer.Indent().WriteLine("custom_tooltip = {");
-                    ParadoxText.IndentLevel++;
-
-                    writer.Indent().WriteLine($"text = {Context.Current.Info.EventNamespace}.{Id}.immediate.tt");
-                    writer.WriteLine();
-                }
-
                 foreach (string line in ImmediateEffect.Split(Environment.NewLine))
                 {
                     writer.Indent().WriteLine(line);
-                }
-
-                if (ImmediateTooltip != string.Empty)
-                {
-                    ParadoxText.IndentLevel--;
-                    writer.Indent().WriteLine("}");
                 }
             }
 
@@ -560,24 +516,9 @@ namespace Paradoxical.Model
             }
             else
             {
-                if (AfterTooltip != string.Empty)
-                {
-                    writer.Indent().WriteLine("custom_tooltip = {");
-                    ParadoxText.IndentLevel++;
-
-                    writer.Indent().WriteLine($"text = {Context.Current.Info.EventNamespace}.{Id}.after.tt");
-                    writer.WriteLine();
-                }
-
                 foreach (string line in AfterEffect.Split(Environment.NewLine))
                 {
                     writer.Indent().WriteLine(line);
-                }
-
-                if (AfterTooltip != string.Empty)
-                {
-                    ParadoxText.IndentLevel--;
-                    writer.Indent().WriteLine("}");
                 }
             }
 
@@ -619,19 +560,6 @@ namespace Paradoxical.Model
         {
             writer.WriteLocLine($"{Context.Current.Info.EventNamespace}.{Id}.t", Title);
             writer.WriteLocLine($"{Context.Current.Info.EventNamespace}.{Id}.d", Description);
-
-            if (TriggerTooltip != string.Empty)
-            {
-                writer.WriteLocLine($"{Context.Current.Info.EventNamespace}.{Id}.trigger.tt", TriggerTooltip);
-            }
-            if (ImmediateTooltip != string.Empty)
-            {
-                writer.WriteLocLine($"{Context.Current.Info.EventNamespace}.{Id}.immediate.tt", ImmediateTooltip);
-            }
-            if (AfterTooltip != string.Empty)
-            {
-                writer.WriteLocLine($"{Context.Current.Info.EventNamespace}.{Id}.after.tt", AfterTooltip);
-            }
 
             foreach (ParadoxEventOption opt in Options)
             {

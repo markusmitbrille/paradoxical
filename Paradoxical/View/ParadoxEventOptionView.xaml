@@ -35,14 +35,23 @@
                 Height="236" />
         </Grid.RowDefinitions>
 
-        <TextBox
+        <view:ScriptBox
             Grid.Row="0"
             Grid.Column="0"
             Margin="6,12"
-            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-            materialDesign:HintAssist.Hint="Name">
+            Style="{DynamicResource MaterialDesignRichTextBox}"
+            AcceptsReturn="False"
+            materialDesign:HintAssist.Hint="Name"
+            materialDesign:HintAssist.IsFloating="True"
+            materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+            materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+            materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
 
-            <TextBox.Text>
+            <view:ScriptBox.TextFormatter>
+                <formatters:EventTextFormatter />
+            </view:ScriptBox.TextFormatter>
+
+            <view:ScriptBox.Text>
                 <Binding
                     Path="Name"
                     Mode="TwoWay"
@@ -52,17 +61,29 @@
                             ValidatesOnTargetUpdated="True" />
                     </Binding.ValidationRules>
                 </Binding>
-            </TextBox.Text>
+            </view:ScriptBox.Text>
 
-        </TextBox>
+        </view:ScriptBox>
 
-        <TextBox
+        <view:ScriptBox
             Grid.Row="0"
             Grid.Column="1"
             Margin="6,12"
-            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+            Style="{DynamicResource MaterialDesignRichTextBox}"
             Text="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            materialDesign:HintAssist.Hint="Tooltip" />
+            AcceptsReturn="False"
+            materialDesign:HintAssist.Hint="Tooltip"
+            materialDesign:HintAssist.IsFloating="True"
+            materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated text."
+            materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+            materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+            materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+
+            <view:ScriptBox.TextFormatter>
+                <formatters:EventTextFormatter />
+            </view:ScriptBox.TextFormatter>
+
+        </view:ScriptBox>
 
         <Grid
             Grid.Row="1"
