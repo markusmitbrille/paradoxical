@@ -11,6 +11,8 @@ namespace Paradoxical.Model
 {
     public partial class ParadoxDecision : ObservableObject
     {
+        private const string DEFAULT_PICTURE = "gfx/interface/illustrations/decisions/decision_misc.dds";
+
         public Context CurrentContext => Context.Current;
 
         [ObservableProperty]
@@ -330,7 +332,7 @@ namespace Paradoxical.Model
             writer.Indent().WriteLine($"desc = {Context.Current.Info.EventNamespace}.{Name}.d");
             writer.Indent().WriteLine($"selection_tooltip = {Context.Current.Info.EventNamespace}.{Name}.tt");
             writer.Indent().WriteLine($"confirm_text = {Context.Current.Info.EventNamespace}.{Name}.c");
-            writer.Indent().WriteLine($"picture = \"{Picture}\"");
+            writer.Indent().WriteLine($"picture = \"{(Picture == string.Empty ? DEFAULT_PICTURE : Picture)}\"");
 
             writer.WriteLine();
 
@@ -477,9 +479,9 @@ namespace Paradoxical.Model
 
         private void WriteEffect(TextWriter writer)
         {
-            if (Effect == string.Empty && Effects.Count == 0)
+            if (Effect == string.Empty && Effects.Count == 0 && TriggeredEvent == null)
             {
-                writer.Indent().WriteLine("# no special effect");
+                writer.Indent().WriteLine("# no effect");
                 return;
             }
 

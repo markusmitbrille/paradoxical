@@ -12,6 +12,8 @@ namespace Paradoxical.Model
 {
     public partial class ParadoxEvent : ObservableObject
     {
+        private const string DEFAULT_THEME = "default";
+
         public Context CurrentContext => Context.Current;
 
         [ObservableProperty]
@@ -284,10 +286,7 @@ namespace Paradoxical.Model
 
             writer.Indent().WriteLine($"title = {Context.Current.Info.EventNamespace}.{Id}.t");
             writer.Indent().WriteLine($"desc = {Context.Current.Info.EventNamespace}.{Id}.d");
-
-            writer.WriteLine();
-
-            WriteTheme(writer);
+            writer.Indent().WriteLine($"theme = {(Theme == string.Empty ? DEFAULT_THEME : Theme)}");
 
             writer.WriteLine();
 
@@ -315,17 +314,6 @@ namespace Paradoxical.Model
 
             ParadoxText.IndentLevel--;
             writer.Indent().WriteLine("}");
-        }
-
-        private void WriteTheme(TextWriter writer)
-        {
-            if (Theme == string.Empty)
-            {
-                writer.Indent().WriteLine($"theme = default");
-                return;
-            }
-
-            writer.Indent().WriteLine($"theme = {Theme}");
         }
 
         private void WriteLeftPortrait(TextWriter writer)
