@@ -29,6 +29,8 @@ namespace Paradoxical.Model
         private string description = "";
         [ObservableProperty]
         private string theme = "";
+        [ObservableProperty]
+        private bool hidden = false;
 
         [ObservableProperty]
         private ObservableCollection<ParadoxEventOption> options = new();
@@ -282,19 +284,30 @@ namespace Paradoxical.Model
 
             writer.Indent().WriteLine($"type = character_event");
 
-            writer.WriteLine();
+            if (Hidden)
+            {
+                writer.Indent().WriteLine("hidden = yes");
+            }
 
-            writer.Indent().WriteLine($"title = {Context.Current.Info.EventNamespace}.{Id}.t");
-            writer.Indent().WriteLine($"desc = {Context.Current.Info.EventNamespace}.{Id}.d");
-            writer.Indent().WriteLine($"theme = {(Theme == string.Empty ? DEFAULT_THEME : Theme)}");
+            if (Hidden == false)
+            {
+                writer.WriteLine();
 
-            writer.WriteLine();
+                writer.Indent().WriteLine($"title = {Context.Current.Info.EventNamespace}.{Id}.t");
+                writer.Indent().WriteLine($"desc = {Context.Current.Info.EventNamespace}.{Id}.d");
+                writer.Indent().WriteLine($"theme = {(Theme == string.Empty ? DEFAULT_THEME : Theme)}");
+            }
 
-            WriteLeftPortrait(writer);
-            WriteRightPortrait(writer);
-            WriteLowerLeftPortrait(writer);
-            WriteLowerCenterPortrait(writer);
-            WriteLowerRightPortrait(writer);
+            if (Hidden == false)
+            {
+                writer.WriteLine();
+
+                WriteLeftPortrait(writer);
+                WriteRightPortrait(writer);
+                WriteLowerLeftPortrait(writer);
+                WriteLowerCenterPortrait(writer);
+                WriteLowerRightPortrait(writer);
+            }
 
             writer.WriteLine();
 
@@ -308,9 +321,12 @@ namespace Paradoxical.Model
 
             WriteAfter(writer);
 
-            writer.WriteLine();
+            if (Hidden == false)
+            {
+                writer.WriteLine();
 
-            WriteOptions(writer);
+                WriteOptions(writer);
+            }
 
             ParadoxText.IndentLevel--;
             writer.Indent().WriteLine("}");

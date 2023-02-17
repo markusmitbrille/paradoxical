@@ -36,6 +36,8 @@
                                     Width="3*" />
                                 <ColumnDefinition
                                     Width="2*" />
+                                <ColumnDefinition
+                                    Width="auto" />
                             </Grid.ColumnDefinitions>
 
                             <TextBox
@@ -84,6 +86,13 @@
 
                             </TextBox>
 
+                            <CheckBox
+                                Grid.Column="2"
+                                Margin="6,12"
+                                Content="Hidden"
+                                IsChecked="{Binding Hidden, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=false}"
+                                ToolTip="If an event is hidden, fields relating to appearance and options are ignored." />
+
                         </Grid>
 
                         <view:ScriptBox
@@ -105,10 +114,6 @@
                                     Path="Title"
                                     Mode="TwoWay"
                                     UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <rules:RequiredRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
                                 </Binding>
                             </view:ScriptBox.Text>
 
@@ -134,10 +139,6 @@
                                     Path="Description"
                                     Mode="TwoWay"
                                     UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <rules:RequiredRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
                                 </Binding>
                             </view:ScriptBox.Text>
 
