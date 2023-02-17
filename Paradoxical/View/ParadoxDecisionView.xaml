@@ -150,6 +150,25 @@
                             Text="{Binding Picture, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Picture"/>
 
+                        <TextBox
+                            Margin="6,12"
+                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            materialDesign:HintAssist.Hint="Cooldown in days">
+
+                            <TextBox.Text>
+                                <Binding
+                                    Path="Cooldown"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <rules:IntRule
+                                            ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+
+                        </TextBox>
+
                         <Grid>
 
                             <Grid.ColumnDefinitions>
@@ -455,7 +474,7 @@
                 materialDesign:ElevationAssist.Elevation="Dp4">
                 <Expander
                     Padding="8"
-                    Header="Is-Valid Triggers"
+                    Header="Is-Valid"
                     IsExpanded="False">
 
                     <Grid>
@@ -618,6 +637,190 @@
                             Margin="6,12"
                             Style="{DynamicResource MaterialDesignRichTextBox}"
                             Text="{Binding IsValidTrigger, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Custom Trigger"
+                            materialDesign:HintAssist.IsFloating="True"
+                            materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                            materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+                            materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                            <view:ScriptBox.TextFormatter>
+                                <formatters:CodeFormatter />
+                            </view:ScriptBox.TextFormatter>
+                        </view:ScriptBox>
+
+                    </Grid>
+
+                </Expander>
+            </materialDesign:Card>
+
+            <materialDesign:Card
+                Margin="20,10"
+                Padding="8,14"
+                materialDesign:ElevationAssist.Elevation="Dp4">
+                <Expander
+                    Padding="8"
+                    Header="Is-Valid Failure"
+                    IsExpanded="False">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="*" />
+                            <ColumnDefinition
+                                Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="400" />
+                        </Grid.RowDefinitions>
+
+                        <Grid
+                            Grid.Column="0"
+                            Margin="4">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition
+                                    Height="*" />
+                                <RowDefinition
+                                    Height="auto" />
+                                <RowDefinition
+                                    Height="auto" />
+                            </Grid.RowDefinitions>
+
+                            <ScrollViewer
+                                Grid.Row="0">
+
+                                <ScrollViewer.Resources>
+                                    <Style
+                                        TargetType="ScrollBar"
+                                        BasedOn="{StaticResource MaterialDesignScrollBarMinimal}" />
+                                </ScrollViewer.Resources>
+
+                                <ItemsControl
+                                    Margin="0,-4"
+                                    ItemsSource="{Binding IsValidFailureTriggers}">
+
+                                    <ItemsControl.Style>
+                                        <Style
+                                            TargetType="ItemsControl">
+                                            <Style.Triggers>
+                                                <Trigger
+                                                    Property="HasItems"
+                                                    Value="false">
+                                                    <Setter
+                                                        Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate>
+                                                                <TextBlock
+                                                                    VerticalAlignment="Center"
+                                                                    HorizontalAlignment="Center"
+                                                                    Foreground="LightGray"
+                                                                    FontStyle="Italic"
+                                                                    Text="No triggers selected ..." />
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ItemsControl.Style>
+
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate
+                                            DataType="model:ParadoxTrigger">
+
+                                            <Grid
+                                                Margin="0,4">
+
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition />
+                                                    <ColumnDefinition
+                                                        Width="Auto" />
+                                                    <ColumnDefinition
+                                                        Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock
+                                                    Grid.Column="0"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Style="{DynamicResource MaterialDesignButtonTextBlock}"
+                                                    Text="{Binding Name}" />
+
+                                                <Button
+                                                    Grid.Column="1"
+                                                    Width="25"
+                                                    Height="25"
+                                                    Margin="4"
+                                                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                                    materialDesign:ElevationAssist.Elevation="Dp3"
+                                                    Command="{Binding DataContext.GoToTriggerCommand, RelativeSource={RelativeSource AncestorType=view:MainWindow}}"
+                                                    CommandParameter="{Binding}"
+                                                    Content="{materialDesign:PackIcon Kind=ArrowRight}"
+                                                    ToolTip="Go to Trigger" />
+
+                                                <Button
+                                                    Grid.Column="2"
+                                                    Width="25"
+                                                    Height="25"
+                                                    Margin="4"
+                                                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                                    materialDesign:ElevationAssist.Elevation="Dp3"
+                                                    Command="{Binding DataContext.RemoveIsValidFailureTriggerCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                    CommandParameter="{Binding}"
+                                                    Content="{materialDesign:PackIcon Kind=Remove}"
+                                                    ToolTip="Remove Trigger" />
+
+                                            </Grid>
+
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+
+                                </ItemsControl>
+
+                            </ScrollViewer>
+
+                            <Separator
+                                Grid.Row="1"
+                                Style="{DynamicResource MaterialDesignDarkSeparator}" />
+
+                            <StackPanel
+                                Grid.Row="2"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+
+                                <Button
+                                    Width="25"
+                                    Height="25"
+                                    Margin="4"
+                                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                    materialDesign:ElevationAssist.Elevation="Dp3"
+                                    Command="{Binding FindIsValidFailureTriggerCommand}"
+                                    Content="{materialDesign:PackIcon Kind=Search}"
+                                    ToolTip="Find Trigger" />
+
+                                <Button
+                                    Width="25"
+                                    Height="25"
+                                    Margin="4"
+                                    Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                                    materialDesign:ElevationAssist.Elevation="Dp3"
+                                    Command="{Binding CreateIsValidFailureTriggerCommand}"
+                                    CommandParameter="{Binding}"
+                                    Content="{materialDesign:PackIcon Kind=Add}"
+                                    ToolTip="Create Trigger" />
+
+                            </StackPanel>
+
+                        </Grid>
+
+                        <view:ScriptBox
+                            Grid.Column="1"
+                            Margin="6,12"
+                            Style="{DynamicResource MaterialDesignRichTextBox}"
+                            Text="{Binding IsValidFailureTrigger, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Custom Trigger"
                             materialDesign:HintAssist.IsFloating="True"
                             materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"

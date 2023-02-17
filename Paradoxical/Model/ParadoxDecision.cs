@@ -35,6 +35,9 @@ namespace Paradoxical.Model
         private int sortOrder = 0;
 
         [ObservableProperty]
+        private int cooldown = 0;
+
+        [ObservableProperty]
         private int goldCost;
         [ObservableProperty]
         private int pietyCost;
@@ -57,6 +60,11 @@ namespace Paradoxical.Model
         private string isValidTrigger = "";
         [ObservableProperty]
         private ObservableCollection<ParadoxTrigger> isValidTriggers = new();
+
+        [ObservableProperty]
+        private string isValidFailureTrigger = "";
+        [ObservableProperty]
+        private ObservableCollection<ParadoxTrigger> isValidFailureTriggers = new();
 
         [ObservableProperty]
         private string effect = "";
@@ -232,6 +240,46 @@ namespace Paradoxical.Model
         }
 
         [RelayCommand]
+        private void CreateIsValidFailureTrigger()
+        {
+            ParadoxTrigger trg = new();
+
+            Context.Current.Triggers.Add(trg);
+            IsValidFailureTriggers.Add(trg);
+        }
+
+        [RelayCommand]
+        private void RemoveIsValidFailureTrigger(ParadoxTrigger trg)
+        {
+            IsValidFailureTriggers.Remove(trg);
+        }
+
+        [RelayCommand]
+        private async void FindIsValidFailureTrigger()
+        {
+            FindTriggerDialogViewModel vm = new()
+            {
+                DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
+                Items = Context.Current.Triggers,
+                Blacklist = new(IsValidFailureTriggers),
+            };
+            FindTriggerDialogView dlg = new()
+            {
+                DataContext = vm,
+            };
+
+            await DialogHost.Show(dlg, MainWindow.ROOT_DIALOG_IDENTIFIER);
+
+            if (vm.DialogResult != true)
+            { return; }
+
+            if (vm.Selected == null)
+            { return; }
+
+            IsValidFailureTriggers.Add(vm.Selected);
+        }
+
+        [RelayCommand]
         private void CreateEffect()
         {
             ParadoxEffect eff = new();
@@ -341,6 +389,10 @@ namespace Paradoxical.Model
 
             writer.WriteLine();
 
+            WriteCooldown(writer);
+
+            writer.WriteLine();
+
             WriteCost(writer);
 
             writer.WriteLine();
@@ -353,6 +405,10 @@ namespace Paradoxical.Model
 
             writer.WriteLine();
 
+            WriteIsValidFailureTrigger(writer);
+
+            writer.WriteLine();
+
             WriteEffect(writer);
 
             writer.WriteLine();
@@ -361,6 +417,18 @@ namespace Paradoxical.Model
 
             ParadoxText.IndentLevel--;
             writer.Indent().WriteLine("}");
+        }
+
+        private void WriteCooldown(TextWriter writer)
+        {
+            if (Cooldown <= 0)
+            {
+                writer.Indent().WriteLine("# no cooldown");
+                return;
+            }
+
+            writer.Indent().WriteLine($"cooldown = {{ days = {Cooldown} }}");
+
         }
 
         private void WriteCost(TextWriter writer)
@@ -468,6 +536,49 @@ namespace Paradoxical.Model
                 writer.Indent().WriteLine("# scripted triggers");
 
                 foreach (ParadoxTrigger trg in IsValidTriggers)
+                {
+                    writer.Indent().WriteLine($"{Context.Current.Info.EventNamespace}_{trg.Name} = yes");
+                }
+            }
+
+            ParadoxText.IndentLevel--;
+            writer.Indent().WriteLine("}");
+        }
+
+        private void WriteIsValidFailureTrigger(TextWriter writer)
+        {
+            if (IsValidFailureTrigger == string.Empty && IsValidFailureTriggers.Count == 0)
+            {
+                writer.Indent().WriteLine("# no is-valid failure");
+                return;
+            }
+
+            writer.Indent().WriteLine("is_valid_showing_failures_only = {");
+            ParadoxText.IndentLevel++;
+
+            if (IsValidFailureTrigger == string.Empty)
+            {
+                writer.Indent().WriteLine("# no custom trigger");
+            }
+            else
+            {
+                foreach (string line in IsValidFailureTrigger.Split(Environment.NewLine))
+                {
+                    writer.Indent().WriteLine(line);
+                }
+            }
+
+            if (IsValidFailureTriggers.Count == 0)
+            {
+                writer.WriteLine();
+                writer.Indent().WriteLine("# no scripted triggers");
+            }
+            else
+            {
+                writer.WriteLine();
+                writer.Indent().WriteLine("# scripted triggers");
+
+                foreach (ParadoxTrigger trg in IsValidFailureTriggers)
                 {
                     writer.Indent().WriteLine($"{Context.Current.Info.EventNamespace}_{trg.Name} = yes");
                 }
