@@ -40,9 +40,12 @@
             Grid.Column="0"
             Margin="6,12"
             Style="{DynamicResource MaterialDesignRichTextBox}"
+            Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            ToolTip="This is not actually an element name, it is more like the title of an event."
             AcceptsReturn="False"
             materialDesign:HintAssist.Hint="Name"
             materialDesign:HintAssist.IsFloating="True"
+            materialDesign:HintAssist.HelperText="Event option button text."
             materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
             materialDesign:TextFieldAssist.HasOutlinedTextField="True"
             materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
@@ -50,18 +53,6 @@
             <view:ScriptBox.TextFormatter>
                 <formatters:EventTextFormatter />
             </view:ScriptBox.TextFormatter>
-
-            <view:ScriptBox.Text>
-                <Binding
-                    Path="Name"
-                    Mode="TwoWay"
-                    UpdateSourceTrigger="PropertyChanged">
-                    <Binding.ValidationRules>
-                        <rules:RequiredRule
-                            ValidatesOnTargetUpdated="True" />
-                    </Binding.ValidationRules>
-                </Binding>
-            </view:ScriptBox.Text>
 
         </view:ScriptBox>
 
@@ -193,7 +184,8 @@
                     <Binding
                         Path="TriggeredEventMinDays"
                         Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+                        UpdateSourceTrigger="PropertyChanged"
+                        FallbackValue="0">
                         <Binding.ValidationRules>
                             <rules:IntRule
                                 ValidatesOnTargetUpdated="True" />
@@ -214,7 +206,8 @@
                     <Binding
                         Path="TriggeredEventMaxDays"
                         Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+                        UpdateSourceTrigger="PropertyChanged"
+                        FallbackValue="0">
                         <Binding.ValidationRules>
                             <rules:IntRule
                                 ValidatesOnTargetUpdated="True" />
@@ -574,7 +567,8 @@
                     <Binding
                         Path="AiBaseChance"
                         Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+                        UpdateSourceTrigger="PropertyChanged"
+                        FallbackValue="0">
                         <Binding.ValidationRules>
                             <rules:IntRule
                                 ValidatesOnTargetUpdated="True" />
@@ -595,7 +589,8 @@
                     <Binding
                         Path="AiBoldnessTargetModifier"
                         Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+                        UpdateSourceTrigger="PropertyChanged"
+                        FallbackValue="0">
                         <Binding.ValidationRules>
                             <rules:IntRule
                                 ValidatesOnTargetUpdated="True" />
@@ -616,7 +611,8 @@
                     <Binding
                         Path="AiCompassionTargetModifier"
                         Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+                        UpdateSourceTrigger="PropertyChanged"
+                        FallbackValue="0">
                         <Binding.ValidationRules>
                             <rules:IntRule
                                 ValidatesOnTargetUpdated="True" />
@@ -637,7 +633,8 @@
                     <Binding
                         Path="AiGreedTargetModifier"
                         Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+                        UpdateSourceTrigger="PropertyChanged"
+                        FallbackValue="0">
                         <Binding.ValidationRules>
                             <rules:IntRule
                                 ValidatesOnTargetUpdated="True" />
@@ -658,7 +655,8 @@
                     <Binding
                         Path="AiEnergyTargetModifier"
                         Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+                        UpdateSourceTrigger="PropertyChanged"
+                        FallbackValue="0">
                         <Binding.ValidationRules>
                             <rules:IntRule
                                 ValidatesOnTargetUpdated="True" />
@@ -679,7 +677,8 @@
                     <Binding
                         Path="AiHonorTargetModifier"
                         Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+                        UpdateSourceTrigger="PropertyChanged"
+                        FallbackValue="0">
                         <Binding.ValidationRules>
                             <rules:IntRule
                                 ValidatesOnTargetUpdated="True" />
@@ -700,7 +699,8 @@
                     <Binding
                         Path="AiRationalityTargetModifier"
                         Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+                        UpdateSourceTrigger="PropertyChanged"
+                        FallbackValue="0">
                         <Binding.ValidationRules>
                             <rules:IntRule
                                 ValidatesOnTargetUpdated="True" />
@@ -721,7 +721,8 @@
                     <Binding
                         Path="AiSociabilityTargetModifier"
                         Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+                        UpdateSourceTrigger="PropertyChanged"
+                        FallbackValue="0">
                         <Binding.ValidationRules>
                             <rules:IntRule
                                 ValidatesOnTargetUpdated="True" />
@@ -742,7 +743,8 @@
                     <Binding
                         Path="AiVengefulnessTargetModifier"
                         Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+                        UpdateSourceTrigger="PropertyChanged"
+                        FallbackValue="0">
                         <Binding.ValidationRules>
                             <rules:IntRule
                                 ValidatesOnTargetUpdated="True" />
@@ -763,7 +765,8 @@
                     <Binding
                         Path="AiZealTargetModifier"
                         Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+                        UpdateSourceTrigger="PropertyChanged"
+                        FallbackValue="0">
                         <Binding.ValidationRules>
                             <rules:IntRule
                                 ValidatesOnTargetUpdated="True" />

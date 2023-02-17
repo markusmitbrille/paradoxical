@@ -49,7 +49,8 @@
                                     <Binding
                                         Path="Name"
                                         Mode="TwoWay"
-                                        UpdateSourceTrigger="PropertyChanged">
+                                        UpdateSourceTrigger="PropertyChanged"
+                                        FallbackValue="element_name">
                                         <Binding.ValidationRules>
                                             <rules:RequiredRule
                                                 ValidatesOnTargetUpdated="True" />
@@ -100,12 +101,13 @@
                                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                                 materialDesign:HintAssist.Hint="Chance"
                                 materialDesign:HintAssist.HelperText="Chance for any random event to happen.">
-                              
+
                                 <TextBox.Text>
                                     <Binding
                                         Path="Chance"
                                         Mode="TwoWay"
-                                        UpdateSourceTrigger="PropertyChanged">
+                                        UpdateSourceTrigger="PropertyChanged"
+                                        FallbackValue="0">
                                         <Binding.ValidationRules>
                                             <rules:RequiredRule
                                                 ValidatesOnTargetUpdated="True" />
@@ -118,7 +120,7 @@
                                         </Binding.ValidationRules>
                                     </Binding>
                                 </TextBox.Text>
-                            
+
                             </TextBox>
 
                             <Slider
