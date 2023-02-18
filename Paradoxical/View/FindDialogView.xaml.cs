@@ -3,9 +3,9 @@ using System.Windows.Input;
 
 namespace Paradoxical.View
 {
-    public partial class FindTriggerDialogView : UserControl
+    public partial class FindDialogView : UserControl
     {
-        public FindTriggerDialogView()
+        public FindDialogView()
         {
             InitializeComponent();
 

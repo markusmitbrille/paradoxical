@@ -4,28 +4,53 @@ using System.IO;
 
 namespace Paradoxical.Model
 {
-    public partial class ParadoxTrigger : ObservableObject
+    public partial class ParadoxTrigger : ParadoxElement
     {
         public Context CurrentContext => Context.Current;
 
-        [ObservableProperty]
-        private string name = "";
         [ObservableProperty]
         private string code = "";
         [ObservableProperty]
         private string tooltip = "";
 
-        public ParadoxTrigger()
+        public ParadoxTrigger() : base()
         {
-            name = $"trigger_{Guid.NewGuid().ToString()[0..4]}";
+            Context.Current.Triggers.Add(this);
+
             code = "# some trigger";
         }
 
         public ParadoxTrigger(ParadoxTrigger other) : this()
         {
-            name = other.name;
-            code = other.name;
+            code = other.code;
             tooltip = other.tooltip;
+        }
+
+        public override void Delete()
+        {
+            foreach (ParadoxEvent evt in Context.Current.Events)
+            {
+                evt.Triggers.Remove(this);
+
+                foreach (ParadoxEventOption opt in evt.Options)
+                {
+                    opt.Triggers.Remove(this);
+                }
+            }
+
+            foreach (ParadoxDecision dec in Context.Current.Decisions)
+            {
+                dec.IsShownTriggers.Remove(this);
+                dec.IsValidTriggers.Remove(this);
+                dec.IsValidFailureTriggers.Remove(this);
+            }
+
+            foreach (ParadoxOnAction act in Context.Current.OnActions)
+            {
+                act.Triggers.Remove(this);
+            }
+
+            Context.Current.Triggers.Remove(this);
         }
 
         public void Write(TextWriter writer)

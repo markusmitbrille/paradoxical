@@ -2,35 +2,73 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:view="clr-namespace:Paradoxical.View"
-    xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel">
+    xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
+    xmlns:model="clr-namespace:Paradoxical.Model">
+
+    <!--#region Pages -->
 
     <DataTemplate
         DataType="{x:Type viewmodel:AboutPageViewModel}">
         <view:AboutPageView />
     </DataTemplate>
+
     <DataTemplate
         DataType="{x:Type viewmodel:InfoPageViewModel}">
         <view:InfoPageView />
     </DataTemplate>
+
     <DataTemplate
         DataType="{x:Type viewmodel:EventPageViewModel}">
         <view:EventPageView />
     </DataTemplate>
+
     <DataTemplate
         DataType="{x:Type viewmodel:TriggerPageViewModel}">
         <view:TriggerPageView />
     </DataTemplate>
+
     <DataTemplate
         DataType="{x:Type viewmodel:EffectPageViewModel}">
         <view:EffectPageView />
     </DataTemplate>
+
     <DataTemplate
         DataType="{x:Type viewmodel:OnActionPageViewModel}">
         <view:OnActionPageView />
     </DataTemplate>
+
     <DataTemplate
         DataType="{x:Type viewmodel:DecisionPageViewModel}">
         <view:DecisionPageView />
     </DataTemplate>
 
+    <!--#endregion-->
+    <!--#region Models -->
+
+    <DataTemplate
+        DataType="{x:Type model:ParadoxEvent}">
+        <view:ParadoxEventView />
+    </DataTemplate>
+
+    <DataTemplate
+        DataType="{x:Type model:ParadoxTrigger}">
+        <view:ParadoxTriggerView />
+    </DataTemplate>
+
+    <DataTemplate
+        DataType="{x:Type model:ParadoxEffect}">
+        <view:ParadoxEffectView />
+    </DataTemplate>
+
+    <DataTemplate
+        DataType="{x:Type model:ParadoxOnAction}">
+        <view:ParadoxOnActionView />
+    </DataTemplate>
+
+    <DataTemplate
+        DataType="{x:Type model:ParadoxDecision}">
+        <view:ParadoxDecisionView />
+    </DataTemplate>
+
+    <!--#endregion-->
 </ResourceDictionary>

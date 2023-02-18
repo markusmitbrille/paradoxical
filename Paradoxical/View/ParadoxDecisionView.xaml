@@ -371,7 +371,7 @@
                                                     Margin="4"
                                                     Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                     materialDesign:ElevationAssist.Elevation="Dp3"
-                                                    Command="{Binding DataContext.GoToTriggerCommand, RelativeSource={RelativeSource AncestorType=view:MainWindow}}"
+                                                    Command="{Binding DataContext.GoToElementCommand, RelativeSource={RelativeSource AncestorType=view:MainWindow}}"
                                                     CommandParameter="{Binding}"
                                                     Content="{materialDesign:PackIcon Kind=ArrowRight}"
                                                     ToolTip="Go to Trigger" />
@@ -555,7 +555,7 @@
                                                     Margin="4"
                                                     Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                     materialDesign:ElevationAssist.Elevation="Dp3"
-                                                    Command="{Binding DataContext.GoToTriggerCommand, RelativeSource={RelativeSource AncestorType=view:MainWindow}}"
+                                                    Command="{Binding DataContext.GoToElementCommand, RelativeSource={RelativeSource AncestorType=view:MainWindow}}"
                                                     CommandParameter="{Binding}"
                                                     Content="{materialDesign:PackIcon Kind=ArrowRight}"
                                                     ToolTip="Go to Trigger" />
@@ -739,7 +739,7 @@
                                                     Margin="4"
                                                     Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                     materialDesign:ElevationAssist.Elevation="Dp3"
-                                                    Command="{Binding DataContext.GoToTriggerCommand, RelativeSource={RelativeSource AncestorType=view:MainWindow}}"
+                                                    Command="{Binding DataContext.GoToElementCommand, RelativeSource={RelativeSource AncestorType=view:MainWindow}}"
                                                     CommandParameter="{Binding}"
                                                     Content="{materialDesign:PackIcon Kind=ArrowRight}"
                                                     ToolTip="Go to Trigger" />
@@ -863,7 +863,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                 materialDesign:ElevationAssist.Elevation="Dp3"
-                                Command="{Binding DataContext.GoToEventCommand, RelativeSource={RelativeSource AncestorType=view:MainWindow}}"
+                                Command="{Binding DataContext.GoToElementCommand, RelativeSource={RelativeSource AncestorType=view:MainWindow}}"
                                 CommandParameter="{Binding TriggeredEvent}"
                                 Content="{materialDesign:PackIcon Kind=ArrowRight}"
                                 ToolTip="Go to Event" />
@@ -1005,7 +1005,7 @@
                                                         Margin="4"
                                                         Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                         materialDesign:ElevationAssist.Elevation="Dp3"
-                                                        Command="{Binding DataContext.GoToEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type view:MainWindow}}}"
+                                                        Command="{Binding DataContext.GoToElementCommand, RelativeSource={RelativeSource AncestorType={x:Type view:MainWindow}}}"
                                                         CommandParameter="{Binding}"
                                                         Content="{materialDesign:PackIcon Kind=ArrowRight}"
                                                         ToolTip="Go to Effect" />

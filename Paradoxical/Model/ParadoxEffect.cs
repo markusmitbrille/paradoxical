@@ -4,12 +4,10 @@ using System.IO;
 
 namespace Paradoxical.Model
 {
-    public partial class ParadoxEffect : ObservableObject
+    public partial class ParadoxEffect : ParadoxElement
     {
         public Context CurrentContext => Context.Current;
 
-        [ObservableProperty]
-        private string name = "";
         [ObservableProperty]
         private string code = "";
         [ObservableProperty]
@@ -17,17 +15,43 @@ namespace Paradoxical.Model
         [ObservableProperty]
         private bool hidden = false;
 
-        public ParadoxEffect()
+        public ParadoxEffect() : base()
         {
-            name = $"effect_{Guid.NewGuid().ToString()[0..4]}";
+            Context.Current.Effects.Add(this);
+
             code = "# some effect";
         }
 
         public ParadoxEffect(ParadoxEffect other) : this()
         {
-            name = other.name;
-            code = other.name;
+            code = other.code;
             tooltip = other.tooltip;
+        }
+
+        public override void Delete()
+        {
+            foreach (ParadoxEvent evt in Context.Current.Events)
+            {
+                evt.ImmediateEffects.Remove(this);
+                evt.AfterEffects.Remove(this);
+
+                foreach (ParadoxEventOption opt in evt.Options)
+                {
+                    opt.Effects.Remove(this);
+                }
+            }
+
+            foreach (ParadoxDecision dec in Context.Current.Decisions)
+            {
+                dec.Effects.Remove(this);
+            }
+
+            foreach (ParadoxOnAction act in Context.Current.OnActions)
+            {
+                act.Effects.Remove(this);
+            }
+
+            Context.Current.Effects.Remove(this);
         }
 
         public void Write(TextWriter writer)

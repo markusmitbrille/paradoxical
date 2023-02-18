@@ -16,76 +16,7 @@
     d:DesignWidth="800"
     FocusVisualStyle="{x:Null}">
 
-    <UserControl.Resources>
-        <converters:VisibilityConverter
-            x:Key="VisibilityConverter" />
-    </UserControl.Resources>
-
-    <UserControl.InputBindings>
-        <KeyBinding
-            Command="{Binding FindDecisionCommand}"
-            Gesture="CTRL+F" />
-        <KeyBinding
-            Command="{Binding PreviousDecisionCommand}"
-            Gesture="ALT+Left" />
-        <KeyBinding
-            Command="{Binding PreviousDecisionCommand}"
-            Gesture="ALT+Up" />
-        <KeyBinding
-            Command="{Binding NextDecisionCommand}"
-            Gesture="ALT+Right" />
-        <KeyBinding
-            Command="{Binding NextDecisionCommand}"
-            Gesture="ALT+Down" />
-    </UserControl.InputBindings>
-
     <DockPanel>
-
-        <materialDesign:Card
-            DockPanel.Dock="Top"
-            Margin="20,10"
-            Padding="8"
-            materialDesign:ElevationAssist.Elevation="Dp4">
-            <ToolBarTray>
-                <ToolBar
-                    Style="{StaticResource MaterialDesignToolBar}">
-                    <Button
-                        Command="{Binding AddDecisionCommand}"
-                        Content="{materialDesign:PackIcon Kind=Add}"
-                        ToolTip="Add Decision" />
-                    <Button
-                        Command="{Binding DuplicateDecisionCommand}"
-                        Content="{materialDesign:PackIcon Kind=ContentDuplicate}"
-                        ToolTip="Duplicate Decision" />
-                    <Button
-                        Command="{Binding RemoveDecisionCommand}"
-                        Content="{materialDesign:PackIcon Kind=Remove}"
-                        ToolTip="Remove Decision" />
-
-                    <Separator />
-
-                    <Button
-                        Command="{Binding PreviousDecisionCommand}"
-                        Content="{materialDesign:PackIcon Kind=NavigateBefore}"
-                        ToolTip="Previous Decision" />
-                    <Button
-                        Command="{Binding FindDecisionCommand}"
-                        Content="{materialDesign:PackIcon Kind=FileSearch}"
-                        ToolTip="Find Decision" />
-                    <Button
-                        Command="{Binding NextDecisionCommand}"
-                        Content="{materialDesign:PackIcon Kind=NavigateNext}"
-                        ToolTip="Next Decision" />
-
-                </ToolBar>
-            </ToolBarTray>
-        </materialDesign:Card>
-
-        <view:ParadoxDecisionView
-            Margin="20,10"
-            DataContext="{Binding SelectedDecision}"
-            Visibility="{Binding Converter={StaticResource VisibilityConverter}}" />
-
     </DockPanel>
 
 </UserControl>

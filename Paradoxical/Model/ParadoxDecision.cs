@@ -6,17 +6,15 @@ using Paradoxical.ViewModel;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 
 namespace Paradoxical.Model
 {
-    public partial class ParadoxDecision : ObservableObject
+    public partial class ParadoxDecision : ParadoxElement
     {
         private const string DEFAULT_PICTURE = "gfx/interface/illustrations/decisions/decision_misc.dds";
 
         public Context CurrentContext => Context.Current;
-
-        [ObservableProperty]
-        private string name = "";
 
         [ObservableProperty]
         private string title = "";
@@ -106,7 +104,7 @@ namespace Paradoxical.Model
 
         public ParadoxDecision() : base()
         {
-            name = $"decision_{Guid.NewGuid().ToString()[0..4]}";
+            Context.Current.Decisions.Add(this);
 
             title = "Hello World";
             description = "Hello World!";
@@ -124,6 +122,8 @@ namespace Paradoxical.Model
 
             major = other.major;
             sortOrder = other.sortOrder;
+
+            cooldown = other.cooldown;
 
             goldCost = other.goldCost;
             pietyCost = other.pietyCost;
@@ -159,6 +159,11 @@ namespace Paradoxical.Model
             aiChance = other.aiChance;
         }
 
+        public override void Delete()
+        {
+            Context.Current.Decisions.Remove(this);
+        }
+
         [RelayCommand]
         private void CreateIsShownTrigger()
         {
@@ -177,13 +182,20 @@ namespace Paradoxical.Model
         [RelayCommand]
         private async void FindIsShownTrigger()
         {
-            FindTriggerDialogViewModel vm = new()
+            var elements = Enumerable.Empty<ParadoxElement>()
+                .Union(Context.Current.Triggers);
+
+            var blacklist = Enumerable.Empty<ParadoxElement>()
+                .Union(IsShownTriggers);
+
+            FindDialogViewModel vm = new()
             {
                 DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
-                Items = Context.Current.Triggers,
-                Blacklist = new(IsShownTriggers),
+                Items = new(elements),
+                Blacklist = new(blacklist),
+                ElementType = typeof(ParadoxTrigger),
             };
-            FindTriggerDialogView dlg = new()
+            FindDialogView dlg = new()
             {
                 DataContext = vm,
             };
@@ -196,7 +208,10 @@ namespace Paradoxical.Model
             if (vm.Selected == null)
             { return; }
 
-            IsShownTriggers.Add(vm.Selected);
+            if (vm.Selected is not ParadoxTrigger selected)
+            { return; }
+
+            IsShownTriggers.Add(selected);
         }
 
         [RelayCommand]
@@ -217,13 +232,20 @@ namespace Paradoxical.Model
         [RelayCommand]
         private async void FindIsValidTrigger()
         {
-            FindTriggerDialogViewModel vm = new()
+            var elements = Enumerable.Empty<ParadoxElement>()
+                .Union(Context.Current.Triggers);
+
+            var blacklist = Enumerable.Empty<ParadoxElement>()
+                .Union(IsValidTriggers);
+
+            FindDialogViewModel vm = new()
             {
                 DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
-                Items = Context.Current.Triggers,
-                Blacklist = new(IsValidTriggers),
+                Items = new(elements),
+                Blacklist = new(blacklist),
+                ElementType = typeof(ParadoxTrigger),
             };
-            FindTriggerDialogView dlg = new()
+            FindDialogView dlg = new()
             {
                 DataContext = vm,
             };
@@ -236,7 +258,10 @@ namespace Paradoxical.Model
             if (vm.Selected == null)
             { return; }
 
-            IsValidTriggers.Add(vm.Selected);
+            if (vm.Selected is not ParadoxTrigger selected)
+            { return; }
+
+            IsValidTriggers.Add(selected);
         }
 
         [RelayCommand]
@@ -257,13 +282,20 @@ namespace Paradoxical.Model
         [RelayCommand]
         private async void FindIsValidFailureTrigger()
         {
-            FindTriggerDialogViewModel vm = new()
+            var elements = Enumerable.Empty<ParadoxElement>()
+                .Union(Context.Current.Triggers);
+
+            var blacklist = Enumerable.Empty<ParadoxElement>()
+                .Union(IsValidFailureTriggers);
+
+            FindDialogViewModel vm = new()
             {
                 DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
-                Items = Context.Current.Triggers,
-                Blacklist = new(IsValidFailureTriggers),
+                Items = new(elements),
+                Blacklist = new(blacklist),
+                ElementType = typeof(ParadoxTrigger),
             };
-            FindTriggerDialogView dlg = new()
+            FindDialogView dlg = new()
             {
                 DataContext = vm,
             };
@@ -276,7 +308,10 @@ namespace Paradoxical.Model
             if (vm.Selected == null)
             { return; }
 
-            IsValidFailureTriggers.Add(vm.Selected);
+            if (vm.Selected is not ParadoxTrigger selected)
+            { return; }
+
+            IsValidFailureTriggers.Add(selected);
         }
 
         [RelayCommand]
@@ -301,13 +336,20 @@ namespace Paradoxical.Model
         [RelayCommand]
         private async void FindEffect()
         {
-            FindEffectDialogViewModel vm = new()
+            var elements = Enumerable.Empty<ParadoxElement>()
+                .Union(Context.Current.Effects);
+
+            var blacklist = Enumerable.Empty<ParadoxElement>()
+                .Union(Effects);
+
+            FindDialogViewModel vm = new()
             {
                 DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
-                Items = Context.Current.Effects,
-                Blacklist = new(Effects),
+                Items = new(elements),
+                Blacklist = new(blacklist),
+                ElementType = typeof(ParadoxEffect),
             };
-            FindEffectDialogView dlg = new()
+            FindDialogView dlg = new()
             {
                 DataContext = vm,
             };
@@ -320,7 +362,10 @@ namespace Paradoxical.Model
             if (vm.Selected == null)
             { return; }
 
-            Effects.Add(vm.Selected);
+            if (vm.Selected is not ParadoxEffect selected)
+            { return; }
+
+            Effects.Add(selected);
         }
 
         [RelayCommand(CanExecute = nameof(CanCreateTriggeredEvent))]
@@ -349,13 +394,21 @@ namespace Paradoxical.Model
         [RelayCommand]
         private async void FindTriggeredEvent()
         {
-            FindEventDialogViewModel vm = new()
+            var elements = Enumerable.Empty<ParadoxElement>()
+                .Union(Context.Current.Events);
+
+            var blacklist = Enumerable.Empty<ParadoxElement>()
+                .Union(new[] { TriggeredEvent })
+                .OfType<ParadoxElement>();
+
+            FindDialogViewModel vm = new()
             {
                 DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
-                Items = Context.Current.Events,
-                Selected = TriggeredEvent,
+                Items = new(elements),
+                Blacklist = new(blacklist),
+                ElementType = typeof(ParadoxEvent),
             };
-            FindEventDialogView dlg = new()
+            FindDialogView dlg = new()
             {
                 DataContext = vm,
             };
@@ -368,7 +421,10 @@ namespace Paradoxical.Model
             if (vm.Selected == null)
             { return; }
 
-            TriggeredEvent = vm.Selected;
+            if (vm.Selected is not ParadoxEvent selected)
+            { return; }
+
+            TriggeredEvent = selected;
         }
 
         public void Write(TextWriter writer)

@@ -15,75 +15,7 @@
     d:DesignWidth="800"
     FocusVisualStyle="{x:Null}">
 
-    <UserControl.Resources>
-        <converters:VisibilityConverter
-            x:Key="VisibilityConverter" />
-    </UserControl.Resources>
-
-    <UserControl.InputBindings>
-        <KeyBinding
-            Command="{Binding FindOnActionCommand}"
-            Gesture="CTRL+F" />
-        <KeyBinding
-            Command="{Binding PreviousOnActionCommand}"
-            Gesture="ALT+Left" />
-        <KeyBinding
-            Command="{Binding PreviousOnActionCommand}"
-            Gesture="ALT+Up" />
-        <KeyBinding
-            Command="{Binding NextOnActionCommand}"
-            Gesture="ALT+Right" />
-        <KeyBinding
-            Command="{Binding NextOnActionCommand}"
-            Gesture="ALT+Down" />
-    </UserControl.InputBindings>
-
     <DockPanel>
-
-        <materialDesign:Card
-            DockPanel.Dock="Top"
-            Margin="20,10"
-            Padding="8"
-            materialDesign:ElevationAssist.Elevation="Dp4">
-            <ToolBarTray>
-                <ToolBar
-                    Style="{StaticResource MaterialDesignToolBar}">
-                    <Button
-                        Command="{Binding AddOnActionCommand}"
-                        Content="{materialDesign:PackIcon Kind=Add}"
-                        ToolTip="Add OnAction" />
-                    <Button
-                        Command="{Binding DuplicateOnActionCommand}"
-                        Content="{materialDesign:PackIcon Kind=ContentDuplicate}"
-                        ToolTip="Duplicate OnAction" />
-                    <Button
-                        Command="{Binding RemoveOnActionCommand}"
-                        Content="{materialDesign:PackIcon Kind=Remove}"
-                        ToolTip="Remove OnAction" />
-
-                    <Separator />
-
-                    <Button
-                        Command="{Binding PreviousOnActionCommand}"
-                        Content="{materialDesign:PackIcon Kind=NavigateBefore}"
-                        ToolTip="Previous OnAction" />
-                    <Button
-                        Command="{Binding FindOnActionCommand}"
-                        Content="{materialDesign:PackIcon Kind=FileSearch}"
-                        ToolTip="Find OnAction" />
-                    <Button
-                        Command="{Binding NextOnActionCommand}"
-                        Content="{materialDesign:PackIcon Kind=NavigateNext}"
-                        ToolTip="Next OnAction" />
-
-                </ToolBar>
-            </ToolBarTray>
-        </materialDesign:Card>
-
-        <view:ParadoxOnActionView
-            DataContext="{Binding SelectedOnAction}"
-            Visibility="{Binding Converter={StaticResource VisibilityConverter}}" />
-
     </DockPanel>
 
 </UserControl>

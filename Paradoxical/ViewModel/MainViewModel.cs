@@ -1,11 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 using Paradoxical.Model;
+using Paradoxical.View;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows;
@@ -22,23 +25,31 @@ namespace Paradoxical.ViewModel
         [ObservableProperty]
         private InfoPageViewModel infoPage = new();
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(GoToEventCommand))]
         private EventPageViewModel eventPage = new();
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(GoToTriggerCommand))]
-        private TriggerPageViewModel triggerPage = new();
+        private DecisionPageViewModel decisionPage = new();
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(GoToEffectCommand))]
-        private EffectPageViewModel effectPage = new();
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(GoToOnActionCommand))]
         private OnActionPageViewModel onActionPage = new();
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(GoToDecisionCommand))]
-        private DecisionPageViewModel decisionPage = new();
+        private TriggerPageViewModel triggerPage = new();
+        [ObservableProperty]
+        private EffectPageViewModel effectPage = new();
 
         [ObservableProperty]
-        private PageViewModelBase selectedPage;
+        [NotifyPropertyChangedFor(nameof(SelectedPage))]
+        [NotifyPropertyChangedFor(nameof(SelectedElement))]
+        private ObservableObject? selectedObject;
+
+        public PageViewModelBase? SelectedPage
+        {
+            get => SelectedObject as PageViewModelBase;
+            set => SelectedObject = value;
+        }
+        public ParadoxElement? SelectedElement
+        {
+            get => SelectedObject as ParadoxElement;
+            set => SelectedObject = value;
+        }
 
         private string SaveDir { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         private string SaveFile { get; set; } = string.Empty;
@@ -51,32 +62,32 @@ namespace Paradoxical.ViewModel
         {
             Pages.Add(infoPage);
             Pages.Add(eventPage);
+            Pages.Add(decisionPage);
+            Pages.Add(onActionPage);
             Pages.Add(triggerPage);
             Pages.Add(effectPage);
-            Pages.Add(onActionPage);
-            Pages.Add(decisionPage);
             Pages.Add(aboutPage);
 
             // navigate to info page
-            selectedPage = infoPage;
+            selectedObject = infoPage;
         }
 
         private void Reset()
         {
             InfoPage = new();
             EventPage = new();
+            DecisionPage = new();
+            OnActionPage = new();
             TriggerPage = new();
             EffectPage = new();
-            OnActionPage = new();
-            DecisionPage = new();
 
             Pages.Clear();
             Pages.Add(InfoPage);
             Pages.Add(EventPage);
+            Pages.Add(DecisionPage);
+            Pages.Add(OnActionPage);
             Pages.Add(TriggerPage);
             Pages.Add(EffectPage);
-            Pages.Add(OnActionPage);
-            Pages.Add(DecisionPage);
             Pages.Add(AboutPage);
 
             // navigate to info page
@@ -292,137 +303,226 @@ namespace Paradoxical.ViewModel
             Application.Current.Shutdown();
         }
 
-        [RelayCommand]
-        private void GoToAboutPage()
+        [RelayCommand(CanExecute = nameof(CanGoToPage))]
+        private void GoToPage(PageViewModelBase page)
         {
-            if (AboutPage == null)
-            { return; }
-
-            SelectedPage = AboutPage;
+            SelectedPage = page;
         }
-
-        [RelayCommand]
-        private void GoToInfoPage()
+        private bool CanGoToPage(PageViewModelBase page)
         {
-            if (InfoPage == null)
-            { return; }
-
-            SelectedPage = InfoPage;
-        }
-
-        [RelayCommand]
-        private void GoToEventPage()
-        {
-            if (EventPage == null)
-            { return; }
-
-            SelectedPage = EventPage;
-        }
-
-        [RelayCommand]
-        private void GoToTriggerPage()
-        {
-            if (TriggerPage == null)
-            { return; }
-
-            SelectedPage = TriggerPage;
-        }
-
-        [RelayCommand]
-        private void GoToEffectPage()
-        {
-            if (EffectPage == null)
-            { return; }
-
-            SelectedPage = EffectPage;
-        }
-
-        [RelayCommand]
-        private void GoToOnActionPage()
-        {
-            if (OnActionPage == null)
-            { return; }
-
-            SelectedPage = OnActionPage;
-        }
-
-        [RelayCommand]
-        private void GoToDecisionPage()
-        {
-            if (DecisionPage == null)
-            { return; }
-
-            SelectedPage = DecisionPage;
-        }
-
-        [RelayCommand(CanExecute = nameof(CanGoToEvent))]
-        private void GoToEvent(ParadoxEvent evt)
-        {
-            SelectedPage = EventPage;
-            EventPage.SelectedEvent = evt;
-        }
-        private bool CanGoToEvent(ParadoxEvent evt)
-        {
-            if (SelectedPage == EventPage && EventPage.SelectedEvent == evt)
+            if (SelectedPage == page)
             { return false; }
 
             return true;
         }
 
-        [RelayCommand(CanExecute = nameof(CanGoToTrigger))]
-        private void GoToTrigger(ParadoxTrigger trg)
+        [RelayCommand(CanExecute = nameof(CanGoToElement))]
+        private void GoToElement(ParadoxElement element)
         {
-            SelectedPage = TriggerPage;
-            TriggerPage.SelectedTrigger = trg;
+            SelectedElement = element;
         }
-        private bool CanGoToTrigger(ParadoxTrigger trg)
+        private bool CanGoToElement(ParadoxElement element)
         {
-            if (SelectedPage == TriggerPage && TriggerPage.SelectedTrigger == trg)
+            if (SelectedElement == element)
             { return false; }
 
             return true;
         }
 
-        [RelayCommand(CanExecute = nameof(CanGoToEffect))]
-        private void GoToEffect(ParadoxEffect eff)
+        [RelayCommand]
+        private async void Find()
         {
-            SelectedPage = EffectPage;
-            EffectPage.SelectedEffect = eff;
-        }
-        private bool CanGoToEffect(ParadoxEffect eff)
-        {
-            if (SelectedPage == EffectPage && EffectPage.SelectedEffect == eff)
-            { return false; }
+            var elements = Enumerable.Empty<ParadoxElement>()
+                .Union(Context.Current.Events)
+                .Union(Context.Current.Triggers)
+                .Union(Context.Current.Effects)
+                .Union(Context.Current.OnActions)
+                .Union(Context.Current.Decisions);
 
-            return true;
+            FindDialogViewModel vm = new()
+            {
+                DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
+                Items = new(elements),
+            };
+            FindDialogView dlg = new()
+            {
+                DataContext = vm,
+            };
+
+            await DialogHost.Show(dlg, MainWindow.ROOT_DIALOG_IDENTIFIER);
+
+            if (vm.DialogResult != true)
+            { return; }
+
+            if (vm.Selected == null)
+            { return; }
+
+            SelectedElement = vm.Selected;
         }
 
-        [RelayCommand(CanExecute = nameof(CanGoToOnAction))]
-        private void GoToOnAction(ParadoxOnAction act)
+        [RelayCommand]
+        private void AddEvent()
         {
-            SelectedPage = OnActionPage;
-            OnActionPage.SelectedOnAction = act;
-        }
-        private bool CanGoToOnAction(ParadoxOnAction act)
-        {
-            if (SelectedPage == OnActionPage && OnActionPage.SelectedOnAction == act)
-            { return false; }
-
-            return true;
+            ParadoxEvent element = new();
+            SelectedElement = element;
         }
 
-        [RelayCommand(CanExecute = nameof(CanGoToDecision))]
-        private void GoToDecision(ParadoxDecision dec)
+        [RelayCommand]
+        private void DuplicateEvent(ParadoxEvent element)
         {
-            SelectedPage = DecisionPage;
-            DecisionPage.SelectedDecision = dec;
+            ParadoxEvent other = new(element);
+            SelectedElement = other;
         }
-        private bool CanGoToDecision(ParadoxDecision dec)
-        {
-            if (SelectedPage == DecisionPage && DecisionPage.SelectedDecision == dec)
-            { return false; }
 
-            return true;
+        [RelayCommand]
+        private void RemoveEvent(ParadoxEvent element)
+        {
+            if (MessageBox.Show(
+                "Are you sure?",
+                "Remove Event",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning,
+                MessageBoxResult.Yes) != MessageBoxResult.Yes)
+            { return; }
+
+            element.Delete();
+
+            if (SelectedElement == element)
+            {
+                SelectedElement = Context.Current.Events.FirstOrDefault();
+            }
+        }
+
+        [RelayCommand]
+        private void AddDecision()
+        {
+            ParadoxDecision element = new();
+            SelectedElement = element;
+        }
+
+        [RelayCommand]
+        private void DuplicateDecision(ParadoxDecision element)
+        {
+            ParadoxDecision other = new(element);
+            SelectedElement = other;
+        }
+
+        [RelayCommand]
+        private void RemoveDecision(ParadoxDecision element)
+        {
+            if (MessageBox.Show(
+                "Are you sure?",
+                "Remove Decision",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning,
+                MessageBoxResult.Yes) != MessageBoxResult.Yes)
+            { return; }
+
+            element.Delete();
+
+            if (SelectedElement == element)
+            {
+                SelectedElement = Context.Current.Decisions.FirstOrDefault();
+            }
+        }
+
+        [RelayCommand]
+        private void AddOnAction()
+        {
+            ParadoxOnAction element = new();
+            SelectedElement = element;
+        }
+
+        [RelayCommand]
+        private void DuplicateOnAction(ParadoxOnAction element)
+        {
+            ParadoxOnAction other = new(element);
+            SelectedElement = other;
+        }
+
+        [RelayCommand]
+        private void RemoveOnAction(ParadoxOnAction element)
+        {
+            if (MessageBox.Show(
+                "Are you sure?",
+                "Remove On-Action",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning,
+                MessageBoxResult.Yes) != MessageBoxResult.Yes)
+            { return; }
+
+            element.Delete();
+
+            if (SelectedElement == element)
+            {
+                SelectedElement = Context.Current.OnActions.FirstOrDefault();
+            }
+        }
+
+        [RelayCommand]
+        private void AddTrigger()
+        {
+            ParadoxTrigger element = new();
+            SelectedElement = element;
+        }
+
+        [RelayCommand]
+        private void DuplicateTrigger(ParadoxTrigger element)
+        {
+            ParadoxTrigger other = new(element);
+            SelectedElement = other;
+        }
+
+        [RelayCommand]
+        private void RemoveTrigger(ParadoxTrigger element)
+        {
+            if (MessageBox.Show(
+                "Are you sure?",
+                "Remove Trigger",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning,
+                MessageBoxResult.Yes) != MessageBoxResult.Yes)
+            { return; }
+
+            element.Delete();
+
+            if (SelectedElement == element)
+            {
+                SelectedElement = Context.Current.Triggers.FirstOrDefault();
+            }
+        }
+
+        [RelayCommand]
+        private void AddEffect()
+        {
+            ParadoxEffect element = new();
+            SelectedElement = element;
+        }
+
+        [RelayCommand]
+        private void DuplicateEffect(ParadoxEffect element)
+        {
+            ParadoxEffect other = new(element);
+            SelectedElement = other;
+        }
+
+        [RelayCommand]
+        private void RemoveEffect(ParadoxEffect element)
+        {
+            if (MessageBox.Show(
+                "Are you sure?",
+                "Remove Effect",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning,
+                MessageBoxResult.Yes) != MessageBoxResult.Yes)
+            { return; }
+
+            element.Delete();
+
+            if (SelectedElement == element)
+            {
+                SelectedElement = Context.Current.Effects.FirstOrDefault();
+            }
         }
     }
 }

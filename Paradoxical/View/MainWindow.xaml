@@ -8,6 +8,7 @@
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
+    xmlns:converters="clr-namespace:Paradoxical.Converters"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     mc:Ignorable="d"
@@ -36,6 +37,11 @@
         <viewmodel:MainViewModel />
     </Window.DataContext>
 
+    <Window.Resources>
+        <converters:VisibilityConverter
+            x:Key="VisibilityConverter" />
+    </Window.Resources>
+
     <Window.InputBindings>
         <KeyBinding
             Command="{Binding NewModCommand}"
@@ -50,22 +56,31 @@
             Command="{Binding BuildModCommand}"
             Gesture="F5" />
         <KeyBinding
-            Command="{Binding GoToInfoPageCommand}"
+            Command="{Binding FindCommand}"
+            Gesture="CTRL+F" />
+        <KeyBinding
+            Command="{Binding GoToPageCommand}"
+            CommandParameter="{Binding InfoPage}"
             Gesture="ALT+1" />
         <KeyBinding
-            Command="{Binding GoToEventPageCommand}"
+            Command="{Binding GoToPageCommand}"
+            CommandParameter="{Binding EventPage}"
             Gesture="ALT+2" />
         <KeyBinding
-            Command="{Binding GoToTriggerPageCommand}"
+            Command="{Binding GoToPageCommand}"
+            CommandParameter="{Binding DecisionPage}"
             Gesture="ALT+3" />
         <KeyBinding
-            Command="{Binding GoToEffectPageCommand}"
+            Command="{Binding GoToPageCommand}"
+            CommandParameter="{Binding OnActionPage}"
             Gesture="ALT+4" />
         <KeyBinding
-            Command="{Binding GoToOnActionPageCommand}"
+            Command="{Binding GoToPageCommand}"
+            CommandParameter="{Binding TriggerPage}"
             Gesture="ALT+5" />
         <KeyBinding
-            Command="{Binding GoToDecisionPageCommand}"
+            Command="{Binding GoToPageCommand}"
+            CommandParameter="{Binding EffectPage}"
             Gesture="ALT+6" />
     </Window.InputBindings>
 
@@ -171,9 +186,18 @@
                                 <Separator />
 
                                 <MenuItem
+                                    Header="Find"
+                                    Icon="{materialDesign:PackIcon Kind=Search}"
+                                    Command="{Binding FindCommand}"
+                                    InputGestureText="CTRL+F"/>
+
+                                <Separator />
+
+                                <MenuItem
                                     Header="About"
                                     Icon="{materialDesign:PackIcon Kind=Information}"
-                                    Command="{Binding GoToAboutPageCommand}"/>
+                                    Command="{Binding GoToPageCommand}"
+                                    CommandParameter="{Binding AboutPage}"/>
 
                                 <Separator />
 
@@ -195,8 +219,9 @@
                 </materialDesign:ColorZone>
 
                 <ContentControl
-                    Margin="0,10,0,10"
-                    Content="{Binding SelectedPage}" />
+                    Margin="20,10"
+                    Content="{Binding SelectedObject}"
+                    Visibility="{Binding Converter={StaticResource VisibilityConverter}}" />
 
             </DockPanel>
         </materialDesign:DrawerHost>

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Model;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -10,27 +11,31 @@ using System.Windows.Data;
 
 namespace Paradoxical.ViewModel
 {
-    public partial class FindTriggerDialogViewModel : DialogViewModelBase
+    public partial class FindDialogViewModel : DialogViewModelBase
     {
         private ICollectionView? view;
 
         [ObservableProperty]
-        private ObservableCollection<ParadoxTrigger>? items;
+        private ObservableCollection<ParadoxElement>? items;
 
         [ObservableProperty]
         private string? filter;
 
         [ObservableProperty]
-        private ObservableCollection<ParadoxTrigger>? blacklist;
+        private Type elementType;
+
+        [ObservableProperty]
+        private ObservableCollection<ParadoxElement>? blacklist;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SubmitCommand))]
-        private ParadoxTrigger? selected;
+        private ParadoxElement? selected;
 
-        public FindTriggerDialogViewModel()
+        public FindDialogViewModel()
         {
             PropertyChanged += ItemsPropertyChangedHandler;
             PropertyChanged += FilterPropertyChangedHandler;
+            PropertyChanged += ElementTypePropertyChangedHandler;
             PropertyChanged += BlacklistPropertyChangedHandler;
         }
 
@@ -40,7 +45,7 @@ namespace Paradoxical.ViewModel
             { return; }
 
             view?.Refresh();
-            Selected = view?.Cast<ParadoxTrigger>().FirstOrDefault();
+            Selected = view?.Cast<ParadoxElement>().FirstOrDefault();
 
             if (Blacklist != null)
             {
@@ -51,7 +56,7 @@ namespace Paradoxical.ViewModel
         private void BlacklistCollectionChangedHandler(object? sender, NotifyCollectionChangedEventArgs e)
         {
             view?.Refresh();
-            Selected = view?.Cast<ParadoxTrigger>().FirstOrDefault();
+            Selected = view?.Cast<ParadoxElement>().FirstOrDefault();
         }
 
         private void FilterPropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
@@ -59,11 +64,17 @@ namespace Paradoxical.ViewModel
             if (e.PropertyName != nameof(Filter))
             { return; }
 
-            if (view == null)
+            view?.Refresh();
+            Selected = view?.Cast<ParadoxElement>().FirstOrDefault();
+        }
+
+        private void ElementTypePropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(ElementType))
             { return; }
 
-            view.Refresh();
-            Selected = view?.Cast<ParadoxTrigger>().FirstOrDefault();
+            view?.Refresh();
+            Selected = view?.Cast<ParadoxElement>().FirstOrDefault();
         }
 
         private void ItemsPropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
@@ -75,24 +86,24 @@ namespace Paradoxical.ViewModel
             view.Filter = FilterItems;
 
             view?.Refresh();
-            Selected = view?.Cast<ParadoxTrigger>().FirstOrDefault();
+            Selected = view?.Cast<ParadoxElement>().FirstOrDefault();
         }
 
         private bool FilterItems(object obj)
         {
-            if (obj is not ParadoxTrigger trg)
+            if (obj is not ParadoxElement element)
             { return false; }
 
-            if (Blacklist != null && Blacklist.Contains(trg))
+            if (ElementType != null && element.GetType() != ElementType)
             { return false; }
 
-            if (string.IsNullOrEmpty(Filter))
-            { return true; }
+            if (Blacklist != null && Blacklist.Contains(element))
+            { return false; }
 
-            if (trg.Name.ToString().Contains(Filter))
-            { return true; }
+            if (string.IsNullOrEmpty(Filter) == false && element.Name.ToString().Contains(Filter) == false)
+            { return false; }
 
-            return false;
+            return true;
         }
 
         protected override bool CanSubmit()
@@ -105,7 +116,7 @@ namespace Paradoxical.ViewModel
         {
             if (Selected == null && view != null)
             {
-                Selected = view.Cast<ParadoxTrigger>().FirstOrDefault();
+                Selected = view.Cast<ParadoxElement>().FirstOrDefault();
             }
         }
 
@@ -118,7 +129,9 @@ namespace Paradoxical.ViewModel
             if (view == null)
             { return; }
 
-            List<ParadoxTrigger> filteredItems = new(view.Cast<ParadoxTrigger>());
+            // maybe use view.movecurrent???
+
+            List<ParadoxElement> filteredItems = new(view.Cast<ParadoxElement>());
 
             if (Selected == filteredItems.First())
             { return; }
@@ -136,7 +149,9 @@ namespace Paradoxical.ViewModel
             if (view == null)
             { return; }
 
-            List<ParadoxTrigger> filteredItems = new(view.Cast<ParadoxTrigger>());
+            // maybe use view.movecurrent???
+
+            List<ParadoxElement> filteredItems = new(view.Cast<ParadoxElement>());
 
             if (Selected == filteredItems.Last())
             { return; }
