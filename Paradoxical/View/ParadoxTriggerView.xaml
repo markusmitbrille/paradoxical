@@ -14,88 +14,97 @@
     mc:Ignorable="d"
     d:DesignWidth="800">
 
-    <materialDesign:Card
-        Padding="8"
-        materialDesign:ElevationAssist.Elevation="Dp4">
-        <ScrollViewer
-            Grid.Column="1"
-            VerticalScrollBarVisibility="Hidden"
-            HorizontalScrollBarVisibility="Disabled">
-            <StackPanel>
+    <ScrollViewer
+        VerticalScrollBarVisibility="Hidden"
+        HorizontalScrollBarVisibility="Disabled">
+        <StackPanel>
 
-                <TextBox
-                    Margin="6,12"
-                    Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                    materialDesign:HintAssist.Hint="Name"
-                    materialDesign:HintAssist.HelperText="Element name, used in script.">
+            <materialDesign:Card
+                Margin="20,10"
+                Padding="8,14"
+                materialDesign:ElevationAssist.Elevation="Dp4">
+                <Expander
+                    Padding="8"
+                    Header="General"
+                    IsExpanded="True">
+                    <StackPanel>
 
-                    <TextBox.Text>
-                        <Binding
-                            Path="Name"
-                            Mode="TwoWay"
-                            UpdateSourceTrigger="PropertyChanged"
-                            FallbackValue="element_name">
-                            <Binding.ValidationRules>
-                                <rules:RequiredRule
-                                    ValidatesOnTargetUpdated="True" />
-                                <rules:NameRule
-                                    ValidatesOnTargetUpdated="True" />
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
+                        <TextBox
+                            Margin="6,12"
+                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            materialDesign:HintAssist.Hint="Name"
+                            materialDesign:HintAssist.HelperText="Element name, used in script.">
 
-                </TextBox>
+                            <TextBox.Text>
+                                <Binding
+                                    Path="Name"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    FallbackValue="element_name">
+                                    <Binding.ValidationRules>
+                                        <rules:RequiredRule
+                                            ValidatesOnTargetUpdated="True" />
+                                        <rules:NameRule
+                                            ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
 
-                <view:ScriptBox
-                    Height="120"
-                    Margin="6,12"
-                    Style="{DynamicResource MaterialDesignRichTextBox}"
-                    materialDesign:HintAssist.Hint="Code"
-                    materialDesign:HintAssist.IsFloating="True"
-                    materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                    materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                    materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
-                    AcceptsReturn="True">
+                        </TextBox>
 
-                    <view:ScriptBox.TextFormatter>
-                        <formatters:CodeFormatter />
-                    </view:ScriptBox.TextFormatter>
+                        <view:ScriptBox
+                            Height="120"
+                            Margin="6,12"
+                            Style="{DynamicResource MaterialDesignRichTextBox}"
+                            materialDesign:HintAssist.Hint="Code"
+                            materialDesign:HintAssist.IsFloating="True"
+                            materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                            materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+                            materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
+                            AcceptsReturn="True">
 
-                    <view:ScriptBox.Text>
-                        <Binding
-                            Path="Code"
-                            Mode="TwoWay"
-                            UpdateSourceTrigger="PropertyChanged"
-                            FallbackValue="# some code">
-                            <Binding.ValidationRules>
-                                <rules:RequiredRule
-                                    ValidatesOnTargetUpdated="True" />
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </view:ScriptBox.Text>
+                            <view:ScriptBox.TextFormatter>
+                                <formatters:CodeFormatter />
+                            </view:ScriptBox.TextFormatter>
 
-                </view:ScriptBox>
+                            <view:ScriptBox.Text>
+                                <Binding
+                                    Path="Code"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    FallbackValue="# some code">
+                                    <Binding.ValidationRules>
+                                        <rules:RequiredRule
+                                            ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </view:ScriptBox.Text>
 
-                <view:ScriptBox
-                    Margin="6,12"
-                    Style="{DynamicResource MaterialDesignRichTextBox}"
-                    Text="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    AcceptsReturn="False"
-                    materialDesign:HintAssist.Hint="Tooltip"
-                    materialDesign:HintAssist.IsFloating="True"
-                    materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated trigger text."
-                    materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                    materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                    materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                        </view:ScriptBox>
 
-                    <view:ScriptBox.TextFormatter>
-                        <formatters:EventTextFormatter />
-                    </view:ScriptBox.TextFormatter>
+                        <view:ScriptBox
+                            Margin="6,12"
+                            Style="{DynamicResource MaterialDesignRichTextBox}"
+                            Text="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            AcceptsReturn="False"
+                            materialDesign:HintAssist.Hint="Tooltip"
+                            materialDesign:HintAssist.IsFloating="True"
+                            materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated trigger text."
+                            materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                            materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+                            materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
 
-                </view:ScriptBox>
+                            <view:ScriptBox.TextFormatter>
+                                <formatters:EventTextFormatter />
+                            </view:ScriptBox.TextFormatter>
 
-            </StackPanel>
-        </ScrollViewer>
-    </materialDesign:Card>
+                        </view:ScriptBox>
+
+                    </StackPanel>
+                </Expander>
+            </materialDesign:Card>
+
+        </StackPanel>
+    </ScrollViewer>
 
 </UserControl>
