@@ -14,6 +14,8 @@ namespace Paradoxical.Model
         private string code = "";
         [ObservableProperty]
         private string tooltip = "";
+        [ObservableProperty]
+        private bool hidden = false;
 
         public ParadoxEffect()
         {
@@ -33,7 +35,12 @@ namespace Paradoxical.Model
             writer.Indent().WriteLine($"{Context.Current.Info.EventNamespace}_{Name} = {{");
             ParadoxText.IndentLevel++;
 
-            if (Tooltip != string.Empty)
+            if (Hidden == true)
+            {
+                writer.Indent().WriteLine("hidden_effect = {");
+                ParadoxText.IndentLevel++;
+            }
+            else if (Tooltip != string.Empty)
             {
                 writer.Indent().WriteLine("custom_tooltip = {");
                 ParadoxText.IndentLevel++;
@@ -47,7 +54,12 @@ namespace Paradoxical.Model
                 writer.Indent().WriteLine(line);
             }
 
-            if (Tooltip != string.Empty)
+            if (Hidden == true)
+            {
+                ParadoxText.IndentLevel--;
+                writer.Indent().WriteLine("}");
+            }
+            else if (Tooltip != string.Empty)
             {
                 ParadoxText.IndentLevel--;
                 writer.Indent().WriteLine("}");
