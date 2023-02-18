@@ -11,13 +11,13 @@
     xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     d:DataContext="{d:DesignInstance Type=model:ParadoxEvent}"
-    mc:Ignorable="d"
-    d:DesignWidth="800">
+    mc:Ignorable="d">
 
     <ScrollViewer
         VerticalScrollBarVisibility="Auto"
         HorizontalScrollBarVisibility="Disabled">
-        <StackPanel>
+        <StackPanel
+            Grid.Column="0">
 
             <materialDesign:Card
                 Margin="20,10"
@@ -150,7 +150,7 @@
                             Text="{Binding Theme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Theme"
                             materialDesign:HintAssist.HelperText="Determines background, icon, sound, and environment." />
-                       
+
                         <TextBox
                             Margin="6,12"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
@@ -449,7 +449,6 @@
                             ToolTip="Add Option" />
 
                     </StackPanel>
-
                 </Expander>
             </materialDesign:Card>
 
@@ -461,7 +460,6 @@
                     Padding="8"
                     Header="Triggers"
                     IsExpanded="False">
-
                     <Grid>
 
                         <Grid.ColumnDefinitions>
@@ -633,7 +631,6 @@
                         </view:ScriptBox>
 
                     </Grid>
-
                 </Expander>
             </materialDesign:Card>
 
@@ -645,7 +642,6 @@
                     Padding="8"
                     Header="Immediate Effects"
                     IsExpanded="False">
-
                     <Grid>
 
                         <Grid.ColumnDefinitions>
@@ -815,7 +811,6 @@
                         </view:ScriptBox>
 
                     </Grid>
-
                 </Expander>
             </materialDesign:Card>
 
@@ -827,7 +822,6 @@
                     Padding="8"
                     Header="After Effects"
                     IsExpanded="False">
-
                     <Grid>
 
                         <Grid.ColumnDefinitions>
@@ -997,7 +991,6 @@
                         </view:ScriptBox>
 
                     </Grid>
-
                 </Expander>
             </materialDesign:Card>
 

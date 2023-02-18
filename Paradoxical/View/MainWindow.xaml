@@ -22,7 +22,7 @@
     MinWidth="700"
     Style="{DynamicResource MaterialDesignWindow}"
     WindowStyle="None"
-    WindowState="Normal"
+    WindowState="Maximized"
     WindowStartupLocation="CenterScreen"
     ResizeMode="CanResizeWithGrip"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -219,7 +219,7 @@
                 </materialDesign:ColorZone>
 
                 <ContentControl
-                    Margin="20,10"
+                    Margin="0,20,0,0"
                     Content="{Binding SelectedObject}"
                     Visibility="{Binding Converter={StaticResource VisibilityConverter}}" />
 
