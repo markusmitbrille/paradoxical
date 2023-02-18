@@ -33,6 +33,9 @@ namespace Paradoxical.Model
         private bool hidden = false;
 
         [ObservableProperty]
+        private int cooldown = 0;
+
+        [ObservableProperty]
         private ObservableCollection<ParadoxEventOption> options = new();
 
         [ObservableProperty]
@@ -298,6 +301,9 @@ namespace Paradoxical.Model
                 writer.Indent().WriteLine($"theme = {(Theme == string.Empty ? DEFAULT_THEME : Theme)}");
             }
 
+            writer.WriteLine();
+            WriteCooldown(writer);
+
             if (Hidden == false)
             {
                 writer.WriteLine();
@@ -310,15 +316,12 @@ namespace Paradoxical.Model
             }
 
             writer.WriteLine();
-
             WriteTrigger(writer);
 
             writer.WriteLine();
-
             WriteImmediate(writer);
 
             writer.WriteLine();
-
             WriteAfter(writer);
 
             if (Hidden == false)
@@ -330,6 +333,17 @@ namespace Paradoxical.Model
 
             ParadoxText.IndentLevel--;
             writer.Indent().WriteLine("}");
+        }
+
+        private void WriteCooldown(TextWriter writer)
+        {
+            if (Cooldown <= 0)
+            {
+                writer.Indent().WriteLine("# no cooldown");
+                return;
+            }
+
+            writer.Indent().WriteLine($"cooldown = {{ days = {Cooldown} }}");
         }
 
         private void WriteLeftPortrait(TextWriter writer)

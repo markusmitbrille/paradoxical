@@ -150,6 +150,26 @@
                             Text="{Binding Theme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Theme"
                             materialDesign:HintAssist.HelperText="Determines background, icon, sound, and environment." />
+                       
+                        <TextBox
+                            Margin="6,12"
+                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            materialDesign:HintAssist.Hint="Cooldown in days">
+
+                            <TextBox.Text>
+                                <Binding
+                                    Path="Cooldown"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    FallbackValue="0">
+                                    <Binding.ValidationRules>
+                                        <rules:IntRule
+                                            ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+
+                        </TextBox>
 
                     </StackPanel>
                 </Expander>
