@@ -14,8 +14,7 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     Height="400"
-    Width="550"
-    FocusVisualStyle="{x:Null}">
+    Width="550">
 
     <UserControl.Resources>
         <converters:MathConverter
@@ -79,6 +78,7 @@
             </Grid.RowDefinitions>
 
             <TextBox
+                x:Name="filter"
                 Grid.Row="0"
                 Style="{DynamicResource MaterialDesignFilledTextBox}"
                 Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
