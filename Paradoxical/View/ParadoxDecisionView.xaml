@@ -39,7 +39,8 @@
                                 <Binding
                                     Path="Name"
                                     Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged">
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    FallbackValue="element_name">
                                     <Binding.ValidationRules>
                                         <rules:RequiredRule
                                             ValidatesOnTargetUpdated="True" />
@@ -54,6 +55,7 @@
                         <view:ScriptBox
                             Margin="6,12"
                             Style="{DynamicResource MaterialDesignRichTextBox}"
+                            Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             AcceptsReturn="False"
                             materialDesign:HintAssist.Hint="Title"
                             materialDesign:HintAssist.IsFloating="True"
@@ -65,24 +67,13 @@
                                 <formatters:EventTextFormatter />
                             </view:ScriptBox.TextFormatter>
 
-                            <view:ScriptBox.Text>
-                                <Binding
-                                    Path="Title"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <rules:RequiredRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </view:ScriptBox.Text>
-
                         </view:ScriptBox>
 
                         <view:ScriptBox
                             Height="120"
                             Margin="6,12"
                             Style="{DynamicResource MaterialDesignRichTextBox}"
+                            Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Description"
                             materialDesign:HintAssist.IsFloating="True"
                             materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
@@ -93,18 +84,6 @@
                             <view:ScriptBox.TextFormatter>
                                 <formatters:EventTextFormatter />
                             </view:ScriptBox.TextFormatter>
-
-                            <view:ScriptBox.Text>
-                                <Binding
-                                    Path="Description"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <rules:RequiredRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </view:ScriptBox.Text>
 
                         </view:ScriptBox>
 
