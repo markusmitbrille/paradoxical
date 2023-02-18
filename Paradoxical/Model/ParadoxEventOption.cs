@@ -246,22 +246,19 @@ namespace Paradoxical.Model
             ParadoxText.IndentLevel++;
 
             writer.Indent().WriteLine($"name = {Context.Current.Info.EventNamespace}.{parent.Id}.o.{index}");
+
             WriteTooltip(writer, parent, index);
 
             writer.WriteLine();
-
             WriteTrigger(writer);
 
             writer.WriteLine();
-
             WriteAiChance(writer);
 
             writer.WriteLine();
-
             WriteTriggeredEvent(writer);
 
             writer.WriteLine();
-
             WriteEffect(writer);
 
             ParadoxText.IndentLevel--;

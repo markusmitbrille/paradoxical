@@ -388,31 +388,24 @@ namespace Paradoxical.Model
             writer.Indent().WriteLine($"sort_order = {SortOrder}");
 
             writer.WriteLine();
-
             WriteCooldown(writer);
 
             writer.WriteLine();
-
             WriteCost(writer);
 
             writer.WriteLine();
-
             WriteIsShownTrigger(writer);
 
             writer.WriteLine();
-
             WriteIsValidTrigger(writer);
 
             writer.WriteLine();
-
             WriteIsValidFailureTrigger(writer);
 
             writer.WriteLine();
-
             WriteEffect(writer);
 
             writer.WriteLine();
-
             WriteAiChance(writer);
 
             ParadoxText.IndentLevel--;
@@ -428,7 +421,6 @@ namespace Paradoxical.Model
             }
 
             writer.Indent().WriteLine($"cooldown = {{ days = {Cooldown} }}");
-
         }
 
         private void WriteCost(TextWriter writer)

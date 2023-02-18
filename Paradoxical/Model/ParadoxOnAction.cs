@@ -238,15 +238,12 @@ namespace Paradoxical.Model
             WriteTrigger(writer);
 
             writer.WriteLine();
-
             WriteEffect(writer);
 
             writer.WriteLine();
-
             WriteEvents(writer);
 
             writer.WriteLine();
-
             WriteOnActions(writer);
 
             ParadoxText.IndentLevel--;
