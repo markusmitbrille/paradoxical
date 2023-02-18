@@ -5,6 +5,7 @@ using Microsoft.Win32;
 using Paradoxical.Model;
 using Paradoxical.View;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -58,6 +59,9 @@ namespace Paradoxical.ViewModel
         private string ModDir { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         private string ModFile { get; set; } = string.Empty;
 
+        private readonly Stack<ObservableObject> history = new();
+        private readonly Stack<ObservableObject> future = new();
+
         public MainViewModel()
         {
             Pages.Add(infoPage);
@@ -74,6 +78,8 @@ namespace Paradoxical.ViewModel
 
         private void Reset()
         {
+            GoToNone();
+
             InfoPage = new();
             EventPage = new();
             DecisionPage = new();
@@ -91,7 +97,7 @@ namespace Paradoxical.ViewModel
             Pages.Add(AboutPage);
 
             // navigate to info page
-            SelectedPage = InfoPage;
+            GoToPage(InfoPage);
         }
 
         private void Save(string path)
@@ -303,10 +309,67 @@ namespace Paradoxical.ViewModel
             Application.Current.Shutdown();
         }
 
+        [RelayCommand(CanExecute = nameof(CanNavigateNext))]
+        private void NavigateNext()
+        {
+            if (SelectedObject != null)
+            {
+                history.Push(SelectedObject);
+            }
+
+            SelectedObject = future.Pop();
+
+            NavigateNextCommand.NotifyCanExecuteChanged();
+            NavigatePreviousCommand.NotifyCanExecuteChanged();
+        }
+        private bool CanNavigateNext()
+        {
+            return future.Any();
+        }
+
+        [RelayCommand(CanExecute = nameof(CanNavigatePrevious))]
+        private void NavigatePrevious()
+        {
+            if (SelectedObject != null)
+            {
+                future.Push(SelectedObject);
+            }
+
+            SelectedObject = history.Pop();
+
+            NavigateNextCommand.NotifyCanExecuteChanged();
+            NavigatePreviousCommand.NotifyCanExecuteChanged();
+        }
+        private bool CanNavigatePrevious()
+        {
+            return history.Any();
+        }
+
+        [RelayCommand]
+        private void GoToNone()
+        {
+            history.Clear();
+            future.Clear();
+
+            SelectedObject = null;
+
+            NavigateNextCommand.NotifyCanExecuteChanged();
+            NavigatePreviousCommand.NotifyCanExecuteChanged();
+        }
+
         [RelayCommand(CanExecute = nameof(CanGoToPage))]
         private void GoToPage(PageViewModelBase page)
         {
+            future.Clear();
+            if (SelectedObject != null)
+            {
+                history.Push(SelectedObject);
+            }
+
             SelectedPage = page;
+
+            NavigateNextCommand.NotifyCanExecuteChanged();
+            NavigatePreviousCommand.NotifyCanExecuteChanged();
         }
         private bool CanGoToPage(PageViewModelBase page)
         {
@@ -319,7 +382,16 @@ namespace Paradoxical.ViewModel
         [RelayCommand(CanExecute = nameof(CanGoToElement))]
         private void GoToElement(ParadoxElement element)
         {
+            future.Clear();
+            if (SelectedObject != null)
+            {
+                history.Push(SelectedObject);
+            }
+
             SelectedElement = element;
+
+            NavigateNextCommand.NotifyCanExecuteChanged();
+            NavigatePreviousCommand.NotifyCanExecuteChanged();
         }
         private bool CanGoToElement(ParadoxElement element)
         {
@@ -357,21 +429,29 @@ namespace Paradoxical.ViewModel
             if (vm.Selected == null)
             { return; }
 
-            SelectedElement = vm.Selected;
+            ParadoxElement selected = vm.Selected;
+            if (CanGoToElement(selected))
+            {
+                GoToElement(selected);
+            }
         }
 
         [RelayCommand]
         private void AddEvent()
         {
             ParadoxEvent element = new();
-            SelectedElement = element;
+
+            if (CanGoToElement(element))
+            { GoToElement(element); }
         }
 
         [RelayCommand]
         private void DuplicateEvent(ParadoxEvent element)
         {
             ParadoxEvent other = new(element);
-            SelectedElement = other;
+
+            if (CanGoToElement(other))
+            { GoToElement(other); }
         }
 
         [RelayCommand]
@@ -388,23 +468,25 @@ namespace Paradoxical.ViewModel
             element.Delete();
 
             if (SelectedElement == element)
-            {
-                SelectedElement = Context.Current.Events.FirstOrDefault();
-            }
+            { GoToNone(); }
         }
 
         [RelayCommand]
         private void AddDecision()
         {
             ParadoxDecision element = new();
-            SelectedElement = element;
+
+            if (CanGoToElement(element))
+            { GoToElement(element); }
         }
 
         [RelayCommand]
         private void DuplicateDecision(ParadoxDecision element)
         {
             ParadoxDecision other = new(element);
-            SelectedElement = other;
+
+            if (CanGoToElement(other))
+            { GoToElement(other); }
         }
 
         [RelayCommand]
@@ -421,23 +503,25 @@ namespace Paradoxical.ViewModel
             element.Delete();
 
             if (SelectedElement == element)
-            {
-                SelectedElement = Context.Current.Decisions.FirstOrDefault();
-            }
+            { GoToNone(); }
         }
 
         [RelayCommand]
         private void AddOnAction()
         {
             ParadoxOnAction element = new();
-            SelectedElement = element;
+
+            if (CanGoToElement(element))
+            { GoToElement(element); }
         }
 
         [RelayCommand]
         private void DuplicateOnAction(ParadoxOnAction element)
         {
             ParadoxOnAction other = new(element);
-            SelectedElement = other;
+
+            if (CanGoToElement(other))
+            { GoToElement(other); }
         }
 
         [RelayCommand]
@@ -454,23 +538,25 @@ namespace Paradoxical.ViewModel
             element.Delete();
 
             if (SelectedElement == element)
-            {
-                SelectedElement = Context.Current.OnActions.FirstOrDefault();
-            }
+            { GoToNone(); }
         }
 
         [RelayCommand]
         private void AddTrigger()
         {
             ParadoxTrigger element = new();
-            SelectedElement = element;
+
+            if (CanGoToElement(element))
+            { GoToElement(element); }
         }
 
         [RelayCommand]
         private void DuplicateTrigger(ParadoxTrigger element)
         {
             ParadoxTrigger other = new(element);
-            SelectedElement = other;
+
+            if (CanGoToElement(other))
+            { GoToElement(other); }
         }
 
         [RelayCommand]
@@ -487,23 +573,25 @@ namespace Paradoxical.ViewModel
             element.Delete();
 
             if (SelectedElement == element)
-            {
-                SelectedElement = Context.Current.Triggers.FirstOrDefault();
-            }
+            { GoToNone(); }
         }
 
         [RelayCommand]
         private void AddEffect()
         {
             ParadoxEffect element = new();
-            SelectedElement = element;
+
+            if (CanGoToElement(element))
+            { GoToElement(element); }
         }
 
         [RelayCommand]
         private void DuplicateEffect(ParadoxEffect element)
         {
             ParadoxEffect other = new(element);
-            SelectedElement = other;
+
+            if (CanGoToElement(other))
+            { GoToElement(other); }
         }
 
         [RelayCommand]

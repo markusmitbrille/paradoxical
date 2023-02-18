@@ -59,6 +59,12 @@
             Command="{Binding FindCommand}"
             Gesture="CTRL+F" />
         <KeyBinding
+            Command="{Binding NavigateNextCommand}"
+            Gesture="ALT+Right" />
+        <KeyBinding
+            Command="{Binding NavigatePreviousCommand}"
+            Gesture="ALT+Left" />
+        <KeyBinding
             Command="{Binding GoToPageCommand}"
             CommandParameter="{Binding InfoPage}"
             Gesture="ALT+1" />
@@ -134,7 +140,12 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition
                                 Width="35" />
-                            <ColumnDefinition />
+                            <ColumnDefinition
+                                Width="2*" />
+                            <ColumnDefinition
+                                Width="1*" />
+                            <ColumnDefinition
+                                Width="2*" />
                             <ColumnDefinition
                                 Width="35" />
                         </Grid.ColumnDefinitions>
@@ -147,8 +158,40 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center" />
 
+                        <StackPanel
+                            Grid.Column="1"
+                            Margin="8,0"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Left">
+
+                            <Button
+                                Margin="8,0"
+                                Style="{StaticResource MaterialDesignToolButton}"
+                                Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"
+                                Command="{Binding NavigatePreviousCommand}"
+                                Content="{materialDesign:PackIcon Kind=ArrowLeft, Size=24}"
+                                ToolTip="Navigate Back" />
+
+                            <Button
+                                Margin="8,0"
+                                Style="{StaticResource MaterialDesignToolButton}"
+                                Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"
+                                Command="{Binding NavigateNextCommand}"
+                                Content="{materialDesign:PackIcon Kind=ArrowRight, Size=24}"
+                                ToolTip="Navigate Back" />
+
+                        </StackPanel>
+                     
+                        <StackPanel
+                            Grid.Column="3"
+                            Margin="8,0"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                            
+                        </StackPanel>
+
                         <materialDesign:PopupBox
-                            Grid.Column="2"
+                            Grid.Column="4"
                             PlacementMode="BottomAndAlignRightEdges"
                             StaysOpen="False"
                             HorizontalAlignment="Center"
@@ -172,12 +215,12 @@
                                 <MenuItem
                                     Header="Save As..."
                                     Icon="{materialDesign:PackIcon Kind=ContentSaveEdit}"
-                                    Command="{Binding SaveModAsCommand}"/>
+                                    Command="{Binding SaveModAsCommand}" />
                                 <MenuItem
                                     Header="Build"
                                     Icon="{materialDesign:PackIcon Kind=Export}"
                                     Command="{Binding BuildModCommand}"
-                                    InputGestureText="F5"/>
+                                    InputGestureText="F5" />
                                 <MenuItem
                                     Header="Build As..."
                                     Icon="{materialDesign:PackIcon Kind=Export}"
@@ -189,7 +232,7 @@
                                     Header="Find"
                                     Icon="{materialDesign:PackIcon Kind=Search}"
                                     Command="{Binding FindCommand}"
-                                    InputGestureText="CTRL+F"/>
+                                    InputGestureText="CTRL+F" />
 
                                 <Separator />
 
@@ -197,7 +240,7 @@
                                     Header="About"
                                     Icon="{materialDesign:PackIcon Kind=Information}"
                                     Command="{Binding GoToPageCommand}"
-                                    CommandParameter="{Binding AboutPage}"/>
+                                    CommandParameter="{Binding AboutPage}" />
 
                                 <Separator />
 
@@ -210,7 +253,7 @@
                         </materialDesign:PopupBox>
 
                         <TextBlock
-                            Grid.Column="1"
+                            Grid.Column="2"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             FontSize="22"
