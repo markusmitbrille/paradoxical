@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Model;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -129,15 +128,7 @@ namespace Paradoxical.ViewModel
             if (view == null)
             { return; }
 
-            // maybe use view.movecurrent???
-
-            List<ParadoxElement> filteredItems = new(view.Cast<ParadoxElement>());
-
-            if (Selected == filteredItems.First())
-            { return; }
-
-            int index = filteredItems.IndexOf(Selected);
-            Selected = filteredItems[index - 1];
+            view.MoveCurrentToPrevious();
         }
 
         [RelayCommand]
@@ -149,15 +140,7 @@ namespace Paradoxical.ViewModel
             if (view == null)
             { return; }
 
-            // maybe use view.movecurrent???
-
-            List<ParadoxElement> filteredItems = new(view.Cast<ParadoxElement>());
-
-            if (Selected == filteredItems.Last())
-            { return; }
-
-            int index = filteredItems.IndexOf(Selected);
-            Selected = filteredItems[index + 1];
+            view.MoveCurrentToNext();
         }
     }
 }
