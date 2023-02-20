@@ -23,6 +23,8 @@
                 <!--#region Styles -->
                 <ResourceDictionary
                     Source="Styles/Borders.xaml" />
+                <ResourceDictionary
+                    Source="Styles/Text.xaml" />
                 <!--#endregion-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
