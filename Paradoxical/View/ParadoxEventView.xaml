@@ -11,6 +11,7 @@
     xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     d:DataContext="{d:DesignInstance Type=model:ParadoxEvent}"
+    d:Width="800"
     mc:Ignorable="d">
 
     <ScrollViewer
