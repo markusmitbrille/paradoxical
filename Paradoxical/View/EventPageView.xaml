@@ -35,11 +35,21 @@
 
                 <Button
                     Margin="4,0"
+                    Command="{Binding CreateCommand}"
                     Content="{materialDesign:PackIcon Kind=Add}"
                     ToolTip="Create Event" />
+               
+                <Button
+                    Margin="4,0"
+                    Command="{Binding DuplicateCommand}"
+                    CommandParameter="{Binding Selected}"
+                    Content="{materialDesign:PackIcon Kind=ContentDuplicate}"
+                    ToolTip="Duplicate Event" />
 
                 <Button
                     Margin="4,0"
+                    Command="{Binding DeleteCommand}"
+                    CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=Remove}"
                     ToolTip="Delete Event" />
 
@@ -65,7 +75,7 @@
             BorderBrush="Gray"
             BorderThickness="1"
             ItemsSource="{Binding CurrentContext.Events}"
-            SelectedItem="{Binding SelectedEvent}"
+            SelectedItem="{Binding Selected}"
             SelectionMode="Single"
             SelectionUnit="FullRow"
             AutoGenerateColumns="False"

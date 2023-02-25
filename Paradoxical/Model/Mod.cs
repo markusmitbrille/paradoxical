@@ -1,0 +1,72 @@
+﻿using SQLite;
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+namespace Paradoxical.Model;
+
+public class Mod : IEquatable<Mod?>
+{
+    [Column("ID"), PrimaryKey, AutoIncrement]
+    public int Id { get => id; set => id = value; }
+    public int id;
+
+    [Column("mod_name"), NotNull]
+    public string ModName { get => modName; set => modName = value; }
+    public string modName = "";
+
+    [Column("mod_version"), NotNull]
+    public string ModVersion { get => modVersion; set => modVersion = value; }
+    public string modVersion = "";
+
+    [Column("game_version"), NotNull]
+    public string GameVersion { get => gameVersion; set => gameVersion = value; }
+    public string gameVersion = "";
+
+    [Column("prefix"), NotNull]
+    public string Prefix { get => prefix; set => prefix = value; }
+    public string prefix = "";
+
+    public void Write(TextWriter writer, string dir, string file)
+    {
+        writer.Indent().WriteLine($"version=\"{ModVersion}\"");
+
+        writer.Indent().WriteLine("tags = {");
+        ParadoxText.IndentLevel++;
+
+        writer.Indent().WriteLine("Events");
+
+        ParadoxText.IndentLevel++;
+        writer.Indent().WriteLine("}");
+
+        writer.Indent().WriteLine($"name=\"{ModName}\"");
+        writer.Indent().WriteLine($"supported_version=\"{GameVersion}\"");
+        writer.Indent().WriteLine($"path=\"mod/{file}\"");
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as Mod);
+    }
+
+    public bool Equals(Mod? other)
+    {
+        return other is not null &&
+               id == other.id;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(id);
+    }
+
+    public static bool operator ==(Mod? left, Mod? right)
+    {
+        return EqualityComparer<Mod>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(Mod? left, Mod? right)
+    {
+        return !(left == right);
+    }
+}

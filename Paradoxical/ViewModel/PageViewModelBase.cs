@@ -1,9 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Paradoxical.ViewModel
+namespace Paradoxical.ViewModel;
+
+public abstract class PageViewModelBase : ObservableObject
 {
-    public abstract partial class PageViewModelBase : ObservableObject
-    {
-        public abstract string PageName { get; }
-    }
+    public abstract string PageName { get; }
 }

@@ -2,41 +2,54 @@
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
 
-namespace Paradoxical.ViewModel
+namespace Paradoxical.ViewModel;
+
+public abstract class DialogViewModelBase : ObservableObject
 {
-    public abstract partial class DialogViewModelBase : ObservableObject
+    private bool? dialogResult;
+    public bool? DialogResult
     {
-        [ObservableProperty]
-        private bool? dialogResult;
+        get => dialogResult;
+        set => SetProperty(ref dialogResult, value);
+    }
 
-        [ObservableProperty]
-        private string? dialogIdentifier;
+    private string? dialogIdentifier;
+    public string? DialogIdentifier
+    {
+        get => dialogIdentifier;
+        set => SetProperty(ref dialogIdentifier, value);
+    }
 
-        [RelayCommand(CanExecute = nameof(CanSubmit))]
-        private void Submit()
-        {
-            DialogResult = true;
+    private RelayCommand? submitCommand;
+    public RelayCommand SubmitCommand => submitCommand ??= new(Submit, CanSubmit);
 
-            Close();
-        }
-        protected virtual bool CanSubmit()
-        {
-            return true;
-        }
+    private void Submit()
+    {
+        DialogResult = true;
 
-        [RelayCommand]
-        private void Cancel()
-        {
-            DialogResult = false;
+        Close();
+    }
+    protected virtual bool CanSubmit()
+    {
+        return true;
+    }
 
-            Close();
-        }
+    private RelayCommand? cancelCommand;
+    public RelayCommand CancelCommand => cancelCommand ??= new(Cancel);
 
-        [RelayCommand]
-        private void Close()
-        {
-            if (DialogHost.IsDialogOpen(DialogIdentifier))
-            { DialogHost.Close(DialogIdentifier); }
-        }
+    private void Cancel()
+    {
+        DialogResult = false;
+
+        Close();
+    }
+
+    private RelayCommand? closeCommand;
+    public RelayCommand CloseCommand => closeCommand ??= new(Close);
+
+    private void Close()
+    {
+        if (DialogHost.IsDialogOpen(DialogIdentifier))
+        { DialogHost.Close(DialogIdentifier); }
     }
 }

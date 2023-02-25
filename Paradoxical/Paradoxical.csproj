@@ -28,6 +28,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.7.1" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
     <PackageReference Include="StringMath" Version="4.1.0" />
   </ItemGroup>
 

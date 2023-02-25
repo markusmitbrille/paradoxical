@@ -33,10 +33,6 @@
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}">
 
-    <Window.DataContext>
-        <viewmodel:MainViewModel />
-    </Window.DataContext>
-
     <Window.Resources>
         <converters:VisibilityConverter
             x:Key="VisibilityConverter" />
