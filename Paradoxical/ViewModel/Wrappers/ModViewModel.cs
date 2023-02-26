@@ -1,9 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Paradoxical.Core;
 using Paradoxical.Model;
 
 namespace Paradoxical.ViewModel;
 
-public partial class ModViewModel : ObservableObject
+public partial class ModViewModel : ModelViewModelBase
 {
     private readonly Mod model;
     public Mod Model => model;

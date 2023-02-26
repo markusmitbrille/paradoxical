@@ -1,4 +1,5 @@
-﻿using Paradoxical.Services;
+﻿using Paradoxical.Core;
+using Paradoxical.Services;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.IO;
 namespace Paradoxical.Model;
 
 [Table("effects")]
-public class Effect : IEquatable<Effect?>
+public class Effect : IElementModel, IEquatable<Effect?>
 {
     [Column("ID"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }

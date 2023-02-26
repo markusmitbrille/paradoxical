@@ -1,12 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Paradoxical.Core;
 using Paradoxical.Model;
-using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Paradoxical.ViewModel;
 
-public partial class TriggerViewModel : ObservableObject
+public partial class TriggerViewModel : ModelViewModelBase
 {
     private readonly Trigger model;
     public Trigger Model => model;

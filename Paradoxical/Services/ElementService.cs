@@ -1,4 +1,4 @@
-﻿using Paradoxical.Model;
+﻿using Paradoxical.Core;
 using System;
 using System.Collections.Generic;
 
@@ -6,7 +6,7 @@ namespace Paradoxical.Services;
 
 public interface IElementService
 {
-    IEnumerable<IElement> Get();
+    IEnumerable<IElementModel> Get();
 }
 
 public class ElementService : IElementService
@@ -18,7 +18,7 @@ public class ElementService : IElementService
         Data = data;
     }
 
-    public IEnumerable<IElement> Get()
+    public IEnumerable<IElementModel> Get()
     {
         throw new NotImplementedException();
     }

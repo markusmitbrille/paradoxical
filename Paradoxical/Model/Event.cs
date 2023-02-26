@@ -1,4 +1,5 @@
-﻿using Paradoxical.Services;
+﻿using Paradoxical.Core;
+using Paradoxical.Services;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Linq;
 
 namespace Paradoxical.Model;
 
-public class Event : IEquatable<Event?>
+public class Event : IElementModel, IEquatable<Event?>
 {
     [Column("ID"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }

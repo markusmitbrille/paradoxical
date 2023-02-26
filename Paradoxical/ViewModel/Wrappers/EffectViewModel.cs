@@ -1,9 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Paradoxical.Core;
 using Paradoxical.Model;
 
 namespace Paradoxical.ViewModel;
 
-public partial class EffectViewModel : ObservableObject
+public partial class EffectViewModel : ModelViewModelBase
 {
     private readonly Effect model;
     public Effect Model => model;

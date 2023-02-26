@@ -1,9 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Paradoxical.Core;
 using Paradoxical.Model;
 
 namespace Paradoxical.ViewModel;
 
-public partial class OnActionViewModel : ObservableObject
+public partial class OnActionViewModel : ModelViewModelBase
 {
     private readonly OnAction model;
     public OnAction Model => model;

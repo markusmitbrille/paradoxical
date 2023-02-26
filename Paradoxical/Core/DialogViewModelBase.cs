@@ -1,10 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
 
-namespace Paradoxical.ViewModel;
+namespace Paradoxical.Core;
 
-public abstract class DialogViewModelBase : ObservableObject
+public abstract class DialogViewModelBase : ViewModelBase
 {
     private bool? dialogResult;
     public bool? DialogResult

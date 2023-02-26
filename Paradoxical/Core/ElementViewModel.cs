@@ -1,11 +1,12 @@
 ﻿using Paradoxical.Model;
+using Paradoxical.ViewModel;
 using System;
 
-namespace Paradoxical.ViewModel;
+namespace Paradoxical.Core;
 
 public interface IElementViewModel
 {
-    public IElement Model { get; }
+    public IElementModel Model { get; }
 
     public int Id { get; }
     public string Name { get; }
@@ -13,7 +14,7 @@ public interface IElementViewModel
 
 public static class ElementViewModel
 {
-    public static IElementViewModel Get(IElement model)
+    public static IElementViewModel Get(IElementModel model)
     {
         switch (model)
         {

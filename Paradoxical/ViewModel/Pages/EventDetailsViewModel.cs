@@ -1,4 +1,5 @@
-﻿using Paradoxical.Services;
+﻿using Paradoxical.Core;
+using Paradoxical.Services;
 
 namespace Paradoxical.ViewModel;
 
@@ -6,12 +7,10 @@ public class EventDetailsViewModel : PageViewModelBase
 {
     public override string PageName => "Event Details";
 
-    public ApplicationViewModel App { get; }
     public IEventService Service { get; }
 
-    public EventDetailsViewModel(ApplicationViewModel app, IEventService service)
+    public EventDetailsViewModel(IEventService service)
     {
-        App = app;
         Service = service;
     }
 }

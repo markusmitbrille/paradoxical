@@ -1,9 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Paradoxical.Core;
 using Paradoxical.Model;
 
 namespace Paradoxical.ViewModel;
 
-public partial class EventViewModel : ObservableObject
+public partial class EventViewModel : ModelViewModelBase
 {
     private readonly Event model;
     public Event Model => model;

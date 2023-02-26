@@ -1,9 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Paradoxical.Core;
 using Paradoxical.Model;
 
 namespace Paradoxical.ViewModel;
 
-public partial class OptionViewModel : ObservableObject
+public partial class OptionViewModel : ModelViewModelBase
 {
     private readonly Option model;
     public Option Model => model;

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Paradoxical.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

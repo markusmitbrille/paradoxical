@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
+using Paradoxical.Core;
 using Paradoxical.Services;
 using Paradoxical.View;
 using System.Linq;
@@ -11,7 +12,6 @@ public class DecisionDetailsViewModel : PageViewModelBase
 {
     public override string PageName => "Decision Details";
 
-    public ApplicationViewModel App { get; }
     public IDecisionService Service { get; }
 
     private DecisionViewModel? selected;
@@ -21,9 +21,8 @@ public class DecisionDetailsViewModel : PageViewModelBase
         set => SetProperty(ref selected, value);
     }
 
-    public DecisionDetailsViewModel(ApplicationViewModel app, IDecisionService service)
+    public DecisionDetailsViewModel(IDecisionService service)
     {
-        App = app;
         Service = service;
     }
 

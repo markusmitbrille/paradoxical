@@ -1,4 +1,5 @@
-﻿using Paradoxical.Services;
+﻿using Paradoxical.Core;
+using Paradoxical.Services;
 
 namespace Paradoxical.ViewModel;
 
@@ -6,12 +7,10 @@ public class DecisionTableViewModel : PageViewModelBase
 {
     public override string PageName => "Decisions";
 
-    public ApplicationViewModel App { get; }
     public IDecisionService Service { get; }
 
-    public DecisionTableViewModel(ApplicationViewModel app, IDecisionService service)
+    public DecisionTableViewModel(IDecisionService service)
     {
-        App = app;
         Service = service;
     }
 }

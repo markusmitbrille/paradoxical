@@ -1,10 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Paradoxical.Core;
 using Paradoxical.Model;
 using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public partial class DecisionViewModel : ObservableObject, IElementViewModel
+public partial class DecisionViewModel : ModelViewModelBase, IElementViewModel
 {
     private static readonly Dictionary<Decision, DecisionViewModel> cache = new();
     public static DecisionViewModel Get(Decision model)
@@ -21,7 +21,7 @@ public partial class DecisionViewModel : ObservableObject, IElementViewModel
     private readonly Decision model;
     public Decision Model => model;
 
-    IElement IElementViewModel.Model => Model;
+    IElementModel IElementViewModel.Model => Model;
 
     public int Id
     {

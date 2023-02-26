@@ -1,9 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Paradoxical.Core;
 using Paradoxical.Model;
 
 namespace Paradoxical.ViewModel;
 
-public partial class PortraitViewModel : ObservableObject
+public partial class PortraitViewModel : ModelViewModelBase
 {
     private readonly Portrait model;
     public Portrait Model => model;
