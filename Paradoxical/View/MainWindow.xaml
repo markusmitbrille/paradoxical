@@ -40,49 +40,40 @@
 
     <Window.InputBindings>
         <KeyBinding
-            Command="{Binding NewModCommand}"
+            Command="{Binding NewCommand}"
             Gesture="CTRL+N" />
         <KeyBinding
-            Command="{Binding OpenModCommand}"
+            Command="{Binding OpenCommand}"
             Gesture="CTRL+O" />
         <KeyBinding
-            Command="{Binding SaveModCommand}"
+            Command="{Binding ExportCommand}"
             Gesture="CTRL+S" />
-        <KeyBinding
-            Command="{Binding BuildModCommand}"
-            Gesture="F5" />
-        <KeyBinding
+        <!--<KeyBinding
             Command="{Binding FindCommand}"
-            Gesture="CTRL+F" />
+            Gesture="CTRL+F" />-->
         <KeyBinding
-            Command="{Binding NavigateNextCommand}"
+            Command="{Binding Navigation.GoForwardCommand}"
             Gesture="ALT+Right" />
         <KeyBinding
-            Command="{Binding NavigatePreviousCommand}"
+            Command="{Binding Navigation.GoBackCommand}"
             Gesture="ALT+Left" />
         <KeyBinding
-            Command="{Binding GoToPageCommand}"
-            CommandParameter="{Binding InfoPage}"
+            Command="{Binding GoToInfoPageCommand}"
             Gesture="ALT+1" />
         <KeyBinding
-            Command="{Binding GoToPageCommand}"
-            CommandParameter="{Binding EventPage}"
+            Command="{Binding GoToEventPageCommand}"
             Gesture="ALT+2" />
         <KeyBinding
-            Command="{Binding GoToPageCommand}"
-            CommandParameter="{Binding DecisionPage}"
+            Command="{Binding GoToOnActionPageCommand}"
             Gesture="ALT+3" />
         <KeyBinding
-            Command="{Binding GoToPageCommand}"
-            CommandParameter="{Binding OnActionPage}"
+            Command="{Binding GoToDecisionPageCommand}"
             Gesture="ALT+4" />
         <KeyBinding
-            Command="{Binding GoToPageCommand}"
-            CommandParameter="{Binding TriggerPage}"
+            Command="{Binding GoToTriggerPageCommand}"
             Gesture="ALT+5" />
         <KeyBinding
-            Command="{Binding GoToPageCommand}"
-            CommandParameter="{Binding EffectPage}"
+            Command="{Binding GoToEffectPageCommand}"
             Gesture="ALT+6" />
     </Window.InputBindings>
 
@@ -98,27 +89,93 @@
                     MinWidth="220">
 
                     <ToggleButton
+                        DockPanel.Dock="Top"
                         Margin="16"
                         HorizontalAlignment="Right"
-                        DockPanel.Dock="Top"
                         IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}"
                         Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
 
-                    <ListBox
-                        Margin="0,16"
-                        Style="{StaticResource MaterialDesignNavigationPrimaryListBox}"
-                        ItemsSource="{Binding Pages}"
-                        SelectionChanged="ListBox_SelectionChanged"
-                        SelectedItem="{Binding SelectedPage, UpdateSourceTrigger=PropertyChanged}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate
-                                DataType="viewmodel:PageViewModel">
-                                <TextBlock
-                                    Margin="24,4,0,4"
-                                    Text="{Binding PageName}" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                    <StackPanel
+                        Margin="0,16">
+
+                        <Button
+                            Margin="12,8"
+                            HorizontalContentAlignment="Left"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Command="{Binding GoToInfoPageCommand}"
+                            Click="MenuButtonClickHandler">
+                            <TextBlock
+                                Margin="24,4,0,4"
+                                Text="Info" />
+                        </Button>
+
+                        <Button
+                            Margin="12,8"
+                            HorizontalContentAlignment="Left"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Command="{Binding GoToEventPageCommand}"
+                            Click="MenuButtonClickHandler">
+                            <TextBlock
+                                Margin="24,4,0,4"
+                                Text="Events" />
+                        </Button>
+
+                        <Button
+                            Margin="12,8"
+                            HorizontalContentAlignment="Left"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Command="{Binding GoToOnActionPageCommand}"
+                            Click="MenuButtonClickHandler">
+                            <TextBlock
+                                Margin="24,4,0,4"
+                                Text="On-Actions" />
+                        </Button>
+
+                        <Button
+                            Margin="12,8"
+                            HorizontalContentAlignment="Left"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Command="{Binding GoToDecisionPageCommand}"
+                            Click="MenuButtonClickHandler">
+                            <TextBlock
+                                Margin="24,4,0,4"
+                                Text="Decisions" />
+                        </Button>
+
+                        <Button
+                            Margin="12,8"
+                            HorizontalContentAlignment="Left"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Command="{Binding GoToTriggerPageCommand}"
+                            Click="MenuButtonClickHandler">
+                            <TextBlock
+                                Margin="24,4,0,4"
+                                Text="Triggers" />
+                        </Button>
+
+                        <Button
+                            Margin="12,8"
+                            HorizontalContentAlignment="Left"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Command="{Binding GoToEffectPageCommand}"
+                            Click="MenuButtonClickHandler">
+                            <TextBlock
+                                Margin="24,4,0,4"
+                                Text="Effects" />
+                        </Button>
+
+                        <Button
+                            Margin="12,8"
+                            HorizontalContentAlignment="Left"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Command="{Binding GoToAboutPageCommand}"
+                            Click="MenuButtonClickHandler">
+                            <TextBlock
+                                Margin="24,4,0,4"
+                                Text="About" />
+                        </Button>
+
+                    </StackPanel>
 
                 </DockPanel>
             </materialDesign:DrawerHost.LeftDrawerContent>
@@ -164,7 +221,7 @@
                                 Margin="8,0"
                                 Style="{StaticResource MaterialDesignToolButton}"
                                 Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"
-                                Command="{Binding NavigatePreviousCommand}"
+                                Command="{Binding Navigation.GoBackCommand}"
                                 Content="{materialDesign:PackIcon Kind=ArrowLeft, Size=24}"
                                 ToolTip="Navigate Back" />
 
@@ -172,7 +229,15 @@
                                 Margin="8,0"
                                 Style="{StaticResource MaterialDesignToolButton}"
                                 Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"
-                                Command="{Binding NavigateNextCommand}"
+                                Command="{Binding Navigation.GoHomeCommand}"
+                                Content="{materialDesign:PackIcon Kind=Home, Size=24}"
+                                ToolTip="Go Home" />
+
+                            <Button
+                                Margin="8,0"
+                                Style="{StaticResource MaterialDesignToolButton}"
+                                Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"
+                                Command="{Binding Navigation.GoForwardCommand}"
                                 Content="{materialDesign:PackIcon Kind=ArrowRight, Size=24}"
                                 ToolTip="Navigate Back" />
 
@@ -187,56 +252,49 @@
                         </StackPanel>
 
                         <materialDesign:PopupBox
+                            x:Name="PopupMenu"
                             Grid.Column="4"
                             PlacementMode="BottomAndAlignRightEdges"
                             StaysOpen="False"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center">
                             <StackPanel>
+                              
                                 <MenuItem
                                     Header="New"
                                     Icon="{materialDesign:PackIcon Kind=Create}"
-                                    Command="{Binding NewModCommand}"
+                                    Command="{Binding NewCommand}"
                                     InputGestureText="CTRL+N" />
                                 <MenuItem
                                     Header="Open..."
                                     Icon="{materialDesign:PackIcon Kind=FolderOpen}"
-                                    Command="{Binding OpenModCommand}"
+                                    Command="{Binding OpenCommand}"
                                     InputGestureText="CTRL+O" />
                                 <MenuItem
-                                    Header="Save"
+                                    Header="Export"
                                     Icon="{materialDesign:PackIcon Kind=ContentSave}"
-                                    Command="{Binding SaveModCommand}"
+                                    Command="{Binding ExportCommand}"
                                     InputGestureText="CTRL+S" />
                                 <MenuItem
-                                    Header="Save As..."
+                                    Header="Export As..."
                                     Icon="{materialDesign:PackIcon Kind=ContentSaveEdit}"
-                                    Command="{Binding SaveModAsCommand}" />
-                                <MenuItem
-                                    Header="Build"
-                                    Icon="{materialDesign:PackIcon Kind=Export}"
-                                    Command="{Binding BuildModCommand}"
-                                    InputGestureText="F5" />
-                                <MenuItem
-                                    Header="Build As..."
-                                    Icon="{materialDesign:PackIcon Kind=Export}"
-                                    Command="{Binding BuildModAsCommand}" />
+                                    Command="{Binding ExportAsCommand}" />
 
                                 <Separator />
 
-                                <MenuItem
+                                <!--<MenuItem
                                     Header="Find"
                                     Icon="{materialDesign:PackIcon Kind=Search}"
                                     Command="{Binding FindCommand}"
-                                    InputGestureText="CTRL+F" />
+                                    InputGestureText="CTRL+F" />-->
 
                                 <Separator />
 
                                 <MenuItem
                                     Header="About"
                                     Icon="{materialDesign:PackIcon Kind=Information}"
-                                    Command="{Binding GoToPageCommand}"
-                                    CommandParameter="{Binding AboutPage}" />
+                                    Command="{Binding GoToAboutPageCommand}"
+                                    Click="PopupMenuButtonClickHandler"/>
 
                                 <Separator />
 
@@ -245,6 +303,7 @@
                                     Icon="{materialDesign:PackIcon Kind=ExitToApp}"
                                     Command="{Binding ExitCommand}"
                                     InputGestureText="ALT+F4" />
+                                
                             </StackPanel>
                         </materialDesign:PopupBox>
 
@@ -253,13 +312,13 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             FontSize="22"
-                            Text="{Binding SelectedPage.PageName, FallbackValue=Paradoxical}" />
+                            Text="{Binding Navigation.CurrentPage.PageName, FallbackValue=Paradoxical}" />
                     </Grid>
                 </materialDesign:ColorZone>
 
                 <ContentControl
                     Margin="0,20,0,0"
-                    Content="{Binding SelectedObject}"
+                    Content="{Binding Navigation.CurrentPage}"
                     Visibility="{Binding Converter={StaticResource VisibilityConverter}}" />
 
             </DockPanel>

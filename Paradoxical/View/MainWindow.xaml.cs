@@ -1,5 +1,4 @@
-﻿using System.Windows.Controls;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace Paradoxical.View;
 
@@ -18,8 +17,13 @@ public partial class MainWindow
         { DragMove(); }
     }
 
-    private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void MenuButtonClickHandler(object sender, System.Windows.RoutedEventArgs e)
     {
         MenuToggleButton.IsChecked = false;
+    }
+
+    private void PopupMenuButtonClickHandler(object sender, System.Windows.RoutedEventArgs e)
+    {
+        PopupMenu.IsPopupOpen = false;
     }
 }
