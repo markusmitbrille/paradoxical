@@ -2,12 +2,10 @@
 
 namespace Paradoxical.View;
 
-public partial class FindDialogView : UserControl
+public partial class OptionFormView : UserControl
 {
-    public FindDialogView()
+    public OptionFormView()
     {
         InitializeComponent();
-
-        filter.Focus();
     }
 }
