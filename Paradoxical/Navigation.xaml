@@ -5,38 +5,63 @@
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel">
 
     <DataTemplate
-        DataType="{x:Type viewmodel:AboutPageViewModel}">
-        <view:AboutPageView />
+        DataType="{x:Type viewmodel:AboutViewModel}">
+        <view:AboutView />
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:InfoPageViewModel}">
-        <view:InfoPageView />
+        DataType="{x:Type viewmodel:InfoViewModel}">
+        <view:InfoView />
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:EventPageViewModel}">
-        <view:EventPageView />
+        DataType="{x:Type viewmodel:EventTableViewModel}">
+        <view:EventTableView />
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:TriggerPageViewModel}">
-        <view:TriggerPageView />
+        DataType="{x:Type viewmodel:EventDetailsViewModel}">
+        <view:EventDetailsView />
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:EffectPageViewModel}">
-        <view:EffectPageView />
+        DataType="{x:Type viewmodel:OnActionTableViewModel}">
+        <view:OnActionTableView />
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:OnActionPageViewModel}">
-        <view:OnActionPageView />
+        DataType="{x:Type viewmodel:OnActionDetailsViewModel}">
+        <view:OnActionDetailsView />
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:DecisionPageViewModel}">
-        <view:DecisionPageView />
+        DataType="{x:Type viewmodel:DecisionTableViewModel}">
+        <view:DecisionTableView />
     </DataTemplate>
 
+    <DataTemplate
+        DataType="{x:Type viewmodel:DecisionDetailsViewModel}">
+        <view:DecisionDetailsView />
+    </DataTemplate>
+
+    <DataTemplate
+        DataType="{x:Type viewmodel:TriggerTableViewModel}">
+        <view:TriggerTableView />
+    </DataTemplate>
+
+    <DataTemplate
+        DataType="{x:Type viewmodel:TriggerDetailsViewModel}">
+        <view:TriggerDetailsView />
+    </DataTemplate>
+
+    <DataTemplate
+        DataType="{x:Type viewmodel:EffectTableViewModel}">
+        <view:EffectTableView />
+    </DataTemplate>
+
+    <DataTemplate
+        DataType="{x:Type viewmodel:EffectDetailsViewModel}">
+        <view:EffectDetailsView />
+    </DataTemplate>
+    
 </ResourceDictionary>

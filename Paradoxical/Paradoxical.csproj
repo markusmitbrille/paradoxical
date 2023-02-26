@@ -28,24 +28,25 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.7.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
     <PackageReference Include="StringMath" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="View\DecisionPageView.xaml.cs">
+    <Compile Update="View\DecisionTableView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\OnActionPageView.xaml.cs">
+    <Compile Update="View\OnActionTableView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\ParadoxEffectView.xaml.cs">
+    <Compile Update="View\EffectDetailsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\ParadoxDecisionView.xaml.cs">
+    <Compile Update="View\DecisionDetailsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\ParadoxOnActionView.xaml.cs">
+    <Compile Update="View\OnActionDetailsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
