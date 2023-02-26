@@ -32,8 +32,16 @@ public partial class App : Application
         services.AddSingleton<PageFactory>(provider => pageType => (PageViewModelBase)provider.GetRequiredService(pageType));
 
         services.AddSingleton<MainViewModel>();
+        services.AddSingleton<MainWindow>(provider => new()
+        {
+            DataContext = provider.GetRequiredService<MainViewModel>(),
+        });
 
         services.AddSingleton<FindDialogViewModel>();
+        services.AddSingleton<FindDialogView>(provider => new()
+        {
+            DataContext = provider.GetRequiredService<FindDialogViewModel>(),
+        });
 
         services.AddSingleton<AboutViewModel>();
         services.AddSingleton<InfoViewModel>();
@@ -60,11 +68,7 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
-        MainWindow main = new()
-        {
-            DataContext = serviceProvider.GetRequiredService<MainViewModel>()
-        };
-
+        MainWindow main = serviceProvider.GetRequiredService<MainWindow>();
         main.Show();
     }
 
