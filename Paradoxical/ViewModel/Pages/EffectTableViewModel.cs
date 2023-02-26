@@ -9,7 +9,8 @@ public class EffectTableViewModel : PageViewModelBase
 
     public IEffectService Service { get; }
 
-    public EffectTableViewModel(IEffectService service)
+    public EffectTableViewModel(NavigationViewModel navigation, IEffectService service)
+        : base(navigation)
     {
         Service = service;
     }

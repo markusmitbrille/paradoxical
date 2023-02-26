@@ -9,7 +9,8 @@ public class EventTableViewModel : PageViewModelBase
 
     public IEventService Service { get; }
 
-    public EventTableViewModel(IEventService service)
+    public EventTableViewModel(NavigationViewModel navigation, IEventService service)
+        : base(navigation)
     {
         Service = service;
     }

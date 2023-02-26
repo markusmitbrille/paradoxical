@@ -9,7 +9,8 @@ public class OnActionDetailsViewModel : PageViewModelBase
 
     public IOnActionService Service { get; }
 
-    public OnActionDetailsViewModel(IOnActionService service)
+    public OnActionDetailsViewModel(NavigationViewModel navigation, IOnActionService service)
+        : base(navigation)
     {
         Service = service;
     }

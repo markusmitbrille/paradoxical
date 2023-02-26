@@ -9,7 +9,8 @@ public class TriggerTableViewModel : PageViewModelBase
 
     public ITriggerService Service { get; }
 
-    public TriggerTableViewModel(ITriggerService service)
+    public TriggerTableViewModel(NavigationViewModel navigation, ITriggerService service)
+        : base(navigation)
     {
         Service = service;
     }

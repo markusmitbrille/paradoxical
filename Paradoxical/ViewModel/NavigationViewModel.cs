@@ -2,6 +2,7 @@
 using Paradoxical.Core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace Paradoxical.ViewModel;
@@ -12,11 +13,6 @@ public class NavigationViewModel : ViewModelBase
 {
     private PageFactory PageFactory { get; }
 
-    public NavigationViewModel(PageFactory pageFactory)
-    {
-        PageFactory = pageFactory;
-    }
-
     private PageViewModelBase? currentPage;
     public PageViewModelBase? CurrentPage
     {
@@ -26,6 +22,34 @@ public class NavigationViewModel : ViewModelBase
 
     private readonly Stack<PageViewModelBase> history = new();
     private readonly Stack<PageViewModelBase> future = new();
+
+    public event Action? Navigating;
+    public event Action? Navigated;
+
+    public NavigationViewModel(PageFactory pageFactory)
+    {
+        PageFactory = pageFactory;
+    }
+
+    protected override void OnPropertyChanging(PropertyChangingEventArgs e)
+    {
+        base.OnPropertyChanging(e);
+
+        if (e.PropertyName == nameof(CurrentPage))
+        {
+            Navigating?.Invoke();
+        }
+    }
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+
+        if (e.PropertyName == nameof(CurrentPage))
+        {
+            Navigated?.Invoke();
+        }
+    }
 
     private RelayCommand? goForwardCommand;
     public RelayCommand GoForwardCommand => goForwardCommand ??= new(GoForward);

@@ -9,7 +9,8 @@ public class TriggerDetailsViewModel : PageViewModelBase
 
     public ITriggerService Service { get; }
 
-    public TriggerDetailsViewModel(ITriggerService service)
+    public TriggerDetailsViewModel(NavigationViewModel navigation, ITriggerService service)
+        : base(navigation)
     {
         Service = service;
     }

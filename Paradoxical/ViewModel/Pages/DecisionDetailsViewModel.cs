@@ -21,7 +21,8 @@ public class DecisionDetailsViewModel : PageViewModelBase
         set => SetProperty(ref selected, value);
     }
 
-    public DecisionDetailsViewModel(IDecisionService service)
+    public DecisionDetailsViewModel(NavigationViewModel navigation, IDecisionService service)
+        : base(navigation)
     {
         Service = service;
     }

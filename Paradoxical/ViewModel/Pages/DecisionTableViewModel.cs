@@ -9,7 +9,8 @@ public class DecisionTableViewModel : PageViewModelBase
 
     public IDecisionService Service { get; }
 
-    public DecisionTableViewModel(IDecisionService service)
+    public DecisionTableViewModel(NavigationViewModel navigation, IDecisionService service)
+        : base(navigation)
     {
         Service = service;
     }

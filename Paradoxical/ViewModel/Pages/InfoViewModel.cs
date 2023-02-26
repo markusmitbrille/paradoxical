@@ -9,7 +9,8 @@ public class InfoViewModel : PageViewModelBase
 
     public IDataService Data { get; }
 
-    public InfoViewModel(IDataService data)
+    public InfoViewModel(NavigationViewModel navigation, IDataService data)
+        : base(navigation)
     {
         Data = data;
     }

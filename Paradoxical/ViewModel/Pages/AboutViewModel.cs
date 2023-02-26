@@ -6,7 +6,8 @@ public class AboutViewModel : PageViewModelBase
 {
     public override string PageName => "About";
 
-    public AboutViewModel()
+    public AboutViewModel(NavigationViewModel navigation)
+        : base(navigation)
     {
     }
 }
