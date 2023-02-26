@@ -7,15 +7,17 @@ namespace Paradoxical.ViewModel;
 
 public class MainViewModel : ViewModelBase
 {
-    public IFileService File { get; }
     public NavigationViewModel Navigation { get; }
 
+    public IFileService File { get; }
+
     public MainViewModel(
-        IFileService file,
-        NavigationViewModel navigation)
+        NavigationViewModel navigation,
+        IFileService file)
     {
-        File = file;
         Navigation = navigation;
+
+        File = file;
     }
 
     private RelayCommand? newCommand;
