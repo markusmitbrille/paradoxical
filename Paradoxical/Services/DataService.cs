@@ -13,6 +13,10 @@ public interface IDataService
 
 public class DataService : IDataService
 {
+    public DataService()
+    {
+    }
+
     private SQLiteAsyncConnection? connection;
     public SQLiteAsyncConnection Connection => connection ?? throw new InvalidOperationException("Not connected!");
 

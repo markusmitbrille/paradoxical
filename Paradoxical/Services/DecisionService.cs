@@ -29,9 +29,9 @@ public interface IDecisionService
 
 public class DecisionService : IDecisionService
 {
-    public DataService Data { get; }
+    public IDataService Data { get; }
 
-    public DecisionService(DataService data)
+    public DecisionService(IDataService data)
     {
         Data = data;
     }
