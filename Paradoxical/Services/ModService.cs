@@ -3,6 +3,14 @@ using System;
 
 namespace Paradoxical.Services;
 
+public interface IModService
+{
+    Mod Get();
+
+    string GetPrefix();
+    string GetModName();
+}
+
 public class ModService : IModService
 {
     public IDataService Data { get; }

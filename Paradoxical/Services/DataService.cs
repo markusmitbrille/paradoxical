@@ -3,6 +3,14 @@ using System;
 
 namespace Paradoxical.Services;
 
+public interface IDataService
+{
+    SQLiteAsyncConnection Connection { get; }
+
+    void Connect(string file);
+    void Disconnect();
+}
+
 public class DataService : IDataService
 {
     private SQLiteAsyncConnection? connection;

@@ -3,6 +3,14 @@ using System;
 
 namespace Paradoxical.ViewModel;
 
+public interface IElementViewModel
+{
+    public IElement Model { get; }
+
+    public int Id { get; }
+    public string Name { get; }
+}
+
 public static class ElementViewModel
 {
     public static IElementViewModel Get(IElement model)

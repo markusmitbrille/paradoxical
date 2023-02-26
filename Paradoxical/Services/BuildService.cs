@@ -4,6 +4,11 @@ using System.Text;
 
 namespace Paradoxical.Services;
 
+public interface IBuildService
+{
+    void Export(string dir, string file);
+}
+
 public class BuildService : IBuildService
 {
     private const string EVENTS_DIR = "events";

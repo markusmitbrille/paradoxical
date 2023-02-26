@@ -4,6 +4,11 @@ using System.Collections.Generic;
 
 namespace Paradoxical.Services;
 
+public interface IElementService
+{
+    IEnumerable<IElement> Get();
+}
+
 public class ElementService : IElementService
 {
     public IDataService Data { get; }
