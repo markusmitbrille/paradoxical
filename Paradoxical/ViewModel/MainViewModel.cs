@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Core;
 using Paradoxical.Services;
-using System.Collections.Generic;
 using System.Windows;
 
 namespace Paradoxical.ViewModel;
@@ -13,31 +12,11 @@ public class MainViewModel : ViewModelBase
 
     public MainViewModel(
         IFileService file,
-        NavigationViewModel navigation,
-        AboutViewModel aboutPage,
-        InfoViewModel infoPage,
-        EventTableViewModel eventPage,
-        OnActionTableViewModel onActionPage,
-        DecisionTableViewModel decisionPage,
-        TriggerTableViewModel triggerPage,
-        EffectTableViewModel effectPage)
+        NavigationViewModel navigation)
     {
         File = file;
         Navigation = navigation;
-
-        Pages = new PageViewModelBase[]
-        {
-            infoPage,
-            eventPage,
-            onActionPage,
-            decisionPage,
-            triggerPage,
-            effectPage,
-            aboutPage,
-        };
     }
-
-    public IEnumerable<PageViewModelBase> Pages { get; }
 
     private RelayCommand? newCommand;
     public RelayCommand NewCommand => newCommand ??= new(New);
@@ -79,5 +58,61 @@ public class MainViewModel : ViewModelBase
     private void Exit()
     {
         Application.Current.Shutdown();
+    }
+
+    private RelayCommand? goToInfoPageCommand;
+    public RelayCommand GoToInfoPageCommand => goToInfoPageCommand ??= new(GoToInfoPage);
+
+    private void GoToInfoPage()
+    {
+        Navigation.Navigate<InfoViewModel>();
+    }
+
+    private RelayCommand? goToEventPageCommand;
+    public RelayCommand GoToEventPageCommand => goToEventPageCommand ??= new(GoToEventPage);
+
+    private void GoToEventPage()
+    {
+        Navigation.Navigate<EventTableViewModel>();
+    }
+
+    private RelayCommand? goToOnActionPageCommand;
+    public RelayCommand GoToOnActionPageCommand => goToOnActionPageCommand ??= new(GoToOnActionPage);
+
+    private void GoToOnActionPage()
+    {
+        Navigation.Navigate<OnActionTableViewModel>();
+    }
+
+    private RelayCommand? goToDecisionPageCommand;
+    public RelayCommand GoToDecisionPageCommand => goToDecisionPageCommand ??= new(GoToDecisionPage);
+
+    private void GoToDecisionPage()
+    {
+        Navigation.Navigate<DecisionTableViewModel>();
+    }
+
+    private RelayCommand? goToTriggerPageCommand;
+    public RelayCommand GoToTriggerPageCommand => goToTriggerPageCommand ??= new(GoToTriggerPage);
+
+    private void GoToTriggerPage()
+    {
+        Navigation.Navigate<TriggerTableViewModel>();
+    }
+
+    private RelayCommand? goToEffectPageCommand;
+    public RelayCommand GoToEffectPageCommand => goToEffectPageCommand ??= new(GoToEffectPage);
+
+    private void GoToEffectPage()
+    {
+        Navigation.Navigate<EffectTableViewModel>();
+    }
+
+    private RelayCommand? goToAboutPageCommand;
+    public RelayCommand GoToAboutPageCommand => goToAboutPageCommand ??= new(GoToAboutPage);
+
+    private void GoToAboutPage()
+    {
+        Navigation.Navigate<AboutViewModel>();
     }
 }

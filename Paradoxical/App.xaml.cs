@@ -32,82 +32,26 @@ public partial class App : Application
         services.AddSingleton<PageFactory>(provider => pageType => (PageViewModelBase)provider.GetRequiredService(pageType));
 
         services.AddSingleton<MainViewModel>();
-        services.AddSingleton<MainWindow>(provider => new()
-        {
-            DataContext = provider.GetRequiredService<MainViewModel>()
-        });
 
         services.AddSingleton<FindDialogViewModel>();
-        services.AddSingleton<FindDialogView>(provider => new()
-        {
-            DataContext = provider.GetRequiredService<FindDialogViewModel>()
-        });
 
         services.AddSingleton<AboutViewModel>();
-        services.AddSingleton<AboutView>(provider => new()
-        {
-            DataContext = provider.GetRequiredService<AboutViewModel>()
-        });
-
         services.AddSingleton<InfoViewModel>();
-        services.AddSingleton<InfoView>(provider => new()
-        {
-            DataContext = provider.GetRequiredService<InfoViewModel>()
-        });
 
         services.AddSingleton<EventDetailsViewModel>();
-        services.AddSingleton<EventDetailsView>(provider => new()
-        {
-            DataContext = provider.GetRequiredService<EventDetailsViewModel>()
-        });
-
         services.AddSingleton<EventTableViewModel>();
-        services.AddSingleton<EventTableView>(provider => new()
-        {
-            DataContext = provider.GetRequiredService<EventTableViewModel>()
-        });
 
         services.AddSingleton<OnActionDetailsViewModel>();
-        services.AddSingleton<OnActionDetailsView>(provider => new()
-        {
-            DataContext = provider.GetRequiredService<OnActionDetailsViewModel>()
-        });
+        services.AddSingleton<OnActionTableViewModel>();
 
         services.AddSingleton<DecisionDetailsViewModel>();
-        services.AddSingleton<DecisionDetailsView>(provider => new()
-        {
-            DataContext = provider.GetRequiredService<DecisionDetailsViewModel>()
-        });
-
         services.AddSingleton<DecisionTableViewModel>();
-        services.AddSingleton<DecisionTableView>(provider => new()
-        {
-            DataContext = provider.GetRequiredService<DecisionTableViewModel>()
-        });
 
         services.AddSingleton<TriggerDetailsViewModel>();
-        services.AddSingleton<TriggerDetailsView>(provider => new()
-        {
-            DataContext = provider.GetRequiredService<TriggerDetailsViewModel>()
-        });
-
         services.AddSingleton<TriggerTableViewModel>();
-        services.AddSingleton<TriggerTableView>(provider => new()
-        {
-            DataContext = provider.GetRequiredService<TriggerTableViewModel>()
-        });
 
         services.AddSingleton<EffectDetailsViewModel>();
-        services.AddSingleton<EffectDetailsView>(provider => new()
-        {
-            DataContext = provider.GetRequiredService<EffectDetailsViewModel>()
-        });
-
         services.AddSingleton<EffectTableViewModel>();
-        services.AddSingleton<EffectTableView>(provider => new()
-        {
-            DataContext = provider.GetRequiredService<EffectTableViewModel>()
-        });
 
         serviceProvider = services.BuildServiceProvider();
     }
@@ -116,7 +60,11 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
-        MainWindow main = serviceProvider.GetRequiredService<MainWindow>();
+        MainWindow main = new()
+        {
+            DataContext = serviceProvider.GetRequiredService<MainViewModel>()
+        };
+
         main.Show();
     }
 
