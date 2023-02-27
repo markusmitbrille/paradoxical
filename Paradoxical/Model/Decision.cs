@@ -9,7 +9,7 @@ using System.Linq;
 namespace Paradoxical.Model;
 
 [Table("decisions")]
-public class Decision : IElementModel, IEquatable<Decision?>
+public class Decision : IModel, IElement, IEquatable<Decision?>
 {
     [Column("ID"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }

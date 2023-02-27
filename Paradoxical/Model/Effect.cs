@@ -8,7 +8,7 @@ using System.IO;
 namespace Paradoxical.Model;
 
 [Table("effects")]
-public class Effect : IElementModel, IEquatable<Effect?>
+public class Effect : IModel, IElement, IEquatable<Effect?>
 {
     [Column("ID"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }

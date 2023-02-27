@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Paradoxical.Model;
 
-public class Mod : IEquatable<Mod?>
+public class Mod : IModel, IEquatable<Mod?>
 {
     [Column("ID"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }

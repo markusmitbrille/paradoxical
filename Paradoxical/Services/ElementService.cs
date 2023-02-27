@@ -6,7 +6,7 @@ namespace Paradoxical.Services;
 
 public interface IElementService
 {
-    IEnumerable<IElementModel> Get();
+    IEnumerable<IElement> Get();
 }
 
 public class ElementService : IElementService
@@ -18,7 +18,7 @@ public class ElementService : IElementService
         Data = data;
     }
 
-    public IEnumerable<IElementModel> Get()
+    public IEnumerable<IElement> Get()
     {
         throw new NotImplementedException();
     }

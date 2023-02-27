@@ -9,7 +9,7 @@ using System.Linq;
 namespace Paradoxical.Model;
 
 [Table("on_actions")]
-public class OnAction : IElementModel, IEquatable<OnAction?>
+public class OnAction : IModel, IElement, IEquatable<OnAction?>
 {
     [Column("ID"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }

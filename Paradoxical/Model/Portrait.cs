@@ -7,7 +7,7 @@ using System.IO;
 namespace Paradoxical.Model;
 
 [Table("portraits")]
-public class Portrait : IEquatable<Portrait?>
+public class Portrait : IModel, IEquatable<Portrait?>
 {
     [Column("ID"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }

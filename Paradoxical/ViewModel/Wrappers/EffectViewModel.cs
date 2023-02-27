@@ -1,12 +1,28 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Model;
+using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public partial class EffectViewModel : ModelViewModelBase
+public partial class EffectViewModel : ViewModelBase, IModelViewModel, IElementViewModel
 {
+    private static readonly Dictionary<Effect, EffectViewModel> cache = new();
+    public static EffectViewModel Get(Effect model)
+    {
+        if (cache.TryGetValue(model, out var viewModel) == false)
+        {
+            viewModel = new(model);
+            cache.Add(model, viewModel);
+        }
+
+        return viewModel;
+    }
+
     private readonly Effect model;
     public Effect Model => model;
+
+    IModel IModelViewModel.Model => Model;
+    IElement IElementViewModel.Model => Model;
 
     public int Id
     {

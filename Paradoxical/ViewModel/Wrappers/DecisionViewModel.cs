@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public partial class DecisionViewModel : ModelViewModelBase, IElementViewModel
+public partial class DecisionViewModel : ViewModelBase, IModelViewModel, IElementViewModel
 {
     private static readonly Dictionary<Decision, DecisionViewModel> cache = new();
     public static DecisionViewModel Get(Decision model)
@@ -21,7 +21,8 @@ public partial class DecisionViewModel : ModelViewModelBase, IElementViewModel
     private readonly Decision model;
     public Decision Model => model;
 
-    IElementModel IElementViewModel.Model => Model;
+    IModel IModelViewModel.Model => Model;
+    IElement IElementViewModel.Model => Model;
 
     public int Id
     {

@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Paradoxical.Model;
 
-public class Event : IElementModel, IEquatable<Event?>
+public class Event : IModel, IElement, IEquatable<Event?>
 {
     [Column("ID"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
