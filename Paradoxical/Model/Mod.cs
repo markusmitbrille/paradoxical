@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using Paradoxical.Core;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.IO;

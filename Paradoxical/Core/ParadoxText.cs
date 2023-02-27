@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Paradoxical.Model;
+namespace Paradoxical.Core;
 
 public static class ParadoxText
 {

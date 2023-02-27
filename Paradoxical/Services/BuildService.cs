@@ -1,4 +1,5 @@
-﻿using Paradoxical.Model;
+﻿using Paradoxical.Core;
+using Paradoxical.Model;
 using System.IO;
 using System.Text;
 

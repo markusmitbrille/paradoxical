@@ -1,4 +1,4 @@
-﻿using Paradoxical.Model;
+﻿using Paradoxical.Core;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Documents;
