@@ -5,6 +5,11 @@
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel">
 
     <DataTemplate
+        DataType="{x:Type viewmodel:FindDialogViewModel}">
+        <view:FindDialogView />
+    </DataTemplate>
+
+    <DataTemplate
         DataType="{x:Type viewmodel:AboutViewModel}">
         <view:AboutView />
     </DataTemplate>

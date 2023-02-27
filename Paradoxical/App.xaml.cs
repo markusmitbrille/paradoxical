@@ -19,6 +19,7 @@ public partial class App : Application
         services.AddSingleton<IDataService, DataService>();
         services.AddSingleton<IFileService, FileService>();
 
+        services.AddSingleton<IElementService, ElementService>();
         services.AddSingleton<IModService, ModService>();
         services.AddSingleton<IEventService, EventService>();
         services.AddSingleton<IOnActionService, OnActionService>();
@@ -37,11 +38,7 @@ public partial class App : Application
             DataContext = provider.GetRequiredService<MainViewModel>(),
         });
 
-        services.AddSingleton<FindDialogViewModel>();
-        services.AddSingleton<FindDialogView>(provider => new()
-        {
-            DataContext = provider.GetRequiredService<FindDialogViewModel>(),
-        });
+        services.AddTransient<FindDialogViewModel>();
 
         services.AddSingleton<AboutViewModel>();
         services.AddSingleton<InfoViewModel>();

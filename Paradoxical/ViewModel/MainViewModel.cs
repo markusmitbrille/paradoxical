@@ -1,6 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
 using Paradoxical.Services;
+using Paradoxical.View;
+using System;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Paradoxical.ViewModel;
@@ -10,14 +14,17 @@ public class MainViewModel : ViewModelBase
     public NavigationViewModel Navigation { get; }
 
     public IFileService File { get; }
+    public IElementService Element { get; }
 
     public MainViewModel(
         NavigationViewModel navigation,
-        IFileService file)
+        IFileService file,
+        IElementService element)
     {
         Navigation = navigation;
 
         File = file;
+        Element = element;
     }
 
     private RelayCommand? newCommand;
@@ -116,5 +123,32 @@ public class MainViewModel : ViewModelBase
     private void GoToAboutPage()
     {
         Navigation.Navigate<AboutViewModel>();
+    }
+
+    private AsyncRelayCommand? findCommand;
+    public AsyncRelayCommand FindCommand => findCommand ??= new AsyncRelayCommand(Find);
+
+    private async Task Find()
+    {
+        var details = Navigation.CurrentPage as IElementDetailsViewModel;
+        var current = details?.Selected;
+
+        // TODO: get all elements, except current
+
+        FindDialogViewModel dlg = new(Array.Empty<IElementViewModel>())
+        {
+            DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
+        };
+
+        await DialogHost.Show(dlg, MainWindow.ROOT_DIALOG_IDENTIFIER);
+
+        if (dlg.DialogResult != true)
+        { return; }
+
+        if (dlg.Selected == null)
+        { return; }
+
+        // TODO: navigate to appropriate page
+        // TODO: set selected element from dlg
     }
 }

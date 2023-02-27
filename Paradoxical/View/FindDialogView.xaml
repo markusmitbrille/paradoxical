@@ -81,7 +81,7 @@
                 x:Name="filter"
                 Grid.Row="0"
                 Style="{DynamicResource MaterialDesignFilledTextBox}"
-                Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Text="{Binding NameFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 materialDesign:HintAssist.Hint="Filter"
                 materialDesign:TextFieldAssist.HasClearButton="True">
 
@@ -113,7 +113,7 @@
             <ListBox
                 Grid.Row="1"
                 Margin="0,20,0,0"
-                ItemsSource="{Binding Items}"
+                ItemsSource="{Binding View}"
                 SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 IsSynchronizedWithCurrentItem="True">
 

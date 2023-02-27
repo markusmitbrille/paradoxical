@@ -48,9 +48,9 @@
         <KeyBinding
             Command="{Binding ExportCommand}"
             Gesture="CTRL+S" />
-        <!--<KeyBinding
+        <KeyBinding
             Command="{Binding FindCommand}"
-            Gesture="CTRL+F" />-->
+            Gesture="CTRL+F" />
         <KeyBinding
             Command="{Binding Navigation.GoForwardCommand}"
             Gesture="ALT+Right" />
@@ -282,11 +282,11 @@
 
                                 <Separator />
 
-                                <!--<MenuItem
+                                <MenuItem
                                     Header="Find"
                                     Icon="{materialDesign:PackIcon Kind=Search}"
                                     Command="{Binding FindCommand}"
-                                    InputGestureText="CTRL+F" />-->
+                                    InputGestureText="CTRL+F" />
 
                                 <Separator />
 
