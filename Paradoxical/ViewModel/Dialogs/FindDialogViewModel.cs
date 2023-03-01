@@ -8,9 +8,23 @@ using System.Windows.Data;
 
 namespace Paradoxical.ViewModel;
 
-public class FindDialogViewModel : DialogViewModelBase
+public class FindDialogViewModel : FullScreenDialogViewModelBase
 {
-    public ICollectionView View { get; }
+    public IEnumerable<IElementViewModel> Items
+    {
+        set
+        {
+            View = CollectionViewSource.GetDefaultView(value);
+            View.Filter = Predicate;
+        }
+    }
+
+    private ICollectionView? view;
+    public ICollectionView? View
+    {
+        get => view;
+        set => SetProperty(ref view, value);
+    }
 
     private string? nameFilter;
     public string? NameFilter
@@ -37,34 +51,52 @@ public class FindDialogViewModel : DialogViewModelBase
         }
     }
 
-    public FindDialogViewModel(IEnumerable<IElementViewModel> items)
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
-        View = CollectionViewSource.GetDefaultView(items);
-        View.Filter = FilterItems;
+        base.OnPropertyChanged(e);
 
-        PropertyChanged += NameFilterPropertyChangedHandler;
-        PropertyChanged += TypeFilterPropertyChangedHandler;
+        if (e.PropertyName == nameof(View))
+        {
+            UpdateView();
+            UpdateSelected();
+        }
+
+        if (e.PropertyName == nameof(NameFilter))
+        {
+            UpdateView();
+            UpdateSelected();
+        }
+
+        if (e.PropertyName == nameof(TypeFilter))
+        {
+            UpdateView();
+            UpdateSelected();
+        }
     }
 
-    private void NameFilterPropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
+    private void UpdateView()
     {
-        if (e.PropertyName != nameof(NameFilter))
+        if (View == null)
         { return; }
 
-        View?.Refresh();
-        Selected = View?.Cast<IElementViewModel>().FirstOrDefault();
+        View.Refresh();
     }
 
-    private void TypeFilterPropertyChangedHandler(object? sender, PropertyChangedEventArgs e)
+    private void UpdateSelected()
     {
-        if (e.PropertyName != nameof(TypeFilter))
+        if (View == null)
         { return; }
 
-        View?.Refresh();
-        Selected = View?.Cast<IElementViewModel>().FirstOrDefault();
+        if (Selected == null)
+        { return; }
+
+        if (Predicate(Selected) == true)
+        { return; }
+
+        Selected = View.Cast<IElementViewModel>().FirstOrDefault();
     }
 
-    private bool FilterItems(object obj)
+    private bool Predicate(object obj)
     {
         if (obj is not IElementViewModel element)
         { return false; }
@@ -109,6 +141,7 @@ public class FindDialogViewModel : DialogViewModelBase
     }
 
     private RelayCommand? nextCommand;
+
     public RelayCommand NextCommand => nextCommand ??= new(Next);
 
     private void Next()

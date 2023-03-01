@@ -2,7 +2,6 @@
 using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
 using Paradoxical.Services;
-using Paradoxical.View;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,17 +11,18 @@ namespace Paradoxical.ViewModel;
 public class MainViewModel : ViewModelBase
 {
     public NavigationViewModel Navigation { get; }
-
+    public FindDialogViewModel Finder { get; }
     public IFileService File { get; }
     public IElementService Element { get; }
 
     public MainViewModel(
         NavigationViewModel navigation,
+        FindDialogViewModel finder,
         IFileService file,
         IElementService element)
     {
         Navigation = navigation;
-
+        Finder = finder;
         File = file;
         Element = element;
     }
@@ -135,17 +135,14 @@ public class MainViewModel : ViewModelBase
 
         // TODO: get all elements, except current
 
-        FindDialogViewModel dlg = new(Array.Empty<IElementViewModel>())
-        {
-            DialogIdentifier = MainWindow.ROOT_DIALOG_IDENTIFIER,
-        };
+        Finder.Items = Array.Empty<IElementViewModel>();
 
-        await DialogHost.Show(dlg, MainWindow.ROOT_DIALOG_IDENTIFIER);
+        await DialogHost.Show(Finder, Finder.DialogIdentifier);
 
-        if (dlg.DialogResult != true)
+        if (Finder.DialogResult != true)
         { return; }
 
-        if (dlg.Selected == null)
+        if (Finder.Selected == null)
         { return; }
 
         // TODO: navigate to appropriate page

@@ -5,18 +5,13 @@ namespace Paradoxical.Core;
 
 public abstract class DialogViewModelBase : ViewModelBase
 {
+    public abstract string DialogIdentifier { get; }
+
     private bool? dialogResult;
     public bool? DialogResult
     {
         get => dialogResult;
         set => SetProperty(ref dialogResult, value);
-    }
-
-    private string? dialogIdentifier;
-    public string? DialogIdentifier
-    {
-        get => dialogIdentifier;
-        set => SetProperty(ref dialogIdentifier, value);
     }
 
     private RelayCommand? submitCommand;
