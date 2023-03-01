@@ -27,21 +27,21 @@ public class MainViewModel : ViewModelBase
         Element = element;
     }
 
-    private RelayCommand? newCommand;
-    public RelayCommand NewCommand => newCommand ??= new(New);
+    private AsyncRelayCommand? newCommand;
+    public AsyncRelayCommand NewCommand => newCommand ??= new(New);
 
-    private void New()
+    private async Task New()
     {
-        File.New();
+        await File.New();
         Navigation.GoHome();
     }
 
-    private RelayCommand? openCommand;
-    public RelayCommand OpenCommand => openCommand ??= new(Open);
+    private AsyncRelayCommand? openCommand;
+    public AsyncRelayCommand OpenCommand => openCommand ??= new(Open);
 
-    private void Open()
+    private async Task Open()
     {
-        File.Open();
+        await File.Open();
         Navigation.GoHome();
     }
 

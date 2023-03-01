@@ -1,5 +1,7 @@
-﻿using SQLite;
+﻿using Paradoxical.Model;
+using SQLite;
 using System;
+using System.Threading.Tasks;
 
 namespace Paradoxical.Services;
 
@@ -7,8 +9,8 @@ public interface IDataService
 {
     SQLiteAsyncConnection Connection { get; }
 
-    void Connect(string file);
-    void Disconnect();
+    Task Connect(string file);
+    Task Disconnect();
 }
 
 public class DataService : IDataService
@@ -20,9 +22,9 @@ public class DataService : IDataService
     private SQLiteAsyncConnection? connection;
     public SQLiteAsyncConnection Connection => connection ?? throw new InvalidOperationException("Not connected!");
 
-    public void Connect(string path)
+    public async Task Connect(string path)
     {
-        Disconnect();
+        await Disconnect();
 
         try
         {
@@ -39,17 +41,45 @@ public class DataService : IDataService
             return;
         }
 
-        CreateTables();
+        await CreateTables();
     }
 
-    public void Disconnect()
+    public async Task Disconnect()
     {
-        connection?.CloseAsync();
+        await Connection.CloseAsync();
+
         connection = null;
     }
 
-    private void CreateTables()
+    private async Task CreateTables()
     {
-        throw new NotImplementedException();
+        await Connection.CreateTableAsync<Mod>();
+
+        await Connection.CreateTableAsync<Event>();
+        await Connection.CreateTableAsync<EventImmediateEffect>();
+        await Connection.CreateTableAsync<EventAfterEffect>();
+        await Connection.CreateTableAsync<EventTrigger>();
+
+        await Connection.CreateTableAsync<Portrait>();
+
+        await Connection.CreateTableAsync<Option>();
+        await Connection.CreateTableAsync<OptionTrigger>();
+        await Connection.CreateTableAsync<OptionEffect>();
+
+        await Connection.CreateTableAsync<OnAction>();
+        await Connection.CreateTableAsync<OnActionTrigger>();
+        await Connection.CreateTableAsync<OnActionEffect>();
+        await Connection.CreateTableAsync<OnActionEvent>();
+        await Connection.CreateTableAsync<OnActionOnAction>();
+
+        await Connection.CreateTableAsync<Decision>();
+        await Connection.CreateTableAsync<DecisionIsShownTrigger>();
+        await Connection.CreateTableAsync<DecisionIsValidTrigger>();
+        await Connection.CreateTableAsync<DecisionIsValidFailureTrigger>();
+        await Connection.CreateTableAsync<DecisionEffect>();
+
+        await Connection.CreateTableAsync<Trigger>();
+
+        await Connection.CreateTableAsync<Effect>();
     }
 }
