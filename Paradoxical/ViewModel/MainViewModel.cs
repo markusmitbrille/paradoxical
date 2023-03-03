@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
+using Paradoxical.Messages;
 using Paradoxical.Services;
 using System;
 using System.Threading.Tasks;
@@ -12,17 +13,20 @@ public class MainViewModel : ViewModelBase
 {
     public NavigationViewModel Navigation { get; }
     public FindDialogViewModel Finder { get; }
+    public IMediatorService Mediator { get; }
     public IFileService File { get; }
     public IElementService Element { get; }
 
     public MainViewModel(
         NavigationViewModel navigation,
         FindDialogViewModel finder,
+        IMediatorService mediator,
         IFileService file,
         IElementService element)
     {
         Navigation = navigation;
         Finder = finder;
+        Mediator = mediator;
         File = file;
         Element = element;
     }
@@ -66,6 +70,7 @@ public class MainViewModel : ViewModelBase
 
     private void Exit()
     {
+        Mediator.Send<ShutdownMessage>(new());
         Application.Current.Shutdown();
     }
 
