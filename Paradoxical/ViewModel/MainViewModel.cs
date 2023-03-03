@@ -126,7 +126,7 @@ public class MainViewModel : ViewModelBase
     }
 
     private AsyncRelayCommand? findCommand;
-    public AsyncRelayCommand FindCommand => findCommand ??= new AsyncRelayCommand(Find);
+    public AsyncRelayCommand FindCommand => findCommand ??= new(Find);
 
     private async Task Find()
     {
