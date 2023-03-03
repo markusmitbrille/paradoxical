@@ -1,5 +1,4 @@
 ﻿using Paradoxical.Model;
-using System;
 using System.Collections.Generic;
 
 namespace Paradoxical.Services;
@@ -8,9 +7,11 @@ public interface ITriggerService
 {
     IEnumerable<Trigger> Get();
 
-    void Insert(Trigger element);
-    void Update(Trigger element);
-    void Delete(Trigger element);
+    void Insert(Trigger model);
+    void Delete(Trigger model);
+
+    void Update(Trigger model);
+    void UpdateAll(IEnumerable<Trigger> models);
 }
 
 public class TriggerService : ITriggerService
@@ -24,19 +25,24 @@ public class TriggerService : ITriggerService
 
     public IEnumerable<Trigger> Get()
     {
-        throw new NotImplementedException();
+        return Data.Connection.Table<Trigger>().ToArray();
     }
 
-    public void Insert(Trigger element)
+    public void Insert(Trigger model)
     {
-        throw new NotImplementedException();
+        Data.Connection.Insert(model);
     }
-    public void Update(Trigger element)
+    public void Delete(Trigger model)
     {
-        throw new NotImplementedException();
+        Data.Connection.Delete(model);
     }
-    public void Delete(Trigger element)
+
+    public void Update(Trigger model)
     {
-        throw new NotImplementedException();
+        Data.Connection.Update(model);
+    }
+    public void UpdateAll(IEnumerable<Trigger> models)
+    {
+        Data.Connection.UpdateAll(models);
     }
 }

@@ -2,14 +2,13 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace Paradoxical.Services;
 
 public interface IFileService
 {
-    Task New();
-    Task Open();
+    void New();
+    void Open();
     void Export();
     void ExportAs();
 }
@@ -34,7 +33,7 @@ public class FileService : IFileService
     private string ModDir { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
     private string ModFile { get; set; } = string.Empty;
 
-    public async Task New()
+    public void New()
     {
         SaveFileDialog dlg = new()
         {
@@ -61,10 +60,10 @@ public class FileService : IFileService
         if (SaveFile == string.Empty)
         { return; }
 
-        await Data.Connect(SavePath);
+        Data.Connect(SavePath);
     }
 
-    public async Task Open()
+    public void Open()
     {
         OpenFileDialog dlg = new()
         {
@@ -85,8 +84,6 @@ public class FileService : IFileService
 
         if (File.Exists(SavePath) == false)
         { return; }
-
-        await Data.Connect(SavePath);
     }
 
     public void Export()
