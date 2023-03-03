@@ -18,6 +18,7 @@ public partial class App : Application
         services.AddSingleton<IBuildService, BuildService>();
         services.AddSingleton<IDataService, DataService>();
         services.AddSingleton<IFileService, FileService>();
+        services.AddSingleton<IMediatorService, MediatorService>();
 
         services.AddSingleton<IElementService, ElementService>();
         services.AddSingleton<IModService, ModService>();
