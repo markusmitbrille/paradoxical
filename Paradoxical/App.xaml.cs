@@ -31,7 +31,7 @@ public partial class App : Application
         services.AddSingleton<IPortraitService, PortraitService>();
 
         services.AddSingleton<NavigationViewModel>();
-        services.AddSingleton<PageFactory>(provider => pageType => (PageViewModelBase)provider.GetRequiredService(pageType));
+        services.AddTransient<PageFactory>(provider => pageType => (PageViewModelBase)provider.GetRequiredService(pageType));
 
         services.AddSingleton<MainViewModel>();
         services.AddSingleton<MainWindow>(provider => new()
@@ -44,19 +44,19 @@ public partial class App : Application
         services.AddSingleton<AboutViewModel>();
         services.AddSingleton<InfoViewModel>();
 
-        services.AddSingleton<EventDetailsViewModel>();
+        services.AddTransient<EventDetailsViewModel>();
         services.AddSingleton<EventTableViewModel>();
 
-        services.AddSingleton<OnActionDetailsViewModel>();
+        services.AddTransient<OnActionDetailsViewModel>();
         services.AddSingleton<OnActionTableViewModel>();
 
-        services.AddSingleton<DecisionDetailsViewModel>();
+        services.AddTransient<DecisionDetailsViewModel>();
         services.AddSingleton<DecisionTableViewModel>();
 
-        services.AddSingleton<TriggerDetailsViewModel>();
+        services.AddTransient<TriggerDetailsViewModel>();
         services.AddSingleton<TriggerTableViewModel>();
 
-        services.AddSingleton<EffectDetailsViewModel>();
+        services.AddTransient<EffectDetailsViewModel>();
         services.AddSingleton<EffectTableViewModel>();
 
         serviceProvider = services.BuildServiceProvider();
