@@ -52,6 +52,9 @@
             Command="{Binding FindCommand}"
             Gesture="CTRL+F" />
         <KeyBinding
+            Command="{Binding ExitCommand}"
+            Gesture="ALT+F4" />
+        <KeyBinding
             Command="{Binding Navigation.GoForwardCommand}"
             Gesture="ALT+Right" />
         <KeyBinding
