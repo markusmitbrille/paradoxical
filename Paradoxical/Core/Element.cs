@@ -16,10 +16,10 @@ public interface IElementViewModel
 
 public interface IElementTableViewModel
 {
-    public IElementViewModel Selected { get; }
+    public IElementViewModel? Selected { get; }
 }
 
 public interface IElementDetailsViewModel
 {
-    public IElementViewModel Selected { get; }
+    public IElementViewModel? Selected { get; }
 }
