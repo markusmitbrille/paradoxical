@@ -9,25 +9,34 @@ public interface IDataService
     SQLiteConnection Connection { get; }
 
     void Connect(string file);
-    void Disconnect();
+
+    void CreateTables();
+    void DropTables();
+    void TruncateTables();
 }
 
 public class DataService : IDataService
 {
-    public DataService()
+    private SQLiteConnection connection = new(":memory:");
+    public SQLiteConnection Connection
     {
+        get => connection;
+        private set => connection = value;
     }
 
-    private SQLiteConnection? connection;
-    public SQLiteConnection Connection => connection ?? throw new InvalidOperationException("Not connected!");
-
-    public void Connect(string path)
+    public DataService()
     {
-        Disconnect();
+        CreateTables();
+    }
+
+    public void Connect(string connectionString)
+    {
+        SQLiteConnection connection;
 
         try
         {
-            connection = new(path);
+            // open new connection
+            connection = new(connectionString);
         }
         catch (Exception)
         {
@@ -40,17 +49,14 @@ public class DataService : IDataService
             return;
         }
 
-        CreateTables();
-    }
-
-    public void Disconnect()
-    {
+        // close old connection
         Connection.Close();
 
-        connection = null;
+        // set new connection
+        Connection = connection;
     }
 
-    private void CreateTables()
+    public void CreateTables()
     {
         Connection.CreateTable<Mod>();
 
@@ -80,5 +86,69 @@ public class DataService : IDataService
         Connection.CreateTable<Trigger>();
 
         Connection.CreateTable<Effect>();
+    }
+
+    public void DropTables()
+    {
+        Connection.DropTable<Mod>();
+
+        Connection.DropTable<Event>();
+        Connection.DropTable<EventImmediateEffect>();
+        Connection.DropTable<EventAfterEffect>();
+        Connection.DropTable<EventTrigger>();
+
+        Connection.DropTable<Portrait>();
+
+        Connection.DropTable<Option>();
+        Connection.DropTable<OptionTrigger>();
+        Connection.DropTable<OptionEffect>();
+
+        Connection.DropTable<OnAction>();
+        Connection.DropTable<OnActionTrigger>();
+        Connection.DropTable<OnActionEffect>();
+        Connection.DropTable<OnActionEvent>();
+        Connection.DropTable<OnActionOnAction>();
+
+        Connection.DropTable<Decision>();
+        Connection.DropTable<DecisionIsShownTrigger>();
+        Connection.DropTable<DecisionIsValidTrigger>();
+        Connection.DropTable<DecisionIsValidFailureTrigger>();
+        Connection.DropTable<DecisionEffect>();
+
+        Connection.DropTable<Trigger>();
+
+        Connection.DropTable<Effect>();
+    }
+
+    public void TruncateTables()
+    {
+        Connection.DeleteAll<Mod>();
+
+        Connection.DeleteAll<Event>();
+        Connection.DeleteAll<EventImmediateEffect>();
+        Connection.DeleteAll<EventAfterEffect>();
+        Connection.DeleteAll<EventTrigger>();
+
+        Connection.DeleteAll<Portrait>();
+
+        Connection.DeleteAll<Option>();
+        Connection.DeleteAll<OptionTrigger>();
+        Connection.DeleteAll<OptionEffect>();
+
+        Connection.DeleteAll<OnAction>();
+        Connection.DeleteAll<OnActionTrigger>();
+        Connection.DeleteAll<OnActionEffect>();
+        Connection.DeleteAll<OnActionEvent>();
+        Connection.DeleteAll<OnActionOnAction>();
+
+        Connection.DeleteAll<Decision>();
+        Connection.DeleteAll<DecisionIsShownTrigger>();
+        Connection.DeleteAll<DecisionIsValidTrigger>();
+        Connection.DeleteAll<DecisionIsValidFailureTrigger>();
+        Connection.DeleteAll<DecisionEffect>();
+
+        Connection.DeleteAll<Trigger>();
+
+        Connection.DeleteAll<Effect>();
     }
 }

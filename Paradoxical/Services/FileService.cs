@@ -61,6 +61,8 @@ public class FileService : IFileService
         { return; }
 
         Data.Connect(SavePath);
+        Data.DropTables();
+        Data.CreateTables();
     }
 
     public void Open()
@@ -84,6 +86,9 @@ public class FileService : IFileService
 
         if (File.Exists(SavePath) == false)
         { return; }
+
+        Data.Connect(SavePath);
+        Data.CreateTables();
     }
 
     public void Export()
