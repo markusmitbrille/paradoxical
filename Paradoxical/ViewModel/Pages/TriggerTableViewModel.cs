@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using FuzzySharp;
 using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
 using Paradoxical.Messages;
@@ -37,11 +36,11 @@ public class TriggerTableViewModel : PageViewModelBase,
 
     IElementViewModel? IElementTableViewModel.Selected => Selected;
 
-    private string? nameFilter;
-    public string? NameFilter
+    private string? filter;
+    public string? Filter
     {
-        get => nameFilter;
-        set => SetProperty(ref nameFilter, value);
+        get => filter;
+        set => SetProperty(ref filter, value);
     }
 
     public TriggerTableViewModel(
@@ -72,7 +71,7 @@ public class TriggerTableViewModel : PageViewModelBase,
             UpdateView();
             UpdateSelected();
         }
-        if (e.PropertyName == nameof(NameFilter))
+        if (e.PropertyName == nameof(Filter))
         {
             UpdateView();
             UpdateSelected();
@@ -161,10 +160,25 @@ public class TriggerTableViewModel : PageViewModelBase,
         if (obj is not TriggerViewModel viewmodel)
         { return false; }
 
-        if (string.IsNullOrEmpty(NameFilter) == false && Fuzz.Ratio(viewmodel.Name, NameFilter) < 80)
-        { return false; }
+        if (string.IsNullOrEmpty(Filter) == true)
+        { return true; }
 
-        return true;
+        if (ParadoxPattern.IdFilterRegex.FuzzyMatch(viewmodel.Id.ToString(), Filter) == true)
+        { return true; }
+
+        if (ParadoxPattern.NameFilterRegex.FuzzyMatch(viewmodel.Name, Filter) == true)
+        { return true; }
+
+        if (ParadoxPattern.CodeFilterRegex.FuzzyMatch(viewmodel.Code, Filter) == true)
+        { return true; }
+
+        if (ParadoxPattern.TooltipFilterRegex.FuzzyMatch(viewmodel.Tooltip, Filter) == true)
+        { return true; }
+
+        if (ParadoxPattern.FilterRegex.FuzzyMatch(viewmodel.Name, Filter) == true)
+        { return true; }
+
+        return false;
     }
 
     private void UpdateView()
@@ -198,7 +212,7 @@ public class TriggerTableViewModel : PageViewModelBase,
 
         Finder.Items = TriggerService.Get().Select(model => new TriggerViewModel(model));
         Finder.Selected = Selected;
-        Finder.NameFilter = NameFilter;
+        Finder.NameFilter = Filter;
 
         await DialogHost.Show(Finder, Finder.DialogIdentifier);
 
