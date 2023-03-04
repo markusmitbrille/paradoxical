@@ -6,7 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
-    xmlns:model="clr-namespace:Paradoxical.Model"
     xmlns:formatters="clr-namespace:Paradoxical.Formatters"
     xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -14,7 +13,47 @@
     mc:Ignorable="d"
     d:DesignWidth="800">
 
-    <ScrollViewer
+    <DockPanel>
+
+        <ToolBarTray
+            DockPanel.Dock="Top"
+            Margin="20">
+            <ToolBar
+                ClipToBounds="False"
+                Style="{StaticResource MaterialDesignToolBar}">
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding CreateCommand}"
+                    Content="{materialDesign:PackIcon Kind=Add}"
+                    ToolTip="Create Trigger" />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding DuplicateCommand}"
+                    CommandParameter="{Binding Selected}"
+                    Content="{materialDesign:PackIcon Kind=ContentDuplicate}"
+                    ToolTip="Duplicate Trigger" />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding DeleteCommand}"
+                    CommandParameter="{Binding Selected}"
+                    Content="{materialDesign:PackIcon Kind=Remove}"
+                    ToolTip="Delete Trigger" />
+
+                <Separator />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding FindCommand}"
+                    Content="{materialDesign:PackIcon Kind=Search}"
+                    ToolTip="Find Trigger" />
+
+            </ToolBar>
+        </ToolBarTray>
+
+        <ScrollViewer
         VerticalScrollBarVisibility="Hidden"
         HorizontalScrollBarVisibility="Disabled">
         <StackPanel>
@@ -37,7 +76,7 @@
 
                             <TextBox.Text>
                                 <Binding
-                                    Path="Name"
+                                    Path="Selected.Name"
                                     Mode="TwoWay"
                                     UpdateSourceTrigger="PropertyChanged"
                                     FallbackValue="element_name">
@@ -69,7 +108,7 @@
 
                             <view:ScriptBox.Text>
                                 <Binding
-                                    Path="Code"
+                                    Path="Selected.Code"
                                     Mode="TwoWay"
                                     UpdateSourceTrigger="PropertyChanged"
                                     FallbackValue="# some code">
@@ -85,7 +124,7 @@
                         <view:ScriptBox
                             Margin="6,12"
                             Style="{DynamicResource MaterialDesignRichTextBox}"
-                            Text="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Text="{Binding Selected.Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             AcceptsReturn="False"
                             materialDesign:HintAssist.Hint="Tooltip"
                             materialDesign:HintAssist.IsFloating="True"
@@ -106,5 +145,8 @@
 
         </StackPanel>
     </ScrollViewer>
+    
+    </DockPanel>
+
 
 </UserControl>

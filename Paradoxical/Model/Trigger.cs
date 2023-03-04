@@ -26,6 +26,19 @@ public class Trigger : IModel, IElement, IEquatable<Trigger?>
     public string Tooltip { get => tooltip; set => tooltip = value; }
     public string tooltip = "";
 
+    public Trigger()
+    {
+    }
+
+    public Trigger(Trigger other)
+    {
+        id = 0;
+
+        name = other.name;
+        code = other.code;
+        tooltip = other.tooltip;
+    }
+
     public void Write(
         TextWriter writer,
         IModService modService)

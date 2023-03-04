@@ -1,23 +1,12 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Model;
+using System;
 using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public partial class TriggerViewModel : ViewModelBase, IModelViewModel, IElementViewModel
+public partial class TriggerViewModel : ViewModelBase, IModelViewModel, IElementViewModel, IEquatable<TriggerViewModel?>
 {
-    private static readonly Dictionary<Trigger, TriggerViewModel> cache = new();
-    public static TriggerViewModel Get(Trigger model)
-    {
-        if (cache.TryGetValue(model, out var viewModel) == false)
-        {
-            viewModel = new(model);
-            cache.Add(model, viewModel);
-        }
-
-        return viewModel;
-    }
-
     private readonly Trigger model;
     public Trigger Model => model;
 
@@ -50,5 +39,31 @@ public partial class TriggerViewModel : ViewModelBase, IModelViewModel, IElement
     public TriggerViewModel(Trigger model)
     {
         this.model = model;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as TriggerViewModel);
+    }
+
+    public bool Equals(TriggerViewModel? other)
+    {
+        return other is not null &&
+               EqualityComparer<Trigger>.Default.Equals(Model, other.Model);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Model);
+    }
+
+    public static bool operator ==(TriggerViewModel? left, TriggerViewModel? right)
+    {
+        return EqualityComparer<TriggerViewModel>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(TriggerViewModel? left, TriggerViewModel? right)
+    {
+        return !(left == right);
     }
 }
