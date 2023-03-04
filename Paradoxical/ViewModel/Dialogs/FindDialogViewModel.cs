@@ -88,10 +88,7 @@ public class FindDialogViewModel : FullScreenDialogViewModelBase
         if (View == null)
         { return; }
 
-        if (Selected == null)
-        { return; }
-
-        if (Predicate(Selected) == true)
+        if (Selected != null && Predicate(Selected) == true)
         { return; }
 
         Selected = View.Cast<IElementViewModel>().FirstOrDefault();
