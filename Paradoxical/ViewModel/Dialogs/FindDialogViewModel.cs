@@ -105,7 +105,7 @@ public class FindDialogViewModel : FullScreenDialogViewModelBase
         if (TypeFilter != null && element.GetType() != TypeFilter)
         { return false; }
 
-        if (string.IsNullOrEmpty(NameFilter) == false && Fuzz.Ratio(element.Name, NameFilter) > 80)
+        if (string.IsNullOrEmpty(NameFilter) == false && Fuzz.Ratio(element.Name, NameFilter) < 80)
         { return false; }
 
         return true;
