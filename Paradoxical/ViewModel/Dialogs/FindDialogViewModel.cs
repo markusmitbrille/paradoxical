@@ -142,7 +142,6 @@ public class FindDialogViewModel : FullScreenDialogViewModelBase
     }
 
     private RelayCommand? nextCommand;
-
     public RelayCommand NextCommand => nextCommand ??= new(Next);
 
     private void Next()
