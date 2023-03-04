@@ -12,8 +12,7 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance {x:Type viewmodel:EventTableViewModel}}"
     d:DesignHeight="450"
-    d:DesignWidth="1600"
-    FocusVisualStyle="{x:Null}">
+    d:DesignWidth="1600">
 
     <DockPanel>
 

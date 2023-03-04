@@ -11,8 +11,7 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance {x:Type viewmodel:AboutViewModel}}"
     d:DesignHeight="450"
-    d:DesignWidth="800"
-    FocusVisualStyle="{x:Null}">
+    d:DesignWidth="800">
 
     <StackPanel>
 
