@@ -1,5 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Core;
+using Paradoxical.Extensions;
+using Paradoxical.Messages;
+using Paradoxical.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,9 +12,11 @@ namespace Paradoxical.ViewModel;
 
 public delegate PageViewModelBase PageFactory(Type pageType);
 
-public class NavigationViewModel : ViewModelBase
+public class NavigationViewModel : ViewModelBase,
+    IMessageHandler<DeleteMessage>
 {
     private PageFactory PageFactory { get; }
+    public IMediatorService Mediator { get; }
 
     private PageViewModelBase? currentPage;
     public PageViewModelBase? CurrentPage
@@ -20,15 +25,20 @@ public class NavigationViewModel : ViewModelBase
         private set => SetProperty(ref currentPage, value);
     }
 
-    private readonly Stack<PageViewModelBase> history = new();
-    private readonly Stack<PageViewModelBase> future = new();
+    private readonly List<PageViewModelBase> history = new();
+    private readonly List<PageViewModelBase> future = new();
 
     public event Action? Navigating;
     public event Action? Navigated;
 
-    public NavigationViewModel(PageFactory pageFactory)
+    public NavigationViewModel(
+        PageFactory pageFactory,
+        IMediatorService mediator)
     {
         PageFactory = pageFactory;
+        Mediator = mediator;
+
+        Mediator.Register<DeleteMessage>(this);
     }
 
     protected override void OnPropertyChanging(PropertyChangingEventArgs e)
@@ -51,8 +61,54 @@ public class NavigationViewModel : ViewModelBase
         }
     }
 
+    public void Handle(DeleteMessage message)
+    {
+        CleanCollection(history);
+        CleanCollection(future);
+
+        CleanSelection();
+
+        void CleanCollection(IList<PageViewModelBase> collection)
+        {
+            var pages = collection.OfType<IElementDetailsViewModel>()
+                .Where(page => page.Selected?.Model == message.Model)
+                .Cast<PageViewModelBase>()
+                .ToArray();
+
+            foreach (var page in pages)
+            {
+                collection.Remove(page);
+            }
+        }
+
+        void CleanSelection()
+        {
+            if (CurrentPage is not IElementDetailsViewModel page)
+            { return; }
+
+            if (page.Selected?.Model != message.Model)
+            { return; }
+
+            CurrentPage = null;
+
+            if (CanGoBack() == true)
+            {
+                GoBack();
+                return;
+            }
+
+            if (CanGoForward() == true)
+            {
+                GoForward();
+                return;
+            }
+
+            GoHome();
+        }
+    }
+
     private RelayCommand? goForwardCommand;
-    public RelayCommand GoForwardCommand => goForwardCommand ??= new(GoForward);
+    public RelayCommand GoForwardCommand => goForwardCommand ??= new(GoForward, CanGoForward);
 
     public void GoForward()
     {
@@ -72,7 +128,7 @@ public class NavigationViewModel : ViewModelBase
     }
 
     private RelayCommand? goBackCommand;
-    public RelayCommand GoBackCommand => goBackCommand ??= new(GoBack);
+    public RelayCommand GoBackCommand => goBackCommand ??= new(GoBack, CanGoBack);
 
     public void GoBack()
     {
@@ -135,13 +191,20 @@ public class NavigationViewModel : ViewModelBase
         return true;
     }
 
-    public void Navigate<TPage>() where TPage : PageViewModelBase
+    public void Navigate(Type pageType)
     {
-        PageViewModelBase page = PageFactory(typeof(TPage));
+        if (pageType.IsAssignableTo(typeof(PageViewModelBase)) == false)
+        { throw new ArgumentException($"{pageType} must be assignable to {typeof(PageViewModelBase)}!", nameof(pageType)); }
+
+        PageViewModelBase page = PageFactory(pageType);
 
         if (CanNavigate(page) == true)
         {
             Navigate(page);
         }
+    }
+    public void Navigate<TPage>() where TPage : PageViewModelBase
+    {
+        Navigate(typeof(TPage));
     }
 }
