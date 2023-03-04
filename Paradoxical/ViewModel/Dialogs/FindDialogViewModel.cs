@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using FuzzySharp;
 using Paradoxical.Core;
 using System;
 using System.Collections.Generic;
@@ -104,7 +105,7 @@ public class FindDialogViewModel : FullScreenDialogViewModelBase
         if (TypeFilter != null && element.GetType() != TypeFilter)
         { return false; }
 
-        if (string.IsNullOrEmpty(NameFilter) == false && element.Name.Contains(NameFilter, StringComparison.InvariantCultureIgnoreCase) == false)
+        if (string.IsNullOrEmpty(NameFilter) == false && Fuzz.Ratio(element.Name, NameFilter) > 80)
         { return false; }
 
         return true;
