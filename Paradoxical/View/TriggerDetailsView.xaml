@@ -13,6 +13,12 @@
     mc:Ignorable="d"
     d:DesignWidth="800">
 
+    <UserControl.InputBindings>
+        <KeyBinding
+            Command="{Binding FindCommand}"
+            Gesture="CTRL+F" />
+    </UserControl.InputBindings>
+
     <DockPanel>
 
         <ToolBarTray

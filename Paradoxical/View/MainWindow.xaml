@@ -47,9 +47,6 @@
             Command="{Binding ExportCommand}"
             Gesture="CTRL+S" />
         <KeyBinding
-            Command="{Binding FindCommand}"
-            Gesture="CTRL+F" />
-        <KeyBinding
             Command="{Binding ExitCommand}"
             Gesture="ALT+F4" />
         <KeyBinding
@@ -280,14 +277,6 @@
                                     Header="Export As..."
                                     Icon="{materialDesign:PackIcon Kind=ContentSaveEdit}"
                                     Command="{Binding ExportAsCommand}" />
-
-                                <Separator />
-
-                                <MenuItem
-                                    Header="Find"
-                                    Icon="{materialDesign:PackIcon Kind=Search}"
-                                    Command="{Binding FindCommand}"
-                                    InputGestureText="CTRL+F" />
 
                                 <Separator />
 

@@ -1,10 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
 using Paradoxical.Messages;
 using Paradoxical.Services;
-using System;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Paradoxical.ViewModel;
@@ -128,29 +125,5 @@ public class MainViewModel : ViewModelBase
     private void GoToAboutPage()
     {
         Navigation.Navigate<AboutViewModel>();
-    }
-
-    private AsyncRelayCommand? findCommand;
-    public AsyncRelayCommand FindCommand => findCommand ??= new(Find);
-
-    private async Task Find()
-    {
-        var details = Navigation.CurrentPage as IElementDetailsViewModel;
-        var current = details?.Selected;
-
-        // TODO: get all elements, except current
-
-        Finder.Items = Array.Empty<IElementViewModel>();
-
-        await DialogHost.Show(Finder, Finder.DialogIdentifier);
-
-        if (Finder.DialogResult != true)
-        { return; }
-
-        if (Finder.Selected == null)
-        { return; }
-
-        // TODO: navigate to appropriate page
-        // TODO: set selected element from dlg
     }
 }
