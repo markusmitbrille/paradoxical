@@ -8,9 +8,9 @@ public interface IEffectService
 {
     IEnumerable<Effect> Get();
 
-    void Insert(Effect element);
-    void Update(Effect element);
-    void Delete(Effect element);
+    void Insert(Effect model);
+    void Update(Effect model);
+    void Delete(Effect model);
 }
 
 public class EffectService : IEffectService
@@ -27,15 +27,15 @@ public class EffectService : IEffectService
         throw new NotImplementedException();
     }
 
-    public void Insert(Effect element)
+    public void Insert(Effect model)
     {
         throw new NotImplementedException();
     }
-    public void Update(Effect element)
+    public void Update(Effect model)
     {
         throw new NotImplementedException();
     }
-    public void Delete(Effect element)
+    public void Delete(Effect model)
     {
         throw new NotImplementedException();
     }

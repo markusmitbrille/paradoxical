@@ -10,9 +10,9 @@ public interface IPortraitService
 
     Portrait? Get(Event owner, PortraitPosition position);
 
-    void Insert(Portrait element);
-    void Update(Portrait element);
-    void Delete(Portrait element);
+    void Insert(Portrait model);
+    void Update(Portrait model);
+    void Delete(Portrait model);
 }
 
 public class PortraitService : IPortraitService
@@ -34,15 +34,15 @@ public class PortraitService : IPortraitService
         throw new NotImplementedException();
     }
 
-    public void Insert(Portrait element)
+    public void Insert(Portrait model)
     {
         throw new NotImplementedException();
     }
-    public void Update(Portrait element)
+    public void Update(Portrait model)
     {
         throw new NotImplementedException();
     }
-    public void Delete(Portrait element)
+    public void Delete(Portrait model)
     {
         throw new NotImplementedException();
     }

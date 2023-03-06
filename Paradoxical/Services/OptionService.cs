@@ -8,18 +8,18 @@ public interface IOptionService
 {
     IEnumerable<Option> Get();
 
-    void Insert(Option element);
-    void Update(Option element);
-    void Delete(Option element);
+    void Insert(Option model);
+    void Update(Option model);
+    void Delete(Option model);
 
-    Event GetOwner(Option element);
-    Event? GetTriggeredEvent(Option element);
+    Event GetOwner(Option model);
+    Event? GetTriggeredEvent(Option model);
 
-    IEnumerable<Trigger> GetTriggers(Option element);
-    void SetTriggers(Option element, IEnumerable<Trigger> relations);
+    IEnumerable<Trigger> GetTriggers(Option model);
+    void SetTriggers(Option model, IEnumerable<Trigger> relations);
 
-    IEnumerable<Effect> GetEffects(Option element);
-    void SetEffects(Option element, IEnumerable<Effect> relations);
+    IEnumerable<Effect> GetEffects(Option model);
+    void SetEffects(Option model, IEnumerable<Effect> relations);
 }
 
 public class OptionService : IOptionService
@@ -36,42 +36,42 @@ public class OptionService : IOptionService
         throw new NotImplementedException();
     }
 
-    public void Insert(Option element)
+    public void Insert(Option model)
     {
         throw new NotImplementedException();
     }
-    public void Update(Option element)
+    public void Update(Option model)
     {
         throw new NotImplementedException();
     }
-    public void Delete(Option element)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Event GetOwner(Option element)
-    {
-        throw new NotImplementedException();
-    }
-    public Event? GetTriggeredEvent(Option element)
+    public void Delete(Option model)
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Trigger> GetTriggers(Option element)
+    public Event GetOwner(Option model)
     {
         throw new NotImplementedException();
     }
-    public void SetTriggers(Option element, IEnumerable<Trigger> relations)
+    public Event? GetTriggeredEvent(Option model)
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Effect> GetEffects(Option element)
+    public IEnumerable<Trigger> GetTriggers(Option model)
     {
         throw new NotImplementedException();
     }
-    public void SetEffects(Option element, IEnumerable<Effect> relations)
+    public void SetTriggers(Option model, IEnumerable<Trigger> relations)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IEnumerable<Effect> GetEffects(Option model)
+    {
+        throw new NotImplementedException();
+    }
+    public void SetEffects(Option model, IEnumerable<Effect> relations)
     {
         throw new NotImplementedException();
     }

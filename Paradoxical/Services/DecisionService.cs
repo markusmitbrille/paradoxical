@@ -8,23 +8,23 @@ public interface IDecisionService
 {
     IEnumerable<Decision> Get();
 
-    void Insert(Decision element);
-    void Update(Decision element);
-    void Delete(Decision element);
+    void Insert(Decision model);
+    void Update(Decision model);
+    void Delete(Decision model);
 
-    Event? GetTriggeredEvent(Decision element);
+    Event? GetTriggeredEvent(Decision model);
 
-    IEnumerable<Trigger> GetIsShownTriggers(Decision element);
-    void SetIsShownTriggers(Decision element, IEnumerable<Trigger> relations);
+    IEnumerable<Trigger> GetIsShownTriggers(Decision model);
+    void SetIsShownTriggers(Decision model, IEnumerable<Trigger> relations);
 
-    IEnumerable<Trigger> GetIsValidTriggers(Decision element);
-    void SetIsValidTriggers(Decision element, IEnumerable<Trigger> relations);
+    IEnumerable<Trigger> GetIsValidTriggers(Decision model);
+    void SetIsValidTriggers(Decision model, IEnumerable<Trigger> relations);
 
-    IEnumerable<Trigger> GetIsValidFailureTriggers(Decision element);
-    void SetIsValidFailureTriggers(Decision element, IEnumerable<Trigger> relations);
+    IEnumerable<Trigger> GetIsValidFailureTriggers(Decision model);
+    void SetIsValidFailureTriggers(Decision model, IEnumerable<Trigger> relations);
 
-    IEnumerable<Effect> GetEffects(Decision element);
-    void SetEffects(Decision element, IEnumerable<Effect> relations);
+    IEnumerable<Effect> GetEffects(Decision model);
+    void SetEffects(Decision model, IEnumerable<Effect> relations);
 }
 
 public class DecisionService : IDecisionService
@@ -41,56 +41,56 @@ public class DecisionService : IDecisionService
         throw new NotImplementedException();
     }
 
-    public void Insert(Decision element)
+    public void Insert(Decision model)
     {
         throw new NotImplementedException();
     }
-    public void Update(Decision element)
+    public void Update(Decision model)
     {
         throw new NotImplementedException();
     }
-    public void Delete(Decision element)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Event? GetTriggeredEvent(Decision element)
+    public void Delete(Decision model)
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Trigger> GetIsShownTriggers(Decision element)
-    {
-        throw new NotImplementedException();
-    }
-    public void SetIsShownTriggers(Decision element, IEnumerable<Trigger> relations)
+    public Event? GetTriggeredEvent(Decision model)
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Trigger> GetIsValidTriggers(Decision element)
+    public IEnumerable<Trigger> GetIsShownTriggers(Decision model)
     {
         throw new NotImplementedException();
     }
-    public void SetIsValidTriggers(Decision element, IEnumerable<Trigger> relations)
-    {
-        throw new NotImplementedException();
-    }
-
-    public IEnumerable<Trigger> GetIsValidFailureTriggers(Decision element)
-    {
-        throw new NotImplementedException();
-    }
-    public void SetIsValidFailureTriggers(Decision element, IEnumerable<Trigger> relations)
+    public void SetIsShownTriggers(Decision model, IEnumerable<Trigger> relations)
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Effect> GetEffects(Decision element)
+    public IEnumerable<Trigger> GetIsValidTriggers(Decision model)
     {
         throw new NotImplementedException();
     }
-    public void SetEffects(Decision element, IEnumerable<Effect> relations)
+    public void SetIsValidTriggers(Decision model, IEnumerable<Trigger> relations)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IEnumerable<Trigger> GetIsValidFailureTriggers(Decision model)
+    {
+        throw new NotImplementedException();
+    }
+    public void SetIsValidFailureTriggers(Decision model, IEnumerable<Trigger> relations)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IEnumerable<Effect> GetEffects(Decision model)
+    {
+        throw new NotImplementedException();
+    }
+    public void SetEffects(Decision model, IEnumerable<Effect> relations)
     {
         throw new NotImplementedException();
     }
