@@ -9,7 +9,7 @@ namespace Paradoxical.Model;
 [Table("portraits")]
 public class Portrait : IModel, IEquatable<Portrait?>
 {
-    [Column("ID"), PrimaryKey, AutoIncrement]
+    [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
     public int id;
 

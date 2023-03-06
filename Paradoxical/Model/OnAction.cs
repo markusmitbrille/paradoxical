@@ -11,7 +11,7 @@ namespace Paradoxical.Model;
 [Table("on_actions")]
 public class OnAction : IModel, IElement, IEquatable<OnAction?>
 {
-    [Column("ID"), PrimaryKey, AutoIncrement]
+    [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
     public int id;
 

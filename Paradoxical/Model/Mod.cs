@@ -8,7 +8,7 @@ namespace Paradoxical.Model;
 
 public class Mod : IModel, IEquatable<Mod?>
 {
-    [Column("ID"), PrimaryKey, AutoIncrement]
+    [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
     public int id;
 

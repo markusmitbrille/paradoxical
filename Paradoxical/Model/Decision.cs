@@ -11,7 +11,7 @@ namespace Paradoxical.Model;
 [Table("decisions")]
 public class Decision : IModel, IElement, IEquatable<Decision?>
 {
-    [Column("ID"), PrimaryKey, AutoIncrement]
+    [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
     public int id;
 

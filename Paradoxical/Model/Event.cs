@@ -10,7 +10,7 @@ namespace Paradoxical.Model;
 
 public class Event : IModel, IElement, IEquatable<Event?>
 {
-    [Column("ID"), PrimaryKey, AutoIncrement]
+    [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
     public int id;
 
@@ -41,6 +41,23 @@ public class Event : IModel, IElement, IEquatable<Event?>
     [Column("cooldown"), NotNull]
     public int Cooldown { get => cooldown; set => cooldown = value; }
     public int cooldown;
+
+    public Event()
+    {
+    }
+
+    public Event(Event other)
+    {
+        id = 0;
+
+        name = other.name;
+        title = other.title;
+        description = other.description;
+        theme = other.theme;
+        hidden = other.hidden;
+        weight = other.weight;
+        cooldown = other.cooldown;
+    }
 
     private const string DEFAULT_THEME = "default";
 

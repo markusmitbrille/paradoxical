@@ -10,7 +10,7 @@ namespace Paradoxical.Model;
 [Table("triggers")]
 public class Trigger : IModel, IElement, IEquatable<Trigger?>
 {
-    [Column("ID"), PrimaryKey, AutoIncrement]
+    [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
     public int id;
 
