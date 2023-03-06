@@ -234,7 +234,7 @@ public class TriggerTableViewModel : PageViewModelBase,
     {
         Trigger model = new()
         {
-            Name = $"trg_{Guid.NewGuid()}",
+            Name = $"trg_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
             Code = "# some trigger",
         };
 
