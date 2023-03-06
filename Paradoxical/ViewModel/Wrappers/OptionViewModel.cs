@@ -1,23 +1,10 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Model;
-using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
 public partial class OptionViewModel : ViewModelBase, IModelViewModel
 {
-    private static readonly Dictionary<Option, OptionViewModel> cache = new();
-    public static OptionViewModel Get(Option model)
-    {
-        if (cache.TryGetValue(model, out var viewModel) == false)
-        {
-            viewModel = new(model);
-            cache.Add(model, viewModel);
-        }
-
-        return viewModel;
-    }
-
     private readonly Option model;
     public Option Model => model;
 

@@ -1,23 +1,10 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Model;
-using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
 public partial class PortraitViewModel : ViewModelBase, IModelViewModel
 {
-    private static readonly Dictionary<Portrait, PortraitViewModel> cache = new();
-    public static PortraitViewModel Get(Portrait model)
-    {
-        if (cache.TryGetValue(model, out var viewModel) == false)
-        {
-            viewModel = new(model);
-            cache.Add(model, viewModel);
-        }
-
-        return viewModel;
-    }
-
     private readonly Portrait model;
     public Portrait Model => model;
 
