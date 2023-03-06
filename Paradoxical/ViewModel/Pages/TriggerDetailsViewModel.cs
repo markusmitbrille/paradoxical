@@ -4,6 +4,7 @@ using Paradoxical.Core;
 using Paradoxical.Messages;
 using Paradoxical.Model;
 using Paradoxical.Services;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -121,7 +122,12 @@ public class TriggerDetailsViewModel : PageViewModelBase,
     {
         Navigation.Navigate<TriggerDetailsViewModel>();
 
-        Trigger model = new();
+        Trigger model = new()
+        {
+            Name = $"trg_{Guid.NewGuid()}",
+            Code = "# some trigger",
+        };
+
         TriggerService.Insert(model);
     }
 

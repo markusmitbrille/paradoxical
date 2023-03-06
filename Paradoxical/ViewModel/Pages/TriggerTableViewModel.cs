@@ -4,6 +4,7 @@ using Paradoxical.Core;
 using Paradoxical.Messages;
 using Paradoxical.Model;
 using Paradoxical.Services;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -231,7 +232,12 @@ public class TriggerTableViewModel : PageViewModelBase,
 
     private void Create()
     {
-        Trigger model = new();
+        Trigger model = new()
+        {
+            Name = $"trg_{Guid.NewGuid()}",
+            Code = "# some trigger",
+        };
+
         TriggerService.Insert(model);
     }
 
