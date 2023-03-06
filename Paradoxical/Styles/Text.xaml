@@ -15,6 +15,9 @@
         <Setter
             Property="TextWrapping"
             Value="Wrap" />
+        <Setter
+            Property="AcceptsReturn"
+            Value="True" />
     </Style>
 
 </ResourceDictionary>
