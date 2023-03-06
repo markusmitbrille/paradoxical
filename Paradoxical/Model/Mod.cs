@@ -6,6 +6,7 @@ using System.IO;
 
 namespace Paradoxical.Model;
 
+[Table("mods")]
 public class Mod : IModel, IEquatable<Mod?>
 {
     [Column("id"), PrimaryKey, AutoIncrement]
