@@ -8,6 +8,7 @@ public interface ITriggerService
 {
     Trigger Get(int id);
     Trigger Get(Trigger model);
+
     IEnumerable<Trigger> Get();
 
     void Insert(Trigger model);
