@@ -14,6 +14,12 @@
     d:DesignHeight="450"
     d:DesignWidth="1600">
 
+    <UserControl.InputBindings>
+        <KeyBinding
+            Command="{Binding FindCommand}"
+            Gesture="CTRL+F" />
+    </UserControl.InputBindings>
+
     <DockPanel>
 
         <ToolBarTray
@@ -26,9 +32,10 @@
                 <Button
                     Margin="4,0"
                     Command="{Binding CreateCommand}"
+                    CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=Add}"
                     ToolTip="Create Event" />
-               
+
                 <Button
                     Margin="4,0"
                     Command="{Binding DuplicateCommand}"
@@ -43,17 +50,27 @@
                     Content="{materialDesign:PackIcon Kind=Remove}"
                     ToolTip="Delete Event" />
 
+                <Button
+                    Margin="4,0"
+                    Command="{Binding EditCommand}"
+                    CommandParameter="{Binding Selected}"
+                    Content="{materialDesign:PackIcon Kind=Pencil}"
+                    ToolTip="Edit Event" />
+
                 <Separator />
 
                 <TextBox
                     Width="300"
                     Margin="4,0"
                     Style="{DynamicResource MaterialDesignFilledTextBox}"
+                    Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    GotFocus="TextBoxGotFocusHandler"
                     materialDesign:HintAssist.Hint="Filter Events ..."
                     materialDesign:TextFieldAssist.HasClearButton="True" />
 
                 <Button
                     Margin="4,0"
+                    Command="{Binding FindCommand}"
                     Content="{materialDesign:PackIcon Kind=Search}"
                     ToolTip="Find Event" />
 
@@ -61,16 +78,18 @@
         </ToolBarTray>
 
         <DataGrid
+            x:Name="datagrid"
             Margin="20"
             BorderBrush="Gray"
             BorderThickness="1"
-            ItemsSource="{Binding CurrentContext.Events}"
-            SelectedItem="{Binding Selected}"
+            ItemsSource="{Binding Events}"
+            SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectionMode="Single"
             SelectionUnit="FullRow"
             AutoGenerateColumns="False"
             CanUserAddRows="False"
             CanUserDeleteRows="False"
+            CanUserSortColumns="False"
             CanUserReorderColumns="False">
 
             <DataGrid.Columns>
@@ -83,30 +102,14 @@
                 <DataGridTextColumn
                     Header="Name"
                     MinWidth="250"
-                    MaxWidth="500">
-                    <DataGridTextColumn.Binding>
-                        <Binding
-                            Path="Name"
-                            Mode="TwoWay"
-                            UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <rules:RequiredRule
-                                    ValidatesOnTargetUpdated="True" />
-                                <rules:NameRule
-                                    ValidatesOnTargetUpdated="True" />
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </DataGridTextColumn.Binding>
-                </DataGridTextColumn>
+                    MaxWidth="500"
+                    Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                 <DataGridTextColumn
                     Header="Title"
-                    Width="*"
-                    MinWidth="400"
-                    MaxWidth="800"
-                    Binding="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    ElementStyle="{StaticResource DataGridWrappingTextBlock}"
-                    EditingElementStyle="{StaticResource DataGridWrappingTextBox}" />
+                    MinWidth="250"
+                    MaxWidth="500"
+                    Binding="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                 <DataGridTextColumn
                     Header="Description"
@@ -122,61 +125,8 @@
                     MinWidth="250"
                     MaxWidth="500"
                     Binding="{Binding Theme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                <DataGridTextColumn
-                    Header="Weight"
-                    MinWidth="200"
-                    MaxWidth="400">
-                    <DataGridTextColumn.Binding>
-                        <Binding
-                            Path="Weight"
-                            Mode="TwoWay"
-                            UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <rules:RequiredRule
-                                    ValidatesOnTargetUpdated="True" />
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </DataGridTextColumn.Binding>
-                </DataGridTextColumn>
-
+                
             </DataGrid.Columns>
-
-            <DataGrid.RowDetailsTemplate>
-                <DataTemplate>
-
-                    <DataGrid
-                        Margin="20"
-                        BorderBrush="Gray"
-                        BorderThickness="1"
-                        ItemsSource="{Binding Options}"
-                        SelectionMode="Single"
-                        SelectionUnit="FullRow"
-                        AutoGenerateColumns="False"
-                        CanUserAddRows="False"
-                        CanUserDeleteRows="False"
-                        CanUserReorderColumns="False">
-
-                        <DataGrid.Columns>
-
-                            <DataGridTextColumn
-                                Header="Name"
-                                MinWidth="600"
-                                MaxWidth="800"
-                                Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                            <DataGridTextColumn
-                                Header="Tooltip"
-                                MinWidth="600"
-                                MaxWidth="800"
-                                Binding="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                        </DataGrid.Columns>
-
-                    </DataGrid>
-
-                </DataTemplate>
-            </DataGrid.RowDetailsTemplate>
 
         </DataGrid>
 

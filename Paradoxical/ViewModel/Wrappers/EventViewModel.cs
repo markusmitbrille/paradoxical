@@ -1,27 +1,14 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Model;
-using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public partial class EventViewModel : ViewModelBase, IModelViewModel, IElementViewModel
+public partial class EventViewModel : ViewModelBase,
+    IElementViewModel
 {
-    private static readonly Dictionary<Event, EventViewModel> cache = new();
-    public static EventViewModel Get(Event model)
-    {
-        if (cache.TryGetValue(model, out var viewModel) == false)
-        {
-            viewModel = new(model);
-            cache.Add(model, viewModel);
-        }
-
-        return viewModel;
-    }
-
     private readonly Event model;
     public Event Model => model;
 
-    IModel IModelViewModel.Model => Model;
     IElement IElementViewModel.Model => Model;
 
     public int Id
@@ -69,6 +56,24 @@ public partial class EventViewModel : ViewModelBase, IModelViewModel, IElementVi
     {
         get => model.cooldown;
         set => SetProperty(ref model.cooldown, value);
+    }
+
+    public string CustomTrigger
+    {
+        get => model.customTrigger;
+        set => SetProperty(ref model.customTrigger, value);
+    }
+
+    public string CustomImmediateEffect
+    {
+        get => model.customImmediateEffect;
+        set => SetProperty(ref model.customImmediateEffect, value);
+    }
+
+    public string CustomAfterEffect
+    {
+        get => model.customAfterEffect;
+        set => SetProperty(ref model.customAfterEffect, value);
     }
 
     public EventViewModel(Event model)

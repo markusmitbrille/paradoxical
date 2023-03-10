@@ -1,4 +1,6 @@
-﻿using Paradoxical.Model;
+﻿using Paradoxical.Core;
+using Paradoxical.Messages;
+using Paradoxical.Model;
 using System;
 using System.Collections.Generic;
 
@@ -6,59 +8,116 @@ namespace Paradoxical.Services;
 
 public interface IEventService
 {
+    Event Get(int id);
+    Event Get(Event model);
+
     IEnumerable<Event> Get();
 
-    void Insert(Event element);
-    void Update(Event element);
-    void Delete(Event element);
+    void Insert(Event model);
+    void Delete(Event model);
 
-    IEnumerable<Trigger> GetTriggers(Event element);
-    void SetTriggers(Event element, IEnumerable<Trigger> relations);
+    void Update(Event model);
+    void UpdateAll(IEnumerable<Event> model);
 
-    IEnumerable<Effect> GetImmediateEffects(Event element);
-    void SetImmediateEffects(Event element, IEnumerable<Effect> relations);
+    IEnumerable<Trigger> GetTriggers(Event model);
+    void AddTrigger(EventTrigger relation);
+    void RemoveTrigger(EventTrigger relation);
 
-    IEnumerable<Effect> GetAfterEffects(Event element);
-    void SetAfterEffects(Event element, IEnumerable<Effect> relations);
+    IEnumerable<Effect> GetImmediateEffects(Event model);
+    void SetImmediateEffects(Event model, IEnumerable<Effect> relations);
 
-    IEnumerable<Option> GetOptions(Event element);
-    void SetOptions(Event element, IEnumerable<Effect> relations);
+    IEnumerable<Effect> GetAfterEffects(Event model);
+    void SetAfterEffects(Event model, IEnumerable<Effect> relations);
+
+    IEnumerable<Option> GetOptions(Event model);
+    void SetOptions(Event model, IEnumerable<Effect> relations);
 }
 
 public class EventService : IEventService
 {
     public IDataService Data { get; }
+    public IMediatorService Mediator { get; }
 
-    public EventService(IDataService data)
+    public EventService(
+        IDataService data,
+        IMediatorService mediator)
     {
         Data = data;
+        Mediator = mediator;
+    }
+
+    public Event Get(int id)
+    {
+        return Data.Connection.Get<Event>(id);
+    }
+    public Event Get(Event model)
+    {
+        return Get(model.Id);
     }
 
     public IEnumerable<Event> Get()
     {
-        throw new NotImplementedException();
+        return Data.Connection.Table<Event>().ToArray();
     }
 
-    public void Insert(Event element)
+    public void Insert(Event model)
     {
-        throw new NotImplementedException();
+        Data.Connection.Insert(model);
+
+        Mediator.Send<ElementInsertedMessage>(new(model));
+        Mediator.Send<ElementSelectedMessage>(new(model));
     }
-    public void Update(Event element)
+    public void Delete(Event model)
     {
-        throw new NotImplementedException();
-    }
-    public void Delete(Event element)
-    {
-        throw new NotImplementedException();
+        Data.Connection.Delete(model);
+
+        Mediator.Send<ElementDeletedMessage>(new(model));
+        Mediator.Send<ElementDeselectedMessage>(new(model));
     }
 
-    public IEnumerable<Trigger> GetTriggers(Event element)
+    public void Update(Event model)
     {
-        throw new NotImplementedException();
+        Data.Connection.Update(model);
     }
-    public void SetTriggers(Event element, IEnumerable<Trigger> relations)
+    public void UpdateAll(IEnumerable<Event> models)
     {
-        throw new NotImplementedException();
+        Data.Connection.UpdateAll(models);
+    }
+
+    public IEnumerable<Trigger> GetTriggers(Event model)
+    {
+        string query = ParadoxQuery.Collection(
+            m: "triggers",
+            n: "events",
+            mn: "event_triggers",
+            mfk: "trigger_id",
+            nfk: "event_id",
+            mpk: "id",
+            npk: "id");
+
+        return Data.Connection.Query<Trigger>(query, model.Id);
+    }
+    public void AddTrigger(EventTrigger relation)
+    {
+        string query = ParadoxQuery.CollectionAdd(
+            mn: "event_triggers",
+            mfk: "trigger_id",
+            nfk: "event_id");
+
+        Data.Connection.Execute(query, relation.TriggerId, relation.EventId);
+
+        Mediator.Send<RelationAddedMessage>(new(relation));
+    }
+    public void RemoveTrigger(EventTrigger relation)
+    {
+        string query = ParadoxQuery.CollectionRemove(
+            mn: "event_triggers",
+            mfk: "trigger_id",
+            nfk: "event_id");
+
+        Data.Connection.Execute(query, relation.TriggerId, relation.EventId);
+
+        Mediator.Send<RelationRemovedMessage>(new(relation));
     }
 
     public IEnumerable<Effect> GetImmediateEffects(Event element)

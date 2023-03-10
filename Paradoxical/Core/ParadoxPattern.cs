@@ -13,17 +13,25 @@ public static partial class ParadoxPattern
     private static partial Regex GetIdFilterRegex();
     public static Regex IdFilterRegex => GetIdFilterRegex();
 
-    [GeneratedRegex(@"name:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
+    [GeneratedRegex(@"n:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
     private static partial Regex GetNameFilterRegex();
     public static Regex NameFilterRegex => GetNameFilterRegex();
 
-    [GeneratedRegex(@"code:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
+    [GeneratedRegex(@"c:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
     private static partial Regex GetCodeFilterRegex();
     public static Regex CodeFilterRegex => GetCodeFilterRegex();
 
-    [GeneratedRegex(@"tooltip:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
+    [GeneratedRegex(@"tt:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
     private static partial Regex GetTooltipFilterRegex();
     public static Regex TooltipFilterRegex => GetTooltipFilterRegex();
+
+    [GeneratedRegex(@"t:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
+    private static partial Regex GetTitleFilterRegex();
+    public static Regex TitleFilterRegex => GetTitleFilterRegex();
+
+    [GeneratedRegex(@"d:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
+    private static partial Regex GetDescriptionFilterRegex();
+    public static Regex DescriptionFilterRegex => GetDescriptionFilterRegex();
 
     public static bool FuzzyMatch(this Regex regex, string text, string filter, int ratio = 80)
     {

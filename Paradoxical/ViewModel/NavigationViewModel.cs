@@ -13,7 +13,7 @@ namespace Paradoxical.ViewModel;
 public delegate PageViewModelBase PageFactory(Type pageType);
 
 public class NavigationViewModel : ViewModelBase,
-    IMessageHandler<DeleteMessage>
+    IMessageHandler<ElementDeletedMessage>
 {
     private PageFactory PageFactory { get; }
     public IMediatorService Mediator { get; }
@@ -38,7 +38,7 @@ public class NavigationViewModel : ViewModelBase,
         PageFactory = pageFactory;
         Mediator = mediator;
 
-        Mediator.Register<DeleteMessage>(this);
+        Mediator.Register<ElementDeletedMessage>(this);
     }
 
     protected override void OnPropertyChanging(PropertyChangingEventArgs e)
@@ -61,7 +61,7 @@ public class NavigationViewModel : ViewModelBase,
         }
     }
 
-    public void Handle(DeleteMessage message)
+    public void Handle(ElementDeletedMessage message)
     {
         CleanCollection(history);
         CleanCollection(future);

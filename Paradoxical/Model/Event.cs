@@ -9,7 +9,7 @@ using System.Linq;
 namespace Paradoxical.Model;
 
 [Table("events")]
-public class Event : IModel, IElement, IEquatable<Event?>
+public class Event : IElement, IEquatable<Event?>
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
@@ -43,6 +43,18 @@ public class Event : IModel, IElement, IEquatable<Event?>
     public int Cooldown { get => cooldown; set => cooldown = value; }
     public int cooldown;
 
+    [Column("custom_trigger"), NotNull]
+    public string CustomTrigger { get => customTrigger; set => customTrigger = value; }
+    public string customTrigger = "";
+
+    [Column("custom_immediate"), NotNull]
+    public string CustomImmediateEffect { get => customImmediateEffect; set => customImmediateEffect = value; }
+    public string customImmediateEffect = "";
+
+    [Column("custom_after"), NotNull]
+    public string CustomAfterEffect { get => customAfterEffect; set => customAfterEffect = value; }
+    public string customAfterEffect = "";
+
     public Event()
     {
     }
@@ -58,6 +70,9 @@ public class Event : IModel, IElement, IEquatable<Event?>
         hidden = other.hidden;
         weight = other.weight;
         cooldown = other.cooldown;
+        customTrigger = other.customTrigger;
+        customImmediateEffect = other.customImmediateEffect;
+        customAfterEffect = other.customAfterEffect;
     }
 
     private const string DEFAULT_THEME = "default";
