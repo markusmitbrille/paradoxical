@@ -12,7 +12,7 @@ namespace Paradoxical.ViewModel;
 
 public class TriggerDetailsViewModel : PageViewModelBase,
     IElementDetailsViewModel,
-    IMessageHandler<SelectMessage>,
+    IMessageHandler<ElementSelectedMessage>,
     IMessageHandler<ShutdownMessage>
 {
     public override string PageName => "Trigger Details";
@@ -43,7 +43,7 @@ public class TriggerDetailsViewModel : PageViewModelBase,
 
         TriggerService = triggerService;
 
-        Mediator.Register<SelectMessage>(this);
+        Mediator.Register<ElementSelectedMessage>(this);
         Mediator.Register<ShutdownMessage>(this);
     }
 
@@ -61,7 +61,7 @@ public class TriggerDetailsViewModel : PageViewModelBase,
         Save();
     }
 
-    public void Handle(SelectMessage message)
+    public void Handle(ElementSelectedMessage message)
     {
         if (message.Element is not Trigger model)
         { return; }
@@ -112,7 +112,7 @@ public class TriggerDetailsViewModel : PageViewModelBase,
         { return; }
 
         Navigation.Navigate<TriggerDetailsViewModel>();
-        Mediator.Send<SelectMessage>(new(Finder.Selected.Model));
+        Mediator.Send<ElementSelectedMessage>(new(Finder.Selected.Model));
     }
 
     private RelayCommand? createCommand;

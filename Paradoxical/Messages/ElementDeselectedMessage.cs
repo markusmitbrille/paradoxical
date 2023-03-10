@@ -2,11 +2,11 @@
 
 namespace Paradoxical.Messages;
 
-public class DeselectMessage : IMessage
+public class ElementDeselectedMessage : IMessage
 {
     public IElement Element { get; }
 
-    public DeselectMessage(IElement element)
+    public ElementDeselectedMessage(IElement element)
     {
         Element = element;
     }

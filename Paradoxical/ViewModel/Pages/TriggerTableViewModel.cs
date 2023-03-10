@@ -15,10 +15,10 @@ namespace Paradoxical.ViewModel;
 
 public class TriggerTableViewModel : PageViewModelBase,
     IElementTableViewModel,
-    IMessageHandler<SelectMessage>,
-    IMessageHandler<DeselectMessage>,
-    IMessageHandler<InsertMessage>,
-    IMessageHandler<DeleteMessage>,
+    IMessageHandler<ElementSelectedMessage>,
+    IMessageHandler<ElementDeselectedMessage>,
+    IMessageHandler<ElementInsertedMessage>,
+    IMessageHandler<ElementDeletedMessage>,
     IMessageHandler<ShutdownMessage>
 {
     public override string PageName => "Triggers";
@@ -56,10 +56,10 @@ public class TriggerTableViewModel : PageViewModelBase,
 
         TriggerService = triggerService;
 
-        Mediator.Register<SelectMessage>(this);
-        Mediator.Register<DeselectMessage>(this);
-        Mediator.Register<InsertMessage>(this);
-        Mediator.Register<DeleteMessage>(this);
+        Mediator.Register<ElementSelectedMessage>(this);
+        Mediator.Register<ElementDeselectedMessage>(this);
+        Mediator.Register<ElementInsertedMessage>(this);
+        Mediator.Register<ElementDeletedMessage>(this);
         Mediator.Register<ShutdownMessage>(this);
     }
 
@@ -93,7 +93,7 @@ public class TriggerTableViewModel : PageViewModelBase,
         Save();
     }
 
-    public void Handle(SelectMessage message)
+    public void Handle(ElementSelectedMessage message)
     {
         if (message.Element is not Trigger model)
         { return; }
@@ -104,7 +104,7 @@ public class TriggerTableViewModel : PageViewModelBase,
         Selected = Triggers.SingleOrDefault(viewmodel => viewmodel.Model == model);
     }
 
-    public void Handle(DeselectMessage message)
+    public void Handle(ElementDeselectedMessage message)
     {
         if (message.Element is not Trigger model)
         { return; }
@@ -118,7 +118,7 @@ public class TriggerTableViewModel : PageViewModelBase,
         }
     }
 
-    public void Handle(InsertMessage message)
+    public void Handle(ElementInsertedMessage message)
     {
         if (message.Model is not Trigger model)
         { return; }
@@ -126,7 +126,7 @@ public class TriggerTableViewModel : PageViewModelBase,
         Triggers.Add(new(model));
     }
 
-    public void Handle(DeleteMessage message)
+    public void Handle(ElementDeletedMessage message)
     {
         if (message.Model is not Trigger model)
         { return; }
@@ -224,7 +224,7 @@ public class TriggerTableViewModel : PageViewModelBase,
         { return; }
 
         Navigation.Navigate<TriggerDetailsViewModel>();
-        Mediator.Send<SelectMessage>(new(Finder.Selected.Model));
+        Mediator.Send<ElementSelectedMessage>(new(Finder.Selected.Model));
     }
 
     private RelayCommand? createCommand;
@@ -281,7 +281,7 @@ public class TriggerTableViewModel : PageViewModelBase,
         { return; }
 
         Navigation.Navigate<TriggerDetailsViewModel>();
-        Mediator.Send<SelectMessage>(new(viewmodel.Model));
+        Mediator.Send<ElementSelectedMessage>(new(viewmodel.Model));
     }
     private bool CanEdit(TriggerViewModel? viewmodel)
     {

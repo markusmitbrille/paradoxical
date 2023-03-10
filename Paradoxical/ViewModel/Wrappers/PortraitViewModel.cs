@@ -3,12 +3,12 @@ using Paradoxical.Model;
 
 namespace Paradoxical.ViewModel;
 
-public partial class PortraitViewModel : ViewModelBase, IModelViewModel
+public partial class PortraitViewModel : ViewModelBase, IComponentViewModel
 {
     private readonly Portrait model;
     public Portrait Model => model;
 
-    IModel IModelViewModel.Model => Model;
+    IComponent IComponentViewModel.Model => Model;
 
     public int Id
     {

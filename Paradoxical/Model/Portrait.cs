@@ -7,7 +7,7 @@ using System.IO;
 namespace Paradoxical.Model;
 
 [Table("portraits")]
-public class Portrait : IModel, IEquatable<Portrait?>
+public class Portrait : IComponent, IEquatable<Portrait?>
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
@@ -16,6 +16,8 @@ public class Portrait : IModel, IEquatable<Portrait?>
     [Column("event_id"), Indexed, NotNull]
     public int EventId { get => eventId; set => eventId = value; }
     public int eventId;
+
+    int IComponent.OwnerId => EventId;
 
     [Column("position"), NotNull]
     public PortraitPosition Position { get => position; set => position = value; }

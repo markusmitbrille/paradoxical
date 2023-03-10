@@ -49,15 +49,15 @@ public class TriggerService : ITriggerService
     {
         Data.Connection.Insert(model);
 
-        Mediator.Send<InsertMessage>(new(model));
-        Mediator.Send<SelectMessage>(new(model));
+        Mediator.Send<ElementInsertedMessage>(new(model));
+        Mediator.Send<ElementSelectedMessage>(new(model));
     }
     public void Delete(Trigger model)
     {
         Data.Connection.Delete(model);
 
-        Mediator.Send<DeleteMessage>(new(model));
-        Mediator.Send<DeselectMessage>(new(model));
+        Mediator.Send<ElementDeletedMessage>(new(model));
+        Mediator.Send<ElementDeselectedMessage>(new(model));
     }
 
     public void Update(Trigger model)

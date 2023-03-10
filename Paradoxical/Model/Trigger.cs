@@ -8,7 +8,7 @@ using System.IO;
 namespace Paradoxical.Model;
 
 [Table("triggers")]
-public class Trigger : IModel, IElement, IEquatable<Trigger?>
+public class Trigger : IElement, IEquatable<Trigger?>
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }

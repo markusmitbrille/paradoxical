@@ -3,12 +3,10 @@ using Paradoxical.Model;
 
 namespace Paradoxical.ViewModel;
 
-public partial class ModViewModel : ViewModelBase, IModelViewModel
+public partial class ModViewModel : ViewModelBase
 {
     private readonly Mod model;
     public Mod Model => model;
-
-    IModel IModelViewModel.Model => Model;
 
     public int Id
     {

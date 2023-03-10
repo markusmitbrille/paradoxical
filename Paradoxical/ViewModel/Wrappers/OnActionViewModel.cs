@@ -3,12 +3,11 @@ using Paradoxical.Model;
 
 namespace Paradoxical.ViewModel;
 
-public partial class OnActionViewModel : ViewModelBase, IModelViewModel, IElementViewModel
+public partial class OnActionViewModel : ViewModelBase, IElementViewModel
 {
     private readonly OnAction model;
     public OnAction Model => model;
 
-    IModel IModelViewModel.Model => Model;
     IElement IElementViewModel.Model => Model;
 
     public int Id

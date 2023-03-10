@@ -5,12 +5,11 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public partial class TriggerViewModel : ViewModelBase, IModelViewModel, IElementViewModel, IEquatable<TriggerViewModel?>
+public partial class TriggerViewModel : ViewModelBase, IElementViewModel, IEquatable<TriggerViewModel?>
 {
     private readonly Trigger model;
     public Trigger Model => model;
 
-    IModel IModelViewModel.Model => Model;
     IElement IElementViewModel.Model => Model;
 
     public int Id
