@@ -1,23 +1,24 @@
 ﻿using Paradoxical.Core;
-using Paradoxical.Model.Components;
+using Paradoxical.Model.Elements;
 
 namespace Paradoxical.ViewModel;
 
-public partial class OptionViewModel : ViewModelBase, IComponentViewModel
+public partial class OptionViewModel : ViewModelBase, IElementViewModel
 {
     private readonly Option model;
     public Option Model => model;
 
-    IComponent IComponentViewModel.Model => Model;
+    IElement IElementViewModel.Model => Model;
 
     public int Id
     {
         get => model.Id;
     }
 
-    public int EventId
+    public string Name
     {
-        get => model.eventId;
+        get => model.name;
+        set => SetProperty(ref model.name, value);
     }
 
     public string Title

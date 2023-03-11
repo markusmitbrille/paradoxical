@@ -1,27 +1,24 @@
 ﻿using Paradoxical.Core;
-using Paradoxical.Model.Elements;
 using Paradoxical.Services;
-using Paradoxical.Services.Components;
+using Paradoxical.Services.Elements;
 using SQLite;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Paradoxical.Model.Components;
+namespace Paradoxical.Model.Elements;
 
 [Table("options")]
-public class Option : IComponent, IEquatable<Option?>
+public class Option : IElement, IEquatable<Option?>
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
     public int id;
 
-    [Column("event_id"), Indexed, NotNull]
-    public int EventId { get => eventId; set => eventId = value; }
-    public int eventId;
-
-    int IComponent.OwnerId => EventId;
+    [Column("name"), Indexed, NotNull]
+    public string Name { get => name; set => name = value; }
+    public string name = "";
 
     [Column("title"), NotNull]
     public string Title { get => title; set => title = value; }
