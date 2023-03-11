@@ -1,12 +1,13 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Services;
+using Paradoxical.Services.Elements;
 using SQLite;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Paradoxical.Model;
+namespace Paradoxical.Model.Elements;
 
 [Table("on_actions")]
 public class OnAction : IElement, IEquatable<OnAction?>

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Paradoxical.Model;
+namespace Paradoxical.Model.Elements;
 
 [Table("effects")]
 public class Effect : IElement, IEquatable<Effect?>

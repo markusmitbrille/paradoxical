@@ -1,7 +1,7 @@
 ﻿using Paradoxical.Core;
 using SQLite;
 
-namespace Paradoxical.Model;
+namespace Paradoxical.Model.Relationships;
 
 [Table("event_triggers")]
 public class EventTrigger : IRelationship

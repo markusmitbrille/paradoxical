@@ -1,12 +1,14 @@
 ﻿using Paradoxical.Core;
+using Paradoxical.Model.Elements;
 using Paradoxical.Services;
+using Paradoxical.Services.Components;
 using SQLite;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Paradoxical.Model;
+namespace Paradoxical.Model.Components;
 
 [Table("options")]
 public class Option : IComponent, IEquatable<Option?>

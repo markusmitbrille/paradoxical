@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-namespace Paradoxical.Model;
+namespace Paradoxical.Model.Components;
 
 [Table("option_triggers")]
 public class OptionTrigger

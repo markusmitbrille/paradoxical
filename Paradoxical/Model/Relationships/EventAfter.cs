@@ -1,10 +1,10 @@
 ﻿using Paradoxical.Core;
 using SQLite;
 
-namespace Paradoxical.Model;
+namespace Paradoxical.Model.Relationships;
 
-[Table("event_immediate_effects")]
-public class EventImmediateEffect : IRelationship
+[Table("event_after_effects")]
+public class EventAfter : IRelationship
 {
     [Column("event_id"), Indexed]
     public int EventId { get; set; }

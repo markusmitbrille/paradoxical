@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-namespace Paradoxical.Model;
+namespace Paradoxical.Model.Components;
 
 [Table("option_effects")]
 public class OptionEffect

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Paradoxical.Model;
+namespace Paradoxical.Model.Components;
 
 [Table("portraits")]
 public class Portrait : IComponent, IEquatable<Portrait?>

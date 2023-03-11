@@ -1,12 +1,15 @@
 ﻿using Paradoxical.Core;
+using Paradoxical.Model.Components;
 using Paradoxical.Services;
+using Paradoxical.Services.Components;
+using Paradoxical.Services.Elements;
 using SQLite;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Paradoxical.Model;
+namespace Paradoxical.Model.Elements;
 
 [Table("events")]
 public class Event : IElement, IEquatable<Event?>

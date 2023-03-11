@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Paradoxical.Model;
+namespace Paradoxical.Model.Elements;
 
 [Table("triggers")]
 public class Trigger : IElement, IEquatable<Trigger?>

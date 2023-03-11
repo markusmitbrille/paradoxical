@@ -1,4 +1,4 @@
-﻿namespace Paradoxical.Model;
+﻿namespace Paradoxical.Model.Components;
 
 public enum PortraitPosition
 {
