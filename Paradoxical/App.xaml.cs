@@ -6,6 +6,7 @@ using Paradoxical.Services.Elements;
 using Paradoxical.Services.Relationships;
 using Paradoxical.View;
 using Paradoxical.ViewModel;
+using Paradoxical.ViewModel.Relationships;
 using System.Windows;
 
 namespace Paradoxical;
@@ -39,6 +40,7 @@ public partial class App : Application
         services.AddSingleton<IPortraitService, PortraitService>();
 
         // relationship services
+        services.AddSingleton<IEventOptionService, EventOptionService>();
         services.AddSingleton<IEventTriggerService, EventTriggerService>();
         services.AddSingleton<IEventImmediateService, EventImmediateService>();
         services.AddSingleton<IEventAfterService, EventAfterService>();
@@ -92,6 +94,7 @@ public partial class App : Application
         services.AddSingleton<EffectTableViewModel>();
 
         // relationship view models
+        services.AddTransient<EventOptionViewModel>();
         services.AddTransient<EventTriggerViewModel>();
         services.AddTransient<EventImmediateViewModel>();
         services.AddTransient<EventAfterViewModel>();

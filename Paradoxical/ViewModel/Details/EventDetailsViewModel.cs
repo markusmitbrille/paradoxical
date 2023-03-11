@@ -3,6 +3,7 @@ using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
 using Paradoxical.Messages;
 using Paradoxical.Model.Elements;
+using Paradoxical.Model.Relationships;
 using Paradoxical.Services;
 using Paradoxical.Services.Elements;
 using System;
@@ -20,6 +21,7 @@ public class EventDetailsViewModel : PageViewModelBase,
 
     public FindDialogViewModel Finder { get; }
 
+    public EventOption Options { get; }
     public EventTriggerViewModel Triggers { get; }
     public EventImmediateViewModel Immediates { get; }
     public EventAfterViewModel Afters { get; }
@@ -27,8 +29,6 @@ public class EventDetailsViewModel : PageViewModelBase,
     public IMediatorService Mediator { get; }
 
     public IEventService EventService { get; }
-    public ITriggerService TriggerService { get; }
-    public IEffectService EffectService { get; }
 
     private EventViewModel? selected;
     public EventViewModel? Selected
@@ -42,24 +42,24 @@ public class EventDetailsViewModel : PageViewModelBase,
     public EventDetailsViewModel(
         NavigationViewModel navigation,
         FindDialogViewModel finder,
+        EventOption options,
         EventTriggerViewModel triggers,
         EventImmediateViewModel immediates,
         EventAfterViewModel afters,
         IMediatorService mediator,
-        IEventService eventService,
-        ITriggerService triggerService,
-        IEffectService effectService)
+        IEventService eventService)
         : base(navigation)
     {
         Finder = finder;
+
+        Options = options;
         Triggers = triggers;
         Immediates = immediates;
         Afters = afters;
+
         Mediator = mediator;
 
         EventService = eventService;
-        TriggerService = triggerService;
-        EffectService = effectService;
 
         Mediator.Register<ElementSelectedMessage>(this);
         Mediator.Register<ShutdownMessage>(this);
