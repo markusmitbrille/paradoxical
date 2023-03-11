@@ -1,8 +1,9 @@
-﻿using Paradoxical.Model;
+﻿using Paradoxical.Model.Components;
+using Paradoxical.Model.Elements;
 using System;
 using System.Collections.Generic;
 
-namespace Paradoxical.Services;
+namespace Paradoxical.Services.Components;
 
 public interface IOptionService
 {

@@ -1,4 +1,7 @@
 ﻿using Paradoxical.Model;
+using Paradoxical.Model.Components;
+using Paradoxical.Model.Elements;
+using Paradoxical.Model.Relationships;
 using SQLite;
 using System;
 
@@ -61,8 +64,8 @@ public class DataService : IDataService
         Connection.CreateTable<Mod>();
 
         Connection.CreateTable<Event>();
-        Connection.CreateTable<EventImmediateEffect>();
-        Connection.CreateTable<EventAfterEffect>();
+        Connection.CreateTable<EventImmediate>();
+        Connection.CreateTable<EventAfter>();
         Connection.CreateTable<EventTrigger>();
 
         Connection.CreateTable<Portrait>();
@@ -78,9 +81,9 @@ public class DataService : IDataService
         Connection.CreateTable<OnActionOnAction>();
 
         Connection.CreateTable<Decision>();
-        Connection.CreateTable<DecisionIsShownTrigger>();
-        Connection.CreateTable<DecisionIsValidTrigger>();
-        Connection.CreateTable<DecisionIsValidFailureTrigger>();
+        Connection.CreateTable<DecisionShown>();
+        Connection.CreateTable<DecisionValid>();
+        Connection.CreateTable<DecisionFailure>();
         Connection.CreateTable<DecisionEffect>();
 
         Connection.CreateTable<Trigger>();
@@ -93,8 +96,8 @@ public class DataService : IDataService
         Connection.DropTable<Mod>();
 
         Connection.DropTable<Event>();
-        Connection.DropTable<EventImmediateEffect>();
-        Connection.DropTable<EventAfterEffect>();
+        Connection.DropTable<EventImmediate>();
+        Connection.DropTable<EventAfter>();
         Connection.DropTable<EventTrigger>();
 
         Connection.DropTable<Portrait>();
@@ -110,9 +113,9 @@ public class DataService : IDataService
         Connection.DropTable<OnActionOnAction>();
 
         Connection.DropTable<Decision>();
-        Connection.DropTable<DecisionIsShownTrigger>();
-        Connection.DropTable<DecisionIsValidTrigger>();
-        Connection.DropTable<DecisionIsValidFailureTrigger>();
+        Connection.DropTable<DecisionShown>();
+        Connection.DropTable<DecisionValid>();
+        Connection.DropTable<DecisionFailure>();
         Connection.DropTable<DecisionEffect>();
 
         Connection.DropTable<Trigger>();
@@ -125,8 +128,8 @@ public class DataService : IDataService
         Connection.DeleteAll<Mod>();
 
         Connection.DeleteAll<Event>();
-        Connection.DeleteAll<EventImmediateEffect>();
-        Connection.DeleteAll<EventAfterEffect>();
+        Connection.DeleteAll<EventImmediate>();
+        Connection.DeleteAll<EventAfter>();
         Connection.DeleteAll<EventTrigger>();
 
         Connection.DeleteAll<Portrait>();
@@ -142,9 +145,9 @@ public class DataService : IDataService
         Connection.DeleteAll<OnActionOnAction>();
 
         Connection.DeleteAll<Decision>();
-        Connection.DeleteAll<DecisionIsShownTrigger>();
-        Connection.DeleteAll<DecisionIsValidTrigger>();
-        Connection.DeleteAll<DecisionIsValidFailureTrigger>();
+        Connection.DeleteAll<DecisionShown>();
+        Connection.DeleteAll<DecisionValid>();
+        Connection.DeleteAll<DecisionFailure>();
         Connection.DeleteAll<DecisionEffect>();
 
         Connection.DeleteAll<Trigger>();

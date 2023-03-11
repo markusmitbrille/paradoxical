@@ -1,5 +1,7 @@
 ﻿using Paradoxical.Core;
-using Paradoxical.Model;
+using Paradoxical.Model.Elements;
+using Paradoxical.Services.Components;
+using Paradoxical.Services.Elements;
 using System.IO;
 using System.Text;
 
