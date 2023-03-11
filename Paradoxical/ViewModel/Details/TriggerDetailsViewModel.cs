@@ -2,8 +2,9 @@
 using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
 using Paradoxical.Messages;
-using Paradoxical.Model;
+using Paradoxical.Model.Elements;
 using Paradoxical.Services;
+using Paradoxical.Services.Elements;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

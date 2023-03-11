@@ -1,5 +1,5 @@
 ﻿using Paradoxical.Core;
-using Paradoxical.Services;
+using Paradoxical.Services.Elements;
 
 namespace Paradoxical.ViewModel;
 

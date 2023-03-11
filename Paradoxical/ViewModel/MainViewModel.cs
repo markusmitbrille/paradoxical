@@ -12,20 +12,17 @@ public class MainViewModel : ViewModelBase
     public FindDialogViewModel Finder { get; }
     public IMediatorService Mediator { get; }
     public IFileService File { get; }
-    public IElementService Element { get; }
 
     public MainViewModel(
         NavigationViewModel navigation,
         FindDialogViewModel finder,
         IMediatorService mediator,
-        IFileService file,
-        IElementService element)
+        IFileService file)
     {
         Navigation = navigation;
         Finder = finder;
         Mediator = mediator;
         File = file;
-        Element = element;
     }
 
     private RelayCommand? newCommand;

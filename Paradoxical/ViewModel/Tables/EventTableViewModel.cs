@@ -2,8 +2,9 @@
 using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
 using Paradoxical.Messages;
-using Paradoxical.Model;
+using Paradoxical.Model.Elements;
 using Paradoxical.Services;
+using Paradoxical.Services.Elements;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -13,7 +14,7 @@ using System.Windows.Data;
 
 namespace Paradoxical.ViewModel;
 
-public class TriggerTableViewModel : PageViewModelBase,
+public class EventTableViewModel : PageViewModelBase,
     IElementTableViewModel,
     IMessageHandler<ElementSelectedMessage>,
     IMessageHandler<ElementDeselectedMessage>,
@@ -21,15 +22,15 @@ public class TriggerTableViewModel : PageViewModelBase,
     IMessageHandler<ElementDeletedMessage>,
     IMessageHandler<ShutdownMessage>
 {
-    public override string PageName => "Triggers";
+    public override string PageName => "Events";
 
     public FindDialogViewModel Finder { get; }
     public IMediatorService Mediator { get; }
 
-    public ITriggerService TriggerService { get; }
+    public IEventService EventService { get; }
 
-    private TriggerViewModel? selected;
-    public TriggerViewModel? Selected
+    private EventViewModel? selected;
+    public EventViewModel? Selected
     {
         get => selected;
         set => SetProperty(ref selected, value);
@@ -44,17 +45,17 @@ public class TriggerTableViewModel : PageViewModelBase,
         set => SetProperty(ref filter, value);
     }
 
-    public TriggerTableViewModel(
+    public EventTableViewModel(
         NavigationViewModel navigation,
         FindDialogViewModel finder,
         IMediatorService mediator,
-        ITriggerService triggerService)
+        IEventService triggerService)
         : base(navigation)
     {
         Finder = finder;
         Mediator = mediator;
 
-        TriggerService = triggerService;
+        EventService = triggerService;
 
         Mediator.Register<ElementSelectedMessage>(this);
         Mediator.Register<ElementDeselectedMessage>(this);
@@ -67,7 +68,7 @@ public class TriggerTableViewModel : PageViewModelBase,
     {
         base.OnPropertyChanged(e);
 
-        if (e.PropertyName == nameof(Triggers))
+        if (e.PropertyName == nameof(Events))
         {
             UpdateView();
             UpdateSelected();
@@ -95,18 +96,18 @@ public class TriggerTableViewModel : PageViewModelBase,
 
     public void Handle(ElementSelectedMessage message)
     {
-        if (message.Element is not Trigger model)
+        if (message.Element is not Event model)
         { return; }
 
         if (Navigation.CurrentPage != this)
         { return; }
 
-        Selected = Triggers.SingleOrDefault(viewmodel => viewmodel.Model == model);
+        Selected = Events.SingleOrDefault(viewmodel => viewmodel.Model == model);
     }
 
     public void Handle(ElementDeselectedMessage message)
     {
-        if (message.Element is not Trigger model)
+        if (message.Element is not Event model)
         { return; }
 
         if (Navigation.CurrentPage != this)
@@ -120,21 +121,21 @@ public class TriggerTableViewModel : PageViewModelBase,
 
     public void Handle(ElementInsertedMessage message)
     {
-        if (message.Model is not Trigger model)
+        if (message.Model is not Event model)
         { return; }
 
-        Triggers.Add(new(model));
+        Events.Add(new(model));
     }
 
     public void Handle(ElementDeletedMessage message)
     {
-        if (message.Model is not Trigger model)
+        if (message.Model is not Event model)
         { return; }
 
-        var viewmodels = Triggers.Where(viewmodel => viewmodel.Model == model).ToArray();
+        var viewmodels = Events.Where(viewmodel => viewmodel.Model == model).ToArray();
         foreach (var viewmodel in viewmodels)
         {
-            Triggers.Remove(viewmodel);
+            Events.Remove(viewmodel);
         }
     }
 
@@ -145,20 +146,20 @@ public class TriggerTableViewModel : PageViewModelBase,
 
     private void Load()
     {
-        Triggers = new(TriggerService.Get().Select(model => new TriggerViewModel(model)));
+        Events = new(EventService.Get().Select(model => new EventViewModel(model)));
 
-        ICollectionView view = CollectionViewSource.GetDefaultView(Triggers);
+        ICollectionView view = CollectionViewSource.GetDefaultView(Events);
         view.Filter = Predicate;
     }
 
     private void Save()
     {
-        TriggerService.UpdateAll(Triggers.Select(vm => vm.Model));
+        EventService.UpdateAll(Events.Select(vm => vm.Model));
     }
 
     private bool Predicate(object obj)
     {
-        if (obj is not TriggerViewModel viewmodel)
+        if (obj is not EventViewModel viewmodel)
         { return false; }
 
         if (string.IsNullOrEmpty(Filter) == true)
@@ -170,10 +171,10 @@ public class TriggerTableViewModel : PageViewModelBase,
         if (ParadoxPattern.NameFilterRegex.FuzzyMatch(viewmodel.Name, Filter) == true)
         { return true; }
 
-        if (ParadoxPattern.CodeFilterRegex.FuzzyMatch(viewmodel.Code, Filter) == true)
+        if (ParadoxPattern.TitleFilterRegex.FuzzyMatch(viewmodel.Title, Filter) == true)
         { return true; }
 
-        if (ParadoxPattern.TooltipFilterRegex.FuzzyMatch(viewmodel.Tooltip, Filter) == true)
+        if (ParadoxPattern.DescriptionFilterRegex.FuzzyMatch(viewmodel.Description, Filter) == true)
         { return true; }
 
         if (ParadoxPattern.FilterRegex.FuzzyMatch(viewmodel.Name, Filter) == true)
@@ -184,7 +185,7 @@ public class TriggerTableViewModel : PageViewModelBase,
 
     private void UpdateView()
     {
-        ICollectionView view = CollectionViewSource.GetDefaultView(Triggers);
+        ICollectionView view = CollectionViewSource.GetDefaultView(Events);
         view.Refresh();
     }
 
@@ -193,12 +194,12 @@ public class TriggerTableViewModel : PageViewModelBase,
         if (Selected != null && Predicate(Selected) == true)
         { return; }
 
-        ICollectionView view = CollectionViewSource.GetDefaultView(Triggers);
-        Selected = view.Cast<TriggerViewModel>().FirstOrDefault();
+        ICollectionView view = CollectionViewSource.GetDefaultView(Events);
+        Selected = view.Cast<EventViewModel>().FirstOrDefault();
     }
 
-    private ObservableCollection<TriggerViewModel> triggers = new();
-    public ObservableCollection<TriggerViewModel> Triggers
+    private ObservableCollection<EventViewModel> triggers = new();
+    public ObservableCollection<EventViewModel> Events
     {
         get => triggers;
         set => SetProperty(ref triggers, value);
@@ -211,7 +212,7 @@ public class TriggerTableViewModel : PageViewModelBase,
     {
         Save();
 
-        Finder.Items = TriggerService.Get().Select(model => new TriggerViewModel(model));
+        Finder.Items = EventService.Get().Select(model => new EventViewModel(model));
         Finder.Selected = Selected;
         Finder.NameFilter = Filter;
 
@@ -223,7 +224,7 @@ public class TriggerTableViewModel : PageViewModelBase,
         if (Finder.Selected == null)
         { return; }
 
-        Navigation.Navigate<TriggerDetailsViewModel>();
+        Navigation.Navigate<EventDetailsViewModel>();
         Mediator.Send<ElementSelectedMessage>(new(Finder.Selected.Model));
     }
 
@@ -232,58 +233,59 @@ public class TriggerTableViewModel : PageViewModelBase,
 
     private void Create()
     {
-        Trigger model = new()
+        Event model = new()
         {
-            Name = $"trg_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Code = "# some trigger",
+            Name = $"evt_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
+            Title = "Hello World",
+            Description = "Hello World!",
         };
 
-        TriggerService.Insert(model);
+        EventService.Insert(model);
     }
 
-    private RelayCommand<TriggerViewModel>? duplicateCommand;
-    public RelayCommand<TriggerViewModel> DuplicateCommand => duplicateCommand ??= new(Duplicate, CanDuplicate);
+    private RelayCommand<EventViewModel>? duplicateCommand;
+    public RelayCommand<EventViewModel> DuplicateCommand => duplicateCommand ??= new(Duplicate, CanDuplicate);
 
-    private void Duplicate(TriggerViewModel? viewmodel)
+    private void Duplicate(EventViewModel? viewmodel)
     {
         if (viewmodel == null)
         { return; }
 
-        Trigger model = new(viewmodel.Model);
-        TriggerService.Insert(model);
+        Event model = new(viewmodel.Model);
+        EventService.Insert(model);
     }
-    private bool CanDuplicate(TriggerViewModel? viewmodel)
+    private bool CanDuplicate(EventViewModel? viewmodel)
     {
         return viewmodel != null;
     }
 
-    private RelayCommand<TriggerViewModel>? deleteCommand;
-    public RelayCommand<TriggerViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
+    private RelayCommand<EventViewModel>? deleteCommand;
+    public RelayCommand<EventViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
 
-    private void Delete(TriggerViewModel? viewmodel)
+    private void Delete(EventViewModel? viewmodel)
     {
         if (viewmodel == null)
         { return; }
 
-        TriggerService.Delete(viewmodel.Model);
+        EventService.Delete(viewmodel.Model);
     }
-    private bool CanDelete(TriggerViewModel? viewmodel)
+    private bool CanDelete(EventViewModel? viewmodel)
     {
         return viewmodel != null;
     }
 
-    private RelayCommand<TriggerViewModel>? editCommand;
-    public RelayCommand<TriggerViewModel> EditCommand => editCommand ??= new(Edit, CanEdit);
+    private RelayCommand<EventViewModel>? editCommand;
+    public RelayCommand<EventViewModel> EditCommand => editCommand ??= new(Edit, CanEdit);
 
-    private void Edit(TriggerViewModel? viewmodel)
+    private void Edit(EventViewModel? viewmodel)
     {
         if (viewmodel == null)
         { return; }
 
-        Navigation.Navigate<TriggerDetailsViewModel>();
+        Navigation.Navigate<EventDetailsViewModel>();
         Mediator.Send<ElementSelectedMessage>(new(viewmodel.Model));
     }
-    private bool CanEdit(TriggerViewModel? viewmodel)
+    private bool CanEdit(EventViewModel? viewmodel)
     {
         return viewmodel != null;
     }

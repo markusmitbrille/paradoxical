@@ -1,23 +1,24 @@
 ﻿using Paradoxical.Core;
-using Paradoxical.Model;
+using Paradoxical.Model.Elements;
 
 namespace Paradoxical.ViewModel;
 
-public partial class OptionViewModel : ViewModelBase, IComponentViewModel
+public partial class DecisionViewModel : ViewModelBase, IElementViewModel
 {
-    private readonly Option model;
-    public Option Model => model;
+    private readonly Decision model;
+    public Decision Model => model;
 
-    IComponent IComponentViewModel.Model => Model;
+    IElement IElementViewModel.Model => Model;
 
     public int Id
     {
         get => model.Id;
     }
 
-    public int EventId
+    public string Name
     {
-        get => model.eventId;
+        get => model.name;
+        set => SetProperty(ref model.name, value);
     }
 
     public string Title
@@ -26,10 +27,64 @@ public partial class OptionViewModel : ViewModelBase, IComponentViewModel
         set => SetProperty(ref model.title, value);
     }
 
+    public string Description
+    {
+        get => model.description;
+        set => SetProperty(ref model.description, value);
+    }
+
     public string Tooltip
     {
         get => model.tooltip;
         set => SetProperty(ref model.tooltip, value);
+    }
+
+    public string Confirm
+    {
+        get => model.confirm;
+        set => SetProperty(ref model.confirm, value);
+    }
+
+    public string Picture
+    {
+        get => model.picture;
+        set => SetProperty(ref model.picture, value);
+    }
+
+    public bool Major
+    {
+        get => model.major;
+        set => SetProperty(ref model.major, value);
+    }
+
+    public int SortOrder
+    {
+        get => model.sortOrder;
+        set => SetProperty(ref model.sortOrder, value);
+    }
+
+    public int Cooldown
+    {
+        get => model.cooldown;
+        set => SetProperty(ref model.cooldown, value);
+    }
+
+    public int GoldCost
+    {
+        get => model.goldCost;
+        set => SetProperty(ref model.goldCost, value);
+    }
+
+    public int PietyCost
+    {
+        get => model.pietyCost;
+        set => SetProperty(ref model.pietyCost, value);
+    }
+
+    public int PrestigeCost
+    {
+        get => model.prestigeCost;
+        set => SetProperty(ref model.prestigeCost, value);
     }
 
     public int? TriggeredEventId
@@ -44,16 +99,22 @@ public partial class OptionViewModel : ViewModelBase, IComponentViewModel
         set => SetProperty(ref model.triggeredEventScope, value);
     }
 
-    public int TriggeredEventMinDays
+    public bool AiPotential
     {
-        get => model.triggeredEventMinDays;
-        set => SetProperty(ref model.triggeredEventMinDays, value);
+        get => model.aiPotential;
+        set => SetProperty(ref model.aiPotential, value);
     }
 
-    public int TriggeredEventMaxDays
+    public bool AiGoal
     {
-        get => model.triggeredEventMaxDays;
-        set => SetProperty(ref model.triggeredEventMaxDays, value);
+        get => model.aiGoal;
+        set => SetProperty(ref model.aiGoal, value);
+    }
+
+    public int AiCheckFrequency
+    {
+        get => model.aiCheckFrequency;
+        set => SetProperty(ref model.aiCheckFrequency, value);
     }
 
     public int AiBaseChance
@@ -116,7 +177,7 @@ public partial class OptionViewModel : ViewModelBase, IComponentViewModel
         set => SetProperty(ref model.aiZealTargetModifier, value);
     }
 
-    public OptionViewModel(Option model)
+    public DecisionViewModel(Decision model)
     {
         this.model = model;
     }

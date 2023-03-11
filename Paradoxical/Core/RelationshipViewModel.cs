@@ -1,16 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
-using Paradoxical.Core;
+using Paradoxical.Extensions;
 using Paradoxical.Messages;
 using Paradoxical.Services;
+using Paradoxical.ViewModel;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Paradoxical.ViewModel;
+namespace Paradoxical.Core;
 
-public class RelationshipViewModel<TOwner, TOwnerViewModel, TRelation, TRelationViewModel, TRelationship, TRelationDetailsViewModel> : ViewModelBase,
+public abstract class RelationshipViewModel<TOwner, TOwnerViewModel, TRelation, TRelationViewModel, TRelationship, TPage> : ViewModelBase,
     IMessageHandler<RelationAddedMessage>,
     IMessageHandler<RelationRemovedMessage>
     where TOwner : IElement
@@ -18,7 +19,7 @@ public class RelationshipViewModel<TOwner, TOwnerViewModel, TRelation, TRelation
     where TRelation : IElement
     where TRelationViewModel : IElementViewModel
     where TRelationship : IRelationship
-    where TRelationDetailsViewModel : PageViewModelBase
+    where TPage : PageViewModelBase
 {
     public NavigationViewModel Navigation { get; }
     public FindDialogViewModel Finder { get; }
@@ -31,10 +32,9 @@ public class RelationshipViewModel<TOwner, TOwnerViewModel, TRelation, TRelation
     private Func<TRelation, TRelationViewModel> RelationViewModelFactory { get; }
     private Func<TRelation, TRelationship> RelationshipFactory { get; }
 
-    public ObservableCollection<TRelationViewModel> Relations { get; }
+    public ObservableCollection<TRelationViewModel> Relations { get; } = new();
 
     public RelationshipViewModel(
-        TOwner owner,
         NavigationViewModel navigation,
         FindDialogViewModel finder,
         IMediatorService mediator,
@@ -54,11 +54,6 @@ public class RelationshipViewModel<TOwner, TOwnerViewModel, TRelation, TRelation
         RelationFactory = relationFactory;
         RelationViewModelFactory = relationViewModelFactory;
         RelationshipFactory = relationshipFactory;
-
-        var relations = RelationshipService.GetRelations(owner)
-            .Select(RelationViewModelFactory);
-
-        Relations = new(relations);
 
         Mediator.Register<RelationAddedMessage>(this);
         Mediator.Register<RelationRemovedMessage>(this);
@@ -84,6 +79,15 @@ public class RelationshipViewModel<TOwner, TOwnerViewModel, TRelation, TRelation
         TRelationViewModel relationViewModel = RelationViewModelFactory(relation);
 
         Relations.Remove(relationViewModel);
+    }
+
+    public void Fetch(TOwner owner)
+    {
+        var relations = RelationshipService.GetRelations(owner)
+            .Select(RelationViewModelFactory);
+
+        Relations.Clear();
+        Relations.AddRange(relations);
     }
 
     private RelayCommand? createCommand;
@@ -158,7 +162,7 @@ public class RelationshipViewModel<TOwner, TOwnerViewModel, TRelation, TRelation
         if (viewmodel.Model is not TRelation relation)
         { return; }
 
-        Navigation.Navigate<TRelationDetailsViewModel>();
+        Navigation.Navigate<TPage>();
         Mediator.Send<ElementSelectedMessage>(new(relation));
     }
     private bool CanFind(TRelationViewModel? viewmodel)
