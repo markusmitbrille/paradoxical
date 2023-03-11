@@ -2,6 +2,7 @@
 using Paradoxical.Model.Elements;
 using Paradoxical.Services.Components;
 using Paradoxical.Services.Elements;
+using Paradoxical.Services.Relationships;
 using System.IO;
 using System.Text;
 
@@ -31,11 +32,27 @@ public class BuildService : IBuildService
     private string LocFile => $"{modService.GetPrefix()}_l_english.yml";
 
     private readonly IModService modService;
+
     private readonly IEventService eventService;
     private readonly IOnActionService onActionService;
     private readonly IDecisionService decisionService;
     private readonly ITriggerService triggerService;
     private readonly IEffectService effectService;
+
+    private readonly IEventTriggerService eventTriggerService;
+    private readonly IEventImmediateService eventImmediateService;
+    private readonly IEventAfterService eventAfterService;
+
+    private readonly IOnActionTriggerService onActionTriggerService;
+    private readonly IOnActionEffectService onActionEffectService;
+    private readonly IOnActionOnActionService onActionOnActionService;
+    private readonly IOnActionEventService onActionEventService;
+
+    private readonly IDecisionValidService decisionValidService;
+    private readonly IDecisionFailureService decisionFailureService;
+    private readonly IDecisionShownService decisionShownService;
+    private readonly IDecisionEffectService decisionEffectService;
+
     private readonly IOptionService optionService;
     private readonly IPortraitService portraitService;
 
@@ -46,15 +63,42 @@ public class BuildService : IBuildService
         IDecisionService decisionService,
         ITriggerService triggerService,
         IEffectService effectService,
+        IEventTriggerService eventTriggerService,
+        IEventImmediateService eventImmediateService,
+        IEventAfterService eventAfterService,
+        IOnActionTriggerService onActionTriggerService,
+        IOnActionEffectService onActionEffectService,
+        IOnActionOnActionService onActionOnActionService,
+        IOnActionEventService onActionEventService,
+        IDecisionValidService decisionValidService,
+        IDecisionFailureService decisionFailureService,
+        IDecisionShownService decisionShownService,
+        IDecisionEffectService decisionEffectService,
         IOptionService optionService,
         IPortraitService portraitService)
     {
         this.modService = modService;
+
         this.eventService = eventService;
         this.onActionService = onActionService;
         this.decisionService = decisionService;
         this.triggerService = triggerService;
         this.effectService = effectService;
+
+        this.eventTriggerService = eventTriggerService;
+        this.eventImmediateService = eventImmediateService;
+        this.eventAfterService = eventAfterService;
+
+        this.onActionTriggerService = onActionTriggerService;
+        this.onActionEffectService = onActionEffectService;
+        this.onActionOnActionService = onActionOnActionService;
+        this.onActionEventService = onActionEventService;
+
+        this.decisionValidService = decisionValidService;
+        this.decisionFailureService = decisionFailureService;
+        this.decisionShownService = decisionShownService;
+        this.decisionEffectService = decisionEffectService;
+
         this.optionService = optionService;
         this.portraitService = portraitService;
     }
@@ -219,7 +263,16 @@ public class BuildService : IBuildService
         {
             ParadoxText.IndentLevel = 0;
 
-            element.Write(writer, modService, eventService, optionService, portraitService);
+            element.Write(
+                writer,
+                modService,
+                eventService,
+                eventTriggerService,
+                eventImmediateService,
+                eventAfterService,
+                optionService,
+                portraitService);
+
             writer.WriteLine();
         }
     }
@@ -258,7 +311,15 @@ public class BuildService : IBuildService
         {
             ParadoxText.IndentLevel = 0;
 
-            element.Write(writer, modService, onActionService);
+            element.Write(
+                writer,
+                modService,
+                onActionService,
+                onActionTriggerService,
+                onActionEffectService,
+                onActionOnActionService,
+                onActionEventService);
+
             writer.WriteLine();
         }
     }
@@ -271,7 +332,15 @@ public class BuildService : IBuildService
         {
             ParadoxText.IndentLevel = 0;
 
-            element.Write(writer, modService, decisionService);
+            element.Write(
+                writer,
+                modService,
+                decisionService,
+                decisionValidService,
+                decisionFailureService,
+                decisionShownService,
+                decisionEffectService);
+
             writer.WriteLine();
         }
     }

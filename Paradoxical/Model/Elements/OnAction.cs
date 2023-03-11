@@ -1,6 +1,7 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Services;
 using Paradoxical.Services.Elements;
+using Paradoxical.Services.Relationships;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,11 @@ public class OnAction : IElement, IEquatable<OnAction?>
     public void Write(
         TextWriter writer,
         IModService modService,
-        IOnActionService onActionService)
+        IOnActionService onActionService,
+        IOnActionTriggerService onActionTriggerService,
+        IOnActionEffectService onActionEffectService,
+        IOnActionOnActionService onActionOnActionService,
+        IOnActionEventService onActionEventService)
     {
         if (Vanilla == false)
         {
@@ -44,16 +49,16 @@ public class OnAction : IElement, IEquatable<OnAction?>
             ParadoxText.IndentLevel++;
         }
 
-        WriteTrigger(writer, modService, onActionService);
+        WriteTrigger(writer, modService, onActionTriggerService);
 
         writer.WriteLine();
-        WriteEffect(writer, modService, onActionService);
+        WriteEffect(writer, modService, onActionEffectService);
 
         writer.WriteLine();
-        WriteEvents(writer, modService, onActionService);
+        WriteEvents(writer, modService, onActionEventService);
 
         writer.WriteLine();
-        WriteOnActions(writer, modService, onActionService);
+        WriteOnActions(writer, modService, onActionOnActionService);
 
         ParadoxText.IndentLevel--;
         writer.Indent().WriteLine("}");
@@ -62,9 +67,9 @@ public class OnAction : IElement, IEquatable<OnAction?>
     private void WriteTrigger(
         TextWriter writer,
         IModService modService,
-        IOnActionService onActionService)
+        IOnActionTriggerService onActionTriggerService)
     {
-        var triggers = onActionService.GetTriggers(this);
+        var triggers = onActionTriggerService.GetRelations(this);
         if (triggers.Any() == false)
         {
             writer.Indent().WriteLine("# no trigger");
@@ -86,9 +91,9 @@ public class OnAction : IElement, IEquatable<OnAction?>
     private void WriteEffect(
         TextWriter writer,
         IModService modService,
-        IOnActionService onActionService)
+        IOnActionEffectService onActionEffectService)
     {
-        var effects = onActionService.GetEffects(this);
+        var effects = onActionEffectService.GetRelations(this);
         if (effects.Any() == false)
         {
             writer.Indent().WriteLine("# no effect");
@@ -110,9 +115,9 @@ public class OnAction : IElement, IEquatable<OnAction?>
     private void WriteEvents(
         TextWriter writer,
         IModService modService,
-        IOnActionService onActionService)
+        IOnActionEventService onActionEventService)
     {
-        var events = onActionService.GetEvents(this);
+        var events = onActionEventService.GetRelations(this);
         if (events.Any() == false)
         {
             writer.Indent().WriteLine("# no events");
@@ -137,9 +142,9 @@ public class OnAction : IElement, IEquatable<OnAction?>
     private void WriteOnActions(
         TextWriter writer,
         IModService modService,
-        IOnActionService onActionService)
+        IOnActionOnActionService onActionOnActionService)
     {
-        var onActions = onActionService.GetOnActions(this);
+        var onActions = onActionOnActionService.GetRelations(this);
         if (onActions.Any() == false)
         {
             writer.Indent().WriteLine("# no on-actions");

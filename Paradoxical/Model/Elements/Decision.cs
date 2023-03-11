@@ -1,6 +1,7 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Services;
 using Paradoxical.Services.Elements;
+using Paradoxical.Services.Relationships;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -129,7 +130,11 @@ public class Decision : IElement, IEquatable<Decision?>
     public void Write(
         TextWriter writer,
         IModService modService,
-        IDecisionService decisionService)
+        IDecisionService decisionService,
+        IDecisionValidService decisionValidService,
+        IDecisionFailureService decisionFailureService,
+        IDecisionShownService decisionShownService,
+        IDecisionEffectService decisionEffectService)
     {
         writer.Indent().WriteLine($"{modService.GetPrefix()}_{Name} = {{");
         ParadoxText.IndentLevel++;
@@ -152,16 +157,16 @@ public class Decision : IElement, IEquatable<Decision?>
         WriteCost(writer);
 
         writer.WriteLine();
-        WriteIsShownTrigger(writer, modService, decisionService);
+        WriteIsShownTrigger(writer, modService, decisionShownService);
 
         writer.WriteLine();
-        WriteIsValidTrigger(writer, modService, decisionService);
+        WriteIsValidTrigger(writer, modService, decisionValidService);
 
         writer.WriteLine();
-        WriteIsValidFailureTrigger(writer, modService, decisionService);
+        WriteIsValidFailureTrigger(writer, modService, decisionFailureService);
 
         writer.WriteLine();
-        WriteEffect(writer, modService, decisionService);
+        WriteEffect(writer, modService, decisionEffectService);
 
         writer.WriteLine();
         WriteAiChance(writer);
@@ -214,9 +219,9 @@ public class Decision : IElement, IEquatable<Decision?>
     private void WriteIsShownTrigger(
         TextWriter writer,
         IModService modService,
-        IDecisionService decisionService)
+        IDecisionShownService decisionShownService)
     {
-        var triggers = decisionService.GetIsShownTriggers(this);
+        var triggers = decisionShownService.GetRelations(this);
         if (triggers.Any() == false)
         {
             writer.Indent().WriteLine("# no is-shown");
@@ -238,9 +243,9 @@ public class Decision : IElement, IEquatable<Decision?>
     private void WriteIsValidTrigger(
         TextWriter writer,
         IModService modService,
-        IDecisionService decisionService)
+        IDecisionValidService decisionValidService)
     {
-        var triggers = decisionService.GetIsValidTriggers(this);
+        var triggers = decisionValidService.GetRelations(this);
         if (triggers.Any() == false)
         {
             writer.Indent().WriteLine("# no is-valid");
@@ -262,9 +267,9 @@ public class Decision : IElement, IEquatable<Decision?>
     private void WriteIsValidFailureTrigger(
         TextWriter writer,
         IModService modService,
-        IDecisionService decisionService)
+        IDecisionFailureService decisionFailureService)
     {
-        var triggers = decisionService.GetIsValidFailureTriggers(this);
+        var triggers = decisionFailureService.GetRelations(this);
         if (triggers.Any() == false)
         {
             writer.Indent().WriteLine("# no is-valid failure");
@@ -286,9 +291,9 @@ public class Decision : IElement, IEquatable<Decision?>
     private void WriteEffect(
         TextWriter writer,
         IModService modService,
-        IDecisionService decisionService)
+        IDecisionEffectService decisionEffectService)
     {
-        var effects = decisionService.GetEffects(this);
+        var effects = decisionEffectService.GetRelations(this);
         var triggeredEvent = decisionService.GetTriggeredEvent(this);
 
         if (effects.Any() == false && triggeredEvent == null)

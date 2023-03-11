@@ -3,6 +3,7 @@ using Paradoxical.Model.Components;
 using Paradoxical.Services;
 using Paradoxical.Services.Components;
 using Paradoxical.Services.Elements;
+using Paradoxical.Services.Relationships;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -84,6 +85,9 @@ public class Event : IElement, IEquatable<Event?>
         TextWriter writer,
         IModService modService,
         IEventService eventService,
+        IEventTriggerService eventTriggerService,
+        IEventImmediateService eventImmediateService,
+        IEventAfterService eventAfterService,
         IOptionService optionService,
         IPortraitService portraitService)
     {
@@ -121,13 +125,13 @@ public class Event : IElement, IEquatable<Event?>
         }
 
         writer.WriteLine();
-        WriteTrigger(writer, modService, eventService);
+        WriteTrigger(writer, modService, eventTriggerService);
 
         writer.WriteLine();
-        WriteImmediate(writer, modService, eventService);
+        WriteImmediate(writer, modService, eventImmediateService);
 
         writer.WriteLine();
-        WriteAfter(writer, modService, eventService);
+        WriteAfter(writer, modService, eventAfterService);
 
         if (Hidden == false)
         {
@@ -255,9 +259,9 @@ public class Event : IElement, IEquatable<Event?>
     private void WriteTrigger(
         TextWriter writer,
         IModService modService,
-        IEventService eventService)
+        IEventTriggerService eventTriggerService)
     {
-        var triggers = eventService.GetTriggers(this);
+        var triggers = eventTriggerService.GetRelations(this);
         if (triggers.Any() == false)
         {
             writer.Indent().WriteLine("# no trigger");
@@ -279,9 +283,9 @@ public class Event : IElement, IEquatable<Event?>
     private void WriteImmediate(
         TextWriter writer,
         IModService modService,
-        IEventService eventService)
+        IEventImmediateService eventImmediateService)
     {
-        var effects = eventService.GetImmediateEffects(this);
+        var effects = eventImmediateService.GetRelations(this);
         if (effects.Any() == false)
         {
             writer.Indent().WriteLine("# no immediate");
@@ -303,9 +307,9 @@ public class Event : IElement, IEquatable<Event?>
     private void WriteAfter(
         TextWriter writer,
         IModService modService,
-        IEventService eventService)
+        IEventAfterService eventAfterService)
     {
-        var effects = eventService.GetImmediateEffects(this);
+        var effects = eventAfterService.GetRelations(this);
         if (effects.Any() == false)
         {
             writer.Indent().WriteLine("# no after");
