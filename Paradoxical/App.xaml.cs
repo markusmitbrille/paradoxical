@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Paradoxical.Core;
 using Paradoxical.Services;
+using Paradoxical.Services.Components;
+using Paradoxical.Services.Elements;
+using Paradoxical.Services.Relationships;
 using Paradoxical.View;
 using Paradoxical.ViewModel;
 using System.Windows;
@@ -15,49 +18,89 @@ public partial class App : Application
     {
         ServiceCollection services = new();
 
+        // general services
         services.AddSingleton<IBuildService, BuildService>();
         services.AddSingleton<IDataService, DataService>();
         services.AddSingleton<IFileService, FileService>();
         services.AddSingleton<IMediatorService, MediatorService>();
 
-        services.AddSingleton<IElementService, ElementService>();
+        // mod service
         services.AddSingleton<IModService, ModService>();
+
+        // element services
         services.AddSingleton<IEventService, EventService>();
         services.AddSingleton<IOnActionService, OnActionService>();
         services.AddSingleton<IDecisionService, DecisionService>();
         services.AddSingleton<ITriggerService, TriggerService>();
         services.AddSingleton<IEffectService, EffectService>();
+
+        // component services
         services.AddSingleton<IOptionService, OptionService>();
         services.AddSingleton<IPortraitService, PortraitService>();
 
+        // relationship services
+        services.AddSingleton<IEventTriggerService, EventTriggerService>();
+        services.AddSingleton<IEventImmediateService, EventImmediateService>();
+        services.AddSingleton<IEventAfterService, EventAfterService>();
+
+        services.AddSingleton<IOnActionTriggerService, OnActionTriggerService>();
+        services.AddSingleton<IOnActionEffectService, OnActionEffectService>();
+        services.AddSingleton<IOnActionOnActionService, OnActionOnActionService>();
+        services.AddSingleton<IOnActionEventService, OnActionEventService>();
+
+        services.AddSingleton<IDecisionValidService, DecisionValidService>();
+        services.AddSingleton<IDecisionFailureService, DecisionFailureService>();
+        services.AddSingleton<IDecisionShownService, DecisionShownService>();
+        services.AddSingleton<IDecisionEffectService, DecisionEffectService>();
+
+        // navigation view model
         services.AddSingleton<NavigationViewModel>();
+
+        // page factory for navigation service
         services.AddTransient<PageFactory>(provider => pageType => (PageViewModelBase)provider.GetRequiredService(pageType));
 
+        // main window and view model
         services.AddSingleton<MainViewModel>();
         services.AddSingleton<MainWindow>(provider => new()
         {
             DataContext = provider.GetRequiredService<MainViewModel>(),
         });
 
+        // finder view model
         services.AddTransient<FindDialogViewModel>();
 
+        // page view models
         services.AddSingleton<AboutViewModel>();
         services.AddSingleton<InfoViewModel>();
 
+        // details page view models
         services.AddTransient<EventDetailsViewModel>();
-        services.AddSingleton<EventTableViewModel>();
-
         services.AddTransient<OnActionDetailsViewModel>();
-        services.AddSingleton<OnActionTableViewModel>();
-
         services.AddTransient<DecisionDetailsViewModel>();
-        services.AddSingleton<DecisionTableViewModel>();
-
         services.AddTransient<TriggerDetailsViewModel>();
-        services.AddSingleton<TriggerTableViewModel>();
-
         services.AddTransient<EffectDetailsViewModel>();
+
+        // table page view models
+        services.AddSingleton<OnActionTableViewModel>();
+        services.AddSingleton<EventTableViewModel>();
+        services.AddSingleton<DecisionTableViewModel>();
+        services.AddSingleton<TriggerTableViewModel>();
         services.AddSingleton<EffectTableViewModel>();
+
+        // relationship view models
+        services.AddTransient<EventTriggerViewModel>();
+        services.AddTransient<EventImmediateViewModel>();
+        services.AddTransient<EventAfterViewModel>();
+
+        services.AddTransient<OnActionTriggerViewModel>();
+        services.AddTransient<OnActionEffectViewModel>();
+        services.AddTransient<OnActionOnActionViewModel>();
+        services.AddTransient<OnActionEventViewModel>();
+
+        services.AddTransient<DecisionValidViewModel>();
+        services.AddTransient<DecisionFailureViewModel>();
+        services.AddTransient<DecisionShownViewModel>();
+        services.AddTransient<DecisionEffectViewModel>();
 
         serviceProvider = services.BuildServiceProvider();
     }
