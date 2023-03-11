@@ -2,7 +2,6 @@
 using Paradoxical.Model.Components;
 using Paradoxical.Services;
 using Paradoxical.Services.Components;
-using Paradoxical.Services.Elements;
 using Paradoxical.Services.Relationships;
 using SQLite;
 using System;
@@ -84,11 +83,12 @@ public class Event : IElement, IEquatable<Event?>
     public void Write(
         TextWriter writer,
         IModService modService,
-        IEventService eventService,
+        IEventOptionService eventOptionService,
         IEventTriggerService eventTriggerService,
         IEventImmediateService eventImmediateService,
         IEventAfterService eventAfterService,
-        IOptionService optionService,
+        IOptionTriggerService optionTriggerService,
+        IOptionEffectService optionEffectService,
         IPortraitService portraitService)
     {
         writer.Indent().WriteLine($"{modService.GetPrefix()}.{Id} = {{");
@@ -137,7 +137,7 @@ public class Event : IElement, IEquatable<Event?>
         {
             writer.WriteLine();
 
-            WriteOptions(writer, modService, eventService, optionService);
+            WriteOptions(writer, modService, eventOptionService, optionTriggerService, optionEffectService);
         }
 
         ParadoxText.IndentLevel--;
@@ -331,10 +331,11 @@ public class Event : IElement, IEquatable<Event?>
     private void WriteOptions(
         TextWriter writer,
         IModService modService,
-        IEventService eventService,
-        IOptionService optionService)
+        IEventOptionService eventOptionService,
+        IOptionTriggerService optionTriggerService,
+        IOptionEffectService optionEffectService)
     {
-        var options = eventService.GetOptions(this);
+        var options = eventOptionService.GetRelations(this);
         if (options.Any() == false)
         {
             writer.Indent().WriteLine("# no options");
@@ -343,24 +344,16 @@ public class Event : IElement, IEquatable<Event?>
 
         foreach (Option opt in options)
         {
-            opt.Write(writer, modService, optionService);
+            opt.Write(writer, modService, optionTriggerService, optionEffectService);
         }
     }
 
     public void WriteLoc(
         TextWriter writer,
-        IModService modService,
-        IEventService eventService,
-        IOptionService optionService)
+        IModService modService)
     {
         writer.WriteLocLine($"{modService.GetPrefix()}.{Id}.t", Title);
         writer.WriteLocLine($"{modService.GetPrefix()}.{Id}.d", Description);
-
-        var options = eventService.GetOptions(this);
-        foreach (Option opt in options)
-        {
-            opt.WriteLoc(writer, modService, optionService);
-        }
     }
 
     public override bool Equals(object? obj)

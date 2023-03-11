@@ -34,14 +34,19 @@ public class BuildService : IBuildService
     private readonly IModService modService;
 
     private readonly IEventService eventService;
+    private readonly IOptionService optionService;
     private readonly IOnActionService onActionService;
     private readonly IDecisionService decisionService;
     private readonly ITriggerService triggerService;
     private readonly IEffectService effectService;
 
+    private readonly IEventOptionService eventOptionService;
     private readonly IEventTriggerService eventTriggerService;
     private readonly IEventImmediateService eventImmediateService;
     private readonly IEventAfterService eventAfterService;
+
+    private readonly IOptionTriggerService optionTriggerService;
+    private readonly IOptionEffectService optionEffectService;
 
     private readonly IOnActionTriggerService onActionTriggerService;
     private readonly IOnActionEffectService onActionEffectService;
@@ -53,19 +58,22 @@ public class BuildService : IBuildService
     private readonly IDecisionShownService decisionShownService;
     private readonly IDecisionEffectService decisionEffectService;
 
-    private readonly IOptionService optionService;
     private readonly IPortraitService portraitService;
 
     public BuildService(
         IModService modService,
         IEventService eventService,
+        IOptionService optionService,
         IOnActionService onActionService,
         IDecisionService decisionService,
         ITriggerService triggerService,
         IEffectService effectService,
+        IEventOptionService eventOptionService,
         IEventTriggerService eventTriggerService,
         IEventImmediateService eventImmediateService,
         IEventAfterService eventAfterService,
+        IOptionTriggerService optionTriggerService,
+        IOptionEffectService optionEffectService,
         IOnActionTriggerService onActionTriggerService,
         IOnActionEffectService onActionEffectService,
         IOnActionOnActionService onActionOnActionService,
@@ -74,7 +82,6 @@ public class BuildService : IBuildService
         IDecisionFailureService decisionFailureService,
         IDecisionShownService decisionShownService,
         IDecisionEffectService decisionEffectService,
-        IOptionService optionService,
         IPortraitService portraitService)
     {
         this.modService = modService;
@@ -84,10 +91,13 @@ public class BuildService : IBuildService
         this.decisionService = decisionService;
         this.triggerService = triggerService;
         this.effectService = effectService;
-
+        this.eventOptionService = eventOptionService;
         this.eventTriggerService = eventTriggerService;
         this.eventImmediateService = eventImmediateService;
         this.eventAfterService = eventAfterService;
+
+        this.optionTriggerService = optionTriggerService;
+        this.optionEffectService = optionEffectService;
 
         this.onActionTriggerService = onActionTriggerService;
         this.onActionEffectService = onActionEffectService;
@@ -266,11 +276,12 @@ public class BuildService : IBuildService
             element.Write(
                 writer,
                 modService,
-                eventService,
+                eventOptionService,
                 eventTriggerService,
                 eventImmediateService,
                 eventAfterService,
-                optionService,
+                optionTriggerService,
+                optionEffectService,
                 portraitService);
 
             writer.WriteLine();
@@ -370,7 +381,15 @@ public class BuildService : IBuildService
 
         foreach (Event evt in eventService.Get())
         {
-            evt.WriteLoc(writer, modService, eventService, optionService);
+            evt.WriteLoc(writer, modService);
+            writer.WriteLine();
+        }
+
+        writer.WriteLine("# options");
+
+        foreach (Option opt in optionService.Get())
+        {
+            opt.WriteLoc(writer, modService);
             writer.WriteLine();
         }
 

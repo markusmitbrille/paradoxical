@@ -1,6 +1,6 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Services;
-using Paradoxical.Services.Elements;
+using Paradoxical.Services.Relationships;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -87,28 +87,27 @@ public class Option : IElement, IEquatable<Option?>
     public void Write(
         TextWriter writer,
         IModService modService,
-        IOptionService optionService)
+        IOptionTriggerService optionTriggerService,
+        IOptionEffectService optionEffectService)
     {
-        Event owner = optionService.GetOwner(this);
-
         writer.Indent().WriteLine("option = {");
         ParadoxText.IndentLevel++;
 
-        writer.Indent().WriteLine($"name = {modService.GetPrefix()}.{owner.Id}.o.{Id}");
+        writer.Indent().WriteLine($"name = {modService.GetPrefix()}.{Name}.t");
 
-        WriteTooltip(writer, modService, optionService);
+        WriteTooltip(writer, modService);
 
         writer.WriteLine();
-        WriteTrigger(writer, modService, optionService);
+        WriteTrigger(writer, modService, optionTriggerService);
 
         writer.WriteLine();
         WriteAiChance(writer);
 
         writer.WriteLine();
-        WriteTriggeredEvent(writer, modService, optionService);
+        WriteTriggeredEvent(writer, modService);
 
         writer.WriteLine();
-        WriteEffect(writer, modService, optionService);
+        WriteEffect(writer, modService, optionEffectService);
 
         ParadoxText.IndentLevel--;
         writer.Indent().WriteLine("}");
@@ -116,8 +115,7 @@ public class Option : IElement, IEquatable<Option?>
 
     private void WriteTooltip(
         TextWriter writer,
-        IModService modService,
-        IOptionService optionService)
+        IModService modService)
     {
         if (Tooltip == string.Empty)
         {
@@ -125,17 +123,15 @@ public class Option : IElement, IEquatable<Option?>
             return;
         }
 
-        Event owner = optionService.GetOwner(this);
-
-        writer.Indent().WriteLine($"custom_tooltip = {modService.GetPrefix()}.{owner.Id}.o.{Id}.tt");
+        writer.Indent().WriteLine($"custom_tooltip = {modService.GetPrefix()}.{Name}.tt");
     }
 
     private void WriteTrigger(
         TextWriter writer,
         IModService modService,
-        IOptionService optionService)
+        IOptionTriggerService optionTriggerService)
     {
-        var triggers = optionService.GetTriggers(this);
+        var triggers = optionTriggerService.GetRelations(this);
         if (triggers.Any() == false)
         {
             writer.Indent().WriteLine("# no trigger");
@@ -224,8 +220,7 @@ public class Option : IElement, IEquatable<Option?>
 
     private void WriteTriggeredEvent(
         TextWriter writer,
-        IModService modService,
-        IOptionService optionService)
+        IModService modService)
     {
         var triggeredEvent = optionService.GetTriggeredEvent(this);
         if (triggeredEvent == null)
@@ -261,9 +256,9 @@ public class Option : IElement, IEquatable<Option?>
     private void WriteEffect(
         TextWriter writer,
         IModService modService,
-        IOptionService optionService)
+        IOptionEffectService optionEffectService)
     {
-        var effects = optionService.GetEffects(this);
+        var effects = optionEffectService.GetRelations(this);
         if (effects.Any() == false)
         {
             writer.Indent().WriteLine("# no special effect");
@@ -278,13 +273,10 @@ public class Option : IElement, IEquatable<Option?>
 
     public void WriteLoc(
         TextWriter writer,
-        IModService modService,
-        IOptionService optionService)
+        IModService modService)
     {
-        Event owner = optionService.GetOwner(this);
-
-        writer.WriteLocLine($"{modService.GetPrefix()}.{owner.Id}.o.{Id}", Title);
-        writer.WriteLocLine($"{modService.GetPrefix()}.{owner.Id}.o.{Id}.tt", Tooltip);
+        writer.WriteLocLine($"{modService.GetPrefix()}.{Name}.t", Title);
+        writer.WriteLocLine($"{modService.GetPrefix()}.{Name}.tt", Tooltip);
     }
 
     public override bool Equals(object? obj)
