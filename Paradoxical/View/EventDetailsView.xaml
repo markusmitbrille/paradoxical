@@ -417,7 +417,7 @@
 
                                 <StackPanel>
 
-                                    <view:OptionFormView
+                                    <view:OptionDetailsView
                                         Margin="20,10"
                                         DataContext="{Binding}" />
 

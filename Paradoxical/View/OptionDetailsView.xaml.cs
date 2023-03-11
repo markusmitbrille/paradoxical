@@ -2,9 +2,9 @@
 
 namespace Paradoxical.View;
 
-public partial class OptionFormView : UserControl
+public partial class OptionDetailsView : UserControl
 {
-    public OptionFormView()
+    public OptionDetailsView()
     {
         InitializeComponent();
     }

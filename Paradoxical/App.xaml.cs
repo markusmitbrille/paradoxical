@@ -29,19 +29,22 @@ public partial class App : Application
 
         // element services
         services.AddSingleton<IEventService, EventService>();
+        services.AddSingleton<IOptionService, OptionService>();
         services.AddSingleton<IOnActionService, OnActionService>();
         services.AddSingleton<IDecisionService, DecisionService>();
         services.AddSingleton<ITriggerService, TriggerService>();
         services.AddSingleton<IEffectService, EffectService>();
 
         // component services
-        services.AddSingleton<IOptionService, OptionService>();
         services.AddSingleton<IPortraitService, PortraitService>();
 
         // relationship services
         services.AddSingleton<IEventTriggerService, EventTriggerService>();
         services.AddSingleton<IEventImmediateService, EventImmediateService>();
         services.AddSingleton<IEventAfterService, EventAfterService>();
+
+        services.AddSingleton<IOptionTriggerService, OptionTriggerService>();
+        services.AddSingleton<IOptionEffectService, OptionEffectService>();
 
         services.AddSingleton<IOnActionTriggerService, OnActionTriggerService>();
         services.AddSingleton<IOnActionEffectService, OnActionEffectService>();
@@ -75,6 +78,7 @@ public partial class App : Application
 
         // details page view models
         services.AddTransient<EventDetailsViewModel>();
+        services.AddTransient<OptionDetailsViewModel>();
         services.AddTransient<OnActionDetailsViewModel>();
         services.AddTransient<DecisionDetailsViewModel>();
         services.AddTransient<TriggerDetailsViewModel>();
@@ -91,6 +95,9 @@ public partial class App : Application
         services.AddTransient<EventTriggerViewModel>();
         services.AddTransient<EventImmediateViewModel>();
         services.AddTransient<EventAfterViewModel>();
+
+        services.AddTransient<OptionTriggerService>();
+        services.AddTransient<OptionEffectService>();
 
         services.AddTransient<OnActionTriggerViewModel>();
         services.AddTransient<OnActionEffectViewModel>();
