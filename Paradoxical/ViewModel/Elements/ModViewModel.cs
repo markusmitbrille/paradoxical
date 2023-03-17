@@ -3,7 +3,7 @@ using Paradoxical.Model;
 
 namespace Paradoxical.ViewModel;
 
-public partial class ModViewModel : ViewModelBase
+public class ModViewModel : ViewModelBase
 {
     private readonly Mod model;
     public Mod Model => model;

@@ -1,10 +1,11 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Model.Elements;
+using System;
+using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public partial class EventViewModel : ViewModelBase,
-    IElementViewModel
+public class EventViewModel : ViewModelBase, IElementViewModel, IEquatable<EventViewModel?>
 {
     private readonly Event model;
     public Event Model => model;
@@ -79,5 +80,31 @@ public partial class EventViewModel : ViewModelBase,
     public EventViewModel(Event model)
     {
         this.model = model;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as EventViewModel);
+    }
+
+    public bool Equals(EventViewModel? other)
+    {
+        return other is not null &&
+               EqualityComparer<Event>.Default.Equals(Model, other.Model);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Model);
+    }
+
+    public static bool operator ==(EventViewModel? left, EventViewModel? right)
+    {
+        return EqualityComparer<EventViewModel>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(EventViewModel? left, EventViewModel? right)
+    {
+        return !(left == right);
     }
 }

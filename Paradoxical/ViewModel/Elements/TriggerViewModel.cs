@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public partial class TriggerViewModel : ViewModelBase, IElementViewModel, IEquatable<TriggerViewModel?>
+public class TriggerViewModel : ViewModelBase, IElementViewModel, IEquatable<TriggerViewModel?>
 {
     private readonly Trigger model;
     public Trigger Model => model;

@@ -1,9 +1,11 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Model.Elements;
+using System;
+using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public partial class OnActionViewModel : ViewModelBase, IElementViewModel
+public class OnActionViewModel : ViewModelBase, IElementViewModel, IEquatable<OnActionViewModel?>
 {
     private readonly OnAction model;
     public OnAction Model => model;
@@ -36,5 +38,31 @@ public partial class OnActionViewModel : ViewModelBase, IElementViewModel
     public OnActionViewModel(OnAction model)
     {
         this.model = model;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as OnActionViewModel);
+    }
+
+    public bool Equals(OnActionViewModel? other)
+    {
+        return other is not null &&
+               EqualityComparer<OnAction>.Default.Equals(Model, other.Model);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Model);
+    }
+
+    public static bool operator ==(OnActionViewModel? left, OnActionViewModel? right)
+    {
+        return EqualityComparer<OnActionViewModel>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(OnActionViewModel? left, OnActionViewModel? right)
+    {
+        return !(left == right);
     }
 }

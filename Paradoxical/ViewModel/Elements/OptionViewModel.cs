@@ -1,9 +1,11 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Model.Elements;
+using System;
+using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public partial class OptionViewModel : ViewModelBase, IElementViewModel
+public class OptionViewModel : ViewModelBase, IElementViewModel, IEquatable<OptionViewModel?>
 {
     private readonly Option model;
     public Option Model => model;
@@ -120,5 +122,31 @@ public partial class OptionViewModel : ViewModelBase, IElementViewModel
     public OptionViewModel(Option model)
     {
         this.model = model;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as OptionViewModel);
+    }
+
+    public bool Equals(OptionViewModel? other)
+    {
+        return other is not null &&
+               EqualityComparer<Option>.Default.Equals(Model, other.Model);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Model);
+    }
+
+    public static bool operator ==(OptionViewModel? left, OptionViewModel? right)
+    {
+        return EqualityComparer<OptionViewModel>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(OptionViewModel? left, OptionViewModel? right)
+    {
+        return !(left == right);
     }
 }
