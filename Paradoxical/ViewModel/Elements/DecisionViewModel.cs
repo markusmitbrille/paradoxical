@@ -1,22 +1,10 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Model.Elements;
-using System;
-using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class DecisionViewModel : ViewModelBase, IElementViewModel, IEquatable<DecisionViewModel?>
+public class DecisionViewModel : ElementViewModel<Decision>
 {
-    private readonly Decision model;
-    public Decision Model => model;
-
-    IElement IElementViewModel.Model => Model;
-
-    public int Id
-    {
-        get => model.Id;
-    }
-
     public string Name
     {
         get => model.name;
@@ -179,34 +167,7 @@ public class DecisionViewModel : ViewModelBase, IElementViewModel, IEquatable<De
         set => SetProperty(ref model.aiZealTargetModifier, value);
     }
 
-    public DecisionViewModel(Decision model)
+    public DecisionViewModel(Decision model) : base(model)
     {
-        this.model = model;
-    }
-
-    public override bool Equals(object? obj)
-    {
-        return Equals(obj as DecisionViewModel);
-    }
-
-    public bool Equals(DecisionViewModel? other)
-    {
-        return other is not null &&
-               EqualityComparer<Decision>.Default.Equals(Model, other.Model);
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(Model);
-    }
-
-    public static bool operator ==(DecisionViewModel? left, DecisionViewModel? right)
-    {
-        return EqualityComparer<DecisionViewModel>.Default.Equals(left, right);
-    }
-
-    public static bool operator !=(DecisionViewModel? left, DecisionViewModel? right)
-    {
-        return !(left == right);
     }
 }

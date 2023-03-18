@@ -1,22 +1,10 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Model.Elements;
-using System;
-using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class EventViewModel : ViewModelBase, IElementViewModel, IEquatable<EventViewModel?>
+public class EventViewModel : ElementViewModel<Event>
 {
-    private readonly Event model;
-    public Event Model => model;
-
-    IElement IElementViewModel.Model => Model;
-
-    public int Id
-    {
-        get => model.Id;
-    }
-
     public string Name
     {
         get => model.name;
@@ -77,34 +65,7 @@ public class EventViewModel : ViewModelBase, IElementViewModel, IEquatable<Event
         set => SetProperty(ref model.customAfterEffect, value);
     }
 
-    public EventViewModel(Event model)
+    public EventViewModel(Event model) : base(model)
     {
-        this.model = model;
-    }
-
-    public override bool Equals(object? obj)
-    {
-        return Equals(obj as EventViewModel);
-    }
-
-    public bool Equals(EventViewModel? other)
-    {
-        return other is not null &&
-               EqualityComparer<Event>.Default.Equals(Model, other.Model);
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(Model);
-    }
-
-    public static bool operator ==(EventViewModel? left, EventViewModel? right)
-    {
-        return EqualityComparer<EventViewModel>.Default.Equals(left, right);
-    }
-
-    public static bool operator !=(EventViewModel? left, EventViewModel? right)
-    {
-        return !(left == right);
     }
 }

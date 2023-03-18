@@ -3,16 +3,8 @@ using Paradoxical.Model;
 
 namespace Paradoxical.ViewModel;
 
-public class ModViewModel : ViewModelBase
+public class ModViewModel : ElementViewModel<Mod>
 {
-    private readonly Mod model;
-    public Mod Model => model;
-
-    public int Id
-    {
-        get => model.Id;
-    }
-
     public string ModName
     {
         get => model.modName;
@@ -37,8 +29,7 @@ public class ModViewModel : ViewModelBase
         set => SetProperty(ref model.prefix, value);
     }
 
-    public ModViewModel(Mod model)
+    public ModViewModel(Mod model) : base(model)
     {
-        this.model = model;
     }
 }
