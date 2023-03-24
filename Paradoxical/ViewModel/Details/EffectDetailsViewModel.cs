@@ -3,7 +3,7 @@ using Paradoxical.Services.Elements;
 
 namespace Paradoxical.ViewModel;
 
-public class EffectDetailsViewModel : PageViewModelBase
+public class EffectDetailsViewModel : PageViewModel
 {
     public override string PageName => "Effect Details";
 

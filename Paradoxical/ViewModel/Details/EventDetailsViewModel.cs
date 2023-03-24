@@ -1,34 +1,31 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
+using Paradoxical.Extensions;
 using Paradoxical.Messages;
 using Paradoxical.Model.Elements;
-using Paradoxical.Model.Relationships;
 using Paradoxical.Services;
 using Paradoxical.Services.Elements;
 using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Paradoxical.ViewModel;
 
-public class EventDetailsViewModel : PageViewModelBase,
-    IElementDetailsViewModel,
-    IMessageHandler<ElementSelectedMessage>,
+public class EventDetailsViewModel : PageViewModel,
+    IMessageHandler<SelectMessage>,
     IMessageHandler<ShutdownMessage>
 {
     public override string PageName => "Event Details";
 
-    public FindDialogViewModel Finder { get; }
-
-    public EventOption Options { get; }
-    public EventTriggerViewModel Triggers { get; }
-    public EventImmediateViewModel Immediates { get; }
-    public EventAfterViewModel Afters { get; }
+    public FinderViewModel Finder { get; }
 
     public IMediatorService Mediator { get; }
 
     public IEventService EventService { get; }
+    public IOptionService OptionService { get; }
+    public ITriggerService TriggerService { get; }
 
     private EventViewModel? selected;
     public EventViewModel? Selected
@@ -37,32 +34,34 @@ public class EventDetailsViewModel : PageViewModelBase,
         set => SetProperty(ref selected, value);
     }
 
-    IElementViewModel? IElementDetailsViewModel.Selected => Selected;
+    private ObservableCollection<OptionViewModel>? options;
+    public ObservableCollection<OptionViewModel> Options => options ??= new();
+
+    private ObservableCollection<TriggerViewModel>? triggers;
+    public ObservableCollection<TriggerViewModel> Triggers => triggers ??= new();
+
+    private ObservableCollection<EffectViewModel>? immediates;
+    public ObservableCollection<EffectViewModel> Immediates => immediates ??= new();
+
+    private ObservableCollection<EffectViewModel>? afters;
+    public ObservableCollection<EffectViewModel> Afters => afters ??= new();
 
     public EventDetailsViewModel(
         NavigationViewModel navigation,
-        FindDialogViewModel finder,
-        EventOption options,
-        EventTriggerViewModel triggers,
-        EventImmediateViewModel immediates,
-        EventAfterViewModel afters,
+        FinderViewModel finder,
         IMediatorService mediator,
-        IEventService eventService)
+        IEventService eventService,
+        IOptionService optionService,
+        ITriggerService triggerService)
         : base(navigation)
     {
         Finder = finder;
 
-        Options = options;
-        Triggers = triggers;
-        Immediates = immediates;
-        Afters = afters;
-
         Mediator = mediator;
 
         EventService = eventService;
-
-        Mediator.Register<ElementSelectedMessage>(this);
-        Mediator.Register<ShutdownMessage>(this);
+        OptionService = optionService;
+        TriggerService = triggerService;
     }
 
     protected override void OnNavigatedTo()
@@ -70,6 +69,9 @@ public class EventDetailsViewModel : PageViewModelBase,
         base.OnNavigatedTo();
 
         Load();
+
+        Mediator.Register<SelectMessage>(this);
+        Mediator.Register<ShutdownMessage>(this);
     }
 
     protected override void OnNavigatingFrom()
@@ -77,22 +79,18 @@ public class EventDetailsViewModel : PageViewModelBase,
         base.OnNavigatingFrom();
 
         Save();
+
+        Mediator.Unregister<SelectMessage>(this);
+        Mediator.Unregister<ShutdownMessage>(this);
     }
 
-    public void Handle(ElementSelectedMessage message)
+    public void Handle(SelectMessage message)
     {
-        if (message.Element is not Event model)
-        { return; }
-
-        if (Navigation.CurrentPage != this)
+        if (message.Model is not Event model)
         { return; }
 
         var selected = EventService.Get(model);
         Selected = new(selected);
-
-        Triggers.Fetch(selected);
-        Immediates.Fetch(selected);
-        Afters.Fetch(selected);
     }
 
     public void Handle(ShutdownMessage message)
@@ -106,11 +104,32 @@ public class EventDetailsViewModel : PageViewModelBase,
         { return; }
 
         var selected = EventService.Get(Selected.Model);
+
+        var options = EventService.GetOptions(selected)
+            .Select(model => new OptionViewModel(model));
+
+        var triggers = EventService.GetTriggers(selected)
+            .Select(model => new TriggerViewModel(model));
+
+        var immediates = EventService.GetImmediates(selected)
+            .Select(model => new EffectViewModel(model));
+
+        var afters = EventService.GetAfters(selected)
+            .Select(model => new EffectViewModel(model));
+
         Selected = new(selected);
 
-        Triggers.Fetch(selected);
-        Immediates.Fetch(selected);
-        Afters.Fetch(selected);
+        Options.Clear();
+        Options.AddRange(options);
+
+        Triggers.Clear();
+        Triggers.AddRange(triggers);
+
+        Immediates.Clear();
+        Immediates.AddRange(immediates);
+
+        Afters.Clear();
+        Afters.AddRange(afters);
     }
 
     private void Save()
@@ -119,28 +138,6 @@ public class EventDetailsViewModel : PageViewModelBase,
         { return; }
 
         EventService.Update(Selected.Model);
-    }
-
-    private AsyncRelayCommand? findCommand;
-    public AsyncRelayCommand FindCommand => findCommand ??= new(Find);
-
-    private async Task Find()
-    {
-        Save();
-
-        Finder.Items = EventService.Get().Select(model => new EventViewModel(model));
-        Finder.Selected = Selected;
-
-        await DialogHost.Show(Finder, Finder.DialogIdentifier);
-
-        if (Finder.DialogResult != true)
-        { return; }
-
-        if (Finder.Selected == null)
-        { return; }
-
-        Navigation.Navigate<EventDetailsViewModel>();
-        Mediator.Send<ElementSelectedMessage>(new(Finder.Selected.Model));
     }
 
     private RelayCommand? createCommand;
@@ -161,6 +158,7 @@ public class EventDetailsViewModel : PageViewModelBase,
         };
 
         EventService.Insert(model);
+        Mediator.Send<SelectMessage>(new(model));
     }
 
     private RelayCommand? duplicateCommand;
@@ -174,7 +172,9 @@ public class EventDetailsViewModel : PageViewModelBase,
         Navigation.Navigate<EventDetailsViewModel>();
 
         Event model = new(Selected.Model);
+
         EventService.Insert(model);
+        Mediator.Send<SelectMessage>(new(model));
     }
 
     private RelayCommand? deleteCommand;
@@ -186,5 +186,140 @@ public class EventDetailsViewModel : PageViewModelBase,
         { return; }
 
         EventService.Delete(Selected.Model);
+    }
+
+    private RelayCommand? createOptionCommand;
+    public RelayCommand CreateOptionCommand => createOptionCommand ??= new(CreateOption);
+
+    private void CreateOption()
+    {
+        if (Selected == null)
+        { return; }
+
+        Option model = new() { EventId = Selected.Id };
+        OptionViewModel observable = new(model);
+
+        OptionService.Insert(model);
+        Options.Add(observable);
+    }
+
+    private RelayCommand<OptionViewModel>? removeOptionCommand;
+    public RelayCommand<OptionViewModel> RemoveOptionCommand => removeOptionCommand ??= new(RemoveOption, CanRemoveOption);
+
+    private void RemoveOption(OptionViewModel? viewmodel)
+    {
+        if (viewmodel == null)
+        { return; }
+
+        Option model = viewmodel.Model;
+
+        OptionService.Delete(model);
+        Options.Remove(viewmodel);
+    }
+    private bool CanRemoveOption(OptionViewModel? viewmodel)
+    {
+        return viewmodel != null;
+    }
+
+    private RelayCommand<OptionViewModel>? findOptionCommand;
+    public RelayCommand<OptionViewModel> FindOptionCommand => findOptionCommand ??= new(FindOption, CanFindOption);
+
+    private void FindOption(OptionViewModel? viewmodel)
+    {
+        if (viewmodel == null)
+        { return; }
+
+        Option model = viewmodel.Model;
+
+        Navigation.Navigate<OptionDetailsViewModel>();
+        Mediator.Send<SelectMessage>(new(model));
+    }
+    private bool CanFindOption(OptionViewModel? viewmodel)
+    {
+        return viewmodel != null;
+    }
+
+    private RelayCommand? createTriggerCommand;
+    public RelayCommand CreateTriggerCommand => createTriggerCommand ??= new(CreateTrigger);
+
+    private void CreateTrigger()
+    {
+        if (Selected == null)
+        { return; }
+
+        Event owner = Selected.Model;
+        Trigger relation = new();
+
+        TriggerService.Insert(relation);
+        EventService.AddTrigger(owner, relation);
+
+        TriggerViewModel observable = new(relation);
+        Triggers.Add(observable);
+    }
+
+    private AsyncRelayCommand? addTriggerCommand;
+    public AsyncRelayCommand AddTriggerCommand => addTriggerCommand ??= new(AddTrigger);
+
+    private async Task AddTrigger()
+    {
+        if (Selected == null)
+        { return; }
+
+        Save();
+
+        Finder.Items = TriggerService.Get()
+            .Select(model => new TriggerViewModel(model));
+
+        await DialogHost.Show(Finder, Finder.DialogIdentifier);
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Event owner = Selected.Model;
+        Trigger relation = ((TriggerViewModel)Finder.Selected).Model;
+
+        EventService.AddTrigger(owner, relation);
+
+        TriggerViewModel observable = new(relation);
+        Triggers.Add(observable);
+    }
+
+    private RelayCommand<TriggerViewModel>? removeTriggerCommand;
+    public RelayCommand<TriggerViewModel> RemoveTriggerCommand => removeTriggerCommand ??= new(RemoveTrigger, CanRemoveTrigger);
+
+    private void RemoveTrigger(TriggerViewModel? viewmodel)
+    {
+        if (viewmodel == null)
+        { return; }
+
+        Trigger model = viewmodel.Model;
+
+        TriggerService.Delete(model);
+        Triggers.Remove(viewmodel);
+    }
+    private bool CanRemoveTrigger(TriggerViewModel? viewmodel)
+    {
+        return viewmodel != null;
+    }
+
+    private RelayCommand<TriggerViewModel>? findTriggerCommand;
+    public RelayCommand<TriggerViewModel> FindTriggerCommand => findTriggerCommand ??= new(FindTrigger, CanFindTrigger);
+
+    private void FindTrigger(TriggerViewModel? viewmodel)
+    {
+        if (viewmodel == null)
+        { return; }
+
+        Trigger model = viewmodel.Model;
+
+        Navigation.Navigate<TriggerDetailsViewModel>();
+        Mediator.Send<SelectMessage>(new(model));
+    }
+    private bool CanFindTrigger(TriggerViewModel? viewmodel)
+    {
+        return viewmodel != null;
     }
 }

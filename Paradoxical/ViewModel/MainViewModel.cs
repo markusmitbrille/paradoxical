@@ -1,21 +1,21 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using Paradoxical.Core;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Messages;
 using Paradoxical.Services;
 using System.Windows;
 
 namespace Paradoxical.ViewModel;
 
-public class MainViewModel : ViewModelBase
+public class MainViewModel : ObservableObject
 {
     public NavigationViewModel Navigation { get; }
-    public FindDialogViewModel Finder { get; }
+    public FinderViewModel Finder { get; }
     public IMediatorService Mediator { get; }
     public IFileService File { get; }
 
     public MainViewModel(
         NavigationViewModel navigation,
-        FindDialogViewModel finder,
+        FinderViewModel finder,
         IMediatorService mediator,
         IFileService file)
     {

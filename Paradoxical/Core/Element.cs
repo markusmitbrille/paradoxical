@@ -1,6 +1,6 @@
 ﻿namespace Paradoxical.Core;
 
-public interface IElement
+public interface IElement : IModel
 {
-    public int Id { get; }
+    string Name { get; }
 }

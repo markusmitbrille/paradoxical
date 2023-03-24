@@ -11,7 +11,4 @@ public class OnActionTrigger : IRelationship
 
     [Column("trigger_id"), Indexed]
     public int TriggerId { get; set; }
-
-    int IRelationship.OwnerID => OnActionId;
-    int IRelationship.RelationID => TriggerId;
 }

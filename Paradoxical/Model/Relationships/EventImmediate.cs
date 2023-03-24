@@ -11,7 +11,4 @@ public class EventImmediate : IRelationship
 
     [Column("effect_id"), Indexed]
     public int EffectId { get; set; }
-
-    int IRelationship.OwnerID => EventId;
-    int IRelationship.RelationID => EffectId;
 }

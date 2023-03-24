@@ -59,4 +59,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModel\Relationships\" />
+  </ItemGroup>
+
 </Project>

@@ -11,7 +11,4 @@ public class DecisionEffect : IRelationship
 
     [Column("effect_id"), Indexed]
     public int EffectId { get; set; }
-
-    int IRelationship.OwnerID => DecisionId;
-    int IRelationship.RelationID => EffectId;
 }

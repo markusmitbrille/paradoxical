@@ -1,14 +1,12 @@
-﻿using Paradoxical.Core;
-using Paradoxical.Model.Components;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Paradoxical.Model.Elements;
 
 namespace Paradoxical.ViewModel;
 
-public partial class PortraitViewModel : ViewModelBase, IComponentViewModel
+public partial class PortraitViewModel : ObservableObject
 {
     private readonly Portrait model;
     public Portrait Model => model;
-
-    IComponent IComponentViewModel.Model => Model;
 
     public int Id
     {

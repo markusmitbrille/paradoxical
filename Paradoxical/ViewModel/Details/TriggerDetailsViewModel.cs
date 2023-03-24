@@ -1,24 +1,20 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
 using Paradoxical.Messages;
 using Paradoxical.Model.Elements;
 using Paradoxical.Services;
 using Paradoxical.Services.Elements;
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Paradoxical.ViewModel;
 
-public class TriggerDetailsViewModel : PageViewModelBase,
-    IElementDetailsViewModel,
-    IMessageHandler<ElementSelectedMessage>,
+public class TriggerDetailsViewModel : PageViewModel,
+    IMessageHandler<SelectMessage>,
     IMessageHandler<ShutdownMessage>
 {
     public override string PageName => "Trigger Details";
 
-    public FindDialogViewModel Finder { get; }
+    public FinderViewModel Finder { get; }
     public IMediatorService Mediator { get; }
 
     public ITriggerService TriggerService { get; }
@@ -30,11 +26,9 @@ public class TriggerDetailsViewModel : PageViewModelBase,
         set => SetProperty(ref selected, value);
     }
 
-    IElementViewModel? IElementDetailsViewModel.Selected => Selected;
-
     public TriggerDetailsViewModel(
         NavigationViewModel navigation,
-        FindDialogViewModel finder,
+        FinderViewModel finder,
         IMediatorService mediator,
         ITriggerService triggerService)
         : base(navigation)
@@ -43,9 +37,6 @@ public class TriggerDetailsViewModel : PageViewModelBase,
         Mediator = mediator;
 
         TriggerService = triggerService;
-
-        Mediator.Register<ElementSelectedMessage>(this);
-        Mediator.Register<ShutdownMessage>(this);
     }
 
     protected override void OnNavigatedTo()
@@ -53,6 +44,9 @@ public class TriggerDetailsViewModel : PageViewModelBase,
         base.OnNavigatedTo();
 
         Load();
+
+        Mediator.Register<SelectMessage>(this);
+        Mediator.Register<ShutdownMessage>(this);
     }
 
     protected override void OnNavigatingFrom()
@@ -60,17 +54,18 @@ public class TriggerDetailsViewModel : PageViewModelBase,
         base.OnNavigatingFrom();
 
         Save();
+
+        Mediator.Unregister<SelectMessage>(this);
+        Mediator.Unregister<ShutdownMessage>(this);
     }
 
-    public void Handle(ElementSelectedMessage message)
+    public void Handle(SelectMessage message)
     {
-        if (message.Element is not Trigger model)
+        if (message.Model is not Trigger model)
         { return; }
 
-        if (Navigation.CurrentPage != this)
-        { return; }
-
-        Selected = new(model);
+        var selected = TriggerService.Get(model);
+        Selected = new(selected);
     }
 
     public void Handle(ShutdownMessage message)
@@ -94,34 +89,15 @@ public class TriggerDetailsViewModel : PageViewModelBase,
         TriggerService.Update(Selected.Model);
     }
 
-    private AsyncRelayCommand? findCommand;
-    public AsyncRelayCommand FindCommand => findCommand ??= new(Find);
-
-    private async Task Find()
-    {
-        Save();
-
-        Finder.Items = TriggerService.Get().Select(model => new TriggerViewModel(model));
-        Finder.Selected = Selected;
-
-        await DialogHost.Show(Finder, Finder.DialogIdentifier);
-
-        if (Finder.DialogResult != true)
-        { return; }
-
-        if (Finder.Selected == null)
-        { return; }
-
-        Navigation.Navigate<TriggerDetailsViewModel>();
-        Mediator.Send<ElementSelectedMessage>(new(Finder.Selected.Model));
-    }
-
     private RelayCommand? createCommand;
     public RelayCommand CreateCommand => createCommand ??= new(Create);
 
     private void Create()
     {
-        Navigation.Navigate<TriggerDetailsViewModel>();
+        if (Selected != null)
+        {
+            Navigation.Navigate<TriggerDetailsViewModel>();
+        }
 
         Trigger model = new()
         {
@@ -130,38 +106,41 @@ public class TriggerDetailsViewModel : PageViewModelBase,
         };
 
         TriggerService.Insert(model);
+        Mediator.Send<SelectMessage>(new(model));
     }
 
     private RelayCommand<TriggerViewModel>? duplicateCommand;
     public RelayCommand<TriggerViewModel> DuplicateCommand => duplicateCommand ??= new(Duplicate, CanDuplicate);
 
-    private void Duplicate(TriggerViewModel? viewmodel)
+    private void Duplicate(TriggerViewModel? observable)
     {
-        if (viewmodel == null)
+        if (observable == null)
         { return; }
 
         Navigation.Navigate<TriggerDetailsViewModel>();
 
-        Trigger model = new(viewmodel.Model);
+        Trigger model = new(observable.Model);
+
         TriggerService.Insert(model);
+        Mediator.Send<SelectMessage>(new(model));
     }
-    private bool CanDuplicate(TriggerViewModel? viewmodel)
+    private bool CanDuplicate(TriggerViewModel? observable)
     {
-        return viewmodel != null;
+        return observable != null;
     }
 
     private RelayCommand<TriggerViewModel>? deleteCommand;
     public RelayCommand<TriggerViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
 
-    private void Delete(TriggerViewModel? viewmodel)
+    private void Delete(TriggerViewModel? observable)
     {
-        if (viewmodel == null)
+        if (observable == null)
         { return; }
 
-        TriggerService.Delete(viewmodel.Model);
+        TriggerService.Delete(observable.Model);
     }
-    private bool CanDelete(TriggerViewModel? viewmodel)
+    private bool CanDelete(TriggerViewModel? observable)
     {
-        return viewmodel != null;
+        return observable != null;
     }
 }

@@ -1,8 +1,7 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Model.Elements;
-using Paradoxical.Services.Components;
 using Paradoxical.Services.Elements;
-using Paradoxical.Services.Relationships;
+using Paradoxical.Services.Entities;
 using System.IO;
 using System.Text;
 
@@ -35,82 +34,31 @@ public class BuildService : IBuildService
 
     private readonly IEventService eventService;
     private readonly IOptionService optionService;
+    private readonly IPortraitService portraitService;
     private readonly IOnActionService onActionService;
     private readonly IDecisionService decisionService;
     private readonly ITriggerService triggerService;
     private readonly IEffectService effectService;
 
-    private readonly IEventOptionService eventOptionService;
-    private readonly IEventTriggerService eventTriggerService;
-    private readonly IEventImmediateService eventImmediateService;
-    private readonly IEventAfterService eventAfterService;
-
-    private readonly IOptionTriggerService optionTriggerService;
-    private readonly IOptionEffectService optionEffectService;
-
-    private readonly IOnActionTriggerService onActionTriggerService;
-    private readonly IOnActionEffectService onActionEffectService;
-    private readonly IOnActionOnActionService onActionOnActionService;
-    private readonly IOnActionEventService onActionEventService;
-
-    private readonly IDecisionValidService decisionValidService;
-    private readonly IDecisionFailureService decisionFailureService;
-    private readonly IDecisionShownService decisionShownService;
-    private readonly IDecisionEffectService decisionEffectService;
-
-    private readonly IPortraitService portraitService;
-
     public BuildService(
         IModService modService,
         IEventService eventService,
         IOptionService optionService,
+        IPortraitService portraitService,
         IOnActionService onActionService,
         IDecisionService decisionService,
         ITriggerService triggerService,
-        IEffectService effectService,
-        IEventOptionService eventOptionService,
-        IEventTriggerService eventTriggerService,
-        IEventImmediateService eventImmediateService,
-        IEventAfterService eventAfterService,
-        IOptionTriggerService optionTriggerService,
-        IOptionEffectService optionEffectService,
-        IOnActionTriggerService onActionTriggerService,
-        IOnActionEffectService onActionEffectService,
-        IOnActionOnActionService onActionOnActionService,
-        IOnActionEventService onActionEventService,
-        IDecisionValidService decisionValidService,
-        IDecisionFailureService decisionFailureService,
-        IDecisionShownService decisionShownService,
-        IDecisionEffectService decisionEffectService,
-        IPortraitService portraitService)
+        IEffectService effectService)
     {
         this.modService = modService;
 
         this.eventService = eventService;
+        this.optionService = optionService;
+        this.portraitService = portraitService;
         this.onActionService = onActionService;
         this.decisionService = decisionService;
         this.triggerService = triggerService;
         this.effectService = effectService;
-        this.eventOptionService = eventOptionService;
-        this.eventTriggerService = eventTriggerService;
-        this.eventImmediateService = eventImmediateService;
-        this.eventAfterService = eventAfterService;
-
-        this.optionTriggerService = optionTriggerService;
-        this.optionEffectService = optionEffectService;
-
-        this.onActionTriggerService = onActionTriggerService;
-        this.onActionEffectService = onActionEffectService;
-        this.onActionOnActionService = onActionOnActionService;
-        this.onActionEventService = onActionEventService;
-
-        this.decisionValidService = decisionValidService;
-        this.decisionFailureService = decisionFailureService;
-        this.decisionShownService = decisionShownService;
-        this.decisionEffectService = decisionEffectService;
-
-        this.optionService = optionService;
-        this.portraitService = portraitService;
     }
 
     public void Export(string dir, string file)
@@ -276,12 +224,8 @@ public class BuildService : IBuildService
             element.Write(
                 writer,
                 modService,
-                eventOptionService,
-                eventTriggerService,
-                eventImmediateService,
-                eventAfterService,
-                optionTriggerService,
-                optionEffectService,
+                eventService,
+                optionService,
                 portraitService);
 
             writer.WriteLine();
@@ -325,11 +269,7 @@ public class BuildService : IBuildService
             element.Write(
                 writer,
                 modService,
-                onActionService,
-                onActionTriggerService,
-                onActionEffectService,
-                onActionOnActionService,
-                onActionEventService);
+                onActionService);
 
             writer.WriteLine();
         }
@@ -346,11 +286,7 @@ public class BuildService : IBuildService
             element.Write(
                 writer,
                 modService,
-                decisionService,
-                decisionValidService,
-                decisionFailureService,
-                decisionShownService,
-                decisionEffectService);
+                decisionService);
 
             writer.WriteLine();
         }

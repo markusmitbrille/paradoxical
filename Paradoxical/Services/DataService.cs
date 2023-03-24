@@ -1,5 +1,4 @@
 ﻿using Paradoxical.Model;
-using Paradoxical.Model.Components;
 using Paradoxical.Model.Elements;
 using Paradoxical.Model.Relationships;
 using SQLite;
@@ -77,8 +76,8 @@ public class DataService : IDataService
         Connection.CreateTable<OnAction>();
         Connection.CreateTable<OnActionTrigger>();
         Connection.CreateTable<OnActionEffect>();
-        Connection.CreateTable<OnActionEvent>();
-        Connection.CreateTable<OnActionOnAction>();
+        Connection.CreateTable<OnActionRandom>();
+        Connection.CreateTable<OnActionChild>();
 
         Connection.CreateTable<Decision>();
         Connection.CreateTable<DecisionShown>();
@@ -109,8 +108,8 @@ public class DataService : IDataService
         Connection.DropTable<OnAction>();
         Connection.DropTable<OnActionTrigger>();
         Connection.DropTable<OnActionEffect>();
-        Connection.DropTable<OnActionEvent>();
-        Connection.DropTable<OnActionOnAction>();
+        Connection.DropTable<OnActionRandom>();
+        Connection.DropTable<OnActionChild>();
 
         Connection.DropTable<Decision>();
         Connection.DropTable<DecisionShown>();
@@ -141,8 +140,8 @@ public class DataService : IDataService
         Connection.DeleteAll<OnAction>();
         Connection.DeleteAll<OnActionTrigger>();
         Connection.DeleteAll<OnActionEffect>();
-        Connection.DeleteAll<OnActionEvent>();
-        Connection.DeleteAll<OnActionOnAction>();
+        Connection.DeleteAll<OnActionRandom>();
+        Connection.DeleteAll<OnActionChild>();
 
         Connection.DeleteAll<Decision>();
         Connection.DeleteAll<DecisionShown>();

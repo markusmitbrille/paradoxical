@@ -5,7 +5,7 @@ using System.IO;
 namespace Paradoxical.Model;
 
 [Table("mods")]
-public class Mod : IElement
+public class Mod : IEntity, IModel
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }

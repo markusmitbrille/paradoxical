@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
 using Paradoxical.Messages;
 using Paradoxical.Model.Elements;
@@ -9,25 +8,27 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace Paradoxical.ViewModel;
 
-public class EventTableViewModel : PageViewModelBase,
-    IElementTableViewModel,
-    IMessageHandler<ElementSelectedMessage>,
-    IMessageHandler<ElementDeselectedMessage>,
-    IMessageHandler<ElementInsertedMessage>,
-    IMessageHandler<ElementDeletedMessage>,
-    IMessageHandler<ShutdownMessage>
+public class EventTableViewModel : PageViewModel
+    , IMessageHandler<SelectMessage>
+    , IMessageHandler<ShutdownMessage>
 {
     public override string PageName => "Events";
 
-    public FindDialogViewModel Finder { get; }
+    public FinderViewModel Finder { get; }
     public IMediatorService Mediator { get; }
 
     public IEventService EventService { get; }
+
+    private ObservableCollection<EventViewModel> wrappers = new();
+    public ObservableCollection<EventViewModel> Wrappers
+    {
+        get => wrappers;
+        set => SetProperty(ref wrappers, value);
+    }
 
     private EventViewModel? selected;
     public EventViewModel? Selected
@@ -35,8 +36,6 @@ public class EventTableViewModel : PageViewModelBase,
         get => selected;
         set => SetProperty(ref selected, value);
     }
-
-    IElementViewModel? IElementTableViewModel.Selected => Selected;
 
     private string? filter;
     public string? Filter
@@ -47,7 +46,7 @@ public class EventTableViewModel : PageViewModelBase,
 
     public EventTableViewModel(
         NavigationViewModel navigation,
-        FindDialogViewModel finder,
+        FinderViewModel finder,
         IMediatorService mediator,
         IEventService triggerService)
         : base(navigation)
@@ -56,19 +55,13 @@ public class EventTableViewModel : PageViewModelBase,
         Mediator = mediator;
 
         EventService = triggerService;
-
-        Mediator.Register<ElementSelectedMessage>(this);
-        Mediator.Register<ElementDeselectedMessage>(this);
-        Mediator.Register<ElementInsertedMessage>(this);
-        Mediator.Register<ElementDeletedMessage>(this);
-        Mediator.Register<ShutdownMessage>(this);
     }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
 
-        if (e.PropertyName == nameof(Events))
+        if (e.PropertyName == nameof(Wrappers))
         {
             UpdateView();
             UpdateSelected();
@@ -85,6 +78,9 @@ public class EventTableViewModel : PageViewModelBase,
         base.OnNavigatedTo();
 
         Load();
+
+        Mediator.Register<SelectMessage>(this);
+        Mediator.Register<ShutdownMessage>(this);
     }
 
     protected override void OnNavigatingFrom()
@@ -92,51 +88,17 @@ public class EventTableViewModel : PageViewModelBase,
         base.OnNavigatingFrom();
 
         Save();
+
+        Mediator.Unregister<SelectMessage>(this);
+        Mediator.Unregister<ShutdownMessage>(this);
     }
 
-    public void Handle(ElementSelectedMessage message)
-    {
-        if (message.Element is not Event model)
-        { return; }
-
-        if (Navigation.CurrentPage != this)
-        { return; }
-
-        Selected = Events.SingleOrDefault(viewmodel => viewmodel.Model == model);
-    }
-
-    public void Handle(ElementDeselectedMessage message)
-    {
-        if (message.Element is not Event model)
-        { return; }
-
-        if (Navigation.CurrentPage != this)
-        { return; }
-
-        if (Selected?.Model == model)
-        {
-            Selected = null;
-        }
-    }
-
-    public void Handle(ElementInsertedMessage message)
+    public void Handle(SelectMessage message)
     {
         if (message.Model is not Event model)
         { return; }
 
-        Events.Add(new(model));
-    }
-
-    public void Handle(ElementDeletedMessage message)
-    {
-        if (message.Model is not Event model)
-        { return; }
-
-        var viewmodels = Events.Where(viewmodel => viewmodel.Model == model).ToArray();
-        foreach (var viewmodel in viewmodels)
-        {
-            Events.Remove(viewmodel);
-        }
+        Selected = Wrappers.SingleOrDefault(viewmodel => viewmodel.Model == model);
     }
 
     public void Handle(ShutdownMessage message)
@@ -146,46 +108,46 @@ public class EventTableViewModel : PageViewModelBase,
 
     private void Load()
     {
-        Events = new(EventService.Get().Select(model => new EventViewModel(model)));
+        Wrappers = new(EventService.Get().Select(model => new EventViewModel(model)));
 
-        ICollectionView view = CollectionViewSource.GetDefaultView(Events);
+        ICollectionView view = CollectionViewSource.GetDefaultView(Wrappers);
         view.Filter = Predicate;
     }
 
     private void Save()
     {
-        EventService.UpdateAll(Events.Select(vm => vm.Model));
+        EventService.UpdateAll(Wrappers.Select(vm => vm.Model));
     }
 
     private bool Predicate(object obj)
     {
-        if (obj is not EventViewModel viewmodel)
+        if (obj is not EventViewModel wrapper)
         { return false; }
 
         if (string.IsNullOrEmpty(Filter) == true)
         { return true; }
 
-        if (ParadoxPattern.IdFilterRegex.FuzzyMatch(viewmodel.Id.ToString(), Filter) == true)
-        { return true; }
+        if (ParadoxPattern.IdFilterRegex.FuzzyMatch(wrapper.Id.ToString(), Filter) == false)
+        { return false; }
 
-        if (ParadoxPattern.NameFilterRegex.FuzzyMatch(viewmodel.Name, Filter) == true)
-        { return true; }
+        if (ParadoxPattern.NameFilterRegex.FuzzyMatch(wrapper.Name, Filter) == false)
+        { return false; }
 
-        if (ParadoxPattern.TitleFilterRegex.FuzzyMatch(viewmodel.Title, Filter) == true)
-        { return true; }
+        if (ParadoxPattern.TitleFilterRegex.FuzzyMatch(wrapper.Title, Filter) == false)
+        { return false; }
 
-        if (ParadoxPattern.DescriptionFilterRegex.FuzzyMatch(viewmodel.Description, Filter) == true)
-        { return true; }
+        if (ParadoxPattern.DescriptionFilterRegex.FuzzyMatch(wrapper.Description, Filter) == false)
+        { return false; }
 
-        if (ParadoxPattern.FilterRegex.FuzzyMatch(viewmodel.Name, Filter) == true)
-        { return true; }
+        if (ParadoxPattern.FilterRegex.FuzzyMatch(wrapper.Name, Filter) == false)
+        { return false; }
 
-        return false;
+        return true;
     }
 
     private void UpdateView()
     {
-        ICollectionView view = CollectionViewSource.GetDefaultView(Events);
+        ICollectionView view = CollectionViewSource.GetDefaultView(Wrappers);
         view.Refresh();
     }
 
@@ -194,38 +156,8 @@ public class EventTableViewModel : PageViewModelBase,
         if (Selected != null && Predicate(Selected) == true)
         { return; }
 
-        ICollectionView view = CollectionViewSource.GetDefaultView(Events);
+        ICollectionView view = CollectionViewSource.GetDefaultView(Wrappers);
         Selected = view.Cast<EventViewModel>().FirstOrDefault();
-    }
-
-    private ObservableCollection<EventViewModel> triggers = new();
-    public ObservableCollection<EventViewModel> Events
-    {
-        get => triggers;
-        set => SetProperty(ref triggers, value);
-    }
-
-    private AsyncRelayCommand? findCommand;
-    public AsyncRelayCommand FindCommand => findCommand ??= new(Find);
-
-    private async Task Find()
-    {
-        Save();
-
-        Finder.Items = EventService.Get().Select(model => new EventViewModel(model));
-        Finder.Selected = Selected;
-        Finder.NameFilter = Filter;
-
-        await DialogHost.Show(Finder, Finder.DialogIdentifier);
-
-        if (Finder.DialogResult != true)
-        { return; }
-
-        if (Finder.Selected == null)
-        { return; }
-
-        Navigation.Navigate<EventDetailsViewModel>();
-        Mediator.Send<ElementSelectedMessage>(new(Finder.Selected.Model));
     }
 
     private RelayCommand? createCommand;
@@ -241,52 +173,57 @@ public class EventTableViewModel : PageViewModelBase,
         };
 
         EventService.Insert(model);
+
+        EventViewModel observable = new(model);
+        Wrappers.Add(observable);
     }
 
     private RelayCommand<EventViewModel>? duplicateCommand;
     public RelayCommand<EventViewModel> DuplicateCommand => duplicateCommand ??= new(Duplicate, CanDuplicate);
 
-    private void Duplicate(EventViewModel? viewmodel)
+    private void Duplicate(EventViewModel? observable)
     {
-        if (viewmodel == null)
+        if (observable == null)
         { return; }
 
-        Event model = new(viewmodel.Model);
+        Event model = new(observable.Model);
         EventService.Insert(model);
     }
-    private bool CanDuplicate(EventViewModel? viewmodel)
+    private bool CanDuplicate(EventViewModel? observable)
     {
-        return viewmodel != null;
+        return observable != null;
     }
 
     private RelayCommand<EventViewModel>? deleteCommand;
     public RelayCommand<EventViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
 
-    private void Delete(EventViewModel? viewmodel)
+    private void Delete(EventViewModel? observable)
     {
-        if (viewmodel == null)
+        if (observable == null)
         { return; }
 
-        EventService.Delete(viewmodel.Model);
+        EventService.Delete(observable.Model);
     }
-    private bool CanDelete(EventViewModel? viewmodel)
+    private bool CanDelete(EventViewModel? observable)
     {
-        return viewmodel != null;
+        return observable != null;
     }
 
     private RelayCommand<EventViewModel>? editCommand;
     public RelayCommand<EventViewModel> EditCommand => editCommand ??= new(Edit, CanEdit);
 
-    private void Edit(EventViewModel? viewmodel)
+    private void Edit(EventViewModel? observable)
     {
-        if (viewmodel == null)
+        if (observable == null)
         { return; }
 
+        var model = observable.Model;
+
         Navigation.Navigate<EventDetailsViewModel>();
-        Mediator.Send<ElementSelectedMessage>(new(viewmodel.Model));
+        Mediator.Send<SelectMessage>(new(model));
     }
-    private bool CanEdit(EventViewModel? viewmodel)
+    private bool CanEdit(EventViewModel? observable)
     {
-        return viewmodel != null;
+        return observable != null;
     }
 }

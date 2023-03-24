@@ -11,7 +11,4 @@ public class EventTrigger : IRelationship
 
     [Column("trigger_id"), Indexed]
     public int TriggerId { get; set; }
-
-    int IRelationship.OwnerID => EventId;
-    int IRelationship.RelationID => TriggerId;
 }

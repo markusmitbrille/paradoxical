@@ -57,4 +57,42 @@ public static class ParadoxQuery
     {
         return $@"DELETE FROM {mn} WHERE {mfk} = ? AND {nfk} = ?";
     }
+
+    /// <summary>
+    /// For two tables with a 1:n relationship, this will generate a query that selects all components for a specific owner.
+    /// The query expects an additional argument for the owner primary key.
+    /// </summary>
+    /// <param name="c">Name of the component table.</param>
+    /// <param name="o">Name of the owner table.</param>
+    /// <param name="fk">Name of the foreign key, pointing to the owner table primary key, in the component table.</param>
+    /// <param name="pk">Name of the owner table primary key.</param>
+    /// <returns></returns>
+    public static string Composition(
+        string c,
+        string o,
+        string fk,
+        string pk)
+    {
+        return $@"SELECT {c}.* FROM {c} JOIN {o} on {c}.{fk} = {o}.{pk} WHERE {o}.{pk} = ?";
+    }
+
+    /// <summary>
+    /// For two tables with a 1:n relationship, this will generate a query that selects the owner of a specific component.
+    /// The query expects an additional argument for the component primary key.
+    /// </summary>
+    /// <param name="c">Name of the component table.</param>
+    /// <param name="o">Name of the owner table.</param>
+    /// <param name="fk">Name of the foreign key, pointing to the owner table primary key, in the component table.</param>
+    /// <param name="cpk">Name of the component table primary key.</param>
+    /// <param name="opk">Name of the owner table primary key.</param>
+    /// <returns></returns>
+    public static string Composite(
+        string c,
+        string o,
+        string fk,
+        string cpk,
+        string opk)
+    {
+        return $@"SELECT {o}.* FROM {c} JOIN {o} on {c}.{fk} = {o}.{opk} WHERE {c}.{cpk} = ? LIMIT 1";
+    }
 }

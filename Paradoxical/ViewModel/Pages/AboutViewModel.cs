@@ -2,7 +2,7 @@
 
 namespace Paradoxical.ViewModel;
 
-public class AboutViewModel : PageViewModelBase
+public class AboutViewModel : PageViewModel
 {
     public override string PageName => "About";
 

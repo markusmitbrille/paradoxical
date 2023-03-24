@@ -1,12 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Paradoxical.Core;
 using Paradoxical.Services;
-using Paradoxical.Services.Components;
 using Paradoxical.Services.Elements;
-using Paradoxical.Services.Relationships;
+using Paradoxical.Services.Entities;
 using Paradoxical.View;
 using Paradoxical.ViewModel;
-using Paradoxical.ViewModel.Relationships;
 using System.Windows;
 
 namespace Paradoxical;
@@ -31,38 +29,17 @@ public partial class App : Application
         // element services
         services.AddSingleton<IEventService, EventService>();
         services.AddSingleton<IOptionService, OptionService>();
+        services.AddSingleton<IPortraitService, PortraitService>();
         services.AddSingleton<IOnActionService, OnActionService>();
         services.AddSingleton<IDecisionService, DecisionService>();
         services.AddSingleton<ITriggerService, TriggerService>();
         services.AddSingleton<IEffectService, EffectService>();
 
-        // component services
-        services.AddSingleton<IPortraitService, PortraitService>();
-
-        // relationship services
-        services.AddSingleton<IEventOptionService, EventOptionService>();
-        services.AddSingleton<IEventTriggerService, EventTriggerService>();
-        services.AddSingleton<IEventImmediateService, EventImmediateService>();
-        services.AddSingleton<IEventAfterService, EventAfterService>();
-
-        services.AddSingleton<IOptionTriggerService, OptionTriggerService>();
-        services.AddSingleton<IOptionEffectService, OptionEffectService>();
-
-        services.AddSingleton<IOnActionTriggerService, OnActionTriggerService>();
-        services.AddSingleton<IOnActionEffectService, OnActionEffectService>();
-        services.AddSingleton<IOnActionOnActionService, OnActionOnActionService>();
-        services.AddSingleton<IOnActionEventService, OnActionEventService>();
-
-        services.AddSingleton<IDecisionValidService, DecisionValidService>();
-        services.AddSingleton<IDecisionFailureService, DecisionFailureService>();
-        services.AddSingleton<IDecisionShownService, DecisionShownService>();
-        services.AddSingleton<IDecisionEffectService, DecisionEffectService>();
-
         // navigation view model
         services.AddSingleton<NavigationViewModel>();
 
         // page factory for navigation service
-        services.AddTransient<PageFactory>(provider => pageType => (PageViewModelBase)provider.GetRequiredService(pageType));
+        services.AddTransient<PageFactory>(provider => pageType => (PageViewModel)provider.GetRequiredService(pageType));
 
         // main window and view model
         services.AddSingleton<MainViewModel>();
@@ -72,7 +49,7 @@ public partial class App : Application
         });
 
         // finder view model
-        services.AddTransient<FindDialogViewModel>();
+        services.AddTransient<FinderViewModel>();
 
         // page view models
         services.AddSingleton<AboutViewModel>();
@@ -92,25 +69,6 @@ public partial class App : Application
         services.AddSingleton<DecisionTableViewModel>();
         services.AddSingleton<TriggerTableViewModel>();
         services.AddSingleton<EffectTableViewModel>();
-
-        // relationship view models
-        services.AddTransient<EventOptionViewModel>();
-        services.AddTransient<EventTriggerViewModel>();
-        services.AddTransient<EventImmediateViewModel>();
-        services.AddTransient<EventAfterViewModel>();
-
-        services.AddTransient<OptionTriggerService>();
-        services.AddTransient<OptionEffectService>();
-
-        services.AddTransient<OnActionTriggerViewModel>();
-        services.AddTransient<OnActionEffectViewModel>();
-        services.AddTransient<OnActionOnActionViewModel>();
-        services.AddTransient<OnActionEventViewModel>();
-
-        services.AddTransient<DecisionValidViewModel>();
-        services.AddTransient<DecisionFailureViewModel>();
-        services.AddTransient<DecisionShownViewModel>();
-        services.AddTransient<DecisionEffectViewModel>();
 
         serviceProvider = services.BuildServiceProvider();
     }

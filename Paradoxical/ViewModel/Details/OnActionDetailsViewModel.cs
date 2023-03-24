@@ -3,7 +3,7 @@ using Paradoxical.Services.Elements;
 
 namespace Paradoxical.ViewModel;
 
-public class OnActionDetailsViewModel : PageViewModelBase
+public class OnActionDetailsViewModel : PageViewModel
 {
     public override string PageName => "On-Action Details";
 

@@ -3,7 +3,7 @@ using Paradoxical.Services;
 
 namespace Paradoxical.ViewModel;
 
-public class InfoViewModel : PageViewModelBase
+public class InfoViewModel : PageViewModel
 {
     public override string PageName => "Mod Info";
 
