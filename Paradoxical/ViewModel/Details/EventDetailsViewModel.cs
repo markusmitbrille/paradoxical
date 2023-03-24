@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace Paradoxical.ViewModel;
 
-public class EventDetailsViewModel : PageViewModel,
-    IMessageHandler<SelectMessage>,
-    IMessageHandler<ShutdownMessage>
+public class EventDetailsViewModel : PageViewModel
+    , IMessageHandler<SelectMessage>
+    , IMessageHandler<ShutdownMessage>
 {
     public override string PageName => "Event Details";
 
@@ -206,37 +206,37 @@ public class EventDetailsViewModel : PageViewModel,
     private RelayCommand<OptionViewModel>? removeOptionCommand;
     public RelayCommand<OptionViewModel> RemoveOptionCommand => removeOptionCommand ??= new(RemoveOption, CanRemoveOption);
 
-    private void RemoveOption(OptionViewModel? viewmodel)
+    private void RemoveOption(OptionViewModel? observable)
     {
-        if (viewmodel == null)
+        if (observable == null)
         { return; }
 
-        Option model = viewmodel.Model;
+        Option model = observable.Model;
 
         OptionService.Delete(model);
-        Options.Remove(viewmodel);
+        Options.Remove(observable);
     }
-    private bool CanRemoveOption(OptionViewModel? viewmodel)
+    private bool CanRemoveOption(OptionViewModel? observable)
     {
-        return viewmodel != null;
+        return observable != null;
     }
 
     private RelayCommand<OptionViewModel>? findOptionCommand;
     public RelayCommand<OptionViewModel> FindOptionCommand => findOptionCommand ??= new(FindOption, CanFindOption);
 
-    private void FindOption(OptionViewModel? viewmodel)
+    private void FindOption(OptionViewModel? observable)
     {
-        if (viewmodel == null)
+        if (observable == null)
         { return; }
 
-        Option model = viewmodel.Model;
+        Option model = observable.Model;
 
         Navigation.Navigate<OptionDetailsViewModel>();
         Mediator.Send<SelectMessage>(new(model));
     }
-    private bool CanFindOption(OptionViewModel? viewmodel)
+    private bool CanFindOption(OptionViewModel? observable)
     {
-        return viewmodel != null;
+        return observable != null;
     }
 
     private RelayCommand? createTriggerCommand;
@@ -290,36 +290,36 @@ public class EventDetailsViewModel : PageViewModel,
     private RelayCommand<TriggerViewModel>? removeTriggerCommand;
     public RelayCommand<TriggerViewModel> RemoveTriggerCommand => removeTriggerCommand ??= new(RemoveTrigger, CanRemoveTrigger);
 
-    private void RemoveTrigger(TriggerViewModel? viewmodel)
+    private void RemoveTrigger(TriggerViewModel? observable)
     {
-        if (viewmodel == null)
+        if (observable == null)
         { return; }
 
-        Trigger model = viewmodel.Model;
+        Trigger model = observable.Model;
 
         TriggerService.Delete(model);
-        Triggers.Remove(viewmodel);
+        Triggers.Remove(observable);
     }
-    private bool CanRemoveTrigger(TriggerViewModel? viewmodel)
+    private bool CanRemoveTrigger(TriggerViewModel? observable)
     {
-        return viewmodel != null;
+        return observable != null;
     }
 
     private RelayCommand<TriggerViewModel>? findTriggerCommand;
     public RelayCommand<TriggerViewModel> FindTriggerCommand => findTriggerCommand ??= new(FindTrigger, CanFindTrigger);
 
-    private void FindTrigger(TriggerViewModel? viewmodel)
+    private void FindTrigger(TriggerViewModel? observable)
     {
-        if (viewmodel == null)
+        if (observable == null)
         { return; }
 
-        Trigger model = viewmodel.Model;
+        Trigger model = observable.Model;
 
         Navigation.Navigate<TriggerDetailsViewModel>();
         Mediator.Send<SelectMessage>(new(model));
     }
-    private bool CanFindTrigger(TriggerViewModel? viewmodel)
+    private bool CanFindTrigger(TriggerViewModel? observable)
     {
-        return viewmodel != null;
+        return observable != null;
     }
 }

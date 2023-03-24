@@ -8,9 +8,9 @@ using System;
 
 namespace Paradoxical.ViewModel;
 
-public class TriggerDetailsViewModel : PageViewModel,
-    IMessageHandler<SelectMessage>,
-    IMessageHandler<ShutdownMessage>
+public class TriggerDetailsViewModel : PageViewModel
+    , IMessageHandler<SelectMessage>
+    , IMessageHandler<ShutdownMessage>
 {
     public override string PageName => "Trigger Details";
 
