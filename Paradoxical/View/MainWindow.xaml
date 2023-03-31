@@ -62,17 +62,11 @@
             Command="{Binding GoToEventPageCommand}"
             Gesture="ALT+2" />
         <KeyBinding
-            Command="{Binding GoToOnActionPageCommand}"
+            Command="{Binding GoToTriggerPageCommand}"
             Gesture="ALT+3" />
         <KeyBinding
-            Command="{Binding GoToDecisionPageCommand}"
-            Gesture="ALT+4" />
-        <KeyBinding
-            Command="{Binding GoToTriggerPageCommand}"
-            Gesture="ALT+5" />
-        <KeyBinding
             Command="{Binding GoToEffectPageCommand}"
-            Gesture="ALT+6" />
+            Gesture="ALT+4" />
     </Window.InputBindings>
 
     <materialDesign:DialogHost
@@ -116,28 +110,6 @@
                             <TextBlock
                                 Margin="24,4,0,4"
                                 Text="Events" />
-                        </Button>
-
-                        <Button
-                            Margin="12,8"
-                            HorizontalContentAlignment="Left"
-                            Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToOnActionPageCommand}"
-                            Click="MenuButtonClickHandler">
-                            <TextBlock
-                                Margin="24,4,0,4"
-                                Text="On-Actions" />
-                        </Button>
-
-                        <Button
-                            Margin="12,8"
-                            HorizontalContentAlignment="Left"
-                            Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToDecisionPageCommand}"
-                            Click="MenuButtonClickHandler">
-                            <TextBlock
-                                Margin="24,4,0,4"
-                                Text="Decisions" />
                         </Button>
 
                         <Button
