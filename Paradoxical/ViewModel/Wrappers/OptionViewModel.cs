@@ -100,8 +100,4 @@ public class OptionViewModel : ModelWrapper<Option>
         get => model.aiZealTargetModifier;
         set => SetProperty(ref model.aiZealTargetModifier, value);
     }
-
-    public OptionViewModel(Option model) : base(model)
-    {
-    }
 }

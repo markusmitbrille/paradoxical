@@ -66,8 +66,4 @@ public class EventViewModel : ElementWrapper<Event>
         get => model.customAfterEffect;
         set => SetProperty(ref model.customAfterEffect, value);
     }
-
-    public EventViewModel(Event model) : base(model)
-    {
-    }
 }

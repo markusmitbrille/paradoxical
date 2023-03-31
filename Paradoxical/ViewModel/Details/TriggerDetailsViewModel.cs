@@ -65,7 +65,7 @@ public class TriggerDetailsViewModel : PageViewModel
         { return; }
 
         var selected = TriggerService.Get(model);
-        Selected = new(selected);
+        Selected = new() { Model = selected };
     }
 
     public void Handle(ShutdownMessage message)
@@ -78,7 +78,8 @@ public class TriggerDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
-        Selected = new(TriggerService.Get(Selected.Model));
+        Trigger model = TriggerService.Get(Selected.Model);
+        Selected = new() { Model = model };
     }
 
     private void Save()

@@ -90,7 +90,7 @@ public class EventDetailsViewModel : PageViewModel
         { return; }
 
         var selected = EventService.Get(model);
-        Selected = new(selected);
+        Selected = new() { Model = selected };
     }
 
     public void Handle(ShutdownMessage message)
@@ -106,18 +106,18 @@ public class EventDetailsViewModel : PageViewModel
         var selected = EventService.Get(Selected.Model);
 
         var options = EventService.GetOptions(selected)
-            .Select(model => new OptionViewModel(model));
+            .Select(model => new OptionViewModel() { Model = model });
 
         var triggers = EventService.GetTriggers(selected)
-            .Select(model => new TriggerViewModel(model));
+            .Select(model => new TriggerViewModel() { Model = model });
 
         var immediates = EventService.GetImmediates(selected)
-            .Select(model => new EffectViewModel(model));
+            .Select(model => new EffectViewModel() { Model = model });
 
         var afters = EventService.GetAfters(selected)
-            .Select(model => new EffectViewModel(model));
+            .Select(model => new EffectViewModel() { Model = model });
 
-        Selected = new(selected);
+        Selected = new() { Model = selected };
 
         Options.Clear();
         Options.AddRange(options);
@@ -197,7 +197,7 @@ public class EventDetailsViewModel : PageViewModel
         { return; }
 
         Option model = new() { EventId = Selected.Id };
-        OptionViewModel observable = new(model);
+        OptionViewModel observable = new() { Model = model };
 
         OptionService.Insert(model);
         Options.Add(observable);
@@ -253,7 +253,7 @@ public class EventDetailsViewModel : PageViewModel
         TriggerService.Insert(relation);
         EventService.AddTrigger(owner, relation);
 
-        TriggerViewModel observable = new(relation);
+        TriggerViewModel observable = new() { Model = relation };
         Triggers.Add(observable);
     }
 
@@ -268,7 +268,7 @@ public class EventDetailsViewModel : PageViewModel
         Save();
 
         Finder.Items = TriggerService.Get()
-            .Select(model => new TriggerViewModel(model));
+            .Select(model => new TriggerViewModel() { Model = model });
 
         await DialogHost.Show(Finder, Finder.DialogIdentifier);
 
@@ -283,7 +283,7 @@ public class EventDetailsViewModel : PageViewModel
 
         EventService.AddTrigger(owner, relation);
 
-        TriggerViewModel observable = new(relation);
+        TriggerViewModel observable = new() { Model = relation };
         Triggers.Add(observable);
     }
 

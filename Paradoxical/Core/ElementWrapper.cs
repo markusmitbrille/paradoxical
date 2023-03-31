@@ -16,12 +16,8 @@ public interface IElementWrapper<T> : IModelWrapper<T>
 public abstract class ElementWrapper<T> : ModelWrapper<T>
     , IElementWrapper
     , IElementWrapper<T>
-    where T : IElement
+    where T : IElement, new()
 {
     public abstract string Kind { get; }
     public abstract string Name { get; set; }
-
-    public ElementWrapper(T model) : base(model)
-    {
-    }
 }

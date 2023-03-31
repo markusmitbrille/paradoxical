@@ -97,7 +97,7 @@ public class TriggerTableViewModel : PageViewModel
 
     private void Load()
     {
-        Wrappers = new(TriggerService.Get().Select(model => new TriggerViewModel(model)));
+        Wrappers = new(TriggerService.Get().Select(model => new TriggerViewModel() { Model = model }));
 
         ICollectionView view = CollectionViewSource.GetDefaultView(Wrappers);
         view.Filter = Predicate;
@@ -159,10 +159,9 @@ public class TriggerTableViewModel : PageViewModel
             Name = $"trg_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
             Code = "# some trigger",
         };
-
         TriggerService.Insert(model);
 
-        TriggerViewModel observable = new(model);
+        TriggerViewModel observable = new() { Model = model };
         Wrappers.Add(observable);
     }
 

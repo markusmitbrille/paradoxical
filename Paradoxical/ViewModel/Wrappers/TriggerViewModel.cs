@@ -24,8 +24,4 @@ public class TriggerViewModel : ElementWrapper<Trigger>
         get => model.tooltip;
         set => SetProperty(ref model.tooltip, value);
     }
-
-    public TriggerViewModel(Trigger model) : base(model)
-    {
-    }
 }

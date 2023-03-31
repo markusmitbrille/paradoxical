@@ -168,8 +168,4 @@ public class DecisionViewModel : ElementWrapper<Decision>
         get => model.aiZealTargetModifier;
         set => SetProperty(ref model.aiZealTargetModifier, value);
     }
-
-    public DecisionViewModel(Decision model) : base(model)
-    {
-    }
 }

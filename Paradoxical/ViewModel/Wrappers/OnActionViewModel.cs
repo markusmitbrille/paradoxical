@@ -24,8 +24,4 @@ public class OnActionViewModel : ElementWrapper<OnAction>
         get => model.chance;
         set => SetProperty(ref model.chance, value);
     }
-
-    public OnActionViewModel(OnAction model) : base(model)
-    {
-    }
 }

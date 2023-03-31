@@ -108,7 +108,7 @@ public class EventTableViewModel : PageViewModel
 
     private void Load()
     {
-        Wrappers = new(EventService.Get().Select(model => new EventViewModel(model)));
+        Wrappers = new(EventService.Get().Select(model => new EventViewModel() { Model = model }));
 
         ICollectionView view = CollectionViewSource.GetDefaultView(Wrappers);
         view.Filter = Predicate;
@@ -171,10 +171,9 @@ public class EventTableViewModel : PageViewModel
             Title = "Hello World",
             Description = "Hello World!",
         };
-
         EventService.Insert(model);
 
-        EventViewModel observable = new(model);
+        EventViewModel observable = new() { Model = model };
         Wrappers.Add(observable);
     }
 

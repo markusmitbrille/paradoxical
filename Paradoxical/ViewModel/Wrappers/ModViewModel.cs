@@ -28,8 +28,4 @@ public class ModViewModel : ModelWrapper<Mod>
         get => model.prefix;
         set => SetProperty(ref model.prefix, value);
     }
-
-    public ModViewModel(Mod model) : base(model)
-    {
-    }
 }

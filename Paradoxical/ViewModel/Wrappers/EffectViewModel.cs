@@ -30,8 +30,4 @@ public class EffectViewModel : ElementWrapper<Effect>
         get => model.hidden;
         set => SetProperty(ref model.hidden, value);
     }
-
-    public EffectViewModel(Effect model) : base(model)
-    {
-    }
 }
