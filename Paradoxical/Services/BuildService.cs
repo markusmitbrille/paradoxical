@@ -26,8 +26,6 @@ public class BuildService : IBuildService
     private string EventsFile => $"{modService.GetPrefix()}_events.txt";
     private string TriggersFile => $"{modService.GetPrefix()}_triggers.txt";
     private string EffectsFile => $"{modService.GetPrefix()}_effects.txt";
-    private string OnActionsFile => $"{modService.GetPrefix()}_on_actions.txt";
-    private string DecisionsFile => $"{modService.GetPrefix()}_decisions.txt";
     private string LocFile => $"{modService.GetPrefix()}_l_english.yml";
 
     private readonly IModService modService;
@@ -35,8 +33,6 @@ public class BuildService : IBuildService
     private readonly IEventService eventService;
     private readonly IOptionService optionService;
     private readonly IPortraitService portraitService;
-    private readonly IOnActionService onActionService;
-    private readonly IDecisionService decisionService;
     private readonly ITriggerService triggerService;
     private readonly IEffectService effectService;
 
@@ -45,8 +41,6 @@ public class BuildService : IBuildService
         IEventService eventService,
         IOptionService optionService,
         IPortraitService portraitService,
-        IOnActionService onActionService,
-        IDecisionService decisionService,
         ITriggerService triggerService,
         IEffectService effectService)
     {
@@ -55,8 +49,6 @@ public class BuildService : IBuildService
         this.eventService = eventService;
         this.optionService = optionService;
         this.portraitService = portraitService;
-        this.onActionService = onActionService;
-        this.decisionService = decisionService;
         this.triggerService = triggerService;
         this.effectService = effectService;
     }
@@ -75,8 +67,6 @@ public class BuildService : IBuildService
         Directory.CreateDirectory(GetCommonDir(dir, file));
         Directory.CreateDirectory(GetScriptedTriggersDir(dir, file));
         Directory.CreateDirectory(GetScriptedEffectsDir(dir, file));
-        Directory.CreateDirectory(GetOnActionDir(dir, file));
-        Directory.CreateDirectory(GetDecisionsDir(dir, file));
         Directory.CreateDirectory(GetLocDir(dir, file));
         Directory.CreateDirectory(GetEnglishLocDir(dir, file));
 
@@ -103,16 +93,6 @@ public class BuildService : IBuildService
         using (StreamWriter writer = new(GetEffectsFilePath(dir, file), encoding, options))
         {
             WriteEffectsFile(writer);
-        }
-
-        using (StreamWriter writer = new(GetOnActionsFilePath(dir, file), encoding, options))
-        {
-            WriteOnActionsFile(writer);
-        }
-
-        using (StreamWriter writer = new(GetDecisionsFilePath(dir, file), encoding, options))
-        {
-            WriteDecisionsFile(writer);
         }
 
         using (StreamWriter writer = new(GetLocFilePath(dir, file), encoding, options))
@@ -144,16 +124,6 @@ public class BuildService : IBuildService
     private static string GetScriptedEffectsDir(string dir, string file)
     {
         return Path.Combine(dir, file, SCRIPTED_EFFECTS_DIR);
-    }
-
-    private static string GetOnActionDir(string dir, string file)
-    {
-        return Path.Combine(dir, file, ON_ACTION_DIR);
-    }
-
-    private static string GetDecisionsDir(string dir, string file)
-    {
-        return Path.Combine(dir, file, DECISIONS_DIR);
     }
 
     private static string GetLocDir(string dir, string file)
@@ -189,16 +159,6 @@ public class BuildService : IBuildService
     private string GetEffectsFilePath(string dir, string file)
     {
         return Path.Combine(GetScriptedEffectsDir(dir, file), EffectsFile);
-    }
-
-    private string GetOnActionsFilePath(string dir, string file)
-    {
-        return Path.Combine(GetOnActionDir(dir, file), OnActionsFile);
-    }
-
-    private string GetDecisionsFilePath(string dir, string file)
-    {
-        return Path.Combine(GetDecisionsDir(dir, file), DecisionsFile);
     }
 
     private string GetLocFilePath(string dir, string file)
@@ -258,40 +218,6 @@ public class BuildService : IBuildService
         }
     }
 
-    private void WriteOnActionsFile(TextWriter writer)
-    {
-        writer.WriteLine($"# {modService.GetModName()} On-Actions");
-
-        foreach (OnAction element in onActionService.Get())
-        {
-            ParadoxText.IndentLevel = 0;
-
-            element.Write(
-                writer,
-                modService,
-                onActionService);
-
-            writer.WriteLine();
-        }
-    }
-
-    private void WriteDecisionsFile(TextWriter writer)
-    {
-        writer.WriteLine($"# {modService.GetModName()} Decisions");
-
-        foreach (Decision element in decisionService.Get())
-        {
-            ParadoxText.IndentLevel = 0;
-
-            element.Write(
-                writer,
-                modService,
-                decisionService);
-
-            writer.WriteLine();
-        }
-    }
-
     private void WriteLocFile(TextWriter writer)
     {
         writer.WriteLine("l_english:");
@@ -326,14 +252,6 @@ public class BuildService : IBuildService
         foreach (Option opt in optionService.Get())
         {
             opt.WriteLoc(writer, modService);
-            writer.WriteLine();
-        }
-
-        writer.WriteLine("# decisions");
-
-        foreach (Decision dec in decisionService.Get())
-        {
-            dec.WriteLoc(writer, modService);
             writer.WriteLine();
         }
     }

@@ -73,18 +73,6 @@ public class DataService : IDataService
         Connection.CreateTable<OptionTrigger>();
         Connection.CreateTable<OptionEffect>();
 
-        Connection.CreateTable<OnAction>();
-        Connection.CreateTable<OnActionTrigger>();
-        Connection.CreateTable<OnActionEffect>();
-        Connection.CreateTable<OnActionRandom>();
-        Connection.CreateTable<OnActionChild>();
-
-        Connection.CreateTable<Decision>();
-        Connection.CreateTable<DecisionShown>();
-        Connection.CreateTable<DecisionValid>();
-        Connection.CreateTable<DecisionFailure>();
-        Connection.CreateTable<DecisionEffect>();
-
         Connection.CreateTable<Trigger>();
 
         Connection.CreateTable<Effect>();
@@ -105,18 +93,6 @@ public class DataService : IDataService
         Connection.DropTable<OptionTrigger>();
         Connection.DropTable<OptionEffect>();
 
-        Connection.DropTable<OnAction>();
-        Connection.DropTable<OnActionTrigger>();
-        Connection.DropTable<OnActionEffect>();
-        Connection.DropTable<OnActionRandom>();
-        Connection.DropTable<OnActionChild>();
-
-        Connection.DropTable<Decision>();
-        Connection.DropTable<DecisionShown>();
-        Connection.DropTable<DecisionValid>();
-        Connection.DropTable<DecisionFailure>();
-        Connection.DropTable<DecisionEffect>();
-
         Connection.DropTable<Trigger>();
 
         Connection.DropTable<Effect>();
@@ -136,18 +112,6 @@ public class DataService : IDataService
         Connection.DeleteAll<Option>();
         Connection.DeleteAll<OptionTrigger>();
         Connection.DeleteAll<OptionEffect>();
-
-        Connection.DeleteAll<OnAction>();
-        Connection.DeleteAll<OnActionTrigger>();
-        Connection.DeleteAll<OnActionEffect>();
-        Connection.DeleteAll<OnActionRandom>();
-        Connection.DeleteAll<OnActionChild>();
-
-        Connection.DeleteAll<Decision>();
-        Connection.DeleteAll<DecisionShown>();
-        Connection.DeleteAll<DecisionValid>();
-        Connection.DeleteAll<DecisionFailure>();
-        Connection.DeleteAll<DecisionEffect>();
 
         Connection.DeleteAll<Trigger>();
 

@@ -35,26 +35,6 @@
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:OnActionTableViewModel}">
-        <view:OnActionTableView />
-    </DataTemplate>
-
-    <DataTemplate
-        DataType="{x:Type viewmodel:OnActionDetailsViewModel}">
-        <view:OnActionDetailsView />
-    </DataTemplate>
-
-    <DataTemplate
-        DataType="{x:Type viewmodel:DecisionTableViewModel}">
-        <view:DecisionTableView />
-    </DataTemplate>
-
-    <DataTemplate
-        DataType="{x:Type viewmodel:DecisionDetailsViewModel}">
-        <view:DecisionDetailsView />
-    </DataTemplate>
-
-    <DataTemplate
         DataType="{x:Type viewmodel:TriggerTableViewModel}">
         <view:TriggerTableView />
     </DataTemplate>

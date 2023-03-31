@@ -84,22 +84,6 @@ public class MainViewModel : ObservableObject
         Navigation.Navigate<EventTableViewModel>();
     }
 
-    private RelayCommand? goToOnActionPageCommand;
-    public RelayCommand GoToOnActionPageCommand => goToOnActionPageCommand ??= new(GoToOnActionPage);
-
-    private void GoToOnActionPage()
-    {
-        Navigation.Navigate<OnActionTableViewModel>();
-    }
-
-    private RelayCommand? goToDecisionPageCommand;
-    public RelayCommand GoToDecisionPageCommand => goToDecisionPageCommand ??= new(GoToDecisionPage);
-
-    private void GoToDecisionPage()
-    {
-        Navigation.Navigate<DecisionTableViewModel>();
-    }
-
     private RelayCommand? goToTriggerPageCommand;
     public RelayCommand GoToTriggerPageCommand => goToTriggerPageCommand ??= new(GoToTriggerPage);
 
