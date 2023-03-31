@@ -6,17 +6,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
+    xmlns:formatters="clr-namespace:Paradoxical.Formatters"
+    xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance {x:Type viewmodel:TriggerTableViewModel}}"
     d:DesignHeight="450"
     d:DesignWidth="800">
-
-    <UserControl.InputBindings>
-        <KeyBinding
-            Command="{Binding FindCommand}"
-            Gesture="CTRL+F" />
-    </UserControl.InputBindings>
 
     <DockPanel>
 
@@ -65,12 +61,6 @@
                     GotFocus="TextBoxGotFocusHandler"
                     materialDesign:HintAssist.Hint="Filter Triggers ..."
                     materialDesign:TextFieldAssist.HasClearButton="True" />
-
-                <Button
-                    Margin="4,0"
-                    Command="{Binding FindCommand}"
-                    Content="{materialDesign:PackIcon Kind=Search}"
-                    ToolTip="Find Trigger" />
 
             </ToolBar>
         </ToolBarTray>

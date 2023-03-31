@@ -6,124 +6,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
-    xmlns:model="clr-namespace:Paradoxical.Model"
     xmlns:formatters="clr-namespace:Paradoxical.Formatters"
     xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    d:DataContext="{d:DesignInstance {x:Type viewmodel:EffectDetailsViewModel}}"
     mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance {x:Type viewmodel:EffectDetailsViewModel}}"
+    d:DesignHeight="450"
     d:DesignWidth="800">
 
-    <ScrollViewer
-        VerticalScrollBarVisibility="Hidden"
-        HorizontalScrollBarVisibility="Disabled">
-        <StackPanel>
-
-            <materialDesign:Card
-                Margin="20,10"
-                Padding="8,14"
-                materialDesign:ElevationAssist.Elevation="Dp4">
-                <Expander
-                    Padding="8"
-                    Header="General"
-                    IsExpanded="True">
-                    <StackPanel>
-
-                        <TextBox
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                            materialDesign:HintAssist.Hint="Name"
-                            materialDesign:HintAssist.HelperText="Element name, used in script.">
-
-                            <TextBox.Text>
-                                <Binding
-                                    Path="Name"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    FallbackValue="element_name">
-                                    <Binding.ValidationRules>
-                                        <rules:RequiredRule
-                                            ValidatesOnTargetUpdated="True" />
-                                        <rules:NameRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-
-                        </TextBox>
-
-                        <view:ScriptBox
-                            Height="120"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignRichTextBox}"
-                            materialDesign:HintAssist.Hint="Code"
-                            materialDesign:HintAssist.IsFloating="True"
-                            materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                            materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                            materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
-                            AcceptsReturn="True">
-
-                            <view:ScriptBox.TextFormatter>
-                                <formatters:CodeFormatter />
-                            </view:ScriptBox.TextFormatter>
-
-                            <view:ScriptBox.Text>
-                                <Binding
-                                    Path="Code"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    FallbackValue="# some code">
-                                    <Binding.ValidationRules>
-                                        <rules:RequiredRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </view:ScriptBox.Text>
-
-                        </view:ScriptBox>
-
-                        <Grid>
-
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition
-                                    Width="*" />
-                                <ColumnDefinition
-                                    Width="auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <view:ScriptBox
-                                Grid.Column="0"
-                                Margin="6,12"
-                                Style="{DynamicResource MaterialDesignRichTextBox}"
-                                Text="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                AcceptsReturn="False"
-                                materialDesign:HintAssist.Hint="Tooltip"
-                                materialDesign:HintAssist.IsFloating="True"
-                                materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated effect text."
-                                materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                                materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                                materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
-
-                                <view:ScriptBox.TextFormatter>
-                                    <formatters:EventTextFormatter />
-                                </view:ScriptBox.TextFormatter>
-
-                            </view:ScriptBox>
-
-                            <CheckBox
-                                Grid.Column="1"
-                                Margin="6,12"
-                                Content="Hidden"
-                                IsChecked="{Binding Hidden, FallbackValue=false, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                ToolTip="If an effect is hidden, the tooltip is ignored." />
-
-                        </Grid>
-
-                    </StackPanel>
-                </Expander>
-            </materialDesign:Card>
-
-        </StackPanel>
-    </ScrollViewer>
+    <DockPanel>
+    </DockPanel>
 
 </UserControl>

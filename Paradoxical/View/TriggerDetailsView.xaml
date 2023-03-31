@@ -9,15 +9,10 @@
     xmlns:formatters="clr-namespace:Paradoxical.Formatters"
     xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    d:DataContext="{d:DesignInstance {x:Type viewmodel:TriggerDetailsViewModel}}"
     mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance {x:Type viewmodel:TriggerDetailsViewModel}}"
+    d:DesignHeight="450"
     d:DesignWidth="800">
-
-    <UserControl.InputBindings>
-        <KeyBinding
-            Command="{Binding FindCommand}"
-            Gesture="CTRL+F" />
-    </UserControl.InputBindings>
 
     <DockPanel>
 
@@ -47,14 +42,6 @@
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=Remove}"
                     ToolTip="Delete Trigger" />
-
-                <Separator />
-
-                <Button
-                    Margin="4,0"
-                    Command="{Binding FindCommand}"
-                    Content="{materialDesign:PackIcon Kind=Search}"
-                    ToolTip="Find Trigger" />
 
             </ToolBar>
         </ToolBarTray>
