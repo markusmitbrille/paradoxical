@@ -1,14 +1,25 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
+using Paradoxical.View;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace Paradoxical.ViewModel;
 
-public class FinderViewModel : PopupViewModel
+public class FinderViewModel : ObservableObject
 {
+    private bool? dialogResult;
+    public bool? DialogResult
+    {
+        get => dialogResult;
+        set => SetProperty(ref dialogResult, value);
+    }
+
     private IEnumerable<IElementWrapper>? items;
     public IEnumerable<IElementWrapper> Items
     {
@@ -35,6 +46,11 @@ public class FinderViewModel : PopupViewModel
             SetProperty(ref selected, value);
             SubmitCommand.NotifyCanExecuteChanged();
         }
+    }
+
+    public async Task<object?> Show()
+    {
+        return await DialogHost.Show(this, MainWindow.ROOT_DIALOG_IDENTIFIER);
     }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -76,9 +92,37 @@ public class FinderViewModel : PopupViewModel
         return true;
     }
 
-    protected override bool CanSubmit()
+    private RelayCommand? submitCommand;
+    public RelayCommand SubmitCommand => submitCommand ??= new(Submit, CanSubmit);
+
+    private void Submit()
     {
-        return Selected != null;
+        DialogResult = true;
+
+        Close();
+    }
+    private bool CanSubmit()
+    {
+        return true;
+    }
+
+    private RelayCommand? cancelCommand;
+    public RelayCommand CancelCommand => cancelCommand ??= new(Cancel);
+
+    private void Cancel()
+    {
+        DialogResult = false;
+
+        Close();
+    }
+
+    private RelayCommand? closeCommand;
+    public RelayCommand CloseCommand => closeCommand ??= new(Close);
+
+    private void Close()
+    {
+        if (DialogHost.IsDialogOpen(MainWindow.ROOT_DIALOG_IDENTIFIER))
+        { DialogHost.Close(MainWindow.ROOT_DIALOG_IDENTIFIER); }
     }
 
     private RelayCommand? updateViewCommand;

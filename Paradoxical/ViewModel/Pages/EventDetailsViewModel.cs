@@ -270,7 +270,7 @@ public class EventDetailsViewModel : PageViewModel
         Finder.Items = TriggerService.Get()
             .Select(model => new TriggerViewModel() { Model = model });
 
-        await DialogHost.Show(Finder, Finder.DialogIdentifier);
+        await Finder.Show();
 
         if (Finder.DialogResult != true)
         { return; }
