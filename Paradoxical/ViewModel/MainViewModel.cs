@@ -1,8 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Paradoxical.Core;
 using Paradoxical.Messages;
+using Paradoxical.Model.Elements;
 using Paradoxical.Services;
-using System.Windows;
+using Paradoxical.Services.Elements;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Application = System.Windows.Application;
 
 namespace Paradoxical.ViewModel;
 
@@ -10,19 +16,32 @@ public class MainViewModel : ObservableObject
 {
     public NavigationViewModel Navigation { get; }
     public FinderViewModel Finder { get; }
+
     public IMediatorService Mediator { get; }
     public IFileService File { get; }
+
+    public IEventService EventService { get; }
+    public ITriggerService TriggerService { get; }
+    public IEffectService EffectService { get; }
 
     public MainViewModel(
         NavigationViewModel navigation,
         FinderViewModel finder,
         IMediatorService mediator,
-        IFileService file)
+        IFileService file,
+        IEventService eventService,
+        ITriggerService triggerService,
+        IEffectService effectService)
     {
         Navigation = navigation;
         Finder = finder;
+
         Mediator = mediator;
         File = file;
+
+        EventService = eventService;
+        TriggerService = triggerService;
+        EffectService = effectService;
     }
 
     private RelayCommand? newCommand;
@@ -66,6 +85,49 @@ public class MainViewModel : ObservableObject
     {
         Mediator.Send<ShutdownMessage>(new());
         Application.Current.Shutdown();
+    }
+
+    private AsyncRelayCommand? findCommand;
+    public AsyncRelayCommand FindCommand => findCommand ??= new(Find);
+
+    private async Task Find()
+    {
+        Finder.Items = Enumerable.Empty<IElementWrapper>()
+            .Union(EventService.Get().Select(model => new EventViewModel() { Model = model }))
+            .Union(TriggerService.Get().Select(model => new TriggerViewModel() { Model = model }))
+            .Union(EffectService.Get().Select(model => new EffectViewModel() { Model = model }));
+
+        Finder.Selected = null;
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        if (Finder.Selected is EventViewModel)
+        {
+            Event model = (Event)Finder.Selected.Model;
+
+            Navigation.Navigate<EventDetailsViewModel>();
+            Mediator.Send<SelectMessage>(new(model));
+        }
+        if (Finder.Selected is TriggerViewModel)
+        {
+            Trigger model = (Trigger)Finder.Selected.Model;
+
+            Navigation.Navigate<TriggerDetailsViewModel>();
+            Mediator.Send<SelectMessage>(new(model));
+        }
+        if (Finder.Selected is EffectViewModel)
+        {
+            Effect model = (Effect)Finder.Selected.Model;
+
+            Navigation.Navigate<EffectDetailsViewModel>();
+            Mediator.Send<SelectMessage>(new(model));
+        }
     }
 
     private RelayCommand? goToInfoPageCommand;

@@ -47,6 +47,9 @@
             Command="{Binding ExportCommand}"
             Gesture="CTRL+S" />
         <KeyBinding
+            Command="{Binding FindCommand}"
+            Gesture="CTRL+F" />
+        <KeyBinding
             Command="{Binding ExitCommand}"
             Gesture="ALT+F4" />
         <KeyBinding
