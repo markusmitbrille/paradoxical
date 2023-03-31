@@ -1,18 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Paradoxical.Core;
 using Paradoxical.Model.Elements;
 
 namespace Paradoxical.ViewModel;
 
-public partial class PortraitViewModel : ObservableObject
+public partial class PortraitViewModel : ModelWrapper<Portrait>
 {
-    private readonly Portrait model;
-    public Portrait Model => model;
-
-    public int Id
-    {
-        get => model.Id;
-    }
-
     public int EventId
     {
         get => model.eventId;
@@ -34,10 +26,5 @@ public partial class PortraitViewModel : ObservableObject
     {
         get => model.outfitTags;
         set => SetProperty(ref model.outfitTags, value);
-    }
-
-    public PortraitViewModel(Portrait model)
-    {
-        this.model = model;
     }
 }
