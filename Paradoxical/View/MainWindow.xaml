@@ -254,6 +254,13 @@
                                     Command="{Binding ExportAsCommand}" />
 
                                 <Separator />
+                              
+                                <MenuItem
+                                    Header="Find..."
+                                    Icon="{materialDesign:PackIcon Kind=Search}"
+                                    Command="{Binding FindCommand}" />
+
+                                <Separator />
 
                                 <MenuItem
                                     Header="About"
