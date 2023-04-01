@@ -23,11 +23,11 @@ public class EventTableViewModel : PageViewModel
 
     public IEventService EventService { get; }
 
-    private ObservableCollection<EventViewModel> wrappers = new();
-    public ObservableCollection<EventViewModel> Wrappers
+    private ObservableCollection<EventViewModel> items = new();
+    public ObservableCollection<EventViewModel> Items
     {
-        get => wrappers;
-        set => SetProperty(ref wrappers, value);
+        get => items;
+        set => SetProperty(ref items, value);
     }
 
     private EventViewModel? selected;
@@ -61,7 +61,7 @@ public class EventTableViewModel : PageViewModel
     {
         base.OnPropertyChanged(e);
 
-        if (e.PropertyName == nameof(Wrappers))
+        if (e.PropertyName == nameof(Items))
         {
             UpdateView();
             UpdateSelected();
@@ -98,7 +98,7 @@ public class EventTableViewModel : PageViewModel
         if (message.Model is not Event model)
         { return; }
 
-        Selected = Wrappers.SingleOrDefault(viewmodel => viewmodel.Model == model);
+        Selected = Items.SingleOrDefault(viewmodel => viewmodel.Model == model);
     }
 
     public void Handle(ShutdownMessage message)
@@ -108,15 +108,15 @@ public class EventTableViewModel : PageViewModel
 
     private void Load()
     {
-        Wrappers = new(EventService.Get().Select(model => new EventViewModel() { Model = model }));
+        Items = new(EventService.Get().Select(model => new EventViewModel() { Model = model }));
 
-        ICollectionView view = CollectionViewSource.GetDefaultView(Wrappers);
+        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
         view.Filter = Predicate;
     }
 
     private void Save()
     {
-        EventService.UpdateAll(Wrappers.Select(vm => vm.Model));
+        EventService.UpdateAll(Items.Select(vm => vm.Model));
     }
 
     private bool Predicate(object obj)
@@ -127,27 +127,30 @@ public class EventTableViewModel : PageViewModel
         if (string.IsNullOrEmpty(Filter) == true)
         { return true; }
 
-        if (ParadoxPattern.IdFilterRegex.FuzzyMatch(wrapper.Id.ToString(), Filter) == false)
-        { return false; }
+        // feature filters
 
-        if (ParadoxPattern.NameFilterRegex.FuzzyMatch(wrapper.Name, Filter) == false)
-        { return false; }
+        bool?[] features = new[]
+        {
+            ParadoxPattern.IdFilterRegex.ExactMatch(wrapper.Id.ToString(), Filter),
+            ParadoxPattern.NameFilterRegex.FuzzyMatch(wrapper.Name, Filter),
+            ParadoxPattern.TitleFilterRegex.FuzzyMatch(wrapper.Title, Filter),
+            ParadoxPattern.DescriptionFilterRegex.FuzzyMatch(wrapper.Description, Filter),
+        };
 
-        if (ParadoxPattern.TitleFilterRegex.FuzzyMatch(wrapper.Title, Filter) == false)
-        { return false; }
+        if (features.Any(res => res == true) && features.All(res => res != false))
+        { return true; }
 
-        if (ParadoxPattern.DescriptionFilterRegex.FuzzyMatch(wrapper.Description, Filter) == false)
-        { return false; }
+        // general filter
 
-        if (ParadoxPattern.FilterRegex.FuzzyMatch(wrapper.Name, Filter) == false)
-        { return false; }
+        if (ParadoxPattern.FilterRegex.FuzzyMatch(wrapper.Name, Filter) == true)
+        { return true; }
 
-        return true;
+        return false;
     }
 
     private void UpdateView()
     {
-        ICollectionView view = CollectionViewSource.GetDefaultView(Wrappers);
+        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
         view.Refresh();
     }
 
@@ -156,7 +159,7 @@ public class EventTableViewModel : PageViewModel
         if (Selected != null && Predicate(Selected) == true)
         { return; }
 
-        ICollectionView view = CollectionViewSource.GetDefaultView(Wrappers);
+        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
         Selected = view.Cast<EventViewModel>().FirstOrDefault();
     }
 
@@ -174,7 +177,7 @@ public class EventTableViewModel : PageViewModel
         EventService.Insert(model);
 
         EventViewModel observable = new() { Model = model };
-        Wrappers.Add(observable);
+        Items.Add(observable);
     }
 
     private RelayCommand<EventViewModel>? duplicateCommand;

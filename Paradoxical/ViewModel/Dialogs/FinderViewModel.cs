@@ -80,16 +80,24 @@ public class FinderViewModel : ObservableObject
         if (string.IsNullOrEmpty(Filter) == true)
         { return true; }
 
-        if (ParadoxPattern.TypeFilterRegex.FuzzyMatch(wrapper.Kind, Filter) == false)
-        { return false; }
+        // feature filters
 
-        if (ParadoxPattern.IdFilterRegex.ExactMatch(wrapper.Id.ToString(), Filter) == false)
-        { return false; }
+        bool?[] features = new[]
+        {
+            ParadoxPattern.IdFilterRegex.ExactMatch(wrapper.Id.ToString(), Filter),
+            ParadoxPattern.NameFilterRegex.FuzzyMatch(wrapper.Name, Filter),
+            ParadoxPattern.TypeFilterRegex.FuzzyMatch(wrapper.Kind, Filter),
+        };
 
-        if (ParadoxPattern.NameFilterRegex.FuzzyMatch(wrapper.Name, Filter) == false)
-        { return false; }
+        if (features.Any(res => res == true) && features.All(res => res != false))
+        { return true; }
 
-        return true;
+        // general filter
+
+        if (ParadoxPattern.FilterRegex.FuzzyMatch(wrapper.Name, Filter) == true)
+        { return true; }
+
+        return false;
     }
 
     private RelayCommand? submitCommand;

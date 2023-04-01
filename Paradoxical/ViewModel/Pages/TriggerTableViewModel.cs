@@ -22,11 +22,11 @@ public class TriggerTableViewModel : PageViewModel
 
     public ITriggerService TriggerService { get; }
 
-    private ObservableCollection<TriggerViewModel> wrappers = new();
-    public ObservableCollection<TriggerViewModel> Wrappers
+    private ObservableCollection<TriggerViewModel> items = new();
+    public ObservableCollection<TriggerViewModel> Items
     {
-        get => wrappers;
-        set => SetProperty(ref wrappers, value);
+        get => items;
+        set => SetProperty(ref items, value);
     }
 
     private TriggerViewModel? selected;
@@ -60,7 +60,7 @@ public class TriggerTableViewModel : PageViewModel
     {
         base.OnPropertyChanged(e);
 
-        if (e.PropertyName == nameof(Wrappers))
+        if (e.PropertyName == nameof(Items))
         {
             UpdateView();
             UpdateSelected();
@@ -97,15 +97,15 @@ public class TriggerTableViewModel : PageViewModel
 
     private void Load()
     {
-        Wrappers = new(TriggerService.Get().Select(model => new TriggerViewModel() { Model = model }));
+        Items = new(TriggerService.Get().Select(model => new TriggerViewModel() { Model = model }));
 
-        ICollectionView view = CollectionViewSource.GetDefaultView(Wrappers);
+        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
         view.Filter = Predicate;
     }
 
     private void Save()
     {
-        TriggerService.UpdateAll(Wrappers.Select(vm => vm.Model));
+        TriggerService.UpdateAll(Items.Select(vm => vm.Model));
     }
 
     private bool Predicate(object obj)
@@ -116,17 +116,20 @@ public class TriggerTableViewModel : PageViewModel
         if (string.IsNullOrEmpty(Filter) == true)
         { return true; }
 
-        if (ParadoxPattern.IdFilterRegex.FuzzyMatch(wrapper.Id.ToString(), Filter) == true)
+        // feature filters
+
+        bool?[] features = new[]
+        {
+            ParadoxPattern.IdFilterRegex.ExactMatch(wrapper.Id.ToString(), Filter),
+            ParadoxPattern.NameFilterRegex.FuzzyMatch(wrapper.Name, Filter),
+            ParadoxPattern.CodeFilterRegex.FuzzyMatch(wrapper.Code, Filter),
+            ParadoxPattern.TooltipFilterRegex.FuzzyMatch(wrapper.Tooltip, Filter),
+        };
+
+        if (features.Any(res => res == true) && features.All(res => res != false))
         { return true; }
 
-        if (ParadoxPattern.NameFilterRegex.FuzzyMatch(wrapper.Name, Filter) == true)
-        { return true; }
-
-        if (ParadoxPattern.CodeFilterRegex.FuzzyMatch(wrapper.Code, Filter) == true)
-        { return true; }
-
-        if (ParadoxPattern.TooltipFilterRegex.FuzzyMatch(wrapper.Tooltip, Filter) == true)
-        { return true; }
+        // general filter
 
         if (ParadoxPattern.FilterRegex.FuzzyMatch(wrapper.Name, Filter) == true)
         { return true; }
@@ -136,7 +139,7 @@ public class TriggerTableViewModel : PageViewModel
 
     private void UpdateView()
     {
-        ICollectionView view = CollectionViewSource.GetDefaultView(Wrappers);
+        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
         view.Refresh();
     }
 
@@ -145,7 +148,7 @@ public class TriggerTableViewModel : PageViewModel
         if (Selected != null && Predicate(Selected) == true)
         { return; }
 
-        ICollectionView view = CollectionViewSource.GetDefaultView(Wrappers);
+        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
         Selected = view.Cast<TriggerViewModel>().FirstOrDefault();
     }
 
@@ -162,7 +165,7 @@ public class TriggerTableViewModel : PageViewModel
         TriggerService.Insert(model);
 
         TriggerViewModel observable = new() { Model = model };
-        Wrappers.Add(observable);
+        Items.Add(observable);
     }
 
     private RelayCommand<TriggerViewModel>? duplicateCommand;
@@ -191,7 +194,7 @@ public class TriggerTableViewModel : PageViewModel
 
         TriggerService.Delete(observable.Model);
 
-        Wrappers.Remove(observable);
+        Items.Remove(observable);
     }
     private bool CanDelete(TriggerViewModel? observable)
     {

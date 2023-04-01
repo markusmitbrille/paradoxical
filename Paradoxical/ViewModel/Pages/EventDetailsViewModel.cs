@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
 using Paradoxical.Extensions;
 using Paradoxical.Messages;
@@ -26,6 +25,7 @@ public class EventDetailsViewModel : PageViewModel
     public IEventService EventService { get; }
     public IOptionService OptionService { get; }
     public ITriggerService TriggerService { get; }
+    public IEffectService EffectService { get; }
 
     private EventViewModel? selected;
     public EventViewModel? Selected
@@ -52,7 +52,8 @@ public class EventDetailsViewModel : PageViewModel
         IMediatorService mediator,
         IEventService eventService,
         IOptionService optionService,
-        ITriggerService triggerService)
+        ITriggerService triggerService,
+        IEffectService effectService)
         : base(navigation)
     {
         Finder = finder;
@@ -62,6 +63,7 @@ public class EventDetailsViewModel : PageViewModel
         EventService = eventService;
         OptionService = optionService;
         TriggerService = triggerService;
+        EffectService = effectService;
     }
 
     protected override void OnNavigatedTo()

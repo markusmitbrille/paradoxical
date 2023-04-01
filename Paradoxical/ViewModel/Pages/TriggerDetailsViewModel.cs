@@ -78,8 +78,8 @@ public class TriggerDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
-        Trigger model = TriggerService.Get(Selected.Model);
-        Selected = new() { Model = model };
+        Trigger selected = TriggerService.Get(Selected.Model);
+        Selected = new() { Model = selected };
     }
 
     private void Save()

@@ -70,7 +70,7 @@
             Margin="20"
             BorderBrush="Gray"
             BorderThickness="1"
-            ItemsSource="{Binding Events}"
+            ItemsSource="{Binding Items}"
             SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectionMode="Single"
             SelectionUnit="FullRow"

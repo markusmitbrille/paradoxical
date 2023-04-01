@@ -44,7 +44,7 @@ public static partial class ParadoxPattern
     /// <param name="text">Text value that is evaluated against a target value extracted from <paramref name="filter"/>.</param>
     /// <param name="filter">Filter text used to determine whether <paramref name="text"/> meets some condition.</param>
     /// <param name="ratio">Fuzziness ratio; more means more exact, less means more fuzzy.</param>
-    /// <returns><c>true</c> if <paramref name="text"/> to target value partial ratio is greater than <paramref name="ratio"/>, otherwise <c>false</c>.
+    /// <returns><c>true</c> if <paramref name="text"/> to <paramref name="filter"/> partial ratio is greater than <paramref name="ratio"/>, otherwise <c>false</c>.
     /// <c>Null</c> if <paramref name="filter"/> does not match <paramref name="regex"/>.
     /// </returns>
     public static bool? FuzzyMatch(this Regex regex, string text, string filter, int ratio = 80)
@@ -66,7 +66,7 @@ public static partial class ParadoxPattern
     /// <param name="text">Text value that is evaluated against a target value extracted from <paramref name="filter"/>.</param>
     /// <param name="filter">Filter text used to determine whether <paramref name="text"/> meets some condition.</param>
     /// <param name="ratio">Fuzziness ratio; more means more exact, less means more fuzzy.</param>
-    /// <returns><c>true</c> if <paramref name="text"/> equals target value, otherwise <c>false</c>.
+    /// <returns><c>true</c> if <paramref name="text"/> equals <paramref name="filter"/>, otherwise <c>false</c>.
     /// <c>Null</c> if <paramref name="filter"/> does not match <paramref name="regex"/>.
     /// </returns>
     public static bool? ExactMatch(this Regex regex, string text, string filter)
