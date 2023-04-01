@@ -100,6 +100,9 @@ public class EventDetailsViewModel : PageViewModel
         Save();
     }
 
+    private RelayCommand? loadCommand;
+    public RelayCommand LoadCommand => loadCommand ??= new(Load);
+
     private void Load()
     {
         if (Selected == null)
@@ -133,6 +136,9 @@ public class EventDetailsViewModel : PageViewModel
         Afters.Clear();
         Afters.AddRange(afters);
     }
+
+    private RelayCommand? saveCommand;
+    public RelayCommand SaveCommand => saveCommand ??= new(Save);
 
     private void Save()
     {

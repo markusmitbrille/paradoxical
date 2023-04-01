@@ -106,6 +106,9 @@ public class EventTableViewModel : PageViewModel
         Save();
     }
 
+    private RelayCommand? loadCommand;
+    public RelayCommand LoadCommand => loadCommand ??= new(Load);
+
     private void Load()
     {
         Items = new(EventService.Get().Select(model => new EventViewModel() { Model = model }));
@@ -113,6 +116,9 @@ public class EventTableViewModel : PageViewModel
         ICollectionView view = CollectionViewSource.GetDefaultView(Items);
         view.Filter = Predicate;
     }
+
+    private RelayCommand? saveCommand;
+    public RelayCommand SaveCommand => saveCommand ??= new(Save);
 
     private void Save()
     {

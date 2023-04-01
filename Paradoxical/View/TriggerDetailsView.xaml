@@ -43,6 +43,20 @@
                     Content="{materialDesign:PackIcon Kind=Remove}"
                     ToolTip="Delete Trigger" />
 
+                <Separator />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding SaveCommand}"
+                    Content="{materialDesign:PackIcon Kind=ContentSave}"
+                    ToolTip="Apply" />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding LoadCommand}"
+                    Content="{materialDesign:PackIcon Kind=Refresh}"
+                    ToolTip="Refresh" />
+
             </ToolBar>
         </ToolBarTray>
 

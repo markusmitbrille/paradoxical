@@ -106,6 +106,9 @@ public class TriggerTableViewModel : PageViewModel
         Save();
     }
 
+    private RelayCommand? loadCommand;
+    public RelayCommand LoadCommand => loadCommand ??= new(Load);
+
     private void Load()
     {
         Items = new(TriggerService.Get().Select(model => new TriggerViewModel() { Model = model }));
@@ -113,6 +116,9 @@ public class TriggerTableViewModel : PageViewModel
         ICollectionView view = CollectionViewSource.GetDefaultView(Items);
         view.Filter = Predicate;
     }
+
+    private RelayCommand? saveCommand;
+    public RelayCommand SaveCommand => saveCommand ??= new(Save);
 
     private void Save()
     {

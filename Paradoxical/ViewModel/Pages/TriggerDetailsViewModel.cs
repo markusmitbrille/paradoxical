@@ -73,6 +73,9 @@ public class TriggerDetailsViewModel : PageViewModel
         Save();
     }
 
+    private RelayCommand? loadCommand;
+    public RelayCommand LoadCommand => loadCommand ??= new(Load);
+
     private void Load()
     {
         if (Selected == null)
@@ -81,6 +84,9 @@ public class TriggerDetailsViewModel : PageViewModel
         Trigger selected = TriggerService.Get(Selected.Model);
         Selected = new() { Model = selected };
     }
+
+    private RelayCommand? saveCommand;
+    public RelayCommand SaveCommand => saveCommand ??= new(Save);
 
     private void Save()
     {
