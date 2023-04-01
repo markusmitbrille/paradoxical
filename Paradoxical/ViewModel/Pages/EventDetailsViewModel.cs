@@ -14,7 +14,7 @@ namespace Paradoxical.ViewModel;
 
 public class EventDetailsViewModel : PageViewModel
     , IMessageHandler<SelectMessage>
-    , IMessageHandler<ShutdownMessage>
+    , IMessageHandler<SaveMessage>
 {
     public override string PageName => "Event Details";
 
@@ -73,7 +73,7 @@ public class EventDetailsViewModel : PageViewModel
         Load();
 
         Mediator.Register<SelectMessage>(this);
-        Mediator.Register<ShutdownMessage>(this);
+        Mediator.Register<SaveMessage>(this);
     }
 
     protected override void OnNavigatingFrom()
@@ -83,10 +83,10 @@ public class EventDetailsViewModel : PageViewModel
         Save();
 
         Mediator.Unregister<SelectMessage>(this);
-        Mediator.Unregister<ShutdownMessage>(this);
+        Mediator.Unregister<SaveMessage>(this);
     }
 
-    public void Handle(SelectMessage message)
+    void IMessageHandler<SelectMessage>.Handle(SelectMessage message)
     {
         if (message.Model is not Event model)
         { return; }
@@ -95,7 +95,7 @@ public class EventDetailsViewModel : PageViewModel
         Selected = new() { Model = selected };
     }
 
-    public void Handle(ShutdownMessage message)
+    void IMessageHandler<SaveMessage>.Handle(SaveMessage message)
     {
         Save();
     }

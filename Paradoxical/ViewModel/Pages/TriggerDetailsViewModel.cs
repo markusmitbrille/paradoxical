@@ -10,7 +10,7 @@ namespace Paradoxical.ViewModel;
 
 public class TriggerDetailsViewModel : PageViewModel
     , IMessageHandler<SelectMessage>
-    , IMessageHandler<ShutdownMessage>
+    , IMessageHandler<SaveMessage>
 {
     public override string PageName => "Trigger Details";
 
@@ -46,7 +46,7 @@ public class TriggerDetailsViewModel : PageViewModel
         Load();
 
         Mediator.Register<SelectMessage>(this);
-        Mediator.Register<ShutdownMessage>(this);
+        Mediator.Register<SaveMessage>(this);
     }
 
     protected override void OnNavigatingFrom()
@@ -56,10 +56,10 @@ public class TriggerDetailsViewModel : PageViewModel
         Save();
 
         Mediator.Unregister<SelectMessage>(this);
-        Mediator.Unregister<ShutdownMessage>(this);
+        Mediator.Unregister<SaveMessage>(this);
     }
 
-    public void Handle(SelectMessage message)
+    void IMessageHandler<SelectMessage>.Handle(SelectMessage message)
     {
         if (message.Model is not Trigger model)
         { return; }
@@ -68,7 +68,7 @@ public class TriggerDetailsViewModel : PageViewModel
         Selected = new() { Model = selected };
     }
 
-    public void Handle(ShutdownMessage message)
+    void IMessageHandler<SaveMessage>.Handle(SaveMessage message)
     {
         Save();
     }

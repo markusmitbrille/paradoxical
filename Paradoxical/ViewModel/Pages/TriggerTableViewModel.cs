@@ -13,7 +13,8 @@ using System.Windows.Data;
 namespace Paradoxical.ViewModel;
 
 public class TriggerTableViewModel : PageViewModel
-    , IMessageHandler<ShutdownMessage>
+    , IMessageHandler<SelectMessage>
+    , IMessageHandler<SaveMessage>
 {
     public override string PageName => "Triggers";
 
@@ -78,7 +79,8 @@ public class TriggerTableViewModel : PageViewModel
 
         Load();
 
-        Mediator.Register<ShutdownMessage>(this);
+        Mediator.Register<SelectMessage>(this);
+        Mediator.Register<SaveMessage>(this);
     }
 
     protected override void OnNavigatingFrom()
@@ -87,10 +89,19 @@ public class TriggerTableViewModel : PageViewModel
 
         Save();
 
-        Mediator.Unregister<ShutdownMessage>(this);
+        Mediator.Unregister<SelectMessage>(this);
+        Mediator.Unregister<SaveMessage>(this);
     }
 
-    public void Handle(ShutdownMessage message)
+    void IMessageHandler<SelectMessage>.Handle(SelectMessage message)
+    {
+        if (message.Model is not Trigger model)
+        { return; }
+
+        Selected = Items.SingleOrDefault(viewmodel => viewmodel.Model == model);
+    }
+
+    void IMessageHandler<SaveMessage>.Handle(SaveMessage message)
     {
         Save();
     }

@@ -92,6 +92,8 @@ public class MainViewModel : ObservableObject
 
     private async Task Find()
     {
+        Mediator.Send<SaveMessage>(new());
+
         Finder.Items = Enumerable.Empty<IElementWrapper>()
             .Union(EventService.Get().Select(model => new EventViewModel() { Model = model }))
             .Union(TriggerService.Get().Select(model => new TriggerViewModel() { Model = model }))
