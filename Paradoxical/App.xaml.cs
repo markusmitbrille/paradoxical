@@ -41,10 +41,7 @@ public partial class App : Application
 
         // main window and view model
         services.AddSingleton<MainViewModel>();
-        services.AddSingleton<MainWindow>(provider => new()
-        {
-            DataContext = provider.GetRequiredService<MainViewModel>(),
-        });
+        services.AddSingleton<MainWindow>();
 
         // finder view model
         services.AddTransient<FinderViewModel>();

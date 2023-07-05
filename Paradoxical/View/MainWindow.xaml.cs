@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using Paradoxical.ViewModel;
+using System.Windows.Input;
 
 namespace Paradoxical.View;
 
@@ -6,9 +7,10 @@ public partial class MainWindow
 {
     public const string ROOT_DIALOG_IDENTIFIER = "RootDialog";
 
-    public MainWindow()
+    public MainWindow(MainViewModel viewmodel)
     {
         InitializeComponent();
+        DataContext = viewmodel;
     }
 
     private void DragWindowMouseDownHandler(object sender, MouseButtonEventArgs e)
