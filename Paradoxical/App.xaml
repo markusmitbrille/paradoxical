@@ -15,9 +15,9 @@
                 <ResourceDictionary
                     Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <!--#endregion-->
-                <!--#region Navigation -->
+                <!--#region Data Templates -->
                 <ResourceDictionary
-                    Source="Navigation.xaml" />
+                    Source="DataTemplates.xaml" />
                 <!--#endregion-->
                 <!--#region Styles -->
                 <ResourceDictionary
