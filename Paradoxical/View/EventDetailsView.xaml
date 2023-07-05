@@ -53,7 +53,7 @@
 
                 <Button
                     Margin="4,0"
-                    Command="{Binding LoadCommand}"
+                    Command="{Binding ReloadCommand}"
                     Content="{materialDesign:PackIcon Kind=Refresh}"
                     ToolTip="Refresh" />
 
@@ -354,9 +354,9 @@
                         DockPanel.Dock="Bottom"
                         Margin="8"
                         Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
-                        Command="{Binding AddOptionCommand}"
+                        Command="{Binding CreateOptionCommand}"
                         Content="{materialDesign:PackIcon Kind=PlaylistAdd}"
-                        ToolTip="Add Option" />
+                        ToolTip="Create Option" />
 
                     <ItemsControl
                         MinHeight="100"
@@ -651,7 +651,7 @@
 
                             <ItemsControl
                                 Margin="0,-4"
-                                ItemsSource="{Binding ImmediateEffects}">
+                                ItemsSource="{Binding Immediates}">
 
                                 <ItemsControl.Style>
                                     <Style
@@ -708,7 +708,7 @@
                                                 Margin="4"
                                                 Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                 materialDesign:ElevationAssist.Elevation="Dp3"
-                                                Command="{Binding DataContext.GoToElementCommand, RelativeSource={RelativeSource AncestorType=view:MainWindow}}"
+                                                Command="{Binding DataContext.FindImmediateCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                 CommandParameter="{Binding}"
                                                 Content="{materialDesign:PackIcon Kind=ArrowRight}"
                                                 ToolTip="Go to Effect" />
@@ -720,7 +720,7 @@
                                                 Margin="4"
                                                 Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                 materialDesign:ElevationAssist.Elevation="Dp3"
-                                                Command="{Binding DataContext.RemoveImmediateEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                Command="{Binding DataContext.RemoveImmediateCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                 CommandParameter="{Binding}"
                                                 Content="{materialDesign:PackIcon Kind=Remove}"
                                                 ToolTip="Remove Effect" />
@@ -750,9 +750,9 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                 materialDesign:ElevationAssist.Elevation="Dp3"
-                                Command="{Binding FindImmediateEffectCommand}"
+                                Command="{Binding AddImmediateCommand}"
                                 Content="{materialDesign:PackIcon Kind=Search}"
-                                ToolTip="Find Effect" />
+                                ToolTip="Add Effect" />
 
                             <Button
                                 Width="25"
@@ -760,7 +760,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                 materialDesign:ElevationAssist.Elevation="Dp3"
-                                Command="{Binding CreateImmediateEffectCommand}"
+                                Command="{Binding CreateImmediateCommand}"
                                 Content="{materialDesign:PackIcon Kind=Add}"
                                 ToolTip="Create Effect" />
 
@@ -820,7 +820,7 @@
 
                             <ItemsControl
                                 Margin="0,-4"
-                                ItemsSource="{Binding AfterEffects}">
+                                ItemsSource="{Binding Afters}">
 
                                 <ItemsControl.Style>
                                     <Style
@@ -877,7 +877,7 @@
                                                 Margin="4"
                                                 Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                 materialDesign:ElevationAssist.Elevation="Dp3"
-                                                Command="{Binding DataContext.GoToElementCommand, RelativeSource={RelativeSource AncestorType=view:MainWindow}}"
+                                                Command="{Binding DataContext.FindAfterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                 CommandParameter="{Binding}"
                                                 Content="{materialDesign:PackIcon Kind=ArrowRight}"
                                                 ToolTip="Go to Effect" />
@@ -889,7 +889,7 @@
                                                 Margin="4"
                                                 Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                 materialDesign:ElevationAssist.Elevation="Dp3"
-                                                Command="{Binding DataContext.RemoveAfterEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                Command="{Binding DataContext.RemoveAfterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                 CommandParameter="{Binding}"
                                                 Content="{materialDesign:PackIcon Kind=Remove}"
                                                 ToolTip="Remove Effect" />
@@ -919,9 +919,9 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                 materialDesign:ElevationAssist.Elevation="Dp3"
-                                Command="{Binding FindAfterEffectCommand}"
+                                Command="{Binding AddAfterCommand}"
                                 Content="{materialDesign:PackIcon Kind=Search}"
-                                ToolTip="Find Effect" />
+                                ToolTip="Add Effect" />
 
                             <Button
                                 Width="25"
@@ -929,7 +929,7 @@
                                 Margin="4"
                                 Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                 materialDesign:ElevationAssist.Elevation="Dp3"
-                                Command="{Binding CreateAfterEffectCommand}"
+                                Command="{Binding CreateAfterCommand}"
                                 Content="{materialDesign:PackIcon Kind=Add}"
                                 ToolTip="Create Effect" />
 

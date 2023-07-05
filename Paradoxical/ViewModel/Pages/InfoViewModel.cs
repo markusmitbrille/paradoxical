@@ -9,8 +9,11 @@ public class InfoViewModel : PageViewModel
 
     public IDataService Data { get; }
 
-    public InfoViewModel(NavigationViewModel navigation, IDataService data)
-        : base(navigation)
+    public InfoViewModel(
+        IShell shell,
+        IMediatorService mediator,
+        IDataService data)
+        : base(shell, mediator)
     {
         Data = data;
     }

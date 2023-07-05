@@ -5,17 +5,26 @@ using Paradoxical.Services.Elements;
 using Paradoxical.Services.Entities;
 using Paradoxical.View;
 using Paradoxical.ViewModel;
+using System;
 using System.Windows;
 
 namespace Paradoxical;
 
 public partial class App : Application
 {
-    private ServiceProvider serviceProvider;
+    private ServiceProvider ServiceProvider { get; }
 
     public App()
     {
         ServiceCollection services = new();
+
+        // service provider
+        // only shell should use this
+        services.AddTransient(provider => provider);
+
+        // main window and shell
+        services.AddSingleton<IShell, Shell>();
+        services.AddSingleton<MainWindow>();
 
         // general services
         services.AddSingleton<IBuildService, BuildService>();
@@ -33,42 +42,32 @@ public partial class App : Application
         services.AddSingleton<ITriggerService, TriggerService>();
         services.AddSingleton<IEffectService, EffectService>();
 
-        // navigation view model
-        services.AddSingleton<NavigationViewModel>();
-
-        // page factory for navigation service
-        services.AddTransient<PageFactory>(provider => pageType => (PageViewModel)provider.GetRequiredService(pageType));
-
-        // main window and view model
-        services.AddSingleton<MainViewModel>();
-        services.AddSingleton<MainWindow>();
-
         // finder view model
         services.AddTransient<FinderViewModel>();
 
-        // page view models
+        // misc page view models
         services.AddSingleton<AboutViewModel>();
         services.AddSingleton<InfoViewModel>();
 
         // details page view models
         services.AddTransient<EventDetailsViewModel>();
-        services.AddTransient<OptionDetailsViewModel>();
         services.AddTransient<TriggerDetailsViewModel>();
         services.AddTransient<EffectDetailsViewModel>();
+        services.AddTransient<OptionDetailsViewModel>();
 
         // table page view models
         services.AddSingleton<EventTableViewModel>();
         services.AddSingleton<TriggerTableViewModel>();
         services.AddSingleton<EffectTableViewModel>();
 
-        serviceProvider = services.BuildServiceProvider();
+        ServiceProvider = services.BuildServiceProvider();
     }
 
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
 
-        MainWindow main = serviceProvider.GetRequiredService<MainWindow>();
+        MainWindow main = ServiceProvider.GetRequiredService<MainWindow>();
         main.Show();
     }
 
@@ -77,6 +76,6 @@ public partial class App : Application
         base.OnExit(e);
 
         // dispose of the service provider
-        serviceProvider.Dispose();
+        ServiceProvider.Dispose();
     }
 }

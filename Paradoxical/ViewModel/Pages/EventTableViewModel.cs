@@ -13,13 +13,9 @@ using System.Windows.Data;
 namespace Paradoxical.ViewModel;
 
 public class EventTableViewModel : PageViewModel
-    , IMessageHandler<SelectMessage>
     , IMessageHandler<SaveMessage>
 {
     public override string PageName => "Events";
-
-    public FinderViewModel Finder { get; }
-    public IMediatorService Mediator { get; }
 
     public IEventService EventService { get; }
 
@@ -45,15 +41,11 @@ public class EventTableViewModel : PageViewModel
     }
 
     public EventTableViewModel(
-        NavigationViewModel navigation,
-        FinderViewModel finder,
+        IShell shell,
         IMediatorService mediator,
         IEventService triggerService)
-        : base(navigation)
+        : base(shell, mediator)
     {
-        Finder = finder;
-        Mediator = mediator;
-
         EventService = triggerService;
     }
 
@@ -75,30 +67,16 @@ public class EventTableViewModel : PageViewModel
 
     protected override void OnNavigatedTo()
     {
-        base.OnNavigatedTo();
-
         Load();
 
-        Mediator.Register<SelectMessage>(this);
         Mediator.Register<SaveMessage>(this);
     }
 
     protected override void OnNavigatingFrom()
     {
-        base.OnNavigatingFrom();
-
         Save();
 
-        Mediator.Unregister<SelectMessage>(this);
         Mediator.Unregister<SaveMessage>(this);
-    }
-
-    void IMessageHandler<SelectMessage>.Handle(SelectMessage message)
-    {
-        if (message.Model is not Event model)
-        { return; }
-
-        Selected = Items.SingleOrDefault(viewmodel => viewmodel.Model == model);
     }
 
     void IMessageHandler<SaveMessage>.Handle(SaveMessage message)
@@ -226,9 +204,9 @@ public class EventTableViewModel : PageViewModel
         { return; }
 
         var model = observable.Model;
-
-        Navigation.Navigate<EventDetailsViewModel>();
-        Mediator.Send<SelectMessage>(new(model));
+       
+        var page = Shell.Navigate<EventDetailsViewModel>();
+        page.Load(model);
     }
     private bool CanEdit(EventViewModel? observable)
     {

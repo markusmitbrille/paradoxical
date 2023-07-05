@@ -13,14 +13,11 @@ using System.Threading.Tasks;
 namespace Paradoxical.ViewModel;
 
 public class EventDetailsViewModel : PageViewModel
-    , IMessageHandler<SelectMessage>
     , IMessageHandler<SaveMessage>
 {
     public override string PageName => "Event Details";
 
     public FinderViewModel Finder { get; }
-
-    public IMediatorService Mediator { get; }
 
     public IEventService EventService { get; }
     public IOptionService OptionService { get; }
@@ -47,18 +44,16 @@ public class EventDetailsViewModel : PageViewModel
     public ObservableCollection<EffectViewModel> Afters => afters ??= new();
 
     public EventDetailsViewModel(
-        NavigationViewModel navigation,
-        FinderViewModel finder,
+        IShell shell,
         IMediatorService mediator,
+        FinderViewModel finder,
         IEventService eventService,
         IOptionService optionService,
         ITriggerService triggerService,
         IEffectService effectService)
-        : base(navigation)
+        : base(shell, mediator)
     {
         Finder = finder;
-
-        Mediator = mediator;
 
         EventService = eventService;
         OptionService = optionService;
@@ -68,31 +63,16 @@ public class EventDetailsViewModel : PageViewModel
 
     protected override void OnNavigatedTo()
     {
-        base.OnNavigatedTo();
+        Reload();
 
-        Load();
-
-        Mediator.Register<SelectMessage>(this);
         Mediator.Register<SaveMessage>(this);
     }
 
     protected override void OnNavigatingFrom()
     {
-        base.OnNavigatingFrom();
-
         Save();
 
-        Mediator.Unregister<SelectMessage>(this);
         Mediator.Unregister<SaveMessage>(this);
-    }
-
-    void IMessageHandler<SelectMessage>.Handle(SelectMessage message)
-    {
-        if (message.Model is not Event model)
-        { return; }
-
-        var selected = EventService.Get(model);
-        Selected = new() { Model = selected };
     }
 
     void IMessageHandler<SaveMessage>.Handle(SaveMessage message)
@@ -100,15 +80,9 @@ public class EventDetailsViewModel : PageViewModel
         Save();
     }
 
-    private RelayCommand? loadCommand;
-    public RelayCommand LoadCommand => loadCommand ??= new(Load);
-
-    private void Load()
+    public void Load(Event model)
     {
-        if (Selected == null)
-        { return; }
-
-        var selected = EventService.Get(Selected.Model);
+        var selected = EventService.Get(model);
 
         var options = EventService.GetOptions(selected)
             .Select(model => new OptionViewModel() { Model = model });
@@ -137,8 +111,23 @@ public class EventDetailsViewModel : PageViewModel
         Afters.AddRange(afters);
     }
 
+    private RelayCommand? reloadCommand;
+    public RelayCommand ReloadCommand => reloadCommand ??= new(Reload, CanReload);
+
+    private void Reload()
+    {
+        if (Selected == null)
+        { return; }
+
+        Load(Selected.Model);
+    }
+    private bool CanReload()
+    {
+        return Selected != null;
+    }
+
     private RelayCommand? saveCommand;
-    public RelayCommand SaveCommand => saveCommand ??= new(Save);
+    public RelayCommand SaveCommand => saveCommand ??= new(Save, CanSave);
 
     private void Save()
     {
@@ -147,17 +136,16 @@ public class EventDetailsViewModel : PageViewModel
 
         EventService.Update(Selected.Model);
     }
+    public bool CanSave()
+    {
+        return Selected != null;
+    }
 
     private RelayCommand? createCommand;
     public RelayCommand CreateCommand => createCommand ??= new(Create);
 
     private void Create()
     {
-        if (Selected != null)
-        {
-            Navigation.Navigate<EventDetailsViewModel>();
-        }
-
         Event model = new()
         {
             Name = $"evt_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
@@ -166,7 +154,9 @@ public class EventDetailsViewModel : PageViewModel
         };
 
         EventService.Insert(model);
-        Mediator.Send<SelectMessage>(new(model));
+
+        var page = Shell.Navigate<EventDetailsViewModel>();
+        page.Load(model);
     }
 
     private RelayCommand? duplicateCommand;
@@ -177,12 +167,12 @@ public class EventDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
-        Navigation.Navigate<EventDetailsViewModel>();
-
         Event model = new(Selected.Model);
 
         EventService.Insert(model);
-        Mediator.Send<SelectMessage>(new(model));
+
+        var page = Shell.Navigate<EventDetailsViewModel>();
+        page.Load(model);
     }
 
     private RelayCommand? deleteCommand;
@@ -195,6 +185,8 @@ public class EventDetailsViewModel : PageViewModel
 
         EventService.Delete(Selected.Model);
     }
+    
+    #region Option Commands
 
     private RelayCommand? createOptionCommand;
     public RelayCommand CreateOptionCommand => createOptionCommand ??= new(CreateOption);
@@ -239,13 +231,17 @@ public class EventDetailsViewModel : PageViewModel
 
         Option model = observable.Model;
 
-        Navigation.Navigate<OptionDetailsViewModel>();
-        Mediator.Send<SelectMessage>(new(model));
+        var page = Shell.Navigate<OptionDetailsViewModel>();
+        page.Load(model);
     }
     private bool CanFindOption(OptionViewModel? observable)
     {
         return observable != null;
     }
+
+    #endregion
+
+    #region Trigger Commands
 
     private RelayCommand? createTriggerCommand;
     public RelayCommand CreateTriggerCommand => createTriggerCommand ??= new(CreateTrigger);
@@ -256,7 +252,11 @@ public class EventDetailsViewModel : PageViewModel
         { return; }
 
         Event owner = Selected.Model;
-        Trigger relation = new();
+        Trigger relation = new()
+        {
+            Name = $"trg_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
+            Code = "# some trigger",
+        };
 
         TriggerService.Insert(relation);
         EventService.AddTrigger(owner, relation);
@@ -323,11 +323,197 @@ public class EventDetailsViewModel : PageViewModel
 
         Trigger model = observable.Model;
 
-        Navigation.Navigate<TriggerDetailsViewModel>();
-        Mediator.Send<SelectMessage>(new(model));
+        var page = Shell.Navigate<TriggerDetailsViewModel>();
+        page.Load(model);
     }
     private bool CanFindTrigger(TriggerViewModel? observable)
     {
         return observable != null;
     }
+
+    #endregion
+
+    #region Immediate Commands
+
+    private RelayCommand? createImmediateCommand;
+    public RelayCommand CreateImmediateCommand => createImmediateCommand ??= new(CreateImmediate);
+
+    private void CreateImmediate()
+    {
+        if (Selected == null)
+        { return; }
+
+        Event owner = Selected.Model;
+        Effect relation = new()
+        {
+            Name = $"eff_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
+            Code = "# some effect",
+        };
+
+        EffectService.Insert(relation);
+        EventService.AddImmediate(owner, relation);
+
+        EffectViewModel observable = new() { Model = relation };
+        Immediates.Add(observable);
+    }
+
+    private AsyncRelayCommand? addImmediateCommand;
+    public AsyncRelayCommand AddImmediateCommand => addImmediateCommand ??= new(AddImmediate);
+
+    private async Task AddImmediate()
+    {
+        if (Selected == null)
+        { return; }
+
+        Save();
+
+        Finder.Items = EffectService.Get()
+            .Select(model => new EffectViewModel() { Model = model });
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Event owner = Selected.Model;
+        Effect relation = ((EffectViewModel)Finder.Selected).Model;
+
+        EventService.AddImmediate(owner, relation);
+
+        EffectViewModel observable = new() { Model = relation };
+        Immediates.Add(observable);
+    }
+
+    private RelayCommand<EffectViewModel>? removeImmediateCommand;
+    public RelayCommand<EffectViewModel> RemoveImmediateCommand => removeImmediateCommand ??= new(RemoveImmediate, CanRemoveImmediate);
+
+    private void RemoveImmediate(EffectViewModel? observable)
+    {
+        if (observable == null)
+        { return; }
+
+        Effect model = observable.Model;
+
+        EffectService.Delete(model);
+        Immediates.Remove(observable);
+    }
+    private bool CanRemoveImmediate(EffectViewModel? observable)
+    {
+        return observable != null;
+    }
+
+    private RelayCommand<EffectViewModel>? findImmediateCommand;
+    public RelayCommand<EffectViewModel> FindImmediateCommand => findImmediateCommand ??= new(FindImmediate, CanFindImmediate);
+
+    private void FindImmediate(EffectViewModel? observable)
+    {
+        if (observable == null)
+        { return; }
+
+        Effect model = observable.Model;
+
+        var page = Shell.Navigate<EffectDetailsViewModel>();
+        page.Load(model);
+    }
+    private bool CanFindImmediate(EffectViewModel? observable)
+    {
+        return observable != null;
+    }
+
+    #endregion
+
+    #region After Commands
+
+    private RelayCommand? createAfterCommand;
+    public RelayCommand CreateAfterCommand => createAfterCommand ??= new(CreateAfter);
+
+    private void CreateAfter()
+    {
+        if (Selected == null)
+        { return; }
+
+        Event owner = Selected.Model;
+        Effect relation = new()
+        {
+            Name = $"eff_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
+            Code = "# some effect",
+        };
+
+        EffectService.Insert(relation);
+        EventService.AddAfter(owner, relation);
+
+        EffectViewModel observable = new() { Model = relation };
+        Afters.Add(observable);
+    }
+
+    private AsyncRelayCommand? addAfterCommand;
+    public AsyncRelayCommand AddAfterCommand => addAfterCommand ??= new(AddAfter);
+
+    private async Task AddAfter()
+    {
+        if (Selected == null)
+        { return; }
+
+        Save();
+
+        Finder.Items = EffectService.Get()
+            .Select(model => new EffectViewModel() { Model = model });
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Event owner = Selected.Model;
+        Effect relation = ((EffectViewModel)Finder.Selected).Model;
+
+        EventService.AddAfter(owner, relation);
+
+        EffectViewModel observable = new() { Model = relation };
+        Afters.Add(observable);
+    }
+
+    private RelayCommand<EffectViewModel>? removeAfterCommand;
+    public RelayCommand<EffectViewModel> RemoveAfterCommand => removeAfterCommand ??= new(RemoveAfter, CanRemoveAfter);
+
+    private void RemoveAfter(EffectViewModel? observable)
+    {
+        if (observable == null)
+        { return; }
+
+        Effect model = observable.Model;
+
+        EffectService.Delete(model);
+        Afters.Remove(observable);
+    }
+    private bool CanRemoveAfter(EffectViewModel? observable)
+    {
+        return observable != null;
+    }
+
+    private RelayCommand<EffectViewModel>? findAfterCommand;
+    public RelayCommand<EffectViewModel> FindAfterCommand => findAfterCommand ??= new(FindAfter, CanFindAfter);
+
+    private void FindAfter(EffectViewModel? observable)
+    {
+        if (observable == null)
+        { return; }
+
+        Effect model = observable.Model;
+
+        var page = Shell.Navigate<EffectDetailsViewModel>();
+        page.Load(model);
+    }
+    private bool CanFindAfter(EffectViewModel? observable)
+    {
+        return observable != null;
+    }
+
+    #endregion
 }

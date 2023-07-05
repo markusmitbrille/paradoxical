@@ -1,35 +1,42 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Paradoxical.Messages;
+using Paradoxical.Services;
 using Paradoxical.ViewModel;
+using System;
 
 namespace Paradoxical.Core;
 
 public abstract class PageViewModel : ObservableObject
 {
+    public IShell Shell { get; }
+    public IMediatorService Mediator { get; }
+
     public abstract string PageName { get; }
 
-    public NavigationViewModel Navigation { get; }
-
-    public PageViewModel(NavigationViewModel navigation)
+    public PageViewModel(
+        IShell shell,
+        IMediatorService mediator)
     {
-        Navigation = navigation;
+        Shell = shell;
+        Mediator = mediator;
 
-        navigation.Navigating += NavigatingHandler;
-        navigation.Navigated += NavigatedHandler;
+        Shell.Navigating += NavigatingHandler;
+        Shell.Navigated += NavigatedHandler;
     }
 
-    private void NavigatingHandler()
+    private void NavigatedHandler(object? sender, EventArgs e)
     {
-        if (Navigation.CurrentPage == this)
+        if (Shell.CurrentPage == this)
         {
-            OnNavigatingFrom();
+            OnNavigatedTo();
         }
     }
 
-    private void NavigatedHandler()
+    private void NavigatingHandler(object? sender, EventArgs e)
     {
-        if (Navigation.CurrentPage == this)
+        if (Shell.CurrentPage == this)
         {
-            OnNavigatedTo();
+            OnNavigatingFrom();
         }
     }
 

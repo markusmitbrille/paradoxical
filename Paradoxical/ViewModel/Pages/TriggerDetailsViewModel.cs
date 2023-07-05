@@ -9,13 +9,9 @@ using System;
 namespace Paradoxical.ViewModel;
 
 public class TriggerDetailsViewModel : PageViewModel
-    , IMessageHandler<SelectMessage>
     , IMessageHandler<SaveMessage>
 {
     public override string PageName => "Trigger Details";
-
-    public FinderViewModel Finder { get; }
-    public IMediatorService Mediator { get; }
 
     public ITriggerService TriggerService { get; }
 
@@ -27,45 +23,26 @@ public class TriggerDetailsViewModel : PageViewModel
     }
 
     public TriggerDetailsViewModel(
-        NavigationViewModel navigation,
-        FinderViewModel finder,
+        IShell shell,
         IMediatorService mediator,
         ITriggerService triggerService)
-        : base(navigation)
+        : base(shell, mediator)
     {
-        Finder = finder;
-        Mediator = mediator;
-
         TriggerService = triggerService;
     }
 
     protected override void OnNavigatedTo()
     {
-        base.OnNavigatedTo();
+        Reload();
 
-        Load();
-
-        Mediator.Register<SelectMessage>(this);
         Mediator.Register<SaveMessage>(this);
     }
 
     protected override void OnNavigatingFrom()
     {
-        base.OnNavigatingFrom();
-
         Save();
 
-        Mediator.Unregister<SelectMessage>(this);
         Mediator.Unregister<SaveMessage>(this);
-    }
-
-    void IMessageHandler<SelectMessage>.Handle(SelectMessage message)
-    {
-        if (message.Model is not Trigger model)
-        { return; }
-
-        var selected = TriggerService.Get(model);
-        Selected = new() { Model = selected };
     }
 
     void IMessageHandler<SaveMessage>.Handle(SaveMessage message)
@@ -73,20 +50,29 @@ public class TriggerDetailsViewModel : PageViewModel
         Save();
     }
 
-    private RelayCommand? loadCommand;
-    public RelayCommand LoadCommand => loadCommand ??= new(Load);
+    public void Load(Trigger model)
+    {
+        var selected = TriggerService.Get(model);
+        Selected = new() { Model = selected };
+    }
 
-    private void Load()
+    private RelayCommand? reloadCommand;
+    public RelayCommand ReloadCommand => reloadCommand ??= new(Reload, CanReload);
+
+    private void Reload()
     {
         if (Selected == null)
         { return; }
 
-        Trigger selected = TriggerService.Get(Selected.Model);
-        Selected = new() { Model = selected };
+        Load(Selected.Model);
+    }
+    private bool CanReload()
+    {
+        return Selected != null;
     }
 
     private RelayCommand? saveCommand;
-    public RelayCommand SaveCommand => saveCommand ??= new(Save);
+    public RelayCommand SaveCommand => saveCommand ??= new(Save, CanSave);
 
     private void Save()
     {
@@ -95,17 +81,16 @@ public class TriggerDetailsViewModel : PageViewModel
 
         TriggerService.Update(Selected.Model);
     }
+    public bool CanSave()
+    {
+        return Selected != null;
+    }
 
     private RelayCommand? createCommand;
     public RelayCommand CreateCommand => createCommand ??= new(Create);
 
     private void Create()
     {
-        if (Selected != null)
-        {
-            Navigation.Navigate<TriggerDetailsViewModel>();
-        }
-
         Trigger model = new()
         {
             Name = $"trg_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
@@ -113,7 +98,9 @@ public class TriggerDetailsViewModel : PageViewModel
         };
 
         TriggerService.Insert(model);
-        Mediator.Send<SelectMessage>(new(model));
+
+        var page = Shell.Navigate<TriggerDetailsViewModel>();
+        page.Load(model);
     }
 
     private RelayCommand<TriggerViewModel>? duplicateCommand;
@@ -124,12 +111,12 @@ public class TriggerDetailsViewModel : PageViewModel
         if (observable == null)
         { return; }
 
-        Navigation.Navigate<TriggerDetailsViewModel>();
-
         Trigger model = new(observable.Model);
 
         TriggerService.Insert(model);
-        Mediator.Send<SelectMessage>(new(model));
+
+        var page = Shell.Navigate<TriggerDetailsViewModel>();
+        page.Load(model);
     }
     private bool CanDuplicate(TriggerViewModel? observable)
     {

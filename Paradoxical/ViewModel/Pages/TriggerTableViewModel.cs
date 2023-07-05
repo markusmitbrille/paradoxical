@@ -13,13 +13,9 @@ using System.Windows.Data;
 namespace Paradoxical.ViewModel;
 
 public class TriggerTableViewModel : PageViewModel
-    , IMessageHandler<SelectMessage>
     , IMessageHandler<SaveMessage>
 {
     public override string PageName => "Triggers";
-
-    public FinderViewModel Finder { get; }
-    public IMediatorService Mediator { get; }
 
     public ITriggerService TriggerService { get; }
 
@@ -45,15 +41,11 @@ public class TriggerTableViewModel : PageViewModel
     }
 
     public TriggerTableViewModel(
-        NavigationViewModel navigation,
-        FinderViewModel finder,
+        IShell shell,
         IMediatorService mediator,
         ITriggerService triggerService)
-        : base(navigation)
+        : base(shell, mediator)
     {
-        Finder = finder;
-        Mediator = mediator;
-
         TriggerService = triggerService;
     }
 
@@ -75,30 +67,16 @@ public class TriggerTableViewModel : PageViewModel
 
     protected override void OnNavigatedTo()
     {
-        base.OnNavigatedTo();
-
         Load();
 
-        Mediator.Register<SelectMessage>(this);
         Mediator.Register<SaveMessage>(this);
     }
 
     protected override void OnNavigatingFrom()
     {
-        base.OnNavigatingFrom();
-
         Save();
 
-        Mediator.Unregister<SelectMessage>(this);
         Mediator.Unregister<SaveMessage>(this);
-    }
-
-    void IMessageHandler<SelectMessage>.Handle(SelectMessage message)
-    {
-        if (message.Model is not Trigger model)
-        { return; }
-
-        Selected = Items.SingleOrDefault(viewmodel => viewmodel.Model == model);
     }
 
     void IMessageHandler<SaveMessage>.Handle(SaveMessage message)
@@ -228,8 +206,8 @@ public class TriggerTableViewModel : PageViewModel
 
         var model = observable.Model;
 
-        Navigation.Navigate<TriggerDetailsViewModel>();
-        Mediator.Send<SelectMessage>(new(model));
+        var page = Shell.Navigate<TriggerDetailsViewModel>();
+        page.Load(model);
     }
     private bool CanEdit(TriggerViewModel? observable)
     {

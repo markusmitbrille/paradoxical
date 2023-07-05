@@ -7,10 +7,10 @@ public partial class MainWindow
 {
     public const string ROOT_DIALOG_IDENTIFIER = "RootDialog";
 
-    public MainWindow(MainViewModel viewmodel)
+    public MainWindow(IShell shell)
     {
         InitializeComponent();
-        DataContext = viewmodel;
+        DataContext = shell;
     }
 
     private void DragWindowMouseDownHandler(object sender, MouseButtonEventArgs e)

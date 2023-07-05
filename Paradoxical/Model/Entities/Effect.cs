@@ -30,6 +30,20 @@ public class Effect : IEntity, IModel, IElement, IEquatable<Effect?>
     public bool Hidden { get => hidden; set => hidden = value; }
     public bool hidden = false;
 
+    public Effect()
+    {
+    }
+
+    public Effect(Effect other)
+    {
+        id = 0;
+
+        name = other.name;
+        code = other.code;
+        tooltip = other.tooltip;
+        hidden = other.hidden;
+    }
+
     public string GetQualifiedName(IModService modService)
     {
         return $"{modService.GetPrefix()}_eff_{Id}";

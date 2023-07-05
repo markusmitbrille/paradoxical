@@ -11,7 +11,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
     Title="Paradoxical"
-    d:DataContext="{d:DesignInstance {x:Type viewmodel:MainViewModel}}"
+    d:DataContext="{d:DesignInstance {x:Type viewmodel:Shell}}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     Height="900"
@@ -53,22 +53,22 @@
             Command="{Binding ExitCommand}"
             Gesture="ALT+F4" />
         <KeyBinding
-            Command="{Binding Navigation.GoForwardCommand}"
+            Command="{Binding GoForwardCommand}"
             Gesture="ALT+Right" />
         <KeyBinding
-            Command="{Binding Navigation.GoBackCommand}"
+            Command="{Binding GoBackCommand}"
             Gesture="ALT+Left" />
         <KeyBinding
-            Command="{Binding GoToInfoPageCommand}"
+            Command="{Binding GoToInfoCommand}"
             Gesture="ALT+1" />
         <KeyBinding
-            Command="{Binding GoToEventPageCommand}"
+            Command="{Binding GoToEventTableCommand}"
             Gesture="ALT+2" />
         <KeyBinding
-            Command="{Binding GoToTriggerPageCommand}"
+            Command="{Binding GoToTriggerTableCommand}"
             Gesture="ALT+3" />
         <KeyBinding
-            Command="{Binding GoToEffectPageCommand}"
+            Command="{Binding GoToEffectTableCommand}"
             Gesture="ALT+4" />
     </Window.InputBindings>
 
@@ -97,7 +97,7 @@
                             Margin="12,8"
                             HorizontalContentAlignment="Left"
                             Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToInfoPageCommand}"
+                            Command="{Binding GoToInfoCommand}"
                             Click="MenuButtonClickHandler">
                             <TextBlock
                                 Margin="24,4,0,4"
@@ -108,7 +108,7 @@
                             Margin="12,8"
                             HorizontalContentAlignment="Left"
                             Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToEventPageCommand}"
+                            Command="{Binding GoToEventTableCommand}"
                             Click="MenuButtonClickHandler">
                             <TextBlock
                                 Margin="24,4,0,4"
@@ -119,7 +119,7 @@
                             Margin="12,8"
                             HorizontalContentAlignment="Left"
                             Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToTriggerPageCommand}"
+                            Command="{Binding GoToTriggerTableCommand}"
                             Click="MenuButtonClickHandler">
                             <TextBlock
                                 Margin="24,4,0,4"
@@ -130,7 +130,7 @@
                             Margin="12,8"
                             HorizontalContentAlignment="Left"
                             Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToEffectPageCommand}"
+                            Command="{Binding GoToEffectTableCommand}"
                             Click="MenuButtonClickHandler">
                             <TextBlock
                                 Margin="24,4,0,4"
@@ -141,7 +141,7 @@
                             Margin="12,8"
                             HorizontalContentAlignment="Left"
                             Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToAboutPageCommand}"
+                            Command="{Binding GoToAboutCommand}"
                             Click="MenuButtonClickHandler">
                             <TextBlock
                                 Margin="24,4,0,4"
@@ -194,7 +194,7 @@
                                 Margin="8,0"
                                 Style="{StaticResource MaterialDesignToolButton}"
                                 Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"
-                                Command="{Binding Navigation.GoBackCommand}"
+                                Command="{Binding GoBackCommand}"
                                 Content="{materialDesign:PackIcon Kind=ArrowLeft, Size=24}"
                                 ToolTip="Navigate Back" />
 
@@ -202,7 +202,7 @@
                                 Margin="8,0"
                                 Style="{StaticResource MaterialDesignToolButton}"
                                 Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"
-                                Command="{Binding Navigation.GoHomeCommand}"
+                                Command="{Binding GoHomeCommand}"
                                 Content="{materialDesign:PackIcon Kind=Home, Size=24}"
                                 ToolTip="Go Home" />
 
@@ -210,7 +210,7 @@
                                 Margin="8,0"
                                 Style="{StaticResource MaterialDesignToolButton}"
                                 Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"
-                                Command="{Binding Navigation.GoForwardCommand}"
+                                Command="{Binding GoForwardCommand}"
                                 Content="{materialDesign:PackIcon Kind=ArrowRight, Size=24}"
                                 ToolTip="Navigate Forward" />
 
@@ -265,7 +265,7 @@
                                 <MenuItem
                                     Header="About"
                                     Icon="{materialDesign:PackIcon Kind=Information}"
-                                    Command="{Binding GoToAboutPageCommand}"
+                                    Command="{Binding GoToAboutCommand}"
                                     Click="PopupMenuButtonClickHandler"/>
 
                                 <Separator />
@@ -284,13 +284,13 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             FontSize="22"
-                            Text="{Binding Navigation.CurrentPage.PageName, FallbackValue=Paradoxical}" />
+                            Text="{Binding CurrentPage.PageName, FallbackValue=Paradoxical}" />
                     </Grid>
                 </materialDesign:ColorZone>
 
                 <ContentControl
                     Margin="0,20,0,0"
-                    Content="{Binding Navigation.CurrentPage}"
+                    Content="{Binding CurrentPage}"
                     Visibility="{Binding Converter={StaticResource VisibilityConverter}}" />
 
             </DockPanel>
