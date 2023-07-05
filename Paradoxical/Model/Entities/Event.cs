@@ -36,10 +36,6 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
     public bool Hidden { get => hidden; set => hidden = value; }
     public bool hidden;
 
-    [Column("weight"), NotNull]
-    public int Weight { get => weight; set => weight = value; }
-    public int weight;
-
     [Column("cooldown"), NotNull]
     public int Cooldown { get => cooldown; set => cooldown = value; }
     public int cooldown;
@@ -69,7 +65,6 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         description = other.description;
         theme = other.theme;
         hidden = other.hidden;
-        weight = other.weight;
         cooldown = other.cooldown;
         customTrigger = other.customTrigger;
         customImmediateEffect = other.customImmediateEffect;

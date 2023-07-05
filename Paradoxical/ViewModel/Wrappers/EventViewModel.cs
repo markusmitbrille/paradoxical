@@ -37,12 +37,6 @@ public class EventViewModel : ElementWrapper<Event>
         set => SetProperty(ref model.hidden, value);
     }
 
-    public int Weight
-    {
-        get => model.weight;
-        set => SetProperty(ref model.weight, value);
-    }
-
     public int Cooldown
     {
         get => model.cooldown;
