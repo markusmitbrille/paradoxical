@@ -14,6 +14,7 @@ namespace Paradoxical.ViewModel;
 
 public class EventTableViewModel : PageViewModel
     , IMessageHandler<SaveMessage>
+    , IMessageHandler<ShutdownMessage>
 {
     public override string PageName => "Events";
 
@@ -70,6 +71,7 @@ public class EventTableViewModel : PageViewModel
         Load();
 
         Mediator.Register<SaveMessage>(this);
+        Mediator.Register<ShutdownMessage>(this);
     }
 
     protected override void OnNavigatingFrom()
@@ -77,9 +79,15 @@ public class EventTableViewModel : PageViewModel
         Save();
 
         Mediator.Unregister<SaveMessage>(this);
+        Mediator.Unregister<ShutdownMessage>(this);
     }
 
     void IMessageHandler<SaveMessage>.Handle(SaveMessage message)
+    {
+        Save();
+    }
+
+    void IMessageHandler<ShutdownMessage>.Handle(ShutdownMessage message)
     {
         Save();
     }

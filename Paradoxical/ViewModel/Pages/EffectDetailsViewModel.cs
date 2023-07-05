@@ -10,6 +10,7 @@ namespace Paradoxical.ViewModel;
 
 public class EffectDetailsViewModel : PageViewModel
     , IMessageHandler<SaveMessage>
+    , IMessageHandler<ShutdownMessage>
 {
     public override string PageName => "Effect Details";
 
@@ -36,6 +37,7 @@ public class EffectDetailsViewModel : PageViewModel
         Reload();
 
         Mediator.Register<SaveMessage>(this);
+        Mediator.Register<ShutdownMessage>(this);
     }
 
     protected override void OnNavigatingFrom()
@@ -43,9 +45,15 @@ public class EffectDetailsViewModel : PageViewModel
         Save();
 
         Mediator.Unregister<SaveMessage>(this);
+        Mediator.Unregister<ShutdownMessage>(this);
     }
 
     void IMessageHandler<SaveMessage>.Handle(SaveMessage message)
+    {
+        Save();
+    }
+
+    void IMessageHandler<ShutdownMessage>.Handle(ShutdownMessage message)
     {
         Save();
     }

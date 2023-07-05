@@ -9,6 +9,7 @@ namespace Paradoxical.ViewModel;
 
 public class OptionDetailsViewModel : PageViewModel
     , IMessageHandler<SaveMessage>
+    , IMessageHandler<ShutdownMessage>
 {
     public override string PageName => "Option Details";
 
@@ -35,6 +36,7 @@ public class OptionDetailsViewModel : PageViewModel
         Reload();
 
         Mediator.Register<SaveMessage>(this);
+        Mediator.Register<ShutdownMessage>(this);
     }
 
     protected override void OnNavigatingFrom()
@@ -42,9 +44,15 @@ public class OptionDetailsViewModel : PageViewModel
         Save();
 
         Mediator.Unregister<SaveMessage>(this);
+        Mediator.Unregister<ShutdownMessage>(this);
     }
 
     void IMessageHandler<SaveMessage>.Handle(SaveMessage message)
+    {
+        Save();
+    }
+
+    void IMessageHandler<ShutdownMessage>.Handle(ShutdownMessage message)
     {
         Save();
     }
