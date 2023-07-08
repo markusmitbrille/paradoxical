@@ -427,7 +427,7 @@
                                         <Button
                                             Margin="8"
                                             Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
-                                            Command="{Binding DataContext.RemoveOptionCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                            Command="{Binding DataContext.DeleteOptionCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                             CommandParameter="{Binding}"
                                             Content="{materialDesign:PackIcon Kind=Delete}"
                                             ToolTip="Remove Option" />
@@ -538,10 +538,10 @@
                                                 Margin="4"
                                                 Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                 materialDesign:ElevationAssist.Elevation="Dp3"
-                                                Command="{Binding DataContext.FindTriggerCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                Command="{Binding DataContext.GoToTriggerCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                 CommandParameter="{Binding}"
                                                 Content="{materialDesign:PackIcon Kind=ArrowRight}"
-                                                ToolTip="Find Trigger" />
+                                                ToolTip="Go to Trigger" />
 
                                             <Button
                                                 Grid.Column="2"
@@ -708,7 +708,7 @@
                                                 Margin="4"
                                                 Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                 materialDesign:ElevationAssist.Elevation="Dp3"
-                                                Command="{Binding DataContext.FindImmediateCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                Command="{Binding DataContext.GoToImmediateCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                 CommandParameter="{Binding}"
                                                 Content="{materialDesign:PackIcon Kind=ArrowRight}"
                                                 ToolTip="Go to Effect" />
@@ -877,7 +877,7 @@
                                                 Margin="4"
                                                 Style="{DynamicResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                                 materialDesign:ElevationAssist.Elevation="Dp3"
-                                                Command="{Binding DataContext.FindAfterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                Command="{Binding DataContext.GoToAfterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                 CommandParameter="{Binding}"
                                                 Content="{materialDesign:PackIcon Kind=ArrowRight}"
                                                 ToolTip="Go to Effect" />

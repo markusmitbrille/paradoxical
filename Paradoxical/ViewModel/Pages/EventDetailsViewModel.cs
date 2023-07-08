@@ -354,7 +354,7 @@ public class EventDetailsViewModel : PageViewModel
     #region Option Commands
 
     private RelayCommand? createOptionCommand;
-    public RelayCommand CreateOptionCommand => createOptionCommand ??= new(CreateOption);
+    public RelayCommand CreateOptionCommand => createOptionCommand ??= new(CreateOption, CanCreateOption);
 
     private void CreateOption()
     {
@@ -367,11 +367,15 @@ public class EventDetailsViewModel : PageViewModel
         OptionService.Insert(model);
         Options.Add(observable);
     }
+    private bool CanCreateOption()
+    {
+        return Selected != null;
+    }
 
-    private RelayCommand<OptionViewModel>? removeOptionCommand;
-    public RelayCommand<OptionViewModel> RemoveOptionCommand => removeOptionCommand ??= new(RemoveOption, CanRemoveOption);
+    private RelayCommand<OptionViewModel>? deleteOptionCommand;
+    public RelayCommand<OptionViewModel> DeleteOptionCommand => deleteOptionCommand ??= new(DeleteOption, CanDeleteOption);
 
-    private void RemoveOption(OptionViewModel? observable)
+    private void DeleteOption(OptionViewModel? observable)
     {
         if (observable == null)
         { return; }
@@ -381,15 +385,15 @@ public class EventDetailsViewModel : PageViewModel
         OptionService.Delete(model);
         Options.Remove(observable);
     }
-    private bool CanRemoveOption(OptionViewModel? observable)
+    private bool CanDeleteOption(OptionViewModel? observable)
     {
         return observable != null;
     }
 
-    private RelayCommand<OptionViewModel>? findOptionCommand;
-    public RelayCommand<OptionViewModel> FindOptionCommand => findOptionCommand ??= new(FindOption, CanFindOption);
+    private RelayCommand<OptionViewModel>? goToOptionCommand;
+    public RelayCommand<OptionViewModel> GoToOptionCommand => goToOptionCommand ??= new(GoToOption, CanGoToOption);
 
-    private void FindOption(OptionViewModel? observable)
+    private void GoToOption(OptionViewModel? observable)
     {
         if (observable == null)
         { return; }
@@ -399,7 +403,7 @@ public class EventDetailsViewModel : PageViewModel
         var page = Shell.Navigate<OptionDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanFindOption(OptionViewModel? observable)
+    private bool CanGoToOption(OptionViewModel? observable)
     {
         return observable != null;
     }
@@ -409,7 +413,7 @@ public class EventDetailsViewModel : PageViewModel
     #region Trigger Commands
 
     private RelayCommand? createTriggerCommand;
-    public RelayCommand CreateTriggerCommand => createTriggerCommand ??= new(CreateTrigger);
+    public RelayCommand CreateTriggerCommand => createTriggerCommand ??= new(CreateTrigger, CanCreateTrigger);
 
     private void CreateTrigger()
     {
@@ -428,6 +432,10 @@ public class EventDetailsViewModel : PageViewModel
 
         TriggerViewModel observable = new() { Model = relation };
         Triggers.Add(observable);
+    }
+    private bool CanCreateTrigger()
+    {
+        return Selected != null;
     }
 
     private AsyncRelayCommand? addTriggerCommand;
@@ -465,23 +473,24 @@ public class EventDetailsViewModel : PageViewModel
 
     private void RemoveTrigger(TriggerViewModel? observable)
     {
+        if (Selected == null)
+        { return; }
+
         if (observable == null)
         { return; }
 
-        Trigger model = observable.Model;
-
-        TriggerService.Delete(model);
+        EventService.RemoveTrigger(Selected.Model, observable.Model);
         Triggers.Remove(observable);
     }
     private bool CanRemoveTrigger(TriggerViewModel? observable)
     {
-        return observable != null;
+        return Selected != null && observable != null;
     }
 
-    private RelayCommand<TriggerViewModel>? findTriggerCommand;
-    public RelayCommand<TriggerViewModel> FindTriggerCommand => findTriggerCommand ??= new(FindTrigger, CanFindTrigger);
+    private RelayCommand<TriggerViewModel>? goToTriggerCommand;
+    public RelayCommand<TriggerViewModel> GoToTriggerCommand => goToTriggerCommand ??= new(GoToTrigger, CanGoToTrigger);
 
-    private void FindTrigger(TriggerViewModel? observable)
+    private void GoToTrigger(TriggerViewModel? observable)
     {
         if (observable == null)
         { return; }
@@ -491,7 +500,7 @@ public class EventDetailsViewModel : PageViewModel
         var page = Shell.Navigate<TriggerDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanFindTrigger(TriggerViewModel? observable)
+    private bool CanGoToTrigger(TriggerViewModel? observable)
     {
         return observable != null;
     }
@@ -501,7 +510,7 @@ public class EventDetailsViewModel : PageViewModel
     #region Immediate Commands
 
     private RelayCommand? createImmediateCommand;
-    public RelayCommand CreateImmediateCommand => createImmediateCommand ??= new(CreateImmediate);
+    public RelayCommand CreateImmediateCommand => createImmediateCommand ??= new(CreateImmediate, CanCreateImmediate);
 
     private void CreateImmediate()
     {
@@ -520,6 +529,10 @@ public class EventDetailsViewModel : PageViewModel
 
         EffectViewModel observable = new() { Model = relation };
         Immediates.Add(observable);
+    }
+    private bool CanCreateImmediate()
+    {
+        return Selected != null;
     }
 
     private AsyncRelayCommand? addImmediateCommand;
@@ -557,23 +570,24 @@ public class EventDetailsViewModel : PageViewModel
 
     private void RemoveImmediate(EffectViewModel? observable)
     {
+        if (Selected == null)
+        { return; }
+
         if (observable == null)
         { return; }
 
-        Effect model = observable.Model;
-
-        EffectService.Delete(model);
+        EventService.RemoveImmediate(Selected.Model, observable.Model);
         Immediates.Remove(observable);
     }
     private bool CanRemoveImmediate(EffectViewModel? observable)
     {
-        return observable != null;
+        return Selected != null && observable != null;
     }
 
-    private RelayCommand<EffectViewModel>? findImmediateCommand;
-    public RelayCommand<EffectViewModel> FindImmediateCommand => findImmediateCommand ??= new(FindImmediate, CanFindImmediate);
+    private RelayCommand<EffectViewModel>? goToImmediateCommand;
+    public RelayCommand<EffectViewModel> GoToImmediateCommand => goToImmediateCommand ??= new(GoToImmediate, CanGoToImmediate);
 
-    private void FindImmediate(EffectViewModel? observable)
+    private void GoToImmediate(EffectViewModel? observable)
     {
         if (observable == null)
         { return; }
@@ -583,7 +597,7 @@ public class EventDetailsViewModel : PageViewModel
         var page = Shell.Navigate<EffectDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanFindImmediate(EffectViewModel? observable)
+    private bool CanGoToImmediate(EffectViewModel? observable)
     {
         return observable != null;
     }
@@ -593,7 +607,7 @@ public class EventDetailsViewModel : PageViewModel
     #region After Commands
 
     private RelayCommand? createAfterCommand;
-    public RelayCommand CreateAfterCommand => createAfterCommand ??= new(CreateAfter);
+    public RelayCommand CreateAfterCommand => createAfterCommand ??= new(CreateAfter, CanCreateAfter);
 
     private void CreateAfter()
     {
@@ -612,6 +626,10 @@ public class EventDetailsViewModel : PageViewModel
 
         EffectViewModel observable = new() { Model = relation };
         Afters.Add(observable);
+    }
+    private bool CanCreateAfter()
+    {
+        return Selected != null;
     }
 
     private AsyncRelayCommand? addAfterCommand;
@@ -649,23 +667,24 @@ public class EventDetailsViewModel : PageViewModel
 
     private void RemoveAfter(EffectViewModel? observable)
     {
+        if (Selected == null)
+        { return; }
+
         if (observable == null)
         { return; }
 
-        Effect model = observable.Model;
-
-        EffectService.Delete(model);
+        EventService.RemoveAfter(Selected.Model, observable.Model);
         Afters.Remove(observable);
     }
     private bool CanRemoveAfter(EffectViewModel? observable)
     {
-        return observable != null;
+        return Selected != null && observable != null;
     }
 
-    private RelayCommand<EffectViewModel>? findAfterCommand;
-    public RelayCommand<EffectViewModel> FindAfterCommand => findAfterCommand ??= new(FindAfter, CanFindAfter);
+    private RelayCommand<EffectViewModel>? goToAfterCommand;
+    public RelayCommand<EffectViewModel> GoToAfterCommand => goToAfterCommand ??= new(GoToAfter, CanGoToAfter);
 
-    private void FindAfter(EffectViewModel? observable)
+    private void GoToAfter(EffectViewModel? observable)
     {
         if (observable == null)
         { return; }
@@ -675,7 +694,7 @@ public class EventDetailsViewModel : PageViewModel
         var page = Shell.Navigate<EffectDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanFindAfter(EffectViewModel? observable)
+    private bool CanGoToAfter(EffectViewModel? observable)
     {
         return observable != null;
     }
