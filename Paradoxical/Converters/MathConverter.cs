@@ -25,12 +25,12 @@ namespace Paradoxical.Converters
             if (formula.Contains(FORMULA_SPLITTER))
             {
                 string[] subformulas = formula.Split(FORMULA_SPLITTER);
-                double[] results = new double[subformulas.Length];
+                string[] results = new string[subformulas.Length];
 
                 for (int i = 0; i < subformulas.Length; i++)
                 {
                     string subformula = subformulas[i];
-                    results[i] = Evaluate(subformula, input);
+                    results[i] = Evaluate(subformula, input).ToString(CultureInfo.InvariantCulture);
                 }
 
                 return string.Join(RESULT_JOINER, results);
