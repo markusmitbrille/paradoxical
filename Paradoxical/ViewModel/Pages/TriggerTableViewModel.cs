@@ -181,6 +181,8 @@ public class TriggerTableViewModel : PageViewModel
 
         Trigger model = new(observable.Model);
         TriggerService.Insert(model);
+
+        Items.Add(new() { Model = model });
     }
     private bool CanDuplicate(TriggerViewModel? observable)
     {

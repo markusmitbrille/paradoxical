@@ -255,6 +255,8 @@ public class EventTableViewModel : PageViewModel
         {
             EventService.AddAfter(model, after);
         }
+
+        Items.Add(new() { Model = model });
     }
     private bool CanDuplicate(EventViewModel? observable)
     {

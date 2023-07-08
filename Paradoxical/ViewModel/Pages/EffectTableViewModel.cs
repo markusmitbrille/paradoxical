@@ -181,6 +181,8 @@ public class EffectTableViewModel : PageViewModel
 
         Effect model = new(observable.Model);
         EffectService.Insert(model);
+
+        Items.Add(new() { Model = model });
     }
     private bool CanDuplicate(EffectViewModel? observable)
     {
