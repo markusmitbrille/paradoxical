@@ -5,6 +5,7 @@ using Paradoxical.Model.Elements;
 using Paradoxical.Services;
 using Paradoxical.Services.Elements;
 using System;
+using System.Linq;
 
 namespace Paradoxical.ViewModel;
 
@@ -111,40 +112,51 @@ public class TriggerDetailsViewModel : PageViewModel
         page.Load(model);
     }
 
-    private RelayCommand<TriggerViewModel>? duplicateCommand;
-    public RelayCommand<TriggerViewModel> DuplicateCommand => duplicateCommand ??= new(Duplicate, CanDuplicate);
+    private RelayCommand? duplicateCommand;
+    public RelayCommand DuplicateCommand => duplicateCommand ??= new(Duplicate, CanDuplicate);
 
-    private void Duplicate(TriggerViewModel? observable)
+    private void Duplicate()
     {
-        if (observable == null)
+        if (Selected == null)
         { return; }
 
-        Trigger model = new(observable.Model);
+        Trigger model = new(Selected.Model);
 
         TriggerService.Insert(model);
 
         var page = Shell.Navigate<TriggerDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanDuplicate(TriggerViewModel? observable)
+    private bool CanDuplicate()
     {
-        return observable != null;
+        return Selected != null;
     }
 
-    private RelayCommand<TriggerViewModel>? deleteCommand;
-    public RelayCommand<TriggerViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
+    private RelayCommand? deleteCommand;
+    public RelayCommand DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
 
-    private void Delete(TriggerViewModel? observable)
+    private void Delete()
     {
-        if (observable == null)
+        if (Selected == null)
         { return; }
 
-        TriggerService.Delete(observable.Model);
+        TriggerService.Delete(Selected.Model);
 
         Shell.Navigate<TriggerTableViewModel>();
+
+        var historyPages = Shell.PageHistory.OfType<TriggerDetailsViewModel>()
+            .Where(page => page.Selected?.Model == Selected.Model)
+            .ToArray();
+
+        var futurePages = Shell.PageFuture.OfType<TriggerDetailsViewModel>()
+            .Where(page => page.Selected?.Model == Selected.Model)
+            .ToArray();
+
+        Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
+        Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
     }
-    private bool CanDelete(TriggerViewModel? observable)
+    private bool CanDelete()
     {
-        return observable != null;
+        return Selected != null;
     }
 }

@@ -20,6 +20,9 @@ public interface IShell
 {
     public PageViewModel? CurrentPage { get; }
 
+    public List<PageViewModel> PageHistory { get; }
+    public List<PageViewModel> PageFuture { get; }
+
     public event EventHandler Navigating;
     public event EventHandler Navigated;
 
@@ -50,6 +53,9 @@ public class Shell : ObservableObject, IShell
             Navigated.Invoke(this, new());
         }
     }
+
+    public List<PageViewModel> PageHistory { get; } = new();
+    public List<PageViewModel> PageFuture { get; } = new();
 
     public event EventHandler Navigating = delegate { };
     public event EventHandler Navigated = delegate { };
@@ -163,9 +169,6 @@ public class Shell : ObservableObject, IShell
         }
     }
 
-    private readonly List<PageViewModel> history = new();
-    private readonly List<PageViewModel> future = new();
-
     public T Navigate<T>() where T : PageViewModel
     {
         T page = ServiceProvider.GetRequiredService<T>();
@@ -186,10 +189,10 @@ public class Shell : ObservableObject, IShell
         if (page == null)
         { return; }
 
-        future.Clear();
+        PageFuture.Clear();
         if (CurrentPage != null)
         {
-            history.Push(CurrentPage);
+            PageHistory.Push(CurrentPage);
         }
 
         CurrentPage = page;
@@ -213,8 +216,8 @@ public class Shell : ObservableObject, IShell
 
     public void GoHome()
     {
-        history.Clear();
-        future.Clear();
+        PageHistory.Clear();
+        PageFuture.Clear();
 
         CurrentPage = null;
 
@@ -229,17 +232,17 @@ public class Shell : ObservableObject, IShell
     {
         if (CurrentPage != null)
         {
-            future.Push(CurrentPage);
+            PageFuture.Push(CurrentPage);
         }
 
-        CurrentPage = history.Pop();
+        CurrentPage = PageHistory.Pop();
 
         GoForwardCommand.NotifyCanExecuteChanged();
         GoBackCommand.NotifyCanExecuteChanged();
     }
     public bool CanGoBack()
     {
-        return history.Any();
+        return PageHistory.Any();
     }
 
     private RelayCommand? goForwardCommand;
@@ -249,17 +252,17 @@ public class Shell : ObservableObject, IShell
     {
         if (CurrentPage != null)
         {
-            history.Push(CurrentPage);
+            PageHistory.Push(CurrentPage);
         }
 
-        CurrentPage = future.Pop();
+        CurrentPage = PageFuture.Pop();
 
         GoForwardCommand.NotifyCanExecuteChanged();
         GoBackCommand.NotifyCanExecuteChanged();
     }
     public bool CanGoForward()
     {
-        return future.Any();
+        return PageFuture.Any();
     }
 
     private RelayCommand? goToInfoCommand;

@@ -5,6 +5,7 @@ using Paradoxical.Model.Elements;
 using Paradoxical.Services;
 using Paradoxical.Services.Elements;
 using System;
+using System.Linq;
 
 namespace Paradoxical.ViewModel;
 
@@ -103,40 +104,51 @@ public class EffectDetailsViewModel : PageViewModel
         page.Load(model);
     }
 
-    private RelayCommand<EffectViewModel>? duplicateCommand;
-    public RelayCommand<EffectViewModel> DuplicateCommand => duplicateCommand ??= new(Duplicate, CanDuplicate);
+    private RelayCommand? duplicateCommand;
+    public RelayCommand DuplicateCommand => duplicateCommand ??= new(Duplicate, CanDuplicate);
 
-    private void Duplicate(EffectViewModel? observable)
+    private void Duplicate()
     {
-        if (observable == null)
+        if (Selected == null)
         { return; }
 
-        Effect model = new(observable.Model);
+        Effect model = new(Selected.Model);
 
         EffectService.Insert(model);
 
         var page = Shell.Navigate<EffectDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanDuplicate(EffectViewModel? observable)
+    private bool CanDuplicate()
     {
-        return observable != null;
+        return Selected != null;
     }
 
-    private RelayCommand<EffectViewModel>? deleteCommand;
-    public RelayCommand<EffectViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
+    private RelayCommand? deleteCommand;
+    public RelayCommand DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
 
-    private void Delete(EffectViewModel? observable)
+    private void Delete()
     {
-        if (observable == null)
+        if (Selected == null)
         { return; }
 
-        EffectService.Delete(observable.Model);
+        EffectService.Delete(Selected.Model);
 
         Shell.Navigate<EffectTableViewModel>();
+
+        var historyPages = Shell.PageHistory.OfType<EffectDetailsViewModel>()
+            .Where(page => page.Selected?.Model == Selected.Model)
+            .ToArray();
+
+        var futurePages = Shell.PageFuture.OfType<EffectDetailsViewModel>()
+            .Where(page => page.Selected?.Model == Selected.Model)
+            .ToArray();
+
+        Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
+        Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
     }
-    private bool CanDelete(EffectViewModel? observable)
+    private bool CanDelete()
     {
-        return observable != null;
+        return Selected != null;
     }
 }

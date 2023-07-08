@@ -271,7 +271,7 @@ public class EventDetailsViewModel : PageViewModel
     }
 
     private RelayCommand? duplicateCommand;
-    public RelayCommand DuplicateCommand => duplicateCommand ??= new(Duplicate);
+    public RelayCommand DuplicateCommand => duplicateCommand ??= new(Duplicate, CanDuplicate);
 
     private void Duplicate()
     {
@@ -285,9 +285,13 @@ public class EventDetailsViewModel : PageViewModel
         var page = Shell.Navigate<EventDetailsViewModel>();
         page.Load(model);
     }
+    private bool CanDuplicate()
+    {
+        return Selected != null;
+    }
 
     private RelayCommand? deleteCommand;
-    public RelayCommand DeleteCommand => deleteCommand ??= new(Delete);
+    public RelayCommand DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
 
     private void Delete()
     {
@@ -297,6 +301,21 @@ public class EventDetailsViewModel : PageViewModel
         EventService.Delete(Selected.Model);
 
         Shell.Navigate<EventTableViewModel>();
+
+        var historyPages = Shell.PageHistory.OfType<EventDetailsViewModel>()
+            .Where(page => page.Selected?.Model == Selected.Model)
+            .ToArray();
+
+        var futurePages = Shell.PageFuture.OfType<EventDetailsViewModel>()
+            .Where(page => page.Selected?.Model == Selected.Model)
+            .ToArray();
+
+        Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
+        Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
+    }
+    private bool CanDelete()
+    {
+        return Selected != null;
     }
 
     #region Option Commands
