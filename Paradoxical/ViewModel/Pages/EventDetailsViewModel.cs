@@ -202,6 +202,27 @@ public class EventDetailsViewModel : PageViewModel
         { return; }
 
         EventService.Update(Selected.Model);
+
+        if (LeftPortrait != null)
+        {
+            PortraitService.Update(LeftPortrait.Model);
+        }
+        if (RightPortrait != null)
+        {
+            PortraitService.Update(RightPortrait.Model);
+        }
+        if (LowerLeftPortrait != null)
+        {
+            PortraitService.Update(LowerLeftPortrait.Model);
+        }
+        if (LowerCenterPortrait != null)
+        {
+            PortraitService.Update(LowerCenterPortrait.Model);
+        }
+        if (LowerRightPortrait != null)
+        {
+            PortraitService.Update(LowerRightPortrait.Model);
+        }
     }
     public bool CanSave()
     {
