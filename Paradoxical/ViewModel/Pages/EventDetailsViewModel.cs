@@ -295,27 +295,6 @@ public class EventDetailsViewModel : PageViewModel
         { return; }
 
         EventService.Delete(Selected.Model);
-
-        if (LeftPortrait != null)
-        {
-            PortraitService.Delete(LeftPortrait.Model);
-        }
-        if (RightPortrait != null)
-        {
-            PortraitService.Delete(RightPortrait.Model);
-        }
-        if (LowerLeftPortrait != null)
-        {
-            PortraitService.Delete(LowerLeftPortrait.Model);
-        }
-        if (LowerCenterPortrait != null)
-        {
-            PortraitService.Delete(LowerCenterPortrait.Model);
-        }
-        if (LowerRightPortrait != null)
-        {
-            PortraitService.Delete(LowerRightPortrait.Model);
-        }
     }
 
     #region Option Commands

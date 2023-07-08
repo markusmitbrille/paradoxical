@@ -1,6 +1,7 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Model.Elements;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -35,6 +36,38 @@ public class EventService : EntityService<Event>, IEventService
 {
     public EventService(IDataService data, IMediatorService mediator) : base(data, mediator)
     {
+    }
+
+    public override void Delete(Event model)
+    {
+        base.Delete(model);
+
+        string deleteOptions = ParadoxQuery.CompositionDelete(
+            c: "options",
+            fk: "event_id");
+
+        string deletePortraits = ParadoxQuery.CompositionDelete(
+            c: "portraits",
+            fk: "event_id");
+
+        Data.Connection.Execute(deleteOptions, model.Id);
+        Data.Connection.Execute(deletePortraits, model.Id);
+
+        string deleteEventTriggers = ParadoxQuery.CollectionDelete(
+            mn: "event_triggers",
+            fk: "event_id");
+
+        string deleteEventImmediateEffects = ParadoxQuery.CollectionDelete(
+            mn: "event_immediate_effects",
+            fk: "event_id");
+
+        string deleteEventAfterEffects = ParadoxQuery.CollectionDelete(
+            mn: "event_after_effects",
+            fk: "event_id");
+
+        Data.Connection.Execute(deleteEventTriggers, model.Id);
+        Data.Connection.Execute(deleteEventImmediateEffects, model.Id);
+        Data.Connection.Execute(deleteEventAfterEffects, model.Id);
     }
 
     public IEnumerable<Option> GetOptions(Event model)

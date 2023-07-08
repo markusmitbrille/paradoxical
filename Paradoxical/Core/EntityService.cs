@@ -32,34 +32,34 @@ public abstract class EntityService<T> : IEntityService<T>
         Mediator = mediator;
     }
 
-    public T Get(int id)
+    public virtual T Get(int id)
     {
         return Data.Connection.Get<T>(id);
     }
-    public T Get(T entity)
+    public virtual T Get(T entity)
     {
         return Get(entity.Id);
     }
 
-    public IEnumerable<T> Get()
+    public virtual IEnumerable<T> Get()
     {
         return Data.Connection.Table<T>().ToArray();
     }
 
-    public void Insert(T entity)
+    public virtual void Insert(T entity)
     {
         Data.Connection.Insert(entity);
     }
-    public void Delete(T entity)
+    public virtual void Delete(T entity)
     {
         Data.Connection.Delete(entity);
     }
 
-    public void Update(T entity)
+    public virtual void Update(T entity)
     {
         Data.Connection.Update(entity);
     }
-    public void UpdateAll(IEnumerable<T> entity)
+    public virtual void UpdateAll(IEnumerable<T> entity)
     {
         Data.Connection.UpdateAll(entity);
     }

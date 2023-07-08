@@ -59,6 +59,20 @@ public static class ParadoxQuery
     }
 
     /// <summary>
+    /// For two tables with an m:n relationship, this will generate a query that removes all relationships for a certain entity.
+    /// The query expects an additional argument for the foreign key value.
+    /// </summary>
+    /// <param name="mn">Name of the m:n intermediary table.</param>
+    /// <param name="fk">Name of the foreign key.</param>
+    /// <returns></returns>
+    public static string CollectionDelete(
+        string mn,
+        string fk)
+    {
+        return $@"DELETE FROM {mn} WHERE {fk} = ?";
+    }
+
+    /// <summary>
     /// For two tables with a 1:n relationship, this will generate a query that selects all components for a specific owner.
     /// The query expects an additional argument for the owner primary key.
     /// </summary>
@@ -94,5 +108,20 @@ public static class ParadoxQuery
         string opk)
     {
         return $@"SELECT {o}.* FROM {c} JOIN {o} on {c}.{fk} = {o}.{opk} WHERE {c}.{cpk} = ? LIMIT 1";
+    }
+
+    /// <summary>
+    /// For two tables with a 1:n relationship, this will generate a query that deletes all components for a specific owner.
+    /// The query expects an additional argument for the owner primary key.
+    /// </summary>
+    /// <param name="c">Name of the component table.</param>
+    /// <param name="o">Name of the owner table.</param>
+    /// <param name="fk">Name of the foreign key, pointing to the owner table primary key, in the component table.</param>
+    /// <returns></returns>
+    public static string CompositionDelete(
+        string c,
+        string fk)
+    {
+        return $@"DELETE FROM {c} WHERE {c}.{fk} = ?";
     }
 }
