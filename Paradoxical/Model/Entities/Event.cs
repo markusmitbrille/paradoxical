@@ -156,19 +156,17 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
     {
         writer.WriteLine();
 
-        var portraits = eventService.GetPortraits(this);
+        var leftPortrait = eventService.GetLeftPortrait(this);
+        var rightPortrait = eventService.GetRightPortrait(this);
+        var lowerLeftPortrait = eventService.GetLowerLeftPortrait(this);
+        var lowerCenterPortrait = eventService.GetLowerCenterPortrait(this);
+        var lowerRightPortrait = eventService.GetLowerRightPortrait(this);
 
-        var left = portraits.SingleOrDefault(portrait => portrait.Position == PortraitPosition.Left);
-        var right = portraits.SingleOrDefault(portrait => portrait.Position == PortraitPosition.Right);
-        var lowerLeft = portraits.SingleOrDefault(portrait => portrait.Position == PortraitPosition.LowerLeft);
-        var lowerCenter = portraits.SingleOrDefault(portrait => portrait.Position == PortraitPosition.LowerCenter);
-        var lowerRight = portraits.SingleOrDefault(portrait => portrait.Position == PortraitPosition.LowerRight);
-
-        left?.Write(writer, portraitService);
-        right?.Write(writer, portraitService);
-        lowerLeft?.Write(writer, portraitService);
-        lowerCenter?.Write(writer, portraitService);
-        lowerRight?.Write(writer, portraitService);
+        leftPortrait.Write(writer, portraitService);
+        rightPortrait.Write(writer, portraitService);
+        lowerLeftPortrait.Write(writer, portraitService);
+        lowerCenterPortrait.Write(writer, portraitService);
+        lowerRightPortrait.Write(writer, portraitService);
     }
 
     private void WriteTrigger(

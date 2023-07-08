@@ -233,6 +233,18 @@ public class EventTableViewModel : PageViewModel
         { return; }
 
         EventService.Delete(observable.Model);
+
+        var leftPortrait = EventService.GetLeftPortrait(observable.Model);
+        var rightPortrait = EventService.GetRightPortrait(observable.Model);
+        var lowerLeftPortrait = EventService.GetLowerLeftPortrait(observable.Model);
+        var lowerCenterPortrait = EventService.GetLowerCenterPortrait(observable.Model);
+        var lowerRightPortrait = EventService.GetLowerRightPortrait(observable.Model);
+
+        PortraitService.Delete(leftPortrait);
+        PortraitService.Delete(rightPortrait);
+        PortraitService.Delete(lowerLeftPortrait);
+        PortraitService.Delete(lowerCenterPortrait);
+        PortraitService.Delete(lowerRightPortrait);
     }
     private bool CanDelete(EventViewModel? observable)
     {

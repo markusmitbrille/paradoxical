@@ -1,6 +1,8 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Model.Elements;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Paradoxical.Services.Elements;
 
@@ -9,6 +11,12 @@ public interface IEventService : IEntityService<Event>
     IEnumerable<Option> GetOptions(Event model);
 
     IEnumerable<Portrait> GetPortraits(Event model);
+
+    Portrait GetLeftPortrait(Event model);
+    Portrait GetRightPortrait(Event model);
+    Portrait GetLowerLeftPortrait(Event model);
+    Portrait GetLowerCenterPortrait(Event model);
+    Portrait GetLowerRightPortrait(Event model);
 
     IEnumerable<Trigger> GetTriggers(Event model);
     void AddTrigger(Event model, Trigger relation);
@@ -49,6 +57,31 @@ public class EventService : EntityService<Event>, IEventService
             pk: "id");
 
         return Data.Connection.Query<Portrait>(query, model.Id);
+    }
+
+    public Portrait GetLeftPortrait(Event model)
+    {
+        return GetPortraits(model).Single(portrait => portrait.Position == PortraitPosition.Left);
+    }
+
+    public Portrait GetRightPortrait(Event model)
+    {
+        return GetPortraits(model).Single(portrait => portrait.Position == PortraitPosition.Right);
+    }
+
+    public Portrait GetLowerLeftPortrait(Event model)
+    {
+        return GetPortraits(model).Single(portrait => portrait.Position == PortraitPosition.LowerLeft);
+    }
+
+    public Portrait GetLowerCenterPortrait(Event model)
+    {
+        return GetPortraits(model).Single(portrait => portrait.Position == PortraitPosition.LowerCenter);
+    }
+
+    public Portrait GetLowerRightPortrait(Event model)
+    {
+        return GetPortraits(model).Single(portrait => portrait.Position == PortraitPosition.LowerRight);
     }
 
     public IEnumerable<Trigger> GetTriggers(Event model)

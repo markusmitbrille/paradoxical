@@ -130,20 +130,11 @@ public class EventDetailsViewModel : PageViewModel
     {
         var selected = EventService.Get(model);
 
-        var leftPortrait = EventService.GetPortraits(selected)
-            .Single(portrait => portrait.Position == PortraitPosition.Left);
-
-        var rightPortrait = EventService.GetPortraits(selected)
-            .Single(portrait => portrait.Position == PortraitPosition.Right);
-
-        var lowerLeftPortrait = EventService.GetPortraits(selected)
-            .Single(portrait => portrait.Position == PortraitPosition.LowerLeft);
-
-        var lowerCenterPortrait = EventService.GetPortraits(selected)
-            .Single(portrait => portrait.Position == PortraitPosition.LowerCenter);
-
-        var lowerRightPortrait = EventService.GetPortraits(selected)
-            .Single(portrait => portrait.Position == PortraitPosition.LowerRight);
+        var leftPortrait = EventService.GetLeftPortrait(model);
+        var rightPortrait = EventService.GetRightPortrait(model);
+        var lowerLeftPortrait = EventService.GetLowerLeftPortrait(model);
+        var lowerCenterPortrait = EventService.GetLowerCenterPortrait(model);
+        var lowerRightPortrait = EventService.GetLowerRightPortrait(model);
 
         var options = EventService.GetOptions(selected)
             .Select(model => new OptionViewModel() { Model = model });
@@ -304,6 +295,27 @@ public class EventDetailsViewModel : PageViewModel
         { return; }
 
         EventService.Delete(Selected.Model);
+
+        if (LeftPortrait != null)
+        {
+            PortraitService.Delete(LeftPortrait.Model);
+        }
+        if (RightPortrait != null)
+        {
+            PortraitService.Delete(RightPortrait.Model);
+        }
+        if (LowerLeftPortrait != null)
+        {
+            PortraitService.Delete(LowerLeftPortrait.Model);
+        }
+        if (LowerCenterPortrait != null)
+        {
+            PortraitService.Delete(LowerCenterPortrait.Model);
+        }
+        if (LowerRightPortrait != null)
+        {
+            PortraitService.Delete(LowerRightPortrait.Model);
+        }
     }
 
     #region Option Commands
