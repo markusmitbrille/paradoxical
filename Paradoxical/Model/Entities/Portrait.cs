@@ -38,6 +38,11 @@ public class Portrait : IEntity, IModel, IEquatable<Portrait?>
         TextWriter writer,
         IPortraitService portraitService)
     {
+        if (Character == string.Empty)
+        {
+            return;
+        }
+
         if (Position == PortraitPosition.Left)
         {
             writer.Indent().WriteLine("left_portrait = {");
@@ -64,14 +69,7 @@ public class Portrait : IEntity, IModel, IEquatable<Portrait?>
             ParadoxText.IndentLevel++;
         }
 
-        if (Character == string.Empty)
-        {
-            writer.Indent().WriteLine("character = ROOT");
-        }
-        else
-        {
-            writer.Indent().WriteLine($"character = {Character}");
-        }
+        writer.Indent().WriteLine($"character = {Character}");
 
         if (Animation != string.Empty)
         {
