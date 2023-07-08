@@ -15,6 +15,117 @@
     d:DesignWidth="800">
 
     <DockPanel>
+
+        <ToolBarTray
+            DockPanel.Dock="Top"
+            Margin="20">
+            <ToolBar
+                ClipToBounds="False"
+                Style="{StaticResource MaterialDesignToolBar}">
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding CreateCommand}"
+                    CommandParameter="{Binding Selected}"
+                    Content="{materialDesign:PackIcon Kind=Add}"
+                    ToolTip="Create Effect" />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding DuplicateCommand}"
+                    CommandParameter="{Binding Selected}"
+                    Content="{materialDesign:PackIcon Kind=ContentDuplicate}"
+                    ToolTip="Duplicate Effect" />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding DeleteCommand}"
+                    CommandParameter="{Binding Selected}"
+                    Content="{materialDesign:PackIcon Kind=Remove}"
+                    ToolTip="Delete Effect" />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding EditCommand}"
+                    CommandParameter="{Binding Selected}"
+                    Content="{materialDesign:PackIcon Kind=Pencil}"
+                    ToolTip="Edit Effect" />
+
+                <Separator />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding SaveCommand}"
+                    Content="{materialDesign:PackIcon Kind=ContentSave}"
+                    ToolTip="Apply" />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding LoadCommand}"
+                    Content="{materialDesign:PackIcon Kind=Refresh}"
+                    ToolTip="Refresh" />
+
+                <Separator />
+
+                <TextBox
+                    Width="300"
+                    Margin="4,0"
+                    Style="{DynamicResource MaterialDesignFilledTextBox}"
+                    Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    GotFocus="TextBoxGotFocusHandler"
+                    materialDesign:HintAssist.Hint="Filter Effects ..."
+                    materialDesign:TextFieldAssist.HasClearButton="True" />
+
+            </ToolBar>
+        </ToolBarTray>
+
+        <DataGrid
+            x:Name="datagrid"
+            Margin="20"
+            BorderBrush="Gray"
+            BorderThickness="1"
+            ItemsSource="{Binding Items}"
+            SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectionMode="Single"
+            SelectionUnit="FullRow"
+            AutoGenerateColumns="False"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            CanUserSortColumns="False"
+            CanUserReorderColumns="False">
+
+            <DataGrid.Columns>
+
+                <DataGridTextColumn
+                    Header="ID"
+                    Binding="{Binding Id}"
+                    IsReadOnly="True" />
+
+                <DataGridTextColumn
+                    Header="Name"
+                    MinWidth="250"
+                    MaxWidth="500"
+                    Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                <DataGridTextColumn
+                    Header="Code"
+                    Width="*"
+                    MinWidth="400"
+                    MaxWidth="800"
+                    Binding="{Binding Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ElementStyle="{StaticResource DataGridWrappingTextBlock}"
+                    EditingElementStyle="{StaticResource DataGridWrappingTextBox}" />
+
+                <DataGridTextColumn
+                    Header="Tooltip"
+                    MinWidth="250"
+                    MaxWidth="500"
+                    Binding="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+
     </DockPanel>
 
 </UserControl>
