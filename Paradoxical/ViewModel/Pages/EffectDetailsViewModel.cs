@@ -132,6 +132,8 @@ public class EffectDetailsViewModel : PageViewModel
         { return; }
 
         EffectService.Delete(observable.Model);
+
+        Shell.Navigate<EffectTableViewModel>();
     }
     private bool CanDelete(EffectViewModel? observable)
     {

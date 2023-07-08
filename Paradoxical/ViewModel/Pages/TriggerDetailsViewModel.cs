@@ -140,6 +140,8 @@ public class TriggerDetailsViewModel : PageViewModel
         { return; }
 
         TriggerService.Delete(observable.Model);
+
+        Shell.Navigate<TriggerTableViewModel>();
     }
     private bool CanDelete(TriggerViewModel? observable)
     {

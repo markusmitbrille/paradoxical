@@ -295,6 +295,8 @@ public class EventDetailsViewModel : PageViewModel
         { return; }
 
         EventService.Delete(Selected.Model);
+
+        Shell.Navigate<EventTableViewModel>();
     }
 
     #region Option Commands
