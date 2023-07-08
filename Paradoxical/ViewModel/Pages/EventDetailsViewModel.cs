@@ -279,8 +279,41 @@ public class EventDetailsViewModel : PageViewModel
         { return; }
 
         Event model = new(Selected.Model);
-
         EventService.Insert(model);
+
+        var options = EventService.GetOptions(Selected.Model);
+        foreach (var option in options)
+        {
+            Option duplicate = new(option);
+            duplicate.EventId = model.Id;
+            OptionService.Insert(duplicate);
+        }
+
+        var portraits = EventService.GetPortraits(Selected.Model);
+        foreach (var portrait in portraits)
+        {
+            Portrait duplicate = new(portrait);
+            duplicate.EventId = model.Id;
+            PortraitService.Insert(duplicate);
+        }
+
+        var triggers = EventService.GetTriggers(Selected.Model);
+        foreach (var trigger in triggers)
+        {
+            EventService.AddTrigger(model, trigger);
+        }
+
+        var immediates = EventService.GetImmediates(Selected.Model);
+        foreach (var immediate in immediates)
+        {
+            EventService.AddImmediate(model, immediate);
+        }
+
+        var afters = EventService.GetAfters(Selected.Model);
+        foreach (var after in afters)
+        {
+            EventService.AddAfter(model, after);
+        }
 
         var page = Shell.Navigate<EventDetailsViewModel>();
         page.Load(model);

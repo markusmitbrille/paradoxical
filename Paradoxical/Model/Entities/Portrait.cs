@@ -34,6 +34,23 @@ public class Portrait : IEntity, IModel, IEquatable<Portrait?>
     public string OutfitTags { get => outfitTags; set => outfitTags = value; }
     public string outfitTags = "";
 
+    public Portrait()
+    {
+    }
+
+    public Portrait(Portrait other)
+    {
+        id = 0;
+
+        eventId = other.eventId;
+
+        position = other.position;
+
+        character = other.character;
+        animation = other.animation;
+        outfitTags = other.outfitTags;
+    }
+
     public void Write(
         TextWriter writer,
         IPortraitService portraitService)

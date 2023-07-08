@@ -66,6 +66,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         theme = other.theme;
         hidden = other.hidden;
         cooldown = other.cooldown;
+        
         customTrigger = other.customTrigger;
         customImmediateEffect = other.customImmediateEffect;
         customAfterEffect = other.customAfterEffect;

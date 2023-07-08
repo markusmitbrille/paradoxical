@@ -84,6 +84,37 @@ public class Option : IEntity, IModel, IEquatable<Option?>
     public int AiZealTargetModifier { get => aiZealTargetModifier; set => aiZealTargetModifier = value; }
     public int aiZealTargetModifier;
 
+    public Option()
+    {
+    }
+
+    public Option(Option other)
+    {
+        id = 0;
+
+        eventId = other.eventId;
+        
+        title = other.title;
+        tooltip = other.tooltip;
+        
+        triggeredEventId = other.triggeredEventId;
+        triggeredEventScope = other.triggeredEventScope;
+        triggeredEventMinDays = other.triggeredEventMinDays;
+        triggeredEventMaxDays = other.triggeredEventMaxDays;
+       
+        aiBaseChance = other.aiBaseChance;
+        
+        aiBoldnessTargetModifier = other.aiBoldnessTargetModifier;
+        aiCompassionTargetModifier = other.aiCompassionTargetModifier;
+        aiGreedTargetModifier = other.aiGreedTargetModifier;
+        aiEnergyTargetModifier = other.aiEnergyTargetModifier;
+        aiHonorTargetModifier = other.aiHonorTargetModifier;
+        aiRationalityTargetModifier = other.aiRationalityTargetModifier;
+        aiSociabilityTargetModifier = other.aiSociabilityTargetModifier;
+        aiVengefulnessTargetModifier = other.aiVengefulnessTargetModifier;
+        aiZealTargetModifier = other.aiZealTargetModifier;
+    }
+
     public string GetQualifiedName(IModService modService)
     {
         return $"{modService.GetPrefix()}_opt_{Id}";

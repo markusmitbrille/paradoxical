@@ -19,6 +19,7 @@ public class EventTableViewModel : PageViewModel
     public override string PageName => "Events";
 
     public IEventService EventService { get; }
+    public IOptionService OptionService { get; }
     public IPortraitService PortraitService { get; }
 
     private ObservableCollection<EventViewModel> items = new();
@@ -46,10 +47,12 @@ public class EventTableViewModel : PageViewModel
         IShell shell,
         IMediatorService mediator,
         IEventService eventService,
+        IOptionService optionService,
         IPortraitService portraitService)
         : base(shell, mediator)
     {
         EventService = eventService;
+        OptionService = optionService;
         PortraitService = portraitService;
     }
 
@@ -218,6 +221,40 @@ public class EventTableViewModel : PageViewModel
 
         Event model = new(observable.Model);
         EventService.Insert(model);
+
+        var options = EventService.GetOptions(observable.Model);
+        foreach (var option in options)
+        {
+            Option duplicate = new(option);
+            duplicate.EventId = model.Id;
+            OptionService.Insert(duplicate);
+        }
+
+        var portraits = EventService.GetPortraits(observable.Model);
+        foreach (var portrait in portraits)
+        {
+            Portrait duplicate = new(portrait);
+            duplicate.EventId = model.Id;
+            PortraitService.Insert(duplicate);
+        }
+
+        var triggers = EventService.GetTriggers(observable.Model);
+        foreach (var trigger in triggers)
+        {
+            EventService.AddTrigger(model, trigger);
+        }
+
+        var immediates = EventService.GetImmediates(observable.Model);
+        foreach (var immediate in immediates)
+        {
+            EventService.AddImmediate(model, immediate);
+        }
+
+        var afters = EventService.GetAfters(observable.Model);
+        foreach (var after in afters)
+        {
+            EventService.AddAfter(model, after);
+        }
     }
     private bool CanDuplicate(EventViewModel? observable)
     {
