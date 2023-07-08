@@ -19,6 +19,7 @@ public class EventTableViewModel : PageViewModel
     public override string PageName => "Events";
 
     public IEventService EventService { get; }
+    public IPortraitService PortraitService { get; }
 
     private ObservableCollection<EventViewModel> items = new();
     public ObservableCollection<EventViewModel> Items
@@ -44,10 +45,12 @@ public class EventTableViewModel : PageViewModel
     public EventTableViewModel(
         IShell shell,
         IMediatorService mediator,
-        IEventService triggerService)
+        IEventService eventService,
+        IPortraitService portraitService)
         : base(shell, mediator)
     {
-        EventService = triggerService;
+        EventService = eventService;
+        PortraitService = portraitService;
     }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -166,7 +169,40 @@ public class EventTableViewModel : PageViewModel
             Title = "Hello World",
             Description = "Hello World!",
         };
+
         EventService.Insert(model);
+
+        Portrait leftPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.Left,
+        };
+        Portrait rightPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.Right,
+        };
+        Portrait lowerLeftPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.LowerLeft,
+        };
+        Portrait lowerCenterPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.LowerCenter,
+        };
+        Portrait lowerRightPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.LowerRight,
+        };
+
+        PortraitService.Insert(leftPortrait);
+        PortraitService.Insert(rightPortrait);
+        PortraitService.Insert(lowerLeftPortrait);
+        PortraitService.Insert(lowerCenterPortrait);
+        PortraitService.Insert(lowerRightPortrait);
 
         EventViewModel observable = new() { Model = model };
         Items.Add(observable);

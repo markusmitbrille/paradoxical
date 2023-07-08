@@ -10,6 +10,11 @@ public partial class PortraitViewModel : ModelWrapper<Portrait>
         get => model.eventId;
     }
 
+    public PortraitPosition Position
+    {
+        get => model.position;
+    }
+
     public string Character
     {
         get => model.character;

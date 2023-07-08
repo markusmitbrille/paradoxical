@@ -21,6 +21,7 @@ public class EventDetailsViewModel : PageViewModel
     public FinderViewModel Finder { get; }
 
     public IEventService EventService { get; }
+    public IPortraitService PortraitService { get; }
     public IOptionService OptionService { get; }
     public ITriggerService TriggerService { get; }
     public IEffectService EffectService { get; }
@@ -30,6 +31,41 @@ public class EventDetailsViewModel : PageViewModel
     {
         get => selected;
         set => SetProperty(ref selected, value);
+    }
+
+    private PortraitViewModel? leftPortrait;
+    public PortraitViewModel? LeftPortrait
+    {
+        get => leftPortrait;
+        set => SetProperty(ref leftPortrait, value);
+    }
+
+    private PortraitViewModel? rightPortrait;
+    public PortraitViewModel? RightPortrait
+    {
+        get => rightPortrait;
+        set => SetProperty(ref rightPortrait, value);
+    }
+
+    private PortraitViewModel? lowerLeftPortrait;
+    public PortraitViewModel? LowerLeftPortrait
+    {
+        get => lowerLeftPortrait;
+        set => SetProperty(ref lowerLeftPortrait, value);
+    }
+
+    private PortraitViewModel? lowerCenterPortrait;
+    public PortraitViewModel? LowerCenterPortrait
+    {
+        get => lowerCenterPortrait;
+        set => SetProperty(ref lowerCenterPortrait, value);
+    }
+
+    private PortraitViewModel? lowerRightPortrait;
+    public PortraitViewModel? LowerRightPortrait
+    {
+        get => lowerRightPortrait;
+        set => SetProperty(ref lowerRightPortrait, value);
     }
 
     private ObservableCollection<OptionViewModel>? options;
@@ -49,6 +85,7 @@ public class EventDetailsViewModel : PageViewModel
         IMediatorService mediator,
         FinderViewModel finder,
         IEventService eventService,
+        IPortraitService portraitService,
         IOptionService optionService,
         ITriggerService triggerService,
         IEffectService effectService)
@@ -57,6 +94,7 @@ public class EventDetailsViewModel : PageViewModel
         Finder = finder;
 
         EventService = eventService;
+        PortraitService = portraitService;
         OptionService = optionService;
         TriggerService = triggerService;
         EffectService = effectService;
@@ -92,6 +130,21 @@ public class EventDetailsViewModel : PageViewModel
     {
         var selected = EventService.Get(model);
 
+        var leftPortrait = EventService.GetPortraits(selected)
+            .Single(portrait => portrait.Position == PortraitPosition.Left);
+
+        var rightPortrait = EventService.GetPortraits(selected)
+            .Single(portrait => portrait.Position == PortraitPosition.Right);
+
+        var lowerLeftPortrait = EventService.GetPortraits(selected)
+            .Single(portrait => portrait.Position == PortraitPosition.LowerLeft);
+
+        var lowerCenterPortrait = EventService.GetPortraits(selected)
+            .Single(portrait => portrait.Position == PortraitPosition.LowerCenter);
+
+        var lowerRightPortrait = EventService.GetPortraits(selected)
+            .Single(portrait => portrait.Position == PortraitPosition.LowerRight);
+
         var options = EventService.GetOptions(selected)
             .Select(model => new OptionViewModel() { Model = model });
 
@@ -105,6 +158,12 @@ public class EventDetailsViewModel : PageViewModel
             .Select(model => new EffectViewModel() { Model = model });
 
         Selected = new() { Model = selected };
+
+        LeftPortrait = new() { Model = leftPortrait };
+        RightPortrait = new() { Model = rightPortrait };
+        LowerLeftPortrait = new() { Model = lowerLeftPortrait };
+        LowerCenterPortrait = new() { Model = lowerCenterPortrait };
+        LowerRightPortrait = new() { Model = lowerRightPortrait };
 
         Options.Clear();
         Options.AddRange(options);
@@ -163,6 +222,38 @@ public class EventDetailsViewModel : PageViewModel
 
         EventService.Insert(model);
 
+        Portrait leftPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.Left,
+        };
+        Portrait rightPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.Right,
+        };
+        Portrait lowerLeftPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.LowerLeft,
+        };
+        Portrait lowerCenterPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.LowerCenter,
+        };
+        Portrait lowerRightPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.LowerRight,
+        };
+
+        PortraitService.Insert(leftPortrait);
+        PortraitService.Insert(rightPortrait);
+        PortraitService.Insert(lowerLeftPortrait);
+        PortraitService.Insert(lowerCenterPortrait);
+        PortraitService.Insert(lowerRightPortrait);
+
         var page = Shell.Navigate<EventDetailsViewModel>();
         page.Load(model);
     }
@@ -193,7 +284,7 @@ public class EventDetailsViewModel : PageViewModel
 
         EventService.Delete(Selected.Model);
     }
-    
+
     #region Option Commands
 
     private RelayCommand? createOptionCommand;
