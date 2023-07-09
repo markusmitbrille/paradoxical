@@ -59,111 +59,101 @@
             </ToolBar>
         </ToolBarTray>
 
-        <ScrollViewer
-            VerticalScrollBarVisibility="Hidden"
-            HorizontalScrollBarVisibility="Disabled">
-            <StackPanel>
+        <TabControl
+            Padding="20">
 
-                <materialDesign:Card
-                    Margin="20,10"
-                    Padding="8,14"
-                    materialDesign:ElevationAssist.Elevation="Dp4">
-                    <Expander
-                        Padding="8"
-                        Header="General"
-                        IsExpanded="True">
-                        <StackPanel>
+            <TabItem
+                Header="General">
+                <StackPanel>
 
-                            <TextBox
-                                Margin="6,12"
-                                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                                materialDesign:HintAssist.Hint="Name"
-                                materialDesign:HintAssist.HelperText="Element name, used in script.">
+                    <TextBox
+                        Margin="6,12"
+                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                        materialDesign:HintAssist.Hint="Name"
+                        materialDesign:HintAssist.HelperText="Element name, used in script.">
 
-                                <TextBox.Text>
-                                    <Binding
-                                        Path="Selected.Name"
-                                        Mode="TwoWay"
-                                        UpdateSourceTrigger="PropertyChanged"
-                                        FallbackValue="element_name">
-                                        <Binding.ValidationRules>
-                                            <rules:RequiredRule
-                                                ValidatesOnTargetUpdated="True" />
-                                            <rules:NameRule
-                                                ValidatesOnTargetUpdated="True" />
-                                        </Binding.ValidationRules>
-                                    </Binding>
-                                </TextBox.Text>
+                        <TextBox.Text>
+                            <Binding
+                                Path="Selected.Name"
+                                Mode="TwoWay"
+                                UpdateSourceTrigger="PropertyChanged"
+                                FallbackValue="element_name">
+                                <Binding.ValidationRules>
+                                    <rules:RequiredRule
+                                        ValidatesOnTargetUpdated="True" />
+                                    <rules:NameRule
+                                        ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
 
-                            </TextBox>
+                    </TextBox>
 
-                            <view:ScriptBox
-                                Height="120"
-                                Margin="6,12"
-                                Style="{DynamicResource MaterialDesignRichTextBox}"
-                                materialDesign:HintAssist.Hint="Code"
-                                materialDesign:HintAssist.IsFloating="True"
-                                materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                                materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                                materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
-                                AcceptsReturn="True">
+                    <view:ScriptBox
+                        Height="120"
+                        Margin="6,12"
+                        Style="{DynamicResource MaterialDesignRichTextBox}"
+                        materialDesign:HintAssist.Hint="Code"
+                        materialDesign:HintAssist.IsFloating="True"
+                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
+                        AcceptsReturn="True">
 
-                                <view:ScriptBox.TextFormatter>
-                                    <formatters:CodeFormatter />
-                                </view:ScriptBox.TextFormatter>
+                        <view:ScriptBox.TextFormatter>
+                            <formatters:CodeFormatter />
+                        </view:ScriptBox.TextFormatter>
 
-                                <view:ScriptBox.Text>
-                                    <Binding
-                                        Path="Selected.Code"
-                                        Mode="TwoWay"
-                                        UpdateSourceTrigger="PropertyChanged"
-                                        FallbackValue="# some code">
-                                        <Binding.ValidationRules>
-                                            <rules:RequiredRule
-                                                ValidatesOnTargetUpdated="True" />
-                                        </Binding.ValidationRules>
-                                    </Binding>
-                                </view:ScriptBox.Text>
+                        <view:ScriptBox.Text>
+                            <Binding
+                                Path="Selected.Code"
+                                Mode="TwoWay"
+                                UpdateSourceTrigger="PropertyChanged"
+                                FallbackValue="# some code">
+                                <Binding.ValidationRules>
+                                    <rules:RequiredRule
+                                        ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </view:ScriptBox.Text>
 
-                            </view:ScriptBox>
+                    </view:ScriptBox>
 
-                            <view:ScriptBox
-                                Margin="6,12"
-                                Style="{DynamicResource MaterialDesignRichTextBox}"
-                                Text="{Binding Selected.Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                AcceptsReturn="False"
-                                materialDesign:HintAssist.Hint="Tooltip"
-                                materialDesign:HintAssist.IsFloating="True"
-                                materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated effect text."
-                                materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                                materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                                materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                    <view:ScriptBox
+                        Margin="6,12"
+                        Style="{DynamicResource MaterialDesignRichTextBox}"
+                        Text="{Binding Selected.Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        AcceptsReturn="False"
+                        materialDesign:HintAssist.Hint="Tooltip"
+                        materialDesign:HintAssist.IsFloating="True"
+                        materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated effect text."
+                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
 
-                                <view:ScriptBox.TextFormatter>
-                                    <formatters:EventTextFormatter />
-                                </view:ScriptBox.TextFormatter>
+                        <view:ScriptBox.TextFormatter>
+                            <formatters:EventTextFormatter />
+                        </view:ScriptBox.TextFormatter>
 
-                            </view:ScriptBox>
+                    </view:ScriptBox>
 
-                            <StackPanel
-                                Margin="6,12"
-                                Orientation="Horizontal">
+                    <StackPanel
+                        Margin="6,12"
+                        Orientation="Horizontal">
 
-                                <CheckBox
-                                    IsChecked="{Binding Selected.Hidden, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <CheckBox
+                            IsChecked="{Binding Selected.Hidden, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                                <TextBlock
-                                    Text="Hidden"
-                                    Style="{DynamicResource MaterialDesignTextBlock}" />
+                        <TextBlock
+                            Text="Hidden"
+                            Style="{DynamicResource MaterialDesignTextBlock}" />
 
-                            </StackPanel>
+                    </StackPanel>
 
-                        </StackPanel>
-                    </Expander>
-                </materialDesign:Card>
+                </StackPanel>
+            </TabItem>
 
-            </StackPanel>
-        </ScrollViewer>
+        </TabControl>
 
     </DockPanel>
 
