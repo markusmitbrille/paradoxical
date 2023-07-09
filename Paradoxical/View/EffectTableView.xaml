@@ -80,7 +80,7 @@
         </ToolBarTray>
 
         <DataGrid
-            x:Name="datagrid"
+            x:Name="ItemsDataGrid"
             Margin="20"
             BorderBrush="Gray"
             BorderThickness="1"
@@ -92,6 +92,13 @@
             AutoGenerateColumns="False"
             CanUserSortColumns="False"
             CanUserReorderColumns="False">
+
+            <DataGrid.InputBindings>
+                <MouseBinding
+                    MouseAction="LeftDoubleClick"
+                    Command="{Binding EditCommand}"
+                    CommandParameter="{Binding SelectedItem, ElementName=ItemsDataGrid}" />
+            </DataGrid.InputBindings>
 
             <DataGrid.Columns>
 

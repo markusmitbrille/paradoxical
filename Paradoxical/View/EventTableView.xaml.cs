@@ -13,9 +13,9 @@ public partial class EventTableView : UserControl
     private void TextBoxGotFocusHandler(object sender, RoutedEventArgs e)
     {
         // commit current edit
-        datagrid.CommitEdit();
+        ItemsDataGrid.CommitEdit();
 
         // commit pending edits
-        datagrid.CommitEdit();
+        ItemsDataGrid.CommitEdit();
     }
 }

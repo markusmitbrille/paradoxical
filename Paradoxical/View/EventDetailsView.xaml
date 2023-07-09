@@ -350,6 +350,7 @@
                 Header="Options">
 
                 <DataGrid
+                    x:Name="OptionsDataGrid"
                     Margin="20"
                     BorderBrush="Gray"
                     BorderThickness="1"
@@ -359,6 +360,13 @@
                     AutoGenerateColumns="False"
                     CanUserSortColumns="False"
                     CanUserReorderColumns="False">
+
+                    <DataGrid.InputBindings>
+                        <MouseBinding
+                            MouseAction="LeftDoubleClick"
+                            Command="{Binding GoToOptionCommand}"
+                            CommandParameter="{Binding SelectedItem, ElementName=OptionsDataGrid}" />
+                    </DataGrid.InputBindings>
 
                     <DataGrid.Columns>
 
