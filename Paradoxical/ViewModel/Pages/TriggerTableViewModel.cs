@@ -6,6 +6,7 @@ using Paradoxical.Services;
 using Paradoxical.Services.Elements;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
@@ -23,8 +24,50 @@ public class TriggerTableViewModel : PageViewModel
     private ObservableCollection<TriggerViewModel> items = new();
     public ObservableCollection<TriggerViewModel> Items
     {
-        get => items;
-        set => SetProperty(ref items, value);
+        get
+        {
+            if (items == null)
+            {
+                items = new();
+                items.CollectionChanged += Items_CollectionChanged;
+            }
+
+            return items;
+        }
+        set
+        {
+            OnPropertyChanging();
+
+            items = value;
+            items.CollectionChanged += Items_CollectionChanged;
+
+            OnPropertyChanged();
+        }
+    }
+
+    private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null && e.NewItems.Count == 1)
+        {
+            TriggerViewModel observable = e.NewItems.Cast<TriggerViewModel>().Single();
+            TriggerService.Insert(observable.Model);
+        }
+        if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null && e.OldItems.Count == 1)
+        {
+            TriggerViewModel observable = e.OldItems.Cast<TriggerViewModel>().Single();
+            TriggerService.Delete(observable.Model);
+
+            var historyPages = Shell.PageHistory.OfType<TriggerDetailsViewModel>()
+                .Where(page => page.Selected?.Model == observable.Model)
+                .ToArray();
+
+            var futurePages = Shell.PageFuture.OfType<TriggerDetailsViewModel>()
+                .Where(page => page.Selected?.Model == observable.Model)
+                .ToArray();
+
+            Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
+            Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
+        }
     }
 
     private TriggerViewModel? selected;
@@ -97,6 +140,7 @@ public class TriggerTableViewModel : PageViewModel
 
     private void Load()
     {
+        Selected = null;
         Items = new(TriggerService.Get().Select(model => new TriggerViewModel() { Model = model }));
 
         ICollectionView view = CollectionViewSource.GetDefaultView(Items);
@@ -160,33 +204,7 @@ public class TriggerTableViewModel : PageViewModel
 
     private void Create()
     {
-        Trigger model = new()
-        {
-            Name = $"trg_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Code = "# some trigger",
-        };
-        TriggerService.Insert(model);
-
-        TriggerViewModel observable = new() { Model = model };
-        Items.Add(observable);
-    }
-
-    private RelayCommand<TriggerViewModel>? duplicateCommand;
-    public RelayCommand<TriggerViewModel> DuplicateCommand => duplicateCommand ??= new(Duplicate, CanDuplicate);
-
-    private void Duplicate(TriggerViewModel? observable)
-    {
-        if (observable == null)
-        { return; }
-
-        Trigger model = new(observable.Model);
-        TriggerService.Insert(model);
-
-        Items.Add(new() { Model = model });
-    }
-    private bool CanDuplicate(TriggerViewModel? observable)
-    {
-        return observable != null;
+        Items.Add(new());
     }
 
     private RelayCommand<TriggerViewModel>? deleteCommand;
@@ -196,19 +214,6 @@ public class TriggerTableViewModel : PageViewModel
     {
         if (observable == null)
         { return; }
-
-        TriggerService.Delete(observable.Model);
-
-        var historyPages = Shell.PageHistory.OfType<TriggerDetailsViewModel>()
-            .Where(page => page.Selected?.Model == observable.Model)
-            .ToArray();
-
-        var futurePages = Shell.PageFuture.OfType<TriggerDetailsViewModel>()
-            .Where(page => page.Selected?.Model == observable.Model)
-            .ToArray();
-
-        Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
-        Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
 
         Items.Remove(observable);
     }

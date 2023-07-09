@@ -16,7 +16,7 @@ public class Effect : IEntity, IModel, IElement, IEquatable<Effect?>
 
     [Column("name"), Indexed, NotNull]
     public string Name { get => name; set => name = value; }
-    public string name = "";
+    public string name = $"eff_{Guid.NewGuid().ToString("N").Substring(0, 4)}";
 
     [Column("code"), NotNull]
     public string Code { get => code; set => code = value; }

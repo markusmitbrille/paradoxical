@@ -13,6 +13,14 @@
     d:DataContext="{d:DesignInstance {x:Type viewmodel:EffectTableViewModel}}"
     d:DesignWidth="800">
 
+    <UserControl.Resources>
+
+        <CollectionViewSource
+            x:Key="ItemsCollectionViewSource"
+            Source="{Binding Items}" />
+
+    </UserControl.Resources>
+
     <DockPanel>
 
         <ToolBarTray
@@ -28,13 +36,6 @@
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=Add}"
                     ToolTip="Create Effect" />
-
-                <Button
-                    Margin="4,0"
-                    Command="{Binding DuplicateCommand}"
-                    CommandParameter="{Binding Selected}"
-                    Content="{materialDesign:PackIcon Kind=ContentDuplicate}"
-                    ToolTip="Duplicate Effect" />
 
                 <Button
                     Margin="4,0"
@@ -83,13 +84,12 @@
             Margin="20"
             BorderBrush="Gray"
             BorderThickness="1"
-            ItemsSource="{Binding Items}"
-            SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            ItemsSource="{Binding Source={StaticResource ItemsCollectionViewSource}}"
+            SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, 
+                TargetNullValue={x:Static CollectionView.NewItemPlaceholder}}"
             SelectionMode="Single"
             SelectionUnit="FullRow"
             AutoGenerateColumns="False"
-            CanUserAddRows="False"
-            CanUserDeleteRows="False"
             CanUserSortColumns="False"
             CanUserReorderColumns="False">
 

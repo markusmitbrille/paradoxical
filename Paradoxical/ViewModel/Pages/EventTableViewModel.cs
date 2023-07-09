@@ -6,6 +6,7 @@ using Paradoxical.Services;
 using Paradoxical.Services.Elements;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
@@ -25,8 +26,82 @@ public class EventTableViewModel : PageViewModel
     private ObservableCollection<EventViewModel> items = new();
     public ObservableCollection<EventViewModel> Items
     {
-        get => items;
-        set => SetProperty(ref items, value);
+        get
+        {
+            if (items == null)
+            {
+                items = new();
+                items.CollectionChanged += Items_CollectionChanged;
+            }
+
+            return items;
+        }
+        set
+        {
+            OnPropertyChanging();
+
+            items = value;
+            items.CollectionChanged += Items_CollectionChanged;
+
+            OnPropertyChanged();
+        }
+    }
+
+    private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null && e.NewItems.Count == 1)
+        {
+            EventViewModel observable = e.NewItems.Cast<EventViewModel>().Single();
+            EventService.Insert(observable.Model);
+
+            Portrait leftPortrait = new()
+            {
+                EventId = observable.Model.Id,
+                Position = PortraitPosition.Left,
+            };
+            Portrait rightPortrait = new()
+            {
+                EventId = observable.Model.Id,
+                Position = PortraitPosition.Right,
+            };
+            Portrait lowerLeftPortrait = new()
+            {
+                EventId = observable.Model.Id,
+                Position = PortraitPosition.LowerLeft,
+            };
+            Portrait lowerCenterPortrait = new()
+            {
+                EventId = observable.Model.Id,
+                Position = PortraitPosition.LowerCenter,
+            };
+            Portrait lowerRightPortrait = new()
+            {
+                EventId = observable.Model.Id,
+                Position = PortraitPosition.LowerRight,
+            };
+
+            PortraitService.Insert(leftPortrait);
+            PortraitService.Insert(rightPortrait);
+            PortraitService.Insert(lowerLeftPortrait);
+            PortraitService.Insert(lowerCenterPortrait);
+            PortraitService.Insert(lowerRightPortrait);
+        }
+        if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null && e.OldItems.Count == 1)
+        {
+            EventViewModel observable = e.OldItems.Cast<EventViewModel>().Single();
+            EventService.Delete(observable.Model);
+
+            var historyPages = Shell.PageHistory.OfType<EventDetailsViewModel>()
+                .Where(page => page.Selected?.Model == observable.Model)
+                .ToArray();
+
+            var futurePages = Shell.PageFuture.OfType<EventDetailsViewModel>()
+                .Where(page => page.Selected?.Model == observable.Model)
+                .ToArray();
+
+            Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
+            Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
+        }
     }
 
     private EventViewModel? selected;
@@ -103,6 +178,7 @@ public class EventTableViewModel : PageViewModel
 
     private void Load()
     {
+        Selected = null;
         Items = new(EventService.Get().Select(model => new EventViewModel() { Model = model }));
 
         ICollectionView view = CollectionViewSource.GetDefaultView(Items);
@@ -166,101 +242,7 @@ public class EventTableViewModel : PageViewModel
 
     private void Create()
     {
-        Event model = new()
-        {
-            Name = $"evt_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Title = "Hello World",
-            Description = "Hello World!",
-        };
-
-        EventService.Insert(model);
-
-        Portrait leftPortrait = new()
-        {
-            EventId = model.Id,
-            Position = PortraitPosition.Left,
-        };
-        Portrait rightPortrait = new()
-        {
-            EventId = model.Id,
-            Position = PortraitPosition.Right,
-        };
-        Portrait lowerLeftPortrait = new()
-        {
-            EventId = model.Id,
-            Position = PortraitPosition.LowerLeft,
-        };
-        Portrait lowerCenterPortrait = new()
-        {
-            EventId = model.Id,
-            Position = PortraitPosition.LowerCenter,
-        };
-        Portrait lowerRightPortrait = new()
-        {
-            EventId = model.Id,
-            Position = PortraitPosition.LowerRight,
-        };
-
-        PortraitService.Insert(leftPortrait);
-        PortraitService.Insert(rightPortrait);
-        PortraitService.Insert(lowerLeftPortrait);
-        PortraitService.Insert(lowerCenterPortrait);
-        PortraitService.Insert(lowerRightPortrait);
-
-        EventViewModel observable = new() { Model = model };
-        Items.Add(observable);
-    }
-
-    private RelayCommand<EventViewModel>? duplicateCommand;
-    public RelayCommand<EventViewModel> DuplicateCommand => duplicateCommand ??= new(Duplicate, CanDuplicate);
-
-    private void Duplicate(EventViewModel? observable)
-    {
-        if (observable == null)
-        { return; }
-
-        Event model = new(observable.Model);
-        EventService.Insert(model);
-
-        var options = EventService.GetOptions(observable.Model);
-        foreach (var option in options)
-        {
-            Option duplicate = new(option);
-            duplicate.EventId = model.Id;
-            OptionService.Insert(duplicate);
-        }
-
-        var portraits = EventService.GetPortraits(observable.Model);
-        foreach (var portrait in portraits)
-        {
-            Portrait duplicate = new(portrait);
-            duplicate.EventId = model.Id;
-            PortraitService.Insert(duplicate);
-        }
-
-        var triggers = EventService.GetTriggers(observable.Model);
-        foreach (var trigger in triggers)
-        {
-            EventService.AddTrigger(model, trigger);
-        }
-
-        var immediates = EventService.GetImmediates(observable.Model);
-        foreach (var immediate in immediates)
-        {
-            EventService.AddImmediate(model, immediate);
-        }
-
-        var afters = EventService.GetAfters(observable.Model);
-        foreach (var after in afters)
-        {
-            EventService.AddAfter(model, after);
-        }
-
-        Items.Add(new() { Model = model });
-    }
-    private bool CanDuplicate(EventViewModel? observable)
-    {
-        return observable != null;
+        Items.Add(new());
     }
 
     private RelayCommand<EventViewModel>? deleteCommand;
@@ -270,19 +252,6 @@ public class EventTableViewModel : PageViewModel
     {
         if (observable == null)
         { return; }
-
-        EventService.Delete(observable.Model);
-
-        var historyPages = Shell.PageHistory.OfType<EventDetailsViewModel>()
-            .Where(page => page.Selected?.Model == observable.Model)
-            .ToArray();
-
-        var futurePages = Shell.PageFuture.OfType<EventDetailsViewModel>()
-            .Where(page => page.Selected?.Model == observable.Model)
-            .ToArray();
-
-        Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
-        Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
 
         Items.Remove(observable);
     }

@@ -6,6 +6,7 @@ using Paradoxical.Services;
 using Paradoxical.Services.Elements;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
@@ -23,8 +24,50 @@ public class EffectTableViewModel : PageViewModel
     private ObservableCollection<EffectViewModel> items = new();
     public ObservableCollection<EffectViewModel> Items
     {
-        get => items;
-        set => SetProperty(ref items, value);
+        get
+        {
+            if (items == null)
+            {
+                items = new();
+                items.CollectionChanged += Items_CollectionChanged;
+            }
+
+            return items;
+        }
+        set
+        {
+            OnPropertyChanging();
+
+            items = value;
+            items.CollectionChanged += Items_CollectionChanged;
+
+            OnPropertyChanged();
+        }
+    }
+
+    private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null && e.NewItems.Count == 1)
+        {
+            EffectViewModel observable = e.NewItems.Cast<EffectViewModel>().Single();
+            EffectService.Insert(observable.Model);
+        }
+        if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null && e.OldItems.Count == 1)
+        {
+            EffectViewModel observable = e.OldItems.Cast<EffectViewModel>().Single();
+            EffectService.Delete(observable.Model);
+
+            var historyPages = Shell.PageHistory.OfType<EffectDetailsViewModel>()
+                .Where(page => page.Selected?.Model == observable.Model)
+                .ToArray();
+
+            var futurePages = Shell.PageFuture.OfType<EffectDetailsViewModel>()
+                .Where(page => page.Selected?.Model == observable.Model)
+                .ToArray();
+
+            Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
+            Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
+        }
     }
 
     private EffectViewModel? selected;
@@ -97,6 +140,7 @@ public class EffectTableViewModel : PageViewModel
 
     private void Load()
     {
+        Selected = null;
         Items = new(EffectService.Get().Select(model => new EffectViewModel() { Model = model }));
 
         ICollectionView view = CollectionViewSource.GetDefaultView(Items);
@@ -160,33 +204,7 @@ public class EffectTableViewModel : PageViewModel
 
     private void Create()
     {
-        Effect model = new()
-        {
-            Name = $"eff_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Code = "# some effect",
-        };
-        EffectService.Insert(model);
-
-        EffectViewModel observable = new() { Model = model };
-        Items.Add(observable);
-    }
-
-    private RelayCommand<EffectViewModel>? duplicateCommand;
-    public RelayCommand<EffectViewModel> DuplicateCommand => duplicateCommand ??= new(Duplicate, CanDuplicate);
-
-    private void Duplicate(EffectViewModel? observable)
-    {
-        if (observable == null)
-        { return; }
-
-        Effect model = new(observable.Model);
-        EffectService.Insert(model);
-
-        Items.Add(new() { Model = model });
-    }
-    private bool CanDuplicate(EffectViewModel? observable)
-    {
-        return observable != null;
+        Items.Add(new());
     }
 
     private RelayCommand<EffectViewModel>? deleteCommand;
@@ -196,19 +214,6 @@ public class EffectTableViewModel : PageViewModel
     {
         if (observable == null)
         { return; }
-
-        EffectService.Delete(observable.Model);
-
-        var historyPages = Shell.PageHistory.OfType<EffectDetailsViewModel>()
-            .Where(page => page.Selected?.Model == observable.Model)
-            .ToArray();
-
-        var futurePages = Shell.PageFuture.OfType<EffectDetailsViewModel>()
-            .Where(page => page.Selected?.Model == observable.Model)
-            .ToArray();
-
-        Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
-        Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
 
         Items.Remove(observable);
     }
