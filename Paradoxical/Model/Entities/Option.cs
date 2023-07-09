@@ -28,6 +28,14 @@ public class Option : IEntity, IModel, IEquatable<Option?>
     public string Tooltip { get => tooltip; set => tooltip = value; }
     public string tooltip = "";
 
+    [Column("custom_trigger"), NotNull]
+    public string CustomTrigger { get => customTrigger; set => customTrigger = value; }
+    public string customTrigger = "";
+
+    [Column("custom_effect"), NotNull]
+    public string CustomEffect { get => customEffect; set => customEffect = value; }
+    public string customEffect = "";
+
     [Column("triggered_event_id"), Indexed]
     public int? TriggeredEventId { get => triggeredEventId; set => triggeredEventId = value; }
     public int? triggeredEventId;

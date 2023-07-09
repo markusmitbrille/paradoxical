@@ -5,6 +5,11 @@ namespace Paradoxical.ViewModel;
 
 public class OptionViewModel : ModelWrapper<Option>
 {
+    public int EventId
+    {
+        get => model.eventId;
+    }
+
     public string Title
     {
         get => model.title;
@@ -15,6 +20,18 @@ public class OptionViewModel : ModelWrapper<Option>
     {
         get => model.tooltip;
         set => SetProperty(ref model.tooltip, value);
+    }
+
+    public string CustomTrigger
+    {
+        get => model.customTrigger;
+        set => SetProperty(ref model.customTrigger, value);
+    }
+
+    public string CustomEffect
+    {
+        get => model.customEffect;
+        set => SetProperty(ref model.customEffect, value);
     }
 
     public int? TriggeredEventId
