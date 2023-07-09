@@ -364,7 +364,7 @@
                     <DataGrid.InputBindings>
                         <MouseBinding
                             MouseAction="LeftDoubleClick"
-                            Command="{Binding GoToOptionCommand}"
+                            Command="{Binding EditOptionCommand}"
                             CommandParameter="{Binding SelectedItem, ElementName=OptionsDataGrid}" />
                     </DataGrid.InputBindings>
 

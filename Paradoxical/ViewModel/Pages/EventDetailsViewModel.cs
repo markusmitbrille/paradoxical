@@ -430,10 +430,10 @@ public class EventDetailsViewModel : PageViewModel
         return observable != null;
     }
 
-    private RelayCommand<OptionViewModel>? goToOptionCommand;
-    public RelayCommand<OptionViewModel> GoToOptionCommand => goToOptionCommand ??= new(GoToOption, CanGoToOption);
+    private RelayCommand<OptionViewModel>? editOptionCommand;
+    public RelayCommand<OptionViewModel> EditOptionCommand => editOptionCommand ??= new(EditOption, EditToOption);
 
-    private void GoToOption(OptionViewModel? observable)
+    private void EditOption(OptionViewModel? observable)
     {
         if (observable == null)
         { return; }
@@ -443,7 +443,7 @@ public class EventDetailsViewModel : PageViewModel
         var page = Shell.Navigate<OptionDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanGoToOption(OptionViewModel? observable)
+    private bool EditToOption(OptionViewModel? observable)
     {
         return observable != null;
     }
