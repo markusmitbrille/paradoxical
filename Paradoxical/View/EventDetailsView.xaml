@@ -349,6 +349,40 @@
             <TabItem
                 Header="Options">
 
+                <DataGrid
+                    Margin="20"
+                    BorderBrush="Gray"
+                    BorderThickness="1"
+                    ItemsSource="{Binding Options}"
+                    SelectionMode="Single"
+                    SelectionUnit="FullRow"
+                    AutoGenerateColumns="False"
+                    CanUserSortColumns="False"
+                    CanUserReorderColumns="False">
+
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn
+                            Header="ID"
+                            Binding="{Binding Id}"
+                            IsReadOnly="True" />
+
+                        <DataGridTextColumn
+                            Header="Name"
+                            MinWidth="250"
+                            MaxWidth="500"
+                            Binding="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <DataGridTextColumn
+                            Header="Tooltip"
+                            MinWidth="250"
+                            MaxWidth="500"
+                            Binding="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                    </DataGrid.Columns>
+
+                </DataGrid>
+
             </TabItem>
 
             <TabItem

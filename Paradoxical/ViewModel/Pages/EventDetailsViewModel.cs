@@ -7,6 +7,7 @@ using Paradoxical.Services;
 using Paradoxical.Services.Elements;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -69,7 +70,55 @@ public class EventDetailsViewModel : PageViewModel
     }
 
     private ObservableCollection<OptionViewModel>? options;
-    public ObservableCollection<OptionViewModel> Options => options ??= new();
+    public ObservableCollection<OptionViewModel> Options
+    {
+        get
+        {
+            if (options == null)
+            {
+                options = new();
+                options.CollectionChanged += Options_CollectionChanged;
+            }
+
+            return options;
+        }
+        set
+        {
+            OnPropertyChanging();
+
+            options = value;
+            options.CollectionChanged += Options_CollectionChanged;
+
+            OnPropertyChanged();
+        }
+    }
+
+    private void Options_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null && e.NewItems.Count == 1)
+        {
+            OptionViewModel observable = e.NewItems.Cast<OptionViewModel>().Single();
+            OptionService.Insert(observable.Model);
+
+            observable.Model.EventId = Selected?.Id ?? 0;
+        }
+        if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null && e.OldItems.Count == 1)
+        {
+            OptionViewModel observable = e.OldItems.Cast<OptionViewModel>().Single();
+            OptionService.Delete(observable.Model);
+
+            var historyPages = Shell.PageHistory.OfType<OptionDetailsViewModel>()
+                .Where(page => page.Selected?.Model == observable.Model)
+                .ToArray();
+
+            var futurePages = Shell.PageFuture.OfType<OptionDetailsViewModel>()
+                .Where(page => page.Selected?.Model == observable.Model)
+                .ToArray();
+
+            Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
+            Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
+        }
+    }
 
     private ObservableCollection<TriggerViewModel>? triggers;
     public ObservableCollection<TriggerViewModel> Triggers => triggers ??= new();
@@ -156,8 +205,7 @@ public class EventDetailsViewModel : PageViewModel
         LowerCenterPortrait = new() { Model = lowerCenterPortrait };
         LowerRightPortrait = new() { Model = lowerRightPortrait };
 
-        Options.Clear();
-        Options.AddRange(options);
+        Options = new(options);
 
         Triggers.Clear();
         Triggers.AddRange(triggers);
@@ -213,6 +261,11 @@ public class EventDetailsViewModel : PageViewModel
         if (LowerRightPortrait != null)
         {
             PortraitService.Update(LowerRightPortrait.Model);
+        }
+
+        foreach (var option in Options)
+        {
+            OptionService.Update(option.Model);
         }
     }
     public bool CanSave()
@@ -361,11 +414,7 @@ public class EventDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
-        Option model = new() { EventId = Selected.Id };
-        OptionViewModel observable = new() { Model = model };
-
-        OptionService.Insert(model);
-        Options.Add(observable);
+        Options.Add(new());
     }
     private bool CanCreateOption()
     {
@@ -380,9 +429,6 @@ public class EventDetailsViewModel : PageViewModel
         if (observable == null)
         { return; }
 
-        Option model = observable.Model;
-
-        OptionService.Delete(model);
         Options.Remove(observable);
     }
     private bool CanDeleteOption(OptionViewModel? observable)
