@@ -100,12 +100,7 @@ public class TriggerDetailsViewModel : PageViewModel
 
     private void Create()
     {
-        Trigger model = new()
-        {
-            Name = $"trg_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Code = "# some trigger",
-        };
-
+        Trigger model = new();
         TriggerService.Insert(model);
 
         var page = Shell.Navigate<TriggerDetailsViewModel>();

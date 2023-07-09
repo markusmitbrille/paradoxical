@@ -278,13 +278,7 @@ public class EventDetailsViewModel : PageViewModel
 
     private void Create()
     {
-        Event model = new()
-        {
-            Name = $"evt_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Title = "Hello World",
-            Description = "Hello World!",
-        };
-
+        Event model = new();
         EventService.Insert(model);
 
         Portrait leftPortrait = new()

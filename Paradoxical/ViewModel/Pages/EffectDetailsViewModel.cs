@@ -92,12 +92,7 @@ public class EffectDetailsViewModel : PageViewModel
 
     private void Create()
     {
-        Effect model = new()
-        {
-            Name = $"eff_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Code = "# some effect",
-        };
-
+        Effect model = new();
         EffectService.Insert(model);
 
         var page = Shell.Navigate<EffectDetailsViewModel>();
