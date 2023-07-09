@@ -23,6 +23,8 @@ public class OptionDetailsViewModel : PageViewModel
     public IOptionService OptionService { get; }
     public ITriggerService TriggerService { get; }
     public IEffectService EffectService { get; }
+    public IEventService EventService { get; }
+    public IPortraitService PortraitService { get; }
 
     private OptionViewModel? selected;
     public OptionViewModel? Selected
@@ -30,6 +32,26 @@ public class OptionDetailsViewModel : PageViewModel
         get => selected;
         set => SetProperty(ref selected, value);
     }
+
+    public int? TriggeredEventId
+    {
+        get => Selected?.TriggeredEventId;
+        set
+        {
+            if (Selected == null)
+            { return; }
+
+            OnPropertyChanging();
+            Selected.TriggeredEventId = value;
+            OnPropertyChanged();
+
+            EditTriggeredEventCommand.NotifyCanExecuteChanged();
+            RemoveTriggeredEventCommand.NotifyCanExecuteChanged();
+        }
+    }
+
+    private ObservableCollection<EventViewModel>? allEvents;
+    public ObservableCollection<EventViewModel> AllEvents => allEvents ??= new();
 
     private ObservableCollection<TriggerViewModel>? triggers;
     public ObservableCollection<TriggerViewModel> Triggers => triggers ??= new();
@@ -43,7 +65,9 @@ public class OptionDetailsViewModel : PageViewModel
         FinderViewModel finder,
         IOptionService optionService,
         ITriggerService triggerService,
-        IEffectService effectService)
+        IEffectService effectService,
+        IEventService eventService,
+        IPortraitService portraitService)
         : base(shell, mediator)
     {
         Finder = finder;
@@ -51,6 +75,8 @@ public class OptionDetailsViewModel : PageViewModel
         OptionService = optionService;
         TriggerService = triggerService;
         EffectService = effectService;
+        EventService = eventService;
+        PortraitService = portraitService;
     }
 
     protected override void OnNavigatedTo()
@@ -83,11 +109,16 @@ public class OptionDetailsViewModel : PageViewModel
     {
         var selected = OptionService.Get(model);
 
+        var triggeredEvent = OptionService.GetTriggeredEvent(model);
+
         var triggers = OptionService.GetTriggers(selected)
             .Select(model => new TriggerViewModel() { Model = model });
 
         var effects = OptionService.GetEffects(selected)
             .Select(model => new EffectViewModel() { Model = model });
+
+        var allEvents = EventService.Get()
+            .Select(model => new EventViewModel() { Model = model });
 
         Selected = new() { Model = selected };
 
@@ -96,6 +127,9 @@ public class OptionDetailsViewModel : PageViewModel
 
         Effects.Clear();
         Effects.AddRange(effects);
+
+        AllEvents.Clear();
+        AllEvents.AddRange(allEvents);
     }
 
     private RelayCommand? reloadCommand;
@@ -188,7 +222,7 @@ public class OptionDetailsViewModel : PageViewModel
         { return; }
 
         Event owner = OptionService.GetEvent(Selected.Model);
-        
+
         OptionService.Delete(Selected.Model);
 
         var page = Shell.Navigate<EventDetailsViewModel>();
@@ -240,7 +274,7 @@ public class OptionDetailsViewModel : PageViewModel
         return Selected != null;
     }
 
-    #region Trigger Commands
+    #region Flow Commands
 
     private RelayCommand? createTriggerCommand;
     public RelayCommand CreateTriggerCommand => createTriggerCommand ??= new(CreateTrigger, CanCreateTrigger);
@@ -333,6 +367,130 @@ public class OptionDetailsViewModel : PageViewModel
     private bool CanGoToTrigger(TriggerViewModel? observable)
     {
         return observable != null;
+    }
+
+    #endregion
+
+    #region Trigger Commands
+
+    private RelayCommand? createTriggeredEventCommand;
+    public RelayCommand CreateTriggeredEventCommand => createTriggeredEventCommand ??= new(CreateTriggeredEvent, CanCreateTriggeredEvent);
+
+    private void CreateTriggeredEvent()
+    {
+        if (Selected == null)
+        { return; }
+
+        Event model = new();
+        EventService.Insert(model);
+
+        Portrait leftPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.Left,
+        };
+        Portrait rightPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.Right,
+        };
+        Portrait lowerLeftPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.LowerLeft,
+        };
+        Portrait lowerCenterPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.LowerCenter,
+        };
+        Portrait lowerRightPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.LowerRight,
+        };
+
+        PortraitService.Insert(leftPortrait);
+        PortraitService.Insert(rightPortrait);
+        PortraitService.Insert(lowerLeftPortrait);
+        PortraitService.Insert(lowerCenterPortrait);
+        PortraitService.Insert(lowerRightPortrait);
+
+        EventViewModel observable = new() { Model = model };
+        AllEvents.Add(observable);
+
+        TriggeredEventId = model.Id;
+    }
+    private bool CanCreateTriggeredEvent()
+    {
+        return Selected != null;
+    }
+
+    private AsyncRelayCommand? addTriggeredEventCommand;
+    public AsyncRelayCommand AddTriggeredEventCommand => addTriggeredEventCommand ??= new(AddTriggeredEvent, CanAddTriggeredEvent);
+
+    private async Task AddTriggeredEvent()
+    {
+        if (Selected == null)
+        { return; }
+
+        Save();
+
+        Finder.Items = EventService.Get()
+            .Select(model => new EventViewModel() { Model = model });
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        TriggeredEventId = Finder.Selected.Id;
+    }
+    private bool CanAddTriggeredEvent()
+    {
+        return Selected != null;
+    }
+
+    private RelayCommand? removeTriggeredEventCommand;
+    public RelayCommand RemoveTriggeredEventCommand => removeTriggeredEventCommand ??= new(RemoveTriggeredEvent, CanRemoveTriggeredEvent);
+
+    private void RemoveTriggeredEvent()
+    {
+        if (Selected == null)
+        { return; }
+
+        if (TriggeredEventId == null)
+        { return; }
+
+        TriggeredEventId = null;
+    }
+    private bool CanRemoveTriggeredEvent()
+    {
+        return Selected != null && TriggeredEventId != null;
+    }
+
+    private RelayCommand? editTriggeredEventCommand;
+    public RelayCommand EditTriggeredEventCommand => editTriggeredEventCommand ??= new(EditTriggeredEvent, EditToTriggeredEvent);
+
+    private void EditTriggeredEvent()
+    {
+        if (Selected == null)
+        { return; }
+
+        if (TriggeredEventId == null)
+        { return; }
+
+        Event model = EventService.Get(TriggeredEventId.Value);
+
+        var page = Shell.Navigate<EventDetailsViewModel>();
+        page.Load(model);
+    }
+    private bool EditToTriggeredEvent()
+    {
+        return Selected != null && TriggeredEventId != null;
     }
 
     #endregion
