@@ -21,10 +21,10 @@
             x:Key="OptionsCollectionViewSource"
             Source="{Binding Options}">
             
-            <!--<CollectionViewSource.SortDescriptions>
+            <CollectionViewSource.SortDescriptions>
                 <scm:SortDescription
                     PropertyName="Priority" />
-            </CollectionViewSource.SortDescriptions>-->
+            </CollectionViewSource.SortDescriptions>
 
         </CollectionViewSource>
 
