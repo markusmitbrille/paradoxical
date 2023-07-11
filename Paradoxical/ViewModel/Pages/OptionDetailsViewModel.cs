@@ -133,7 +133,7 @@ public class OptionDetailsViewModel : PageViewModel
     }
 
     private RelayCommand? reloadCommand;
-    public RelayCommand ReloadCommand => reloadCommand ??= new(Reload, CanReload);
+    public RelayCommand ReloadCommand => reloadCommand ??= new(Reload);
 
     private void Reload()
     {
@@ -142,13 +142,9 @@ public class OptionDetailsViewModel : PageViewModel
 
         Load(Selected.Model);
     }
-    private bool CanReload()
-    {
-        return Selected != null;
-    }
 
     private RelayCommand? saveCommand;
-    public RelayCommand SaveCommand => saveCommand ??= new(Save, CanSave);
+    public RelayCommand SaveCommand => saveCommand ??= new(Save);
 
     private void Save()
     {
@@ -157,13 +153,9 @@ public class OptionDetailsViewModel : PageViewModel
 
         OptionService.Update(Selected.Model);
     }
-    private bool CanSave()
-    {
-        return Selected != null;
-    }
 
     private RelayCommand? createCommand;
-    public RelayCommand CreateCommand => createCommand ??= new(Create, CanCreate);
+    public RelayCommand CreateCommand => createCommand ??= new(Create);
 
     private void Create()
     {
@@ -177,13 +169,9 @@ public class OptionDetailsViewModel : PageViewModel
         var page = Shell.Navigate<OptionDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanCreate()
-    {
-        return Selected != null;
-    }
 
     private RelayCommand? duplicateCommand;
-    public RelayCommand DuplicateCommand => duplicateCommand ??= new(Duplicate, CanDuplicate);
+    public RelayCommand DuplicateCommand => duplicateCommand ??= new(Duplicate);
 
     private void Duplicate()
     {
@@ -208,13 +196,9 @@ public class OptionDetailsViewModel : PageViewModel
         var page = Shell.Navigate<OptionDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanDuplicate()
-    {
-        return Selected != null;
-    }
 
     private RelayCommand? deleteCommand;
-    public RelayCommand DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
+    public RelayCommand DeleteCommand => deleteCommand ??= new(Delete);
 
     private void Delete()
     {
@@ -239,13 +223,9 @@ public class OptionDetailsViewModel : PageViewModel
         Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
         Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
     }
-    private bool CanDelete()
-    {
-        return Selected != null;
-    }
 
     private RelayCommand? goToPreviousOptionCommand;
-    public RelayCommand GoToPreviousOptionCommand => goToPreviousOptionCommand ??= new(GoToPreviousOption, CanGoToPreviousOption);
+    public RelayCommand GoToPreviousOptionCommand => goToPreviousOptionCommand ??= new(GoToPreviousOption);
 
     private void GoToPreviousOption()
     {
@@ -254,13 +234,9 @@ public class OptionDetailsViewModel : PageViewModel
 
         throw new NotImplementedException();
     }
-    private bool CanGoToPreviousOption()
-    {
-        return Selected != null;
-    }
 
     private RelayCommand? goToNextOptionCommand;
-    public RelayCommand GoToNextOptionCommand => goToNextOptionCommand ??= new(GoToNextOption, CanGoToNextOption);
+    public RelayCommand GoToNextOptionCommand => goToNextOptionCommand ??= new(GoToNextOption);
 
     private void GoToNextOption()
     {
@@ -269,15 +245,11 @@ public class OptionDetailsViewModel : PageViewModel
 
         throw new NotImplementedException();
     }
-    private bool CanGoToNextOption()
-    {
-        return Selected != null;
-    }
 
     #region Flow Commands
 
     private RelayCommand? createTriggerCommand;
-    public RelayCommand CreateTriggerCommand => createTriggerCommand ??= new(CreateTrigger, CanCreateTrigger);
+    public RelayCommand CreateTriggerCommand => createTriggerCommand ??= new(CreateTrigger);
 
     private void CreateTrigger()
     {
@@ -296,10 +268,6 @@ public class OptionDetailsViewModel : PageViewModel
 
         TriggerViewModel observable = new() { Model = relation };
         Triggers.Add(observable);
-    }
-    private bool CanCreateTrigger()
-    {
-        return Selected != null;
     }
 
     private AsyncRelayCommand? addTriggerCommand;
@@ -348,7 +316,7 @@ public class OptionDetailsViewModel : PageViewModel
     }
     private bool CanRemoveTrigger(TriggerViewModel? observable)
     {
-        return Selected != null && observable != null;
+        return observable != null;
     }
 
     private RelayCommand<TriggerViewModel>? goToTriggerCommand;
@@ -374,7 +342,7 @@ public class OptionDetailsViewModel : PageViewModel
     #region Trigger Commands
 
     private RelayCommand? createTriggeredEventCommand;
-    public RelayCommand CreateTriggeredEventCommand => createTriggeredEventCommand ??= new(CreateTriggeredEvent, CanCreateTriggeredEvent);
+    public RelayCommand CreateTriggeredEventCommand => createTriggeredEventCommand ??= new(CreateTriggeredEvent);
 
     private void CreateTriggeredEvent()
     {
@@ -421,13 +389,9 @@ public class OptionDetailsViewModel : PageViewModel
 
         TriggeredEventId = model.Id;
     }
-    private bool CanCreateTriggeredEvent()
-    {
-        return Selected != null;
-    }
 
     private AsyncRelayCommand? addTriggeredEventCommand;
-    public AsyncRelayCommand AddTriggeredEventCommand => addTriggeredEventCommand ??= new(AddTriggeredEvent, CanAddTriggeredEvent);
+    public AsyncRelayCommand AddTriggeredEventCommand => addTriggeredEventCommand ??= new(AddTriggeredEvent);
 
     private async Task AddTriggeredEvent()
     {
@@ -449,10 +413,6 @@ public class OptionDetailsViewModel : PageViewModel
 
         TriggeredEventId = Finder.Selected.Id;
     }
-    private bool CanAddTriggeredEvent()
-    {
-        return Selected != null;
-    }
 
     private RelayCommand? removeTriggeredEventCommand;
     public RelayCommand RemoveTriggeredEventCommand => removeTriggeredEventCommand ??= new(RemoveTriggeredEvent, CanRemoveTriggeredEvent);
@@ -469,11 +429,11 @@ public class OptionDetailsViewModel : PageViewModel
     }
     private bool CanRemoveTriggeredEvent()
     {
-        return Selected != null && TriggeredEventId != null;
+        return TriggeredEventId != null;
     }
 
     private RelayCommand? editTriggeredEventCommand;
-    public RelayCommand EditTriggeredEventCommand => editTriggeredEventCommand ??= new(EditTriggeredEvent, EditToTriggeredEvent);
+    public RelayCommand EditTriggeredEventCommand => editTriggeredEventCommand ??= new(EditTriggeredEvent, EditTriggeredEvent);
 
     private void EditTriggeredEvent()
     {
@@ -488,9 +448,9 @@ public class OptionDetailsViewModel : PageViewModel
         var page = Shell.Navigate<EventDetailsViewModel>();
         page.Load(model);
     }
-    private bool EditToTriggeredEvent()
+    private bool EditTriggeredEvent()
     {
-        return Selected != null && TriggeredEventId != null;
+        return TriggeredEventId != null;
     }
 
     #endregion
@@ -498,7 +458,7 @@ public class OptionDetailsViewModel : PageViewModel
     #region Effect Commands
 
     private RelayCommand? createEffectCommand;
-    public RelayCommand CreateEffectCommand => createEffectCommand ??= new(CreateEffect, CanCreateEffect);
+    public RelayCommand CreateEffectCommand => createEffectCommand ??= new(CreateEffect);
 
     private void CreateEffect()
     {
@@ -517,10 +477,6 @@ public class OptionDetailsViewModel : PageViewModel
 
         EffectViewModel observable = new() { Model = relation };
         Effects.Add(observable);
-    }
-    private bool CanCreateEffect()
-    {
-        return Selected != null;
     }
 
     private AsyncRelayCommand? addEffectCommand;
@@ -569,7 +525,7 @@ public class OptionDetailsViewModel : PageViewModel
     }
     private bool CanRemoveEffect(EffectViewModel? observable)
     {
-        return Selected != null && observable != null;
+        return observable != null;
     }
 
     private RelayCommand<EffectViewModel>? goToEffectCommand;

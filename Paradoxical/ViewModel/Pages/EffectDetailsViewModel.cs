@@ -100,7 +100,7 @@ public class EffectDetailsViewModel : PageViewModel
     }
 
     private RelayCommand? duplicateCommand;
-    public RelayCommand DuplicateCommand => duplicateCommand ??= new(Duplicate, CanDuplicate);
+    public RelayCommand DuplicateCommand => duplicateCommand ??= new(Duplicate);
 
     private void Duplicate()
     {
@@ -114,13 +114,9 @@ public class EffectDetailsViewModel : PageViewModel
         var page = Shell.Navigate<EffectDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanDuplicate()
-    {
-        return Selected != null;
-    }
 
     private RelayCommand? deleteCommand;
-    public RelayCommand DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
+    public RelayCommand DeleteCommand => deleteCommand ??= new(Delete);
 
     private void Delete()
     {
@@ -141,9 +137,5 @@ public class EffectDetailsViewModel : PageViewModel
 
         Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
         Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
-    }
-    private bool CanDelete()
-    {
-        return Selected != null;
     }
 }

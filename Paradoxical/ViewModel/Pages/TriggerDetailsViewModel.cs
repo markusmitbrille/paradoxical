@@ -66,7 +66,7 @@ public class TriggerDetailsViewModel : PageViewModel
     }
 
     private RelayCommand? reloadCommand;
-    public RelayCommand ReloadCommand => reloadCommand ??= new(Reload, CanReload);
+    public RelayCommand ReloadCommand => reloadCommand ??= new(Reload);
 
     private void Reload()
     {
@@ -75,13 +75,9 @@ public class TriggerDetailsViewModel : PageViewModel
 
         Load(Selected.Model);
     }
-    private bool CanReload()
-    {
-        return Selected != null;
-    }
 
     private RelayCommand? saveCommand;
-    public RelayCommand SaveCommand => saveCommand ??= new(Save, CanSave);
+    public RelayCommand SaveCommand => saveCommand ??= new(Save);
 
     private void Save()
     {
@@ -89,10 +85,6 @@ public class TriggerDetailsViewModel : PageViewModel
         { return; }
 
         TriggerService.Update(Selected.Model);
-    }
-    public bool CanSave()
-    {
-        return Selected != null;
     }
 
     private RelayCommand? createCommand;
@@ -108,7 +100,7 @@ public class TriggerDetailsViewModel : PageViewModel
     }
 
     private RelayCommand? duplicateCommand;
-    public RelayCommand DuplicateCommand => duplicateCommand ??= new(Duplicate, CanDuplicate);
+    public RelayCommand DuplicateCommand => duplicateCommand ??= new(Duplicate);
 
     private void Duplicate()
     {
@@ -122,13 +114,9 @@ public class TriggerDetailsViewModel : PageViewModel
         var page = Shell.Navigate<TriggerDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanDuplicate()
-    {
-        return Selected != null;
-    }
 
     private RelayCommand? deleteCommand;
-    public RelayCommand DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
+    public RelayCommand DeleteCommand => deleteCommand ??= new(Delete);
 
     private void Delete()
     {
@@ -149,9 +137,5 @@ public class TriggerDetailsViewModel : PageViewModel
 
         Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
         Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
-    }
-    private bool CanDelete()
-    {
-        return Selected != null;
     }
 }
