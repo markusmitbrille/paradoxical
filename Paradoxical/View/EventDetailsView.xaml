@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
     xmlns:formatters="clr-namespace:Paradoxical.Formatters"
@@ -13,6 +14,21 @@
     d:DataContext="{d:DesignInstance {x:Type viewmodel:EventDetailsViewModel}}"
     d:DesignHeight="600"
     d:DesignWidth="800">
+
+    <UserControl.Resources>
+
+        <CollectionViewSource
+            x:Key="OptionsCollectionViewSource"
+            Source="{Binding Options}">
+            
+            <!--<CollectionViewSource.SortDescriptions>
+                <scm:SortDescription
+                    PropertyName="Priority" />
+            </CollectionViewSource.SortDescriptions>-->
+
+        </CollectionViewSource>
+
+    </UserControl.Resources>
 
     <DockPanel>
 
@@ -354,7 +370,7 @@
                     Margin="20"
                     BorderBrush="Gray"
                     BorderThickness="1"
-                    ItemsSource="{Binding Options}"
+                    ItemsSource="{Binding Source={StaticResource OptionsCollectionViewSource}}"
                     SelectionMode="Single"
                     SelectionUnit="FullRow"
                     AutoGenerateColumns="False"
@@ -386,6 +402,12 @@
                             MinWidth="250"
                             MaxWidth="500"
                             Binding="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <DataGridTextColumn
+                            Header="Priority"
+                            MinWidth="100"
+                            MaxWidth="200"
+                            Binding="{Binding Priority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     </DataGrid.Columns>
 

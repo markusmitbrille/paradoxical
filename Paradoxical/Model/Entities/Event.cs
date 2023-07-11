@@ -294,13 +294,14 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         IEventService eventService,
         IOptionService optionService)
     {
-        var options = eventService.GetOptions(this);
+        var options = eventService.GetOptions(this).ToList();
         if (options.Any() == false)
         {
             writer.Indent().WriteLine("# no options");
             return;
         }
 
+        options.Sort();
         foreach (Option opt in options)
         {
             opt.Write(writer, modService, optionService);

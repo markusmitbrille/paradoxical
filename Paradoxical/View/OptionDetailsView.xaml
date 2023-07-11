@@ -107,28 +107,20 @@
                             </view:ScriptBox.TextFormatter>
 
                         </view:ScriptBox>
-                       
+
                         <TextBox
                             Grid.Column="1"
                             Margin="6,12"
                             Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            Text="{Binding Selected.Priority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            ToolTip="Options will be diplayed in ascending order of their priority."
+                            AcceptsReturn="False"
                             materialDesign:HintAssist.Hint="Priority"
-                            ToolTip="Options will be diplayed in ascending order of their priority.">
-
-                            <TextBox.Text>
-                                <Binding
-                                    Path="Selected.Priority"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    FallbackValue="0">
-                                    <Binding.ValidationRules>
-                                        <rules:IntRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-
-                        </TextBox>
+                            materialDesign:HintAssist.IsFloating="True"
+                            materialDesign:HintAssist.HelperText="Option order."
+                            materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                            materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+                            materialDesign:TextFieldAssist.TextFieldCornerRadius="4" />
 
                     </Grid>
 

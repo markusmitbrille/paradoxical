@@ -11,7 +11,7 @@ using System.Linq;
 namespace Paradoxical.Model.Elements;
 
 [Table("options")]
-public class Option : IEntity, IModel, IEquatable<Option?>
+public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
@@ -30,8 +30,8 @@ public class Option : IEntity, IModel, IEquatable<Option?>
     public string tooltip = "";
 
     [Column("priority")]
-    public int Priority { get => priority; set => priority = value; }
-    public int priority = 0;
+    public string Priority { get => priority; set => priority = value; }
+    public string priority = "";
 
     [Column("custom_trigger"), NotNull]
     public string CustomTrigger { get => customTrigger; set => customTrigger = value; }
@@ -379,6 +379,11 @@ public class Option : IEntity, IModel, IEquatable<Option?>
         return HashCode.Combine(id);
     }
 
+    public int CompareTo(Option? other)
+    {
+        return Comparer<string>.Default.Compare(priority, other?.priority);
+    }
+
     public static bool operator ==(Option? left, Option? right)
     {
         return EqualityComparer<Option>.Default.Equals(left, right);
@@ -387,5 +392,25 @@ public class Option : IEntity, IModel, IEquatable<Option?>
     public static bool operator !=(Option? left, Option? right)
     {
         return !(left == right);
+    }
+
+    public static bool operator <(Option left, Option right)
+    {
+        return left.CompareTo(right) < 0;
+    }
+
+    public static bool operator <=(Option left, Option right)
+    {
+        return left.CompareTo(right) <= 0;
+    }
+
+    public static bool operator >(Option left, Option right)
+    {
+        return left.CompareTo(right) > 0;
+    }
+
+    public static bool operator >=(Option left, Option right)
+    {
+        return left.CompareTo(right) >= 0;
     }
 }

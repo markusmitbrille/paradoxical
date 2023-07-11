@@ -22,7 +22,7 @@ public class OptionViewModel : ModelWrapper<Option>
         set => SetProperty(ref model.tooltip, value);
     }
 
-    public int Priority
+    public string Priority
     {
         get => model.priority;
         set => SetProperty(ref model.priority, value);
