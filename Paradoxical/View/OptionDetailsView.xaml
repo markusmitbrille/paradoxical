@@ -60,13 +60,15 @@
 
                 <Button
                     Margin="4,0"
-                    Command="{Binding GoToPreviousOptionCommand}"
+                    Command="{Binding EditPreviousOptionCommand}"
+                    CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=ArrowLeft}"
                     ToolTip="Go to previous Option" />
 
                 <Button
                     Margin="4,0"
-                    Command="{Binding GoToNextOptionCommand}"
+                    Command="{Binding EditNextOptionCommand}"
+                    CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=ArrowRight}"
                     ToolTip="Go to next Option" />
 

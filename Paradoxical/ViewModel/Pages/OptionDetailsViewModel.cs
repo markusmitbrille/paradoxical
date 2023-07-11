@@ -33,6 +33,15 @@ public class OptionDetailsViewModel : PageViewModel
         set => SetProperty(ref selected, value);
     }
 
+    private ObservableCollection<TriggerViewModel>? triggers;
+    public ObservableCollection<TriggerViewModel> Triggers => triggers ??= new();
+
+    private ObservableCollection<EffectViewModel>? effects;
+    public ObservableCollection<EffectViewModel> Effects => effects ??= new();
+
+    private ObservableCollection<EventViewModel>? allEvents;
+    public ObservableCollection<EventViewModel> AllEvents => allEvents ??= new();
+
     public int? TriggeredEventId
     {
         get => Selected?.TriggeredEventId;
@@ -49,15 +58,6 @@ public class OptionDetailsViewModel : PageViewModel
             RemoveTriggeredEventCommand.NotifyCanExecuteChanged();
         }
     }
-
-    private ObservableCollection<EventViewModel>? allEvents;
-    public ObservableCollection<EventViewModel> AllEvents => allEvents ??= new();
-
-    private ObservableCollection<TriggerViewModel>? triggers;
-    public ObservableCollection<TriggerViewModel> Triggers => triggers ??= new();
-
-    private ObservableCollection<EffectViewModel>? effects;
-    public ObservableCollection<EffectViewModel> Effects => effects ??= new();
 
     public OptionDetailsViewModel(
         IShell shell,
@@ -109,7 +109,7 @@ public class OptionDetailsViewModel : PageViewModel
     {
         var selected = OptionService.Get(model);
 
-        var triggeredEvent = OptionService.GetTriggeredEvent(model);
+        var owner = OptionService.GetEvent(model);
 
         var triggers = OptionService.GetTriggers(selected)
             .Select(model => new TriggerViewModel() { Model = model });
@@ -224,26 +224,82 @@ public class OptionDetailsViewModel : PageViewModel
         Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
     }
 
-    private RelayCommand? goToPreviousOptionCommand;
-    public RelayCommand GoToPreviousOptionCommand => goToPreviousOptionCommand ??= new(GoToPreviousOption);
+    private RelayCommand<OptionViewModel>? editPreviousOptionCommand;
+    public RelayCommand<OptionViewModel> EditPreviousOptionCommand => editPreviousOptionCommand ??= new(EditPreviousOption, CanEditPreviousOption);
 
-    private void GoToPreviousOption()
+    private void EditPreviousOption(OptionViewModel? observable)
     {
-        if (Selected == null)
+        if (observable == null)
         { return; }
 
-        throw new NotImplementedException();
+        var owner = OptionService.GetEvent(observable.Model);
+
+        var siblings = EventService.GetOptions(owner).ToList();
+        siblings.Sort();
+
+        int index = siblings.IndexOf(observable.Model) - 1;
+        if (index < 0)
+        {
+            return;
+        }
+
+        var model = siblings[index];
+
+        var page = Shell.Navigate<OptionDetailsViewModel>();
+        page.Load(model);
+    }
+    private bool CanEditPreviousOption(OptionViewModel? observable)
+    {
+        if (observable == null)
+        { return false; }
+
+        var owner = OptionService.GetEvent(observable.Model);
+
+        var siblings = EventService.GetOptions(owner).ToList();
+        siblings.Sort();
+
+        int index = siblings.IndexOf(observable.Model) - 1;
+
+        return index >= 0;
     }
 
-    private RelayCommand? goToNextOptionCommand;
-    public RelayCommand GoToNextOptionCommand => goToNextOptionCommand ??= new(GoToNextOption);
+    private RelayCommand<OptionViewModel>? editNextOptionCommand;
+    public RelayCommand<OptionViewModel> EditNextOptionCommand => editNextOptionCommand ??= new(EditNextOption, CanEditNextOption);
 
-    private void GoToNextOption()
+    private void EditNextOption(OptionViewModel? observable)
     {
-        if (Selected == null)
+        if (observable == null)
         { return; }
 
-        throw new NotImplementedException();
+        var owner = OptionService.GetEvent(observable.Model);
+
+        var siblings = EventService.GetOptions(owner).ToList();
+        siblings.Sort();
+
+        int index = siblings.IndexOf(observable.Model) + 1;
+        if (index >= siblings.Count)
+        {
+            return;
+        }
+
+        var model = siblings[index];
+
+        var page = Shell.Navigate<OptionDetailsViewModel>();
+        page.Load(model);
+    }
+    private bool CanEditNextOption(OptionViewModel? observable)
+    {
+        if (observable == null)
+        { return false; }
+
+        var owner = OptionService.GetEvent(observable.Model);
+
+        var siblings = EventService.GetOptions(owner).ToList();
+        siblings.Sort();
+
+        int index = siblings.IndexOf(observable.Model) + 1;
+
+        return index < siblings.Count;
     }
 
     #region Flow Commands
