@@ -222,12 +222,15 @@ public class EffectTableViewModel : PageViewModel
         return observable != null;
     }
 
-    private RelayCommand<EffectViewModel>? editCommand;
-    public RelayCommand<EffectViewModel> EditCommand => editCommand ??= new(Edit, CanEdit);
+    private RelayCommand<object>? editCommand;
+    public RelayCommand<object> EditCommand => editCommand ??= new(Edit, CanEdit);
 
-    private void Edit(EffectViewModel? observable)
+    private void Edit(object? param)
     {
-        if (observable == null)
+        if (param == null)
+        { return; }
+
+        if (param is not EffectViewModel observable)
         { return; }
 
         var model = observable.Model;
@@ -235,8 +238,8 @@ public class EffectTableViewModel : PageViewModel
         var page = Shell.Navigate<EffectDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanEdit(EffectViewModel? observable)
+    private bool CanEdit(object? param)
     {
-        return observable != null;
+        return param is EffectViewModel observable && observable != null;
     }
 }

@@ -260,21 +260,24 @@ public class EventTableViewModel : PageViewModel
         return observable != null;
     }
 
-    private RelayCommand<EventViewModel>? editCommand;
-    public RelayCommand<EventViewModel> EditCommand => editCommand ??= new(Edit, CanEdit);
+    private RelayCommand<object>? editCommand;
+    public RelayCommand<object> EditCommand => editCommand ??= new(Edit, CanEdit);
 
-    private void Edit(EventViewModel? observable)
+    private void Edit(object? param)
     {
-        if (observable == null)
+        if (param == null)
+        { return; }
+
+        if (param is not EventViewModel observable)
         { return; }
 
         var model = observable.Model;
-       
+
         var page = Shell.Navigate<EventDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanEdit(EventViewModel? observable)
+    private bool CanEdit(object? param)
     {
-        return observable != null;
+        return param is EventViewModel observable && observable != null;
     }
 }

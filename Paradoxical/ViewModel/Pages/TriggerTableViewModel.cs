@@ -222,12 +222,15 @@ public class TriggerTableViewModel : PageViewModel
         return observable != null;
     }
 
-    private RelayCommand<TriggerViewModel>? editCommand;
-    public RelayCommand<TriggerViewModel> EditCommand => editCommand ??= new(Edit, CanEdit);
+    private RelayCommand<object>? editCommand;
+    public RelayCommand<object> EditCommand => editCommand ??= new(Edit, CanEdit);
 
-    private void Edit(TriggerViewModel? observable)
+    private void Edit(object? param)
     {
-        if (observable == null)
+        if (param == null)
+        { return; }
+
+        if (param is not TriggerViewModel observable)
         { return; }
 
         var model = observable.Model;
@@ -235,8 +238,8 @@ public class TriggerTableViewModel : PageViewModel
         var page = Shell.Navigate<TriggerDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanEdit(TriggerViewModel? observable)
+    private bool CanEdit(object? param)
     {
-        return observable != null;
+        return param is TriggerViewModel observable && observable != null;
     }
 }

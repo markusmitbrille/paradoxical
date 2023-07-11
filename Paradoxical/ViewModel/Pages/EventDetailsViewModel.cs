@@ -410,12 +410,15 @@ public class EventDetailsViewModel : PageViewModel
         return observable != null;
     }
 
-    private RelayCommand<OptionViewModel>? editOptionCommand;
-    public RelayCommand<OptionViewModel> EditOptionCommand => editOptionCommand ??= new(EditOption, EditToOption);
+    private RelayCommand<object>? editOptionCommand;
+    public RelayCommand<object> EditOptionCommand => editOptionCommand ??= new(EditOption, EditToOption);
 
-    private void EditOption(OptionViewModel? observable)
+    private void EditOption(object? param)
     {
-        if (observable == null)
+        if (param == null)
+        { return; }
+
+        if (param is not OptionViewModel observable)
         { return; }
 
         Option model = observable.Model;
@@ -423,9 +426,9 @@ public class EventDetailsViewModel : PageViewModel
         var page = Shell.Navigate<OptionDetailsViewModel>();
         page.Load(model);
     }
-    private bool EditToOption(OptionViewModel? observable)
+    private bool EditToOption(object? param)
     {
-        return observable != null;
+        return param is OptionViewModel observable && observable != null;
     }
 
     #endregion
