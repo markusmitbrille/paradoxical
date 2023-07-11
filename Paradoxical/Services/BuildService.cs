@@ -3,6 +3,7 @@ using Paradoxical.Model.Elements;
 using Paradoxical.Services.Elements;
 using Paradoxical.Services.Entities;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Paradoxical.Services;
@@ -168,7 +169,8 @@ public class BuildService : IBuildService
 
     private void WriteModFile(TextWriter writer, string dir, string file)
     {
-        modService.Get().Write(writer, dir, file);
+        var mod = modService.Get().SingleOrDefault() ?? new();
+        mod.Write(writer, dir, file);
     }
 
     private void WriteEventsFile(TextWriter writer)

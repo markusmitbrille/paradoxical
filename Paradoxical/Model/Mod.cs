@@ -13,19 +13,19 @@ public class Mod : IEntity, IModel
 
     [Column("mod_name"), NotNull]
     public string ModName { get => modName; set => modName = value; }
-    public string modName = "";
+    public string modName = "New Mod";
 
     [Column("mod_version"), NotNull]
     public string ModVersion { get => modVersion; set => modVersion = value; }
-    public string modVersion = "";
+    public string modVersion = "1.0";
 
     [Column("game_version"), NotNull]
     public string GameVersion { get => gameVersion; set => gameVersion = value; }
-    public string gameVersion = "";
+    public string gameVersion = "2.*";
 
     [Column("prefix"), NotNull]
     public string Prefix { get => prefix; set => prefix = value; }
-    public string prefix = "";
+    public string prefix = "mod";
 
     public void Write(TextWriter writer, string dir, string file)
     {

@@ -223,6 +223,8 @@ public class Shell : ObservableObject, IShell
 
         GoForwardCommand.NotifyCanExecuteChanged();
         GoBackCommand.NotifyCanExecuteChanged();
+
+        GoToInfo();
     }
 
     private RelayCommand? goBackCommand;

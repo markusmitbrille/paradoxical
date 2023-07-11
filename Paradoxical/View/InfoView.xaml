@@ -6,156 +6,173 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
+    xmlns:formatters="clr-namespace:Paradoxical.Formatters"
     xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance {x:Type viewmodel:InfoViewModel}}"
     d:DesignWidth="800">
 
-    <ScrollViewer
-        VerticalScrollBarVisibility="Hidden"
-        HorizontalScrollBarVisibility="Disabled">
-        <StackPanel>
+    <DockPanel>
 
-            <materialDesign:Card
-                Margin="20,10"
-                Padding="8,14"
-                materialDesign:ElevationAssist.Elevation="Dp4">
-                <Expander
-                    Padding="8"
-                    Header="Display"
-                    IsExpanded="True">
-                    <Grid>
+        <ToolBarTray
+            DockPanel.Dock="Top"
+            Margin="20">
+            <ToolBar
+                ClipToBounds="False"
+                Style="{StaticResource MaterialDesignToolBar}">
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
-                                Width="*"
-                                MinWidth="100" />
-                            <ColumnDefinition
-                                Width="*"
-                                MinWidth="100" />
-                            <ColumnDefinition
-                                Width="*"
-                                MinWidth="100" />
-                            <ColumnDefinition
-                                Width="*"
-                                MinWidth="100" />
-                            <ColumnDefinition
-                                Width="*"
-                                MinWidth="100" />
-                        </Grid.ColumnDefinitions>
+                <Button
+                    Margin="4,0"
+                    Command="{Binding SaveCommand}"
+                    Content="{materialDesign:PackIcon Kind=ContentSave}"
+                    ToolTip="Apply" />
 
-                        <Grid.RowDefinitions>
-                            <RowDefinition
-                                Height="auto" />
-                            <RowDefinition
-                                Height="auto" />
-                            <RowDefinition
-                                Height="auto" />
-                            <RowDefinition
-                                Height="auto" />
-                        </Grid.RowDefinitions>
+                <Button
+                    Margin="4,0"
+                    Command="{Binding ReloadCommand}"
+                    Content="{materialDesign:PackIcon Kind=Refresh}"
+                    ToolTip="Refresh" />
 
-                        <TextBox
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="3"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                            materialDesign:HintAssist.Hint="Mod Name">
+            </ToolBar>
+        </ToolBarTray>
 
-                            <TextBox.Text>
-                                <Binding
-                                    Path="CurrentContext.Info.Name"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <rules:RequiredRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
+        <TabControl
+            Padding="20">
 
-                        </TextBox>
+            <TabItem
+                Header="General">
+                <Grid>
 
-                        <TextBox
-                            Grid.Row="0"
-                            Grid.Column="3"
-                            Grid.ColumnSpan="1"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                            materialDesign:HintAssist.Hint="Mod Version">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="*"
+                            MinWidth="100" />
+                        <ColumnDefinition
+                            Width="*"
+                            MinWidth="100" />
+                        <ColumnDefinition
+                            Width="*"
+                            MinWidth="100" />
+                        <ColumnDefinition
+                            Width="*"
+                            MinWidth="100" />
+                        <ColumnDefinition
+                            Width="*"
+                            MinWidth="100" />
+                    </Grid.ColumnDefinitions>
 
-                            <TextBox.Text>
-                                <Binding
-                                    Path="CurrentContext.Info.Version"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <rules:RequiredRule
-                                            ValidatesOnTargetUpdated="True" />
-                                        <rules:VersionRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="auto" />
+                        <RowDefinition
+                            Height="auto" />
+                        <RowDefinition
+                            Height="auto" />
+                        <RowDefinition
+                            Height="auto" />
+                    </Grid.RowDefinitions>
 
-                        </TextBox>
+                    <TextBox
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Margin="6,12"
+                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                        materialDesign:HintAssist.Hint="Mod Name">
 
-                        <TextBox
-                            Grid.Row="0"
-                            Grid.Column="4"
-                            Grid.ColumnSpan="1"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                            materialDesign:HintAssist.Hint="Game Version">
+                        <TextBox.Text>
+                            <Binding
+                                Path="Selected.ModName"
+                                Mode="TwoWay"
+                                UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <rules:RequiredRule
+                                        ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
 
-                            <TextBox.Text>
-                                <Binding
-                                    Path="CurrentContext.Info.GameVersion"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <rules:RequiredRule
-                                            ValidatesOnTargetUpdated="True" />
-                                        <rules:VersionRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
+                    </TextBox>
 
-                        </TextBox>
+                    <TextBox
+                        Grid.Row="0"
+                        Grid.Column="3"
+                        Grid.ColumnSpan="1"
+                        Margin="6,12"
+                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                        materialDesign:HintAssist.Hint="Mod Version">
 
-                        <TextBox
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="5"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                            materialDesign:HintAssist.Hint="Namespace"
-                            materialDesign:HintAssist.HelperText="Used for events, file names, etc.">
+                        <TextBox.Text>
+                            <Binding
+                                Path="Selected.ModVersion"
+                                Mode="TwoWay"
+                                UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <rules:RequiredRule
+                                        ValidatesOnTargetUpdated="True" />
+                                    <rules:VersionRule
+                                        ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
 
-                            <TextBox.Text>
-                                <Binding
-                                    Path="CurrentContext.Info.EventNamespace"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <rules:RequiredRule
-                                            ValidatesOnTargetUpdated="True" />
-                                        <rules:NameRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
+                    </TextBox>
 
-                        </TextBox>
+                    <TextBox
+                        Grid.Row="0"
+                        Grid.Column="4"
+                        Grid.ColumnSpan="1"
+                        Margin="6,12"
+                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                        materialDesign:HintAssist.Hint="Game Version">
 
-                    </Grid>
-                </Expander>
-            </materialDesign:Card>
+                        <TextBox.Text>
+                            <Binding
+                                Path="Selected.GameVersion"
+                                Mode="TwoWay"
+                                UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <rules:RequiredRule
+                                        ValidatesOnTargetUpdated="True" />
+                                    <rules:VersionRule
+                                        ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
 
-        </StackPanel>
-    </ScrollViewer>
+                    </TextBox>
+
+                    <TextBox
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="5"
+                        Margin="6,12"
+                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                        materialDesign:HintAssist.Hint="Prefix"
+                        materialDesign:HintAssist.HelperText="Used for events, file names, etc.">
+
+                        <TextBox.Text>
+                            <Binding
+                                Path="Selected.Prefix"
+                                Mode="TwoWay"
+                                UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <rules:RequiredRule
+                                        ValidatesOnTargetUpdated="True" />
+                                    <rules:NameRule
+                                        ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+
+                    </TextBox>
+
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+
+    </DockPanel>
 
 </UserControl>
