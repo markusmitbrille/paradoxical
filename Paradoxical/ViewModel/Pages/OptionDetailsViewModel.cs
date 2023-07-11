@@ -433,7 +433,7 @@ public class OptionDetailsViewModel : PageViewModel
     }
 
     private RelayCommand? editTriggeredEventCommand;
-    public RelayCommand EditTriggeredEventCommand => editTriggeredEventCommand ??= new(EditTriggeredEvent, EditTriggeredEvent);
+    public RelayCommand EditTriggeredEventCommand => editTriggeredEventCommand ??= new(EditTriggeredEvent, CanEditTriggeredEvent);
 
     private void EditTriggeredEvent()
     {
@@ -448,7 +448,7 @@ public class OptionDetailsViewModel : PageViewModel
         var page = Shell.Navigate<EventDetailsViewModel>();
         page.Load(model);
     }
-    private bool EditTriggeredEvent()
+    private bool CanEditTriggeredEvent()
     {
         return TriggeredEventId != null;
     }
