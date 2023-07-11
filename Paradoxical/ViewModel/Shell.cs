@@ -272,7 +272,7 @@ public class Shell : ObservableObject, IShell
 
     private void GoToInfo()
     {
-        Navigate<InfoViewModel>();
+        Navigate<ModDetailsViewModel>();
     }
 
     private RelayCommand? goToAboutCommand;

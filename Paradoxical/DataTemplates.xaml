@@ -15,8 +15,8 @@
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:InfoViewModel}">
-        <view:InfoView />
+        DataType="{x:Type viewmodel:ModDetailsViewModel}">
+        <view:ModDetailsView />
     </DataTemplate>
 
     <DataTemplate
