@@ -1,4 +1,5 @@
 ﻿using Paradoxical.Core;
+using Paradoxical.Extensions;
 using Paradoxical.Services.Elements;
 using Paradoxical.Services.Entities;
 using SQLite;
@@ -101,17 +102,17 @@ public class Option : IEntity, IModel, IEquatable<Option?>
         id = 0;
 
         eventId = other.eventId;
-        
+
         title = other.title;
         tooltip = other.tooltip;
-        
+
         triggeredEventId = other.triggeredEventId;
         triggeredEventScope = other.triggeredEventScope;
         triggeredEventMinDays = other.triggeredEventMinDays;
         triggeredEventMaxDays = other.triggeredEventMaxDays;
-       
+
         aiBaseChance = other.aiBaseChance;
-        
+
         aiBoldnessTargetModifier = other.aiBoldnessTargetModifier;
         aiCompassionTargetModifier = other.aiCompassionTargetModifier;
         aiGreedTargetModifier = other.aiGreedTargetModifier;
@@ -180,7 +181,7 @@ public class Option : IEntity, IModel, IEquatable<Option?>
         IOptionService optionService)
     {
         var triggers = optionService.GetTriggers(this);
-        if (triggers.Any() == false)
+        if (triggers.Any() == false && CustomTrigger.IsEmpty() == true)
         {
             writer.Indent().WriteLine("# no trigger");
             return;
@@ -189,9 +190,24 @@ public class Option : IEntity, IModel, IEquatable<Option?>
         writer.Indent().WriteLine("trigger = {");
         ParadoxText.IndentLevel++;
 
-        foreach (Trigger trg in triggers)
+        if (triggers.Any() == true)
         {
-            writer.Indent().WriteLine($"{trg.GetQualifiedName(modService)} = yes");
+            writer.Indent().WriteLine("# scripted triggers");
+
+            foreach (Trigger trg in triggers)
+            {
+                writer.Indent().WriteLine($"{trg.GetQualifiedName(modService)} = yes");
+            }
+        }
+
+        if (CustomTrigger.IsEmpty() == false)
+        {
+            writer.Indent().WriteLine("# custom trigger");
+
+            foreach (string line in CustomTrigger.Split(Environment.NewLine))
+            {
+                writer.Indent().WriteLine(line);
+            }
         }
 
         ParadoxText.IndentLevel--;
@@ -308,15 +324,30 @@ public class Option : IEntity, IModel, IEquatable<Option?>
         IOptionService optionService)
     {
         var effects = optionService.GetEffects(this);
-        if (effects.Any() == false)
+        if (effects.Any() == false && CustomEffect.IsEmpty() == true)
         {
             writer.Indent().WriteLine("# no special effect");
             return;
         }
 
-        foreach (Effect eff in effects)
+        if (effects.Any() == true)
         {
-            writer.Indent().WriteLine($"{eff.GetQualifiedName(modService)} = yes");
+            writer.Indent().WriteLine("# scripted effects");
+
+            foreach (Effect eff in effects)
+            {
+                writer.Indent().WriteLine($"{eff.GetQualifiedName(modService)} = yes");
+            }
+        }
+
+        if (CustomEffect.IsEmpty() == false)
+        {
+            writer.Indent().WriteLine("# custom effect");
+
+            foreach (string line in CustomEffect.Split(Environment.NewLine))
+            {
+                writer.Indent().WriteLine(line);
+            }
         }
     }
 

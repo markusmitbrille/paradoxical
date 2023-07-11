@@ -1,4 +1,5 @@
 ﻿using Paradoxical.Core;
+using Paradoxical.Extensions;
 using Paradoxical.Services.Elements;
 using Paradoxical.Services.Entities;
 using SQLite;
@@ -66,7 +67,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         theme = other.theme;
         hidden = other.hidden;
         cooldown = other.cooldown;
-        
+
         customTrigger = other.customTrigger;
         customImmediateEffect = other.customImmediateEffect;
         customAfterEffect = other.customAfterEffect;
@@ -176,7 +177,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         IEventService eventService)
     {
         var triggers = eventService.GetTriggers(this);
-        if (triggers.Any() == false)
+        if (triggers.Any() == false && CustomTrigger.IsEmpty() == true)
         {
             writer.Indent().WriteLine("# no trigger");
             return;
@@ -185,9 +186,24 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         writer.Indent().WriteLine("trigger = {");
         ParadoxText.IndentLevel++;
 
-        foreach (Trigger trg in triggers)
+        if (triggers.Any() == true)
         {
-            writer.Indent().WriteLine($"{trg.GetQualifiedName(modService)} = yes");
+            writer.Indent().WriteLine("# scripted triggers");
+
+            foreach (Trigger trg in triggers)
+            {
+                writer.Indent().WriteLine($"{trg.GetQualifiedName(modService)} = yes");
+            }
+        }
+
+        if (CustomTrigger.IsEmpty() == false)
+        {
+            writer.Indent().WriteLine("# custom trigger");
+
+            foreach (string line in CustomTrigger.Split(Environment.NewLine))
+            {
+                writer.Indent().WriteLine(line);
+            }
         }
 
         ParadoxText.IndentLevel--;
@@ -200,7 +216,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         IEventService eventService)
     {
         var effects = eventService.GetImmediates(this);
-        if (effects.Any() == false)
+        if (effects.Any() == false && CustomImmediateEffect.IsEmpty() == true)
         {
             writer.Indent().WriteLine("# no immediate");
             return;
@@ -209,9 +225,24 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         writer.Indent().WriteLine("immediate = {");
         ParadoxText.IndentLevel++;
 
-        foreach (Effect eff in effects)
+        if (effects.Any() == true)
         {
-            writer.Indent().WriteLine($"{eff.GetQualifiedName(modService)} = yes");
+            writer.Indent().WriteLine("# scripted effects");
+
+            foreach (Effect eff in effects)
+            {
+                writer.Indent().WriteLine($"{eff.GetQualifiedName(modService)} = yes");
+            }
+        }
+
+        if (CustomImmediateEffect.IsEmpty() == false)
+        {
+            writer.Indent().WriteLine("# custom effect");
+
+            foreach (string line in CustomImmediateEffect.Split(Environment.NewLine))
+            {
+                writer.Indent().WriteLine(line);
+            }
         }
 
         ParadoxText.IndentLevel--;
@@ -224,7 +255,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         IEventService eventService)
     {
         var effects = eventService.GetAfters(this);
-        if (effects.Any() == false)
+        if (effects.Any() == false && CustomAfterEffect.IsEmpty() == true)
         {
             writer.Indent().WriteLine("# no after");
             return;
@@ -233,9 +264,24 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         writer.Indent().WriteLine("after = {");
         ParadoxText.IndentLevel++;
 
-        foreach (Effect eff in effects)
+        if (effects.Any() == true)
         {
-            writer.Indent().WriteLine($"{eff.GetQualifiedName(modService)} = yes");
+            writer.Indent().WriteLine("# scripted effects");
+
+            foreach (Effect eff in effects)
+            {
+                writer.Indent().WriteLine($"{eff.GetQualifiedName(modService)} = yes");
+            }
+        }
+
+        if (CustomAfterEffect.IsEmpty() == false)
+        {
+            writer.Indent().WriteLine("# custom effect");
+
+            foreach (string line in CustomAfterEffect.Split(Environment.NewLine))
+            {
+                writer.Indent().WriteLine(line);
+            }
         }
 
         ParadoxText.IndentLevel--;
