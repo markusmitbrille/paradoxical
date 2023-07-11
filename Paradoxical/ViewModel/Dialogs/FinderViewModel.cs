@@ -11,7 +11,19 @@ using System.Windows.Data;
 
 namespace Paradoxical.ViewModel;
 
-public class FinderViewModel : ObservableObject
+public interface IFinder
+{
+    public bool? DialogResult { get; }
+
+    public IEnumerable<IElementWrapper> Items { get; set; }
+    public IElementWrapper? Selected { get; set; }
+
+    public string? Filter { get; set; }
+
+    public Task<object?> Show();
+}
+
+public class FinderViewModel : ObservableObject, IFinder
 {
     private bool? dialogResult;
     public bool? DialogResult
@@ -30,13 +42,6 @@ public class FinderViewModel : ObservableObject
     private ICollectionView View => CollectionViewSource.GetDefaultView(Items);
     private IEnumerable<IElementWrapper> FilteredItems => View.Cast<IElementWrapper>();
 
-    private string? filter;
-    public string? Filter
-    {
-        get => filter;
-        set => SetProperty(ref filter, value);
-    }
-
     private IElementWrapper? selected;
     public IElementWrapper? Selected
     {
@@ -46,6 +51,13 @@ public class FinderViewModel : ObservableObject
             SetProperty(ref selected, value);
             SubmitCommand.NotifyCanExecuteChanged();
         }
+    }
+
+    private string? filter;
+    public string? Filter
+    {
+        get => filter;
+        set => SetProperty(ref filter, value);
     }
 
     public async Task<object?> Show()

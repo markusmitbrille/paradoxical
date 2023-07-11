@@ -43,7 +43,7 @@ public partial class App : Application
         services.AddSingleton<IEffectService, EffectService>();
 
         // finder view model
-        services.AddTransient<FinderViewModel>();
+        services.AddTransient<IFinder, FinderViewModel>();
 
         // misc page view models
         services.AddSingleton<AboutViewModel>();

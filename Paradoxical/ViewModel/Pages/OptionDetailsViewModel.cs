@@ -18,7 +18,7 @@ public class OptionDetailsViewModel : PageViewModel
 {
     public override string PageName => "Option Details";
 
-    public FinderViewModel Finder { get; }
+    public IFinder Finder { get; }
 
     public IOptionService OptionService { get; }
     public ITriggerService TriggerService { get; }
@@ -62,7 +62,7 @@ public class OptionDetailsViewModel : PageViewModel
     public OptionDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
-        FinderViewModel finder,
+        IFinder finder,
         IOptionService optionService,
         ITriggerService triggerService,
         IEffectService effectService,

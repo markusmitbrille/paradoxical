@@ -19,7 +19,7 @@ public class EventDetailsViewModel : PageViewModel
 {
     public override string PageName => "Event Details";
 
-    public FinderViewModel Finder { get; }
+    public IFinder Finder { get; }
 
     public IEventService EventService { get; }
     public IPortraitService PortraitService { get; }
@@ -132,7 +132,7 @@ public class EventDetailsViewModel : PageViewModel
     public EventDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
-        FinderViewModel finder,
+        IFinder finder,
         IEventService eventService,
         IPortraitService portraitService,
         IOptionService optionService,

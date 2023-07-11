@@ -37,7 +37,7 @@ public class Shell : ObservableObject, IShell
 {
     public IServiceProvider ServiceProvider { get; }
 
-    public FinderViewModel Finder { get; }
+    public IFinder Finder { get; }
 
     public IMediatorService Mediator { get; }
     public IFileService File { get; }
@@ -66,7 +66,7 @@ public class Shell : ObservableObject, IShell
 
     public Shell(
         IServiceProvider serviceProvider,
-        FinderViewModel finder,
+        IFinder finder,
         IMediatorService mediator,
         IFileService file,
         IEventService eventService,
