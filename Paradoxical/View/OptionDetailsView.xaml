@@ -78,35 +78,59 @@
 
             <TabItem
                 Header="Display">
+                <StackPanel>
 
-                <Grid>
+                    <Grid>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                            Width="*" />
-                        <ColumnDefinition
-                            Width="*" />
-                    </Grid.ColumnDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="4*" />
+                            <ColumnDefinition
+                                Width="1*" />
+                        </Grid.ColumnDefinitions>
 
-                    <view:ScriptBox
-                        Grid.Column="0"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignRichTextBox}"
-                        Text="{Binding Selected.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        ToolTip="Text label of the option button."
-                        AcceptsReturn="False"
-                        materialDesign:HintAssist.Hint="Title"
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:HintAssist.HelperText="Event option button text."
-                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                        <view:ScriptBox
+                            Grid.Column="0"
+                            Margin="6,12"
+                            Style="{DynamicResource MaterialDesignRichTextBox}"
+                            Text="{Binding Selected.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            AcceptsReturn="False"
+                            materialDesign:HintAssist.Hint="Title"
+                            materialDesign:HintAssist.IsFloating="True"
+                            materialDesign:HintAssist.HelperText="Event option button text."
+                            materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
+                            materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+                            materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
 
-                        <view:ScriptBox.TextFormatter>
-                            <formatters:EventTextFormatter />
-                        </view:ScriptBox.TextFormatter>
+                            <view:ScriptBox.TextFormatter>
+                                <formatters:EventTextFormatter />
+                            </view:ScriptBox.TextFormatter>
 
-                    </view:ScriptBox>
+                        </view:ScriptBox>
+                       
+                        <TextBox
+                            Grid.Column="1"
+                            Margin="6,12"
+                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            materialDesign:HintAssist.Hint="Priority"
+                            ToolTip="Options will be diplayed in ascending order of their priority.">
+
+                            <TextBox.Text>
+                                <Binding
+                                    Path="Selected.Priority"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    FallbackValue="0">
+                                    <Binding.ValidationRules>
+                                        <rules:IntRule
+                                            ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+
+                        </TextBox>
+
+                    </Grid>
 
                     <view:ScriptBox
                         Grid.Column="1"
@@ -127,8 +151,7 @@
 
                     </view:ScriptBox>
 
-                </Grid>
-
+                </StackPanel>
             </TabItem>
 
             <TabItem

@@ -29,6 +29,10 @@ public class Option : IEntity, IModel, IEquatable<Option?>
     public string Tooltip { get => tooltip; set => tooltip = value; }
     public string tooltip = "";
 
+    [Column("priority")]
+    public int Priority { get => priority; set => priority = value; }
+    public int priority = 0;
+
     [Column("custom_trigger"), NotNull]
     public string CustomTrigger { get => customTrigger; set => customTrigger = value; }
     public string customTrigger = "";

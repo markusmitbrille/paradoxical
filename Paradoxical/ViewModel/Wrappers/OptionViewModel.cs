@@ -22,6 +22,12 @@ public class OptionViewModel : ModelWrapper<Option>
         set => SetProperty(ref model.tooltip, value);
     }
 
+    public int Priority
+    {
+        get => model.priority;
+        set => SetProperty(ref model.priority, value);
+    }
+
     public string CustomTrigger
     {
         get => model.customTrigger;
