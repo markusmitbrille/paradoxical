@@ -27,6 +27,10 @@ public interface IShell
     public event EventHandler Navigated;
 
     public T Navigate<T>() where T : PageViewModel;
+
+    public void GoHome();
+    public void GoBack();
+    public void GoForward();
 }
 
 public class Shell : ObservableObject, IShell

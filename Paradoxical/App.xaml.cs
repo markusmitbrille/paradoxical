@@ -70,8 +70,8 @@ public partial class App : Application
         MainWindow main = ServiceProvider.GetRequiredService<MainWindow>();
         main.Show();
 
-        //Shell shell = ServiceProvider.GetRequiredService<Shell>();
-        //shell.GoHome();
+        IShell shell = ServiceProvider.GetRequiredService<IShell>();
+        shell.GoHome();
     }
 
     protected override void OnExit(ExitEventArgs e)
