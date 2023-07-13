@@ -110,30 +110,76 @@
 
                         <DataGridTextColumn
                             Header="Name"
-                            MinWidth="250"
-                            MaxWidth="500"
+                            Width="2*"
                             Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                        <DataGridTextColumn
+                        <DataGridTemplateColumn
                             Header="Title"
-                            MinWidth="250"
-                            MaxWidth="500"
-                            Binding="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Width="2*">
 
-                        <DataGridTextColumn
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+
+                                    <TextBlock
+                                        Text="{Binding Title}"
+                                        TextWrapping="Wrap" />
+
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+
+                                    <view:ScriptBox
+                                        AcceptsReturn="True"
+                                        Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                        BorderThickness="0">
+                                        
+                                        <view:ScriptBox.TextFormatter>
+                                            <formatters:EventTextFormatter />
+                                        </view:ScriptBox.TextFormatter>
+
+                                    </view:ScriptBox>
+
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn
                             Header="Description"
-                            Width="*"
-                            MinWidth="400"
-                            MaxWidth="800"
-                            Binding="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            ElementStyle="{StaticResource DataGridWrappingTextBlock}"
-                            EditingElementStyle="{StaticResource DataGridWrappingTextBox}" />
+                            Width="5*">
 
-                        <DataGridTextColumn
-                            Header="Theme"
-                            MinWidth="250"
-                            MaxWidth="500"
-                            Binding="{Binding Theme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                   
+                                    <TextBlock
+                                        Text="{Binding Description}"
+                                        TextWrapping="Wrap" />
+                               
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    
+                                    <view:ScriptBox
+                                        AcceptsReturn="True"
+                                        Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                        BorderThickness="0">
+
+                                        <view:ScriptBox.TextFormatter>
+                                            <formatters:EventTextFormatter />
+                                        </view:ScriptBox.TextFormatter>
+
+                                    </view:ScriptBox>
+
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                            
+                        </DataGridTemplateColumn>
 
                     </DataGrid.Columns>
 
