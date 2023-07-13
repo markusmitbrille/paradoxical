@@ -110,23 +110,19 @@
 
                         <DataGridTextColumn
                             Header="Name"
-                            MinWidth="250"
-                            MaxWidth="500"
+                            Width="2*"
                             Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <DataGridTextColumn
                             Header="Code"
-                            Width="*"
-                            MinWidth="400"
-                            MaxWidth="800"
+                            Width="5*"
                             Binding="{Binding Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             ElementStyle="{StaticResource DataGridWrappingTextBlock}"
                             EditingElementStyle="{StaticResource DataGridWrappingTextBox}" />
 
                         <DataGridTextColumn
                             Header="Tooltip"
-                            MinWidth="250"
-                            MaxWidth="500"
+                            Width="2*"
                             Binding="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     </DataGrid.Columns>

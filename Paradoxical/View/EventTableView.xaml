@@ -113,74 +113,16 @@
                             Width="2*"
                             Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                        <DataGridTemplateColumn
+                        <DataGridTextColumn
                             Header="Title"
-                            Width="2*">
+                            Width="2*"
+                            Binding="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-
-                                    <TextBlock
-                                        Text="{Binding Title}"
-                                        TextWrapping="Wrap" />
-
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-
-                            <DataGridTemplateColumn.CellEditingTemplate>
-                                <DataTemplate>
-
-                                    <view:ScriptBox
-                                        AcceptsReturn="True"
-                                        Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                        FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                                        BorderThickness="0">
-                                        
-                                        <view:ScriptBox.TextFormatter>
-                                            <formatters:EventTextFormatter />
-                                        </view:ScriptBox.TextFormatter>
-
-                                    </view:ScriptBox>
-
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellEditingTemplate>
-
-                        </DataGridTemplateColumn>
-
-                        <DataGridTemplateColumn
+                        <DataGridTextColumn
                             Header="Description"
-                            Width="5*">
-
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                   
-                                    <TextBlock
-                                        Text="{Binding Description}"
-                                        TextWrapping="Wrap" />
-                               
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                            
-                            <DataGridTemplateColumn.CellEditingTemplate>
-                                <DataTemplate>
-                                    
-                                    <view:ScriptBox
-                                        AcceptsReturn="True"
-                                        Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                        FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                                        BorderThickness="0">
-
-                                        <view:ScriptBox.TextFormatter>
-                                            <formatters:EventTextFormatter />
-                                        </view:ScriptBox.TextFormatter>
-
-                                    </view:ScriptBox>
-
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellEditingTemplate>
-                            
-                        </DataGridTemplateColumn>
-
+                            Width="5*"
+                            Binding="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    
                     </DataGrid.Columns>
 
                 </DataGrid>

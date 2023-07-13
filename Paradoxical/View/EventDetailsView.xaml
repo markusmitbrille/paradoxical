@@ -393,22 +393,19 @@
                             IsReadOnly="True" />
 
                         <DataGridTextColumn
+                            Header="Priority"
+                            Width="1*"
+                            Binding="{Binding Priority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <DataGridTextColumn
                             Header="Name"
-                            MinWidth="250"
-                            MaxWidth="500"
+                            Width="2*"
                             Binding="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <DataGridTextColumn
                             Header="Tooltip"
-                            MinWidth="250"
-                            MaxWidth="500"
+                            Width="2*"
                             Binding="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                        <DataGridTextColumn
-                            Header="Priority"
-                            MinWidth="100"
-                            MaxWidth="200"
-                            Binding="{Binding Priority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     </DataGrid.Columns>
 
