@@ -231,7 +231,7 @@ public class EventTableViewModel : PageViewModel
         { return; }
 
         ICollectionView view = CollectionViewSource.GetDefaultView(Items);
-        Selected = view.Cast<EventViewModel>().FirstOrDefault();
+        Selected = view.OfType<EventViewModel>().FirstOrDefault();
     }
 
     private RelayCommand? createCommand;

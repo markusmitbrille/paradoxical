@@ -193,7 +193,7 @@ public class TriggerTableViewModel : PageViewModel
         { return; }
 
         ICollectionView view = CollectionViewSource.GetDefaultView(Items);
-        Selected = view.Cast<TriggerViewModel>().FirstOrDefault();
+        Selected = view.OfType<TriggerViewModel>().FirstOrDefault();
     }
 
     private RelayCommand? createCommand;

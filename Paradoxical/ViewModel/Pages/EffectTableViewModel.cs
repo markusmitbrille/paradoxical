@@ -193,7 +193,7 @@ public class EffectTableViewModel : PageViewModel
         { return; }
 
         ICollectionView view = CollectionViewSource.GetDefaultView(Items);
-        Selected = view.Cast<EffectViewModel>().FirstOrDefault();
+        Selected = view.OfType<EffectViewModel>().FirstOrDefault();
     }
 
     private RelayCommand? createCommand;
