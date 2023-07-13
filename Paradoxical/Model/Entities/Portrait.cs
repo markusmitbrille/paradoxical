@@ -57,7 +57,31 @@ public class Portrait : IEntity, IModel, IEquatable<Portrait?>
     {
         if (Character == string.Empty)
         {
-            return;
+            if (Position == PortraitPosition.Left)
+            {
+                writer.Indent().WriteLine("# no left portrait");
+                return;
+            }
+            if (Position == PortraitPosition.Right)
+            {
+                writer.Indent().WriteLine("# no right portrait");
+                return;
+            }
+            if (Position == PortraitPosition.LowerLeft)
+            {
+                writer.Indent().WriteLine("# no lower left portrait");
+                return;
+            }
+            if (Position == PortraitPosition.LowerCenter)
+            {
+                writer.Indent().WriteLine("# no lower center portrait");
+                return;
+            }
+            if (Position == PortraitPosition.LowerRight)
+            {
+                writer.Indent().WriteLine("# no lower right portrait");
+                return;
+            }
         }
 
         if (Position == PortraitPosition.Left)

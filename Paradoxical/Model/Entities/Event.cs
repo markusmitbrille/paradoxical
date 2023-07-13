@@ -116,6 +116,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
 
         if (Hidden == false)
         {
+            writer.WriteLine();
             WritePortraits(writer, eventService, portraitService);
         }
 
@@ -131,7 +132,6 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         if (Hidden == false)
         {
             writer.WriteLine();
-
             WriteOptions(writer, modService, eventService, optionService);
         }
 
@@ -156,8 +156,6 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         IEventService eventService,
         IPortraitService portraitService)
     {
-        writer.WriteLine();
-
         var leftPortrait = eventService.GetLeftPortrait(this);
         var rightPortrait = eventService.GetRightPortrait(this);
         var lowerLeftPortrait = eventService.GetLowerLeftPortrait(this);
