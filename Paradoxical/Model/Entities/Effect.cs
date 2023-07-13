@@ -1,4 +1,5 @@
 ﻿using Paradoxical.Core;
+using Paradoxical.Extensions;
 using Paradoxical.Services.Entities;
 using SQLite;
 using System;
@@ -75,9 +76,16 @@ public class Effect : IEntity, IModel, IElement, IEquatable<Effect?>
             writer.WriteLine();
         }
 
-        foreach (string line in Code.Split(ParadoxText.NewParagraph))
+        if (Code.IsEmpty() == false)
         {
-            writer.Indent().WriteLine(line);
+            foreach (string line in Code.Split(ParadoxText.NewParagraph))
+            {
+                writer.Indent().WriteLine(line);
+            }
+        }
+        else
+        {
+            writer.Indent().WriteLine("# no effect");
         }
 
         if (Hidden == true)
