@@ -11,26 +11,32 @@
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     mc:Ignorable="d"
     d:DesignHeight="450"
-    d:DesignWidth="800"
-    Style="{DynamicResource MaterialDesignRichTextBox}">
+    d:DesignWidth="800">
 
     <RichTextBox.Resources>
+       
         <RoutedUICommand
             x:Key="CompleteWordCommand"
             Text="Complete Word">
+            
             <RoutedUICommand.InputGestures>
                 <KeyGesture>CTRL+Space</KeyGesture>
             </RoutedUICommand.InputGestures>
+        
         </RoutedUICommand>
+   
     </RichTextBox.Resources>
 
     <RichTextBox.InputBindings>
+        
         <KeyBinding
             Command="{StaticResource CompleteWordCommand}"
             Gesture="CTRL+Space" />
+   
     </RichTextBox.InputBindings>
 
     <RichTextBox.CommandBindings>
+       
         <!-- disable default editing commands -->
         <CommandBinding
             Command="EditingCommands.AlignCenter"
@@ -77,10 +83,12 @@
         <CommandBinding
             Command="EditingCommands.ToggleUnderline"
             CanExecute="NeverExecute" />
+      
         <!-- new commands -->
         <CommandBinding
             Command="{StaticResource CompleteWordCommand}"
             Executed="CompleteWordCommandExecuted" />
+   
     </RichTextBox.CommandBindings>
 
 </xctk:RichTextBox>
