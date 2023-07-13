@@ -72,7 +72,7 @@
                     Margin="4,0"
                     Style="{DynamicResource MaterialDesignFilledTextBox}"
                     Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    GotFocus="TextBoxGotFocusHandler"
+                    GotFocus="TextBox_GotFocus"
                     materialDesign:HintAssist.Hint="Filter Triggers ..."
                     materialDesign:TextFieldAssist.HasClearButton="True" />
 

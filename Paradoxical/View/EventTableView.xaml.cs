@@ -10,7 +10,7 @@ public partial class EventTableView : UserControl
         InitializeComponent();
     }
 
-    private void TextBoxGotFocusHandler(object sender, RoutedEventArgs e)
+    private void TextBox_GotFocus(object sender, RoutedEventArgs e)
     {
         // commit current edit
         ItemsDataGrid.CommitEdit();
