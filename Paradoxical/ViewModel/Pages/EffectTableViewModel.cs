@@ -41,6 +41,9 @@ public class EffectTableViewModel : PageViewModel
             items = value;
             items.CollectionChanged += Items_CollectionChanged;
 
+            UpdateView();
+            UpdateSelected();
+
             OnPropertyChanged();
         }
     }
@@ -70,18 +73,28 @@ public class EffectTableViewModel : PageViewModel
         }
     }
 
+    private string? filter;
+    public string? Filter
+    {
+        get => filter;
+        set
+        {
+            OnPropertyChanging();
+
+            filter = value;
+
+            UpdateView();
+            UpdateSelected();
+
+            OnPropertyChanged();
+        }
+    }
+
     private EffectViewModel? selected;
     public EffectViewModel? Selected
     {
         get => selected;
         set => SetProperty(ref selected, value);
-    }
-
-    private string? filter;
-    public string? Filter
-    {
-        get => filter;
-        set => SetProperty(ref filter, value);
     }
 
     public EffectTableViewModel(
@@ -91,22 +104,6 @@ public class EffectTableViewModel : PageViewModel
         : base(shell, mediator)
     {
         EffectService = effectService;
-    }
-
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
-
-        if (e.PropertyName == nameof(Items))
-        {
-            UpdateView();
-            UpdateSelected();
-        }
-        if (e.PropertyName == nameof(Filter))
-        {
-            UpdateView();
-            UpdateSelected();
-        }
     }
 
     protected override void OnNavigatedTo()

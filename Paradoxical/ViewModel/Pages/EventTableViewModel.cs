@@ -43,6 +43,9 @@ public class EventTableViewModel : PageViewModel
             items = value;
             items.CollectionChanged += Items_CollectionChanged;
 
+            UpdateView();
+            UpdateSelected();
+
             OnPropertyChanged();
         }
     }
@@ -104,18 +107,28 @@ public class EventTableViewModel : PageViewModel
         }
     }
 
+    private string? filter;
+    public string? Filter
+    {
+        get => filter;
+        set
+        {
+            OnPropertyChanging();
+
+            filter = value;
+
+            UpdateView();
+            UpdateSelected();
+
+            OnPropertyChanged();
+        }
+    }
+
     private EventViewModel? selected;
     public EventViewModel? Selected
     {
         get => selected;
         set => SetProperty(ref selected, value);
-    }
-
-    private string? filter;
-    public string? Filter
-    {
-        get => filter;
-        set => SetProperty(ref filter, value);
     }
 
     public EventTableViewModel(
@@ -129,22 +142,6 @@ public class EventTableViewModel : PageViewModel
         EventService = eventService;
         OptionService = optionService;
         PortraitService = portraitService;
-    }
-
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
-
-        if (e.PropertyName == nameof(Items))
-        {
-            UpdateView();
-            UpdateSelected();
-        }
-        if (e.PropertyName == nameof(Filter))
-        {
-            UpdateView();
-            UpdateSelected();
-        }
     }
 
     protected override void OnNavigatedTo()
