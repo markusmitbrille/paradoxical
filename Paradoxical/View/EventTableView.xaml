@@ -13,14 +13,6 @@
     d:DataContext="{d:DesignInstance {x:Type viewmodel:EventTableViewModel}}"
     d:DesignWidth="800">
 
-    <UserControl.Resources>
-
-        <CollectionViewSource
-            x:Key="ItemsCollectionViewSource"
-            Source="{Binding Items}" />
-
-    </UserControl.Resources>
-
     <DockPanel>
 
         <ToolBarTray
@@ -90,7 +82,7 @@
                     Margin="20"
                     BorderBrush="Gray"
                     BorderThickness="1"
-                    ItemsSource="{Binding Source={StaticResource ItemsCollectionViewSource}}"
+                    ItemsSource="{Binding Items}"
                     SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static CollectionView.NewItemPlaceholder}}"
                     SelectionMode="Single"
                     SelectionUnit="FullRow"
