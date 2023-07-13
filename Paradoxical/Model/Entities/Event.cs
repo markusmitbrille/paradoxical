@@ -200,7 +200,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         {
             writer.Indent().WriteLine("# custom trigger");
 
-            foreach (string line in CustomTrigger.Split(Environment.NewLine))
+            foreach (string line in CustomTrigger.Split(ParadoxText.NewParagraph))
             {
                 writer.Indent().WriteLine(line);
             }
@@ -239,7 +239,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         {
             writer.Indent().WriteLine("# custom effect");
 
-            foreach (string line in CustomImmediateEffect.Split(Environment.NewLine))
+            foreach (string line in CustomImmediateEffect.Split(ParadoxText.NewParagraph))
             {
                 writer.Indent().WriteLine(line);
             }
@@ -278,7 +278,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         {
             writer.Indent().WriteLine("# custom effect");
 
-            foreach (string line in CustomAfterEffect.Split(Environment.NewLine))
+            foreach (string line in CustomAfterEffect.Split(ParadoxText.NewParagraph))
             {
                 writer.Indent().WriteLine(line);
             }

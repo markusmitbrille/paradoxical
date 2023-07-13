@@ -208,7 +208,7 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
         {
             writer.Indent().WriteLine("# custom trigger");
 
-            foreach (string line in CustomTrigger.Split(Environment.NewLine))
+            foreach (string line in CustomTrigger.Split(ParadoxText.NewParagraph))
             {
                 writer.Indent().WriteLine(line);
             }
@@ -348,7 +348,7 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
         {
             writer.Indent().WriteLine("# custom effect");
 
-            foreach (string line in CustomEffect.Split(Environment.NewLine))
+            foreach (string line in CustomEffect.Split(ParadoxText.NewParagraph))
             {
                 writer.Indent().WriteLine(line);
             }

@@ -65,7 +65,7 @@ public class Trigger : IEntity, IModel, IElement, IEquatable<Trigger?>
             writer.WriteLine();
         }
 
-        foreach (string line in Code.Split(Environment.NewLine))
+        foreach (string line in Code.Split(ParadoxText.NewParagraph))
         {
             writer.Indent().WriteLine(line);
         }
