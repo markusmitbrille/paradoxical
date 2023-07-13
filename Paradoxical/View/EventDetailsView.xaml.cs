@@ -9,4 +9,13 @@ public partial class EventDetailsView : UserControl
     {
         InitializeComponent();
     }
+
+    private void OptionsDataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        // commit current edit
+        OptionsDataGrid.CommitEdit();
+
+        // commit pending edits
+        OptionsDataGrid.CommitEdit();
+    }
 }

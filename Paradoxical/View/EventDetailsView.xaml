@@ -375,7 +375,8 @@
                     SelectionUnit="FullRow"
                     AutoGenerateColumns="False"
                     CanUserSortColumns="False"
-                    CanUserReorderColumns="False">
+                    CanUserReorderColumns="False"
+                    MouseDoubleClick="OptionsDataGrid_MouseDoubleClick">
 
                     <DataGrid.InputBindings>
                         <MouseBinding

@@ -18,4 +18,13 @@ public partial class TriggerTableView : UserControl
         // commit pending edits
         ItemsDataGrid.CommitEdit();
     }
+
+    private void ItemsDataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        // commit current edit
+        ItemsDataGrid.CommitEdit();
+
+        // commit pending edits
+        ItemsDataGrid.CommitEdit();
+    }
 }

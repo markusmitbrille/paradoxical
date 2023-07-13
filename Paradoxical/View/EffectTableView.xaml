@@ -96,7 +96,8 @@
                     SelectionUnit="FullRow"
                     AutoGenerateColumns="False"
                     CanUserSortColumns="False"
-                    CanUserReorderColumns="False">
+                    CanUserReorderColumns="False"
+                    MouseDoubleClick="ItemsDataGrid_MouseDoubleClick">
 
                     <DataGrid.InputBindings>
                         <MouseBinding
