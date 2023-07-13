@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
+    xmlns:converters="clr-namespace:Paradoxical.Converters"
     xmlns:formatters="clr-namespace:Paradoxical.Formatters"
     xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -110,20 +111,123 @@
 
                         <DataGridTextColumn
                             Header="Name"
-                            Width="2*"
-                            Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Width="2*">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style
+                                    TargetType="TextBlock">
+                                    <Setter
+                                        Property="TextWrapping"
+                                        Value="Wrap" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
+                            <DataGridTextColumn.EditingElementStyle>
+                                <Style
+                                    TargetType="TextBox">
+                                    <Setter
+                                        Property="TextWrapping"
+                                        Value="Wrap" />
+                                    <Setter
+                                        Property="AcceptsReturn"
+                                        Value="true" />
+                                </Style>
+                            </DataGridTextColumn.EditingElementStyle>
+
+                            <DataGridTextColumn.Binding>
+                                <Binding
+                                    Path="Name"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.Converter>
+                                        <converters:CodeConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </DataGridTextColumn.Binding>
+
+                        </DataGridTextColumn>
 
                         <DataGridTextColumn
                             Header="Code"
-                            Width="5*"
-                            Binding="{Binding Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            ElementStyle="{StaticResource DataGridWrappingTextBlock}"
-                            EditingElementStyle="{StaticResource DataGridWrappingTextBox}" />
+                            Width="5*">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style
+                                    TargetType="TextBlock">
+                                    <Setter
+                                        Property="TextWrapping"
+                                        Value="Wrap" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
+                            <DataGridTextColumn.EditingElementStyle>
+                                <Style
+                                    TargetType="TextBox">
+                                    <Setter
+                                        Property="TextWrapping"
+                                        Value="Wrap" />
+                                    <Setter
+                                        Property="AcceptsReturn"
+                                        Value="true" />
+                                </Style>
+                            </DataGridTextColumn.EditingElementStyle>
+
+                            <DataGridTextColumn.Binding>
+                                <Binding
+                                    Path="Code"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.Converter>
+                                        <converters:CodeConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </DataGridTextColumn.Binding>
+
+                        </DataGridTextColumn>
 
                         <DataGridTextColumn
                             Header="Tooltip"
-                            Width="2*"
-                            Binding="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Width="5*">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style
+                                    TargetType="TextBlock">
+                                    <Setter
+                                        Property="TextWrapping"
+                                        Value="Wrap" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
+                            <DataGridTextColumn.EditingElementStyle>
+                                <Style
+                                    TargetType="TextBox">
+                                    <Setter
+                                        Property="TextWrapping"
+                                        Value="Wrap" />
+                                    <Setter
+                                        Property="AcceptsReturn"
+                                        Value="true" />
+                                </Style>
+                            </DataGridTextColumn.EditingElementStyle>
+
+                            <DataGridTextColumn.Binding>
+                                <Binding
+                                    Path="Tooltip"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.Converter>
+                                        <converters:CodeConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </DataGridTextColumn.Binding>
+
+                        </DataGridTextColumn>
 
                     </DataGrid.Columns>
 
