@@ -90,6 +90,8 @@
                     AutoGenerateColumns="False"
                     CanUserSortColumns="False"
                     CanUserReorderColumns="False"
+                    CanUserResizeColumns="False"
+                    CanUserResizeRows="False"
                     MouseDoubleClick="ItemsDataGrid_MouseDoubleClick">
 
                     <DataGrid.InputBindings>
