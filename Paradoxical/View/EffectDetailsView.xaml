@@ -13,6 +13,23 @@
     d:DataContext="{d:DesignInstance {x:Type viewmodel:EffectDetailsViewModel}}"
     d:DesignWidth="800">
 
+    <UserControl.Resources>
+
+        <Style
+            TargetType="TextBox"
+            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+
+            <Setter
+                Property="Margin"
+                Value="6,12" />
+            <Setter
+                Property="materialDesign:HintAssist.FontFamily"
+                Value="{StaticResource MaterialDesignFont}" />
+
+        </Style>
+
+    </UserControl.Resources>
+
     <DockPanel>
 
         <ToolBarTray
@@ -67,8 +84,6 @@
                 <StackPanel>
 
                     <TextBox
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         materialDesign:HintAssist.Hint="Name"
                         materialDesign:HintAssist.HelperText="Element name, used in script.">
 
@@ -90,17 +105,11 @@
                     </TextBox>
 
                     <TextBox
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
                         MinLines="12"
                         MaxLines="12"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Code"
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                        materialDesign:HintAssist.Hint="Code">
 
                         <TextBox.Text>
                             <Binding
@@ -118,18 +127,12 @@
                     </TextBox>
 
                     <TextBox
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
                         MinLines="4"
                         MaxLines="4"
                         AcceptsReturn="True"
                         materialDesign:HintAssist.Hint="Tooltip"
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated effect text."
-                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                        materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated effect text.">
 
                         <TextBox.Text>
                             <Binding

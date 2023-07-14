@@ -19,13 +19,26 @@
         <CollectionViewSource
             x:Key="OptionsCollectionViewSource"
             Source="{Binding Options}">
-            
+
             <CollectionViewSource.SortDescriptions>
                 <scm:SortDescription
                     PropertyName="Priority" />
             </CollectionViewSource.SortDescriptions>
 
         </CollectionViewSource>
+
+        <Style
+            TargetType="TextBox"
+            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+
+            <Setter
+                Property="Margin"
+                Value="6,12" />
+            <Setter
+                Property="materialDesign:HintAssist.FontFamily"
+                Value="{StaticResource MaterialDesignFont}" />
+
+        </Style>
 
     </UserControl.Resources>
 
@@ -93,8 +106,6 @@
 
                         <TextBox
                             Grid.Column="0"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             materialDesign:HintAssist.Hint="Name"
                             materialDesign:HintAssist.HelperText="Element name, only used by Paradoxical.">
 
@@ -125,15 +136,9 @@
                     </Grid>
 
                     <TextBox
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
                         AcceptsReturn="False"
-                        materialDesign:HintAssist.Hint="Title"
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                        materialDesign:HintAssist.Hint="Title">
 
                         <TextBox.Text>
                             <Binding
@@ -151,17 +156,11 @@
                     </TextBox>
 
                     <TextBox
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
                         MinLines="12"
                         MaxLines="12"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Description"
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                        materialDesign:HintAssist.Hint="Description">
 
                         <TextBox.Text>
                             <Binding
@@ -179,15 +178,11 @@
                     </TextBox>
 
                     <TextBox
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         Text="{Binding Selected.Theme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         materialDesign:HintAssist.Hint="Theme"
                         materialDesign:HintAssist.HelperText="Determines background, icon, sound, and environment." />
 
                     <TextBox
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         materialDesign:HintAssist.Hint="Cooldown in days">
 
                         <TextBox.Text>
@@ -196,10 +191,12 @@
                                 Mode="TwoWay"
                                 UpdateSourceTrigger="PropertyChanged"
                                 FallbackValue="0">
+
                                 <Binding.ValidationRules>
                                     <rules:IntRule
                                         ValidatesOnTargetUpdated="True" />
                                 </Binding.ValidationRules>
+
                             </Binding>
                         </TextBox.Text>
 
@@ -213,68 +210,62 @@
                 <StackPanel>
 
                     <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition
-                            Height="auto" />
-                        <RowDefinition
-                            Height="auto" />
-                        <RowDefinition
-                            Height="auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                            Width="*"
-                            MinWidth="100" />
-                        <ColumnDefinition
-                            Width="*"
-                            MinWidth="100" />
-                    </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="auto" />
+                            <RowDefinition
+                                Height="auto" />
+                            <RowDefinition
+                                Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="*"
+                                MinWidth="100" />
+                            <ColumnDefinition
+                                Width="*"
+                                MinWidth="100" />
+                        </Grid.ColumnDefinitions>
 
-                    <TextBox
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                        Text="{Binding LeftPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        materialDesign:HintAssist.Hint="Left Character" />
-                    <TextBox
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                        Text="{Binding LeftPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        materialDesign:HintAssist.Hint="Left Animation" />
-                    <TextBox
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                        Text="{Binding LeftPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        materialDesign:HintAssist.Hint="Left Outfit Tags" />
+                        <TextBox
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            FontFamily="Consolas"
+                            Text="{Binding LeftPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Left Character" />
+                        <TextBox
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            FontFamily="Consolas"
+                            Text="{Binding LeftPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Left Animation" />
+                        <TextBox
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            FontFamily="Consolas"
+                            Text="{Binding LeftPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Left Outfit Tags" />
 
-                    <TextBox
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                        Text="{Binding RightPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        materialDesign:HintAssist.Hint="Right Character" />
-                    <TextBox
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                        Text="{Binding RightPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        materialDesign:HintAssist.Hint="Right Animation" />
-                    <TextBox
-                        Grid.Row="2"
-                        Grid.Column="1"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                        Text="{Binding RightPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        materialDesign:HintAssist.Hint="Right Outfit Tags" />
-                </Grid>
-                  
+                        <TextBox
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            FontFamily="Consolas"
+                            Text="{Binding RightPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Right Character" />
+                        <TextBox
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            FontFamily="Consolas"
+                            Text="{Binding RightPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Right Animation" />
+                        <TextBox
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            FontFamily="Consolas"
+                            Text="{Binding RightPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Right Outfit Tags" />
+                    </Grid>
+
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition
@@ -299,66 +290,56 @@
                         <TextBox
                             Grid.Row="0"
                             Grid.Column="0"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            FontFamily="Consolas"
                             Text="{Binding LowerLeftPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Left Character" />
                         <TextBox
                             Grid.Row="1"
                             Grid.Column="0"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding LowerLeftPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Left Animation" />
                         <TextBox
                             Grid.Row="2"
                             Grid.Column="0"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            FontFamily="Consolas"
                             Text="{Binding LowerLeftPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Left Outfit Tags" />
 
                         <TextBox
                             Grid.Row="0"
                             Grid.Column="1"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            FontFamily="Consolas"
                             Text="{Binding LowerCenterPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Center Character" />
                         <TextBox
                             Grid.Row="1"
                             Grid.Column="1"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            FontFamily="Consolas"
                             Text="{Binding LowerCenterPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Center Animation" />
                         <TextBox
                             Grid.Row="2"
                             Grid.Column="1"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            FontFamily="Consolas"
                             Text="{Binding LowerCenterPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Center Outfit Tags" />
 
                         <TextBox
                             Grid.Row="0"
                             Grid.Column="2"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            FontFamily="Consolas"
                             Text="{Binding LowerRightPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Right Character" />
                         <TextBox
                             Grid.Row="1"
                             Grid.Column="2"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            FontFamily="Consolas"
                             Text="{Binding LowerRightPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Right Animation" />
                         <TextBox
                             Grid.Row="2"
                             Grid.Column="2"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            FontFamily="Consolas"
                             Text="{Binding LowerRightPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Right Outfit Tags" />
                     </Grid>
@@ -635,15 +616,9 @@
 
                     <TextBox
                         Grid.Column="0"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Custom Trigger Code"
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                        materialDesign:HintAssist.Hint="Custom Trigger Code">
 
                         <TextBox.Text>
                             <Binding
@@ -815,15 +790,9 @@
 
                     <TextBox
                         Grid.Column="0"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Custom Effect Code"
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                        materialDesign:HintAssist.Hint="Custom Effect Code">
 
                         <TextBox.Text>
                             <Binding
@@ -995,15 +964,9 @@
 
                     <TextBox
                         Grid.Column="0"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Custom Effect Code"
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                        materialDesign:HintAssist.Hint="Custom Effect Code">
 
                         <TextBox.Text>
                             <Binding

@@ -13,6 +13,23 @@
     d:DataContext="{d:DesignInstance {x:Type viewmodel:ModDetailsViewModel}}"
     d:DesignWidth="800">
 
+    <UserControl.Resources>
+
+        <Style
+            TargetType="TextBox"
+            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+
+            <Setter
+                Property="Margin"
+                Value="6,12" />
+            <Setter
+                Property="materialDesign:HintAssist.FontFamily"
+                Value="{StaticResource MaterialDesignFont}" />
+
+        </Style>
+
+    </UserControl.Resources>
+
     <DockPanel>
 
         <ToolBarTray
@@ -77,8 +94,6 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         materialDesign:HintAssist.Hint="Mod Name">
 
                         <TextBox.Text>
@@ -99,8 +114,6 @@
                         Grid.Row="0"
                         Grid.Column="3"
                         Grid.ColumnSpan="1"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         materialDesign:HintAssist.Hint="Mod Version">
 
                         <TextBox.Text>
@@ -123,8 +136,6 @@
                         Grid.Row="0"
                         Grid.Column="4"
                         Grid.ColumnSpan="1"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         materialDesign:HintAssist.Hint="Game Version">
 
                         <TextBox.Text>
@@ -147,8 +158,6 @@
                         Grid.Row="1"
                         Grid.Column="0"
                         Grid.ColumnSpan="5"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         materialDesign:HintAssist.Hint="Prefix"
                         materialDesign:HintAssist.HelperText="Used for events, file names, etc.">
 

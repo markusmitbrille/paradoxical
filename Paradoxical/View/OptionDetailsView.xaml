@@ -13,6 +13,23 @@
     mc:Ignorable="d"
     d:DesignWidth="800">
 
+    <UserControl.Resources>
+
+        <Style
+            TargetType="TextBox"
+            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+
+            <Setter
+                Property="Margin"
+                Value="6,12" />
+            <Setter
+                Property="materialDesign:HintAssist.FontFamily"
+                Value="{StaticResource MaterialDesignFont}" />
+
+        </Style>
+
+    </UserControl.Resources>
+
     <DockPanel>
 
         <ToolBarTray
@@ -93,16 +110,10 @@
 
                         <TextBox
                             Grid.Column="0"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             FontFamily="Consolas"
                             AcceptsReturn="False"
                             materialDesign:HintAssist.Hint="Title"
-                            materialDesign:HintAssist.IsFloating="True"
-                            materialDesign:HintAssist.HelperText="Event option button text."
-                            materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                            materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                            materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                            materialDesign:HintAssist.HelperText="Event option button text.">
 
                             <TextBox.Text>
                                 <Binding
@@ -121,34 +132,20 @@
 
                         <TextBox
                             Grid.Column="1"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding Selected.Priority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            ToolTip="Options will be diplayed in ascending order of their priority."
                             AcceptsReturn="False"
-                            materialDesign:HintAssist.Hint="Priority"
-                            materialDesign:HintAssist.IsFloating="True"
-                            materialDesign:HintAssist.HelperText="Option order."
-                            materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                            materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                            materialDesign:TextFieldAssist.TextFieldCornerRadius="4" />
+                            materialDesign:HintAssist.Hint="Priority" />
 
                     </Grid>
 
                     <TextBox
                         Grid.Column="1"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
                         MinLines="4"
                         MaxLines="4"
                         AcceptsReturn="True"
                         materialDesign:HintAssist.Hint="Tooltip"
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated text."
-                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                        materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated text.">
 
                         <TextBox.Text>
                             <Binding
@@ -258,16 +255,12 @@
 
                         <TextBox
                             Grid.Column="0"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             Text="{Binding Selected.TriggeredEventScope, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Event Scope"
                             materialDesign:HintAssist.HelperText="Scope wherein the follow-up event will be triggered." />
 
                         <TextBox
                             Grid.Column="1"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             materialDesign:HintAssist.Hint="Min Days"
                             materialDesign:HintAssist.HelperText="Min days until triggered.">
 
@@ -288,8 +281,6 @@
 
                         <TextBox
                             Grid.Column="2"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             materialDesign:HintAssist.Hint="Max Days"
                             materialDesign:HintAssist.HelperText="Min days until triggered.">
 
@@ -357,8 +348,6 @@
                             Grid.Row="0"
                             Grid.Column="0"
                             Grid.ColumnSpan="3"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             materialDesign:HintAssist.Hint="Base Chance"
                             materialDesign:HintAssist.HelperText="Base chance AI will select this; modified additively by personality.">
 
@@ -380,8 +369,6 @@
                         <TextBox
                             Grid.Row="1"
                             Grid.Column="0"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             materialDesign:HintAssist.Hint="Boldness">
 
                             <TextBox.Text>
@@ -402,8 +389,6 @@
                         <TextBox
                             Grid.Row="1"
                             Grid.Column="1"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             materialDesign:HintAssist.Hint="Compassion">
 
                             <TextBox.Text>
@@ -424,8 +409,6 @@
                         <TextBox
                             Grid.Row="1"
                             Grid.Column="2"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             materialDesign:HintAssist.Hint="Boldness">
 
                             <TextBox.Text>
@@ -446,8 +429,6 @@
                         <TextBox
                             Grid.Row="2"
                             Grid.Column="0"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             materialDesign:HintAssist.Hint="Energy">
 
                             <TextBox.Text>
@@ -468,8 +449,6 @@
                         <TextBox
                             Grid.Row="2"
                             Grid.Column="1"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             materialDesign:HintAssist.Hint="Honor">
 
                             <TextBox.Text>
@@ -490,8 +469,6 @@
                         <TextBox
                             Grid.Row="2"
                             Grid.Column="2"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             materialDesign:HintAssist.Hint="Rationality">
 
                             <TextBox.Text>
@@ -512,8 +489,6 @@
                         <TextBox
                             Grid.Row="3"
                             Grid.Column="0"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             materialDesign:HintAssist.Hint="Sociability">
 
                             <TextBox.Text>
@@ -534,8 +509,6 @@
                         <TextBox
                             Grid.Row="3"
                             Grid.Column="1"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             materialDesign:HintAssist.Hint="Vengefulness">
 
                             <TextBox.Text>
@@ -556,8 +529,6 @@
                         <TextBox
                             Grid.Row="3"
                             Grid.Column="2"
-                            Margin="6,12"
-                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                             materialDesign:HintAssist.Hint="Zeal">
 
                             <TextBox.Text>
@@ -579,15 +550,9 @@
 
                     <TextBox
                         Grid.Column="1"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Custom AI Chance"
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                        materialDesign:HintAssist.Hint="Custom AI Chance">
 
                         <TextBox.Text>
                             <Binding
@@ -614,15 +579,9 @@
 
                     <TextBox
                         Grid.Column="0"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Custom Trigger Code"
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                        materialDesign:HintAssist.Hint="Custom Trigger Code">
 
                         <TextBox.Text>
                             <Binding
@@ -648,15 +607,9 @@
 
                     <TextBox
                         Grid.Column="0"
-                        Margin="6,12"
-                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Custom Effect Code"
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
+                        materialDesign:HintAssist.Hint="Custom Effect Code">
 
                         <TextBox.Text>
                             <Binding
