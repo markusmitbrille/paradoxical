@@ -64,8 +64,7 @@
                     Margin="4,0"
                     Style="{DynamicResource MaterialDesignFilledTextBox}"
                     Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    GotFocus="TextBox_GotFocus"
-                    GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                    PreviewTextInput="TextBox_PreviewTextInput"
                     materialDesign:HintAssist.Hint="Filter Triggers ..."
                     materialDesign:TextFieldAssist.HasClearButton="True" />
 
@@ -92,7 +91,7 @@
                     CanUserReorderColumns="False"
                     CanUserResizeColumns="False"
                     CanUserResizeRows="False"
-                    MouseDoubleClick="ItemsDataGrid_MouseDoubleClick">
+                    InitializingNewItem="DataGrid_InitializingNewItem">
 
                     <DataGrid.InputBindings>
                         <MouseBinding
@@ -111,8 +110,7 @@
                                     <TextBlock>
                                         <Hyperlink
                                             Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-                                            CommandParameter="{Binding}"
-                                            Click="Hyperlink_Click">
+                                            CommandParameter="{Binding}">
                                             <TextBlock
                                                 Text="{Binding Id, Mode=OneWay}" />
                                         </Hyperlink>

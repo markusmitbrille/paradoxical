@@ -10,21 +10,20 @@ public partial class EventDetailsView : UserControl
         InitializeComponent();
     }
 
-    private void OptionsDataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void DataGrid_InitializingNewItem(object? sender, InitializingNewItemEventArgs e)
     {
-        // commit current edit
-        OptionsDataGrid.CommitEdit();
+        if (sender is not DataGrid dataGrid)
+        { return; }
 
-        // commit pending edits
-        OptionsDataGrid.CommitEdit();
+        dataGrid.BeginningEdit += DataGrid_BeginningEdit;
     }
 
-    private void OptionsDataGrid_Hyperlink_Click(object sender, RoutedEventArgs e)
+    private void DataGrid_BeginningEdit(object? sender, DataGridBeginningEditEventArgs e)
     {
-        // commit current edit
-        OptionsDataGrid.CommitEdit();
+        if (sender is not DataGrid dataGrid)
+        { return; }
 
-        // commit pending edits
-        OptionsDataGrid.CommitEdit();
+        dataGrid.CommitEdit(DataGridEditingUnit.Row, false);
+        dataGrid.BeginningEdit -= DataGrid_BeginningEdit;
     }
 }

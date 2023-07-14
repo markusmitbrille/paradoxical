@@ -11,39 +11,25 @@ public partial class EffectTableView : UserControl
         InitializeComponent();
     }
 
-    private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+    private void DataGrid_InitializingNewItem(object? sender, InitializingNewItemEventArgs e)
     {
-        // commit current edit
-        ItemsDataGrid.CommitEdit();
+        if (sender is not DataGrid dataGrid)
+        { return; }
 
-        // commit pending edits
-        ItemsDataGrid.CommitEdit();
+        dataGrid.BeginningEdit += DataGrid_BeginningEdit;
     }
 
-    private void TextBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+    private void DataGrid_BeginningEdit(object? sender, DataGridBeginningEditEventArgs e)
     {
-        // commit current edit
-        ItemsDataGrid.CommitEdit();
+        if (sender is not DataGrid dataGrid)
+        { return; }
 
-        // commit pending edits
-        ItemsDataGrid.CommitEdit();
+        dataGrid.CommitEdit(DataGridEditingUnit.Row, false);
+        dataGrid.BeginningEdit -= DataGrid_BeginningEdit;
     }
 
-    private void ItemsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
-        // commit current edit
-        ItemsDataGrid.CommitEdit();
-
-        // commit pending edits
-        ItemsDataGrid.CommitEdit();
-    }
-
-    private void Hyperlink_Click(object sender, RoutedEventArgs e)
-    {
-        // commit current edit
-        ItemsDataGrid.CommitEdit();
-
-        // commit pending edits
-        ItemsDataGrid.CommitEdit();
+        ItemsDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
     }
 }

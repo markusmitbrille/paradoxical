@@ -16,17 +16,6 @@
 
     <UserControl.Resources>
 
-        <CollectionViewSource
-            x:Key="OptionsCollectionViewSource"
-            Source="{Binding Options}">
-
-            <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription
-                    PropertyName="Priority" />
-            </CollectionViewSource.SortDescriptions>
-
-        </CollectionViewSource>
-
         <Style
             TargetType="TextBox"
             BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
@@ -353,13 +342,13 @@
                     Margin="6,12"
                     BorderBrush="Gray"
                     BorderThickness="1"
-                    ItemsSource="{Binding Source={StaticResource OptionsCollectionViewSource}}"
+                    ItemsSource="{Binding Options}"
                     SelectionMode="Single"
                     SelectionUnit="FullRow"
                     AutoGenerateColumns="False"
                     CanUserSortColumns="False"
                     CanUserReorderColumns="False"
-                    MouseDoubleClick="OptionsDataGrid_MouseDoubleClick">
+                    InitializingNewItem="DataGrid_InitializingNewItem">
 
                     <DataGrid.InputBindings>
                         <MouseBinding
@@ -378,8 +367,7 @@
                                     <TextBlock>
                                         <Hyperlink
                                             Command="{Binding DataContext.EditOptionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-                                            CommandParameter="{Binding}"
-                                            Click="OptionsDataGrid_Hyperlink_Click">
+                                            CommandParameter="{Binding}">
                                             <TextBlock
                                                 Text="{Binding Id, Mode=OneWay}" />
                                         </Hyperlink>
