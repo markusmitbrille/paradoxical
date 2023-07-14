@@ -98,6 +98,9 @@ public class Shell : ObservableObject, IShell
 
     private void New()
     {
+        Mediator.Send<SaveMessage>(new());
+
+        ClearPage();
         File.New();
         GoHome();
     }
@@ -107,6 +110,9 @@ public class Shell : ObservableObject, IShell
 
     private void Open()
     {
+        Mediator.Send<SaveMessage>(new());
+
+        ClearPage();
         File.Open();
         GoHome();
     }
@@ -125,8 +131,9 @@ public class Shell : ObservableObject, IShell
     private void Backup()
     {
         Mediator.Send<SaveMessage>(new());
-        File.Backup();
 
+        ClearPage();
+        File.Backup();
         GoHome();
     }
 
@@ -271,10 +278,7 @@ if you don't save them.",
         return true;
     }
 
-    private RelayCommand? goHomeCommand;
-    public RelayCommand GoHomeCommand => goHomeCommand ??= new(GoHome);
-
-    public void GoHome()
+    public void ClearPage()
     {
         PageHistory.Clear();
         PageFuture.Clear();
@@ -283,7 +287,13 @@ if you don't save them.",
 
         GoForwardCommand.NotifyCanExecuteChanged();
         GoBackCommand.NotifyCanExecuteChanged();
+    }
 
+    private RelayCommand? goHomeCommand;
+    public RelayCommand GoHomeCommand => goHomeCommand ??= new(GoHome);
+
+    public void GoHome()
+    {
         GoToInfo();
     }
 
