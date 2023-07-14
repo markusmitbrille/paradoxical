@@ -108,12 +108,7 @@
                             <Binding
                                 Path="Selected.Code"
                                 Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged"
-                                FallbackValue="# some code">
-                                <Binding.ValidationRules>
-                                    <rules:RequiredRule
-                                        ValidatesOnTargetUpdated="True" />
-                                </Binding.ValidationRules>
+                                UpdateSourceTrigger="PropertyChanged">
                             </Binding>
                         </view:ScriptBox.Text>
 
