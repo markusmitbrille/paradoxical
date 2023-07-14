@@ -387,10 +387,23 @@
 
                     <DataGrid.Columns>
 
-                        <DataGridTextColumn
+                        <DataGridTemplateColumn
                             Header="ID"
-                            Binding="{Binding Id}"
-                            IsReadOnly="True" />
+                            IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <Hyperlink
+                                            Command="{Binding DataContext.EditOptionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                            CommandParameter="{Binding}"
+                                            Click="OptionsDataGrid_Hyperlink_Click">
+                                            <TextBlock
+                                                Text="{Binding Id, Mode=OneWay}" />
+                                        </Hyperlink>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
 
                         <DataGridTextColumn
                             Header="Priority"

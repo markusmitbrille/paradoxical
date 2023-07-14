@@ -37,4 +37,13 @@ public partial class TriggerTableView : UserControl
         // commit pending edits
         ItemsDataGrid.CommitEdit();
     }
+
+    private void Hyperlink_Click(object sender, RoutedEventArgs e)
+    {
+        // commit current edit
+        ItemsDataGrid.CommitEdit();
+
+        // commit pending edits
+        ItemsDataGrid.CommitEdit();
+    }
 }

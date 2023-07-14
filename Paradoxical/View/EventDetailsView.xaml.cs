@@ -18,4 +18,13 @@ public partial class EventDetailsView : UserControl
         // commit pending edits
         OptionsDataGrid.CommitEdit();
     }
+
+    private void OptionsDataGrid_Hyperlink_Click(object sender, RoutedEventArgs e)
+    {
+        // commit current edit
+        OptionsDataGrid.CommitEdit();
+
+        // commit pending edits
+        OptionsDataGrid.CommitEdit();
+    }
 }
