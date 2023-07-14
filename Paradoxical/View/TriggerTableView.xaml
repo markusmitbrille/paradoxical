@@ -123,43 +123,8 @@
 
                         <DataGridTextColumn
                             Header="Name"
-                            Width="2*">
-
-                            <DataGridTextColumn.ElementStyle>
-                                <Style
-                                    TargetType="TextBlock">
-                                    <Setter
-                                        Property="TextWrapping"
-                                        Value="Wrap" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-
-                            <DataGridTextColumn.EditingElementStyle>
-                                <Style
-                                    TargetType="TextBox">
-                                    <Setter
-                                        Property="TextWrapping"
-                                        Value="Wrap" />
-                                    <Setter
-                                        Property="AcceptsReturn"
-                                        Value="true" />
-                                </Style>
-                            </DataGridTextColumn.EditingElementStyle>
-
-                            <DataGridTextColumn.Binding>
-                                <Binding
-                                    Path="Name"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged">
-
-                                    <Binding.Converter>
-                                        <converters:CodeConverter />
-                                    </Binding.Converter>
-
-                                </Binding>
-                            </DataGridTextColumn.Binding>
-
-                        </DataGridTextColumn>
+                            Width="2*"
+                            Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <DataGridTextColumn
                             Header="Code"

@@ -12,7 +12,6 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance {x:Type viewmodel:EventDetailsViewModel}}"
-    d:DesignHeight="600"
     d:DesignWidth="800">
 
     <UserControl.Resources>
@@ -152,16 +151,17 @@
                     </TextBox>
 
                     <TextBox
-                        Height="120"
                         Margin="6,12"
                         Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
+                        MinLines="12"
+                        MaxLines="12"
+                        AcceptsReturn="True"
                         materialDesign:HintAssist.Hint="Description"
                         materialDesign:HintAssist.IsFloating="True"
                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
                         materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
-                        AcceptsReturn="True">
+                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
 
                         <TextBox.Text>
                             <Binding
@@ -411,20 +411,69 @@
 
                         <DataGridTextColumn
                             Header="Priority"
-                            Width="1*"
+                            Width="2*"
                             Binding="{Binding Priority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <DataGridTextColumn
                             Header="Title"
-                            Width="2*"
-                            FontFamily="Consolas"
-                            Binding="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Width="5*"
+                            FontFamily="Consolas">
+
+                            <DataGridTextColumn.Binding>
+                                <Binding
+                                    Path="Title"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.Converter>
+                                        <converters:CodeConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </DataGridTextColumn.Binding>
+
+                        </DataGridTextColumn>
 
                         <DataGridTextColumn
                             Header="Tooltip"
-                            Width="2*"
-                            FontFamily="Consolas"
-                            Binding="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Width="5*"
+                            FontFamily="Consolas">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style
+                                    TargetType="TextBlock">
+                                    <Setter
+                                        Property="TextWrapping"
+                                        Value="Wrap" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
+                            <DataGridTextColumn.EditingElementStyle>
+                                <Style
+                                    TargetType="TextBox">
+                                    <Setter
+                                        Property="TextWrapping"
+                                        Value="Wrap" />
+                                    <Setter
+                                        Property="AcceptsReturn"
+                                        Value="true" />
+                                </Style>
+                            </DataGridTextColumn.EditingElementStyle>
+
+                            <DataGridTextColumn.Binding>
+                                <Binding
+                                    Path="Tooltip"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.Converter>
+                                        <converters:CodeConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </DataGridTextColumn.Binding>
+
+                        </DataGridTextColumn>
 
                     </DataGrid.Columns>
 
@@ -589,6 +638,7 @@
                         Margin="6,12"
                         Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
+                        AcceptsReturn="True"
                         materialDesign:HintAssist.Hint="Custom Trigger Code"
                         materialDesign:HintAssist.IsFloating="True"
                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
@@ -768,6 +818,7 @@
                         Margin="6,12"
                         Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
+                        AcceptsReturn="True"
                         materialDesign:HintAssist.Hint="Custom Effect Code"
                         materialDesign:HintAssist.IsFloating="True"
                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
@@ -947,6 +998,7 @@
                         Margin="6,12"
                         Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
+                        AcceptsReturn="True"
                         materialDesign:HintAssist.Hint="Custom Effect Code"
                         materialDesign:HintAssist.IsFloating="True"
                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"

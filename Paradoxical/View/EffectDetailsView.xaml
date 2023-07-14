@@ -90,16 +90,17 @@
                     </TextBox>
 
                     <TextBox
-                        Height="120"
                         Margin="6,12"
                         Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
+                        MinLines="12"
+                        MaxLines="12"
+                        AcceptsReturn="True"
                         materialDesign:HintAssist.Hint="Code"
                         materialDesign:HintAssist.IsFloating="True"
                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
                         materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
-                        AcceptsReturn="True">
+                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
 
                         <TextBox.Text>
                             <Binding
@@ -120,7 +121,9 @@
                         Margin="6,12"
                         Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                         FontFamily="Consolas"
-                        AcceptsReturn="False"
+                        MinLines="4"
+                        MaxLines="4"
+                        AcceptsReturn="True"
                         materialDesign:HintAssist.Hint="Tooltip"
                         materialDesign:HintAssist.IsFloating="True"
                         materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated effect text."
