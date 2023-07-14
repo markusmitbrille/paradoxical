@@ -10,7 +10,7 @@
     xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance {x:Type viewmodel:ModViewModel}}"
+    d:DataContext="{d:DesignInstance {x:Type viewmodel:ModDetailsViewModel}}"
     d:DesignWidth="800">
 
     <DockPanel>
