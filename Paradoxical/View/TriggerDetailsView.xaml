@@ -29,7 +29,7 @@
         </Style>
 
     </UserControl.Resources>
-    
+
     <DockPanel>
 
         <ToolBarTray
@@ -81,11 +81,20 @@
 
             <TabItem
                 Header="General">
-                <StackPanel>
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="auto" />
+                        <RowDefinition
+                            Height="*" />
+                        <RowDefinition
+                            Height="auto" />
+                    </Grid.RowDefinitions>
 
                     <TextBox
-                        materialDesign:HintAssist.Hint="Name"
-                        materialDesign:HintAssist.HelperText="Element name, used in script.">
+                        Grid.Row="0"
+                        materialDesign:HintAssist.Hint="Name">
 
                         <TextBox.Text>
                             <Binding
@@ -105,9 +114,8 @@
                     </TextBox>
 
                     <TextBox
+                        Grid.Row="1"
                         FontFamily="Consolas"
-                        MinLines="12"
-                        MaxLines="12"
                         AcceptsReturn="True"
                         materialDesign:HintAssist.Hint="Code">
 
@@ -127,12 +135,12 @@
                     </TextBox>
 
                     <TextBox
+                        Grid.Row="2"
                         FontFamily="Consolas"
                         MinLines="4"
                         MaxLines="4"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Tooltip"
-                        materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated trigger text.">
+                        materialDesign:HintAssist.Hint="Tooltip">
 
                         <TextBox.Text>
                             <Binding
@@ -149,7 +157,7 @@
 
                     </TextBox>
 
-                </StackPanel>
+                </Grid>
             </TabItem>
 
         </TabControl>

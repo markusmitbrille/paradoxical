@@ -112,8 +112,7 @@
                             Grid.Column="0"
                             FontFamily="Consolas"
                             AcceptsReturn="False"
-                            materialDesign:HintAssist.Hint="Title"
-                            materialDesign:HintAssist.HelperText="Event option button text.">
+                            materialDesign:HintAssist.Hint="Title">
 
                             <TextBox.Text>
                                 <Binding
@@ -144,8 +143,7 @@
                         MinLines="4"
                         MaxLines="4"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Tooltip"
-                        materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated text.">
+                        materialDesign:HintAssist.Hint="Tooltip">
 
                         <TextBox.Text>
                             <Binding
@@ -191,8 +189,7 @@
                             SelectedValuePath="Id"
                             DisplayMemberPath="Name"
                             IsEditable="True"
-                            materialDesign:HintAssist.Hint="Triggered Event"
-                            materialDesign:HintAssist.HelperText="Follow-up event, triggered by this option." />
+                            materialDesign:HintAssist.Hint="Triggered Event" />
 
                         <StackPanel
                             Grid.Column="1"
@@ -256,13 +253,11 @@
                         <TextBox
                             Grid.Column="0"
                             Text="{Binding Selected.TriggeredEventScope, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Event Scope"
-                            materialDesign:HintAssist.HelperText="Scope wherein the follow-up event will be triggered." />
+                            materialDesign:HintAssist.Hint="Event Scope" />
 
                         <TextBox
                             Grid.Column="1"
-                            materialDesign:HintAssist.Hint="Min Days"
-                            materialDesign:HintAssist.HelperText="Min days until triggered.">
+                            materialDesign:HintAssist.Hint="Min Days">
 
                             <TextBox.Text>
                                 <Binding
@@ -281,8 +276,7 @@
 
                         <TextBox
                             Grid.Column="2"
-                            materialDesign:HintAssist.Hint="Max Days"
-                            materialDesign:HintAssist.HelperText="Min days until triggered.">
+                            materialDesign:HintAssist.Hint="Max Days">
 
                             <TextBox.Text>
                                 <Binding
@@ -317,13 +311,8 @@
                             Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition
-                            Height="auto" />
-                    </Grid.RowDefinitions>
-
                     <Grid
-                        Grid.Column="0">
+                        Grid.Column="1">
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition
@@ -348,8 +337,7 @@
                             Grid.Row="0"
                             Grid.Column="0"
                             Grid.ColumnSpan="3"
-                            materialDesign:HintAssist.Hint="Base Chance"
-                            materialDesign:HintAssist.HelperText="Base chance AI will select this; modified additively by personality.">
+                            materialDesign:HintAssist.Hint="Base Chance">
 
                             <TextBox.Text>
                                 <Binding
@@ -549,7 +537,7 @@
                     </Grid>
 
                     <TextBox
-                        Grid.Column="1"
+                        Grid.Column="0"
                         FontFamily="Consolas"
                         AcceptsReturn="True"
                         materialDesign:HintAssist.Hint="Custom AI Chance">

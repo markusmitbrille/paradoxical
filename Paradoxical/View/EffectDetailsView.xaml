@@ -81,33 +81,64 @@
 
             <TabItem
                 Header="General">
-                <StackPanel>
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="auto" />
+                        <RowDefinition
+                            Height="*" />
+                        <RowDefinition
+                            Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid
+                        Grid.Row="0">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="*" />
+                            <ColumnDefinition
+                                Width="auto" />
+                            <ColumnDefinition
+                                Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Grid.Column="0"
+                            materialDesign:HintAssist.Hint="Name">
+
+                            <TextBox.Text>
+                                <Binding
+                                    Path="Selected.Name"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    FallbackValue="element_name">
+                                    <Binding.ValidationRules>
+                                        <rules:RequiredRule
+                                            ValidatesOnTargetUpdated="True" />
+                                        <rules:NameRule
+                                            ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+
+                        </TextBox>
+
+                        <CheckBox
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding Selected.Hidden, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock
+                            Grid.Column="2"
+                            VerticalAlignment="Center"
+                            Text="Hidden"/>
+
+                    </Grid>
 
                     <TextBox
-                        materialDesign:HintAssist.Hint="Name"
-                        materialDesign:HintAssist.HelperText="Element name, used in script.">
-
-                        <TextBox.Text>
-                            <Binding
-                                Path="Selected.Name"
-                                Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged"
-                                FallbackValue="element_name">
-                                <Binding.ValidationRules>
-                                    <rules:RequiredRule
-                                        ValidatesOnTargetUpdated="True" />
-                                    <rules:NameRule
-                                        ValidatesOnTargetUpdated="True" />
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-
-                    </TextBox>
-
-                    <TextBox
+                        Grid.Row="1"
                         FontFamily="Consolas"
-                        MinLines="12"
-                        MaxLines="12"
                         AcceptsReturn="True"
                         materialDesign:HintAssist.Hint="Code">
 
@@ -127,12 +158,12 @@
                     </TextBox>
 
                     <TextBox
+                        Grid.Row="2"
                         FontFamily="Consolas"
                         MinLines="4"
                         MaxLines="4"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Tooltip"
-                        materialDesign:HintAssist.HelperText="Will be displayed instead of auto-generated effect text.">
+                        materialDesign:HintAssist.Hint="Tooltip">
 
                         <TextBox.Text>
                             <Binding
@@ -149,20 +180,7 @@
 
                     </TextBox>
 
-                    <StackPanel
-                        Margin="6,12"
-                        Orientation="Horizontal">
-
-                        <CheckBox
-                            IsChecked="{Binding Selected.Hidden, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                        <TextBlock
-                            Text="Hidden"
-                            Style="{DynamicResource MaterialDesignTextBlock}" />
-
-                    </StackPanel>
-
-                </StackPanel>
+                </Grid>
             </TabItem>
 
         </TabControl>

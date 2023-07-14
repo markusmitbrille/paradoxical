@@ -158,8 +158,7 @@
                         Grid.Row="1"
                         Grid.Column="0"
                         Grid.ColumnSpan="5"
-                        materialDesign:HintAssist.Hint="Prefix"
-                        materialDesign:HintAssist.HelperText="Used for events, file names, etc.">
+                        materialDesign:HintAssist.Hint="Prefix">
 
                         <TextBox.Text>
                             <Binding

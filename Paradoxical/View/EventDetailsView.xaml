@@ -106,8 +106,7 @@
 
                         <TextBox
                             Grid.Column="0"
-                            materialDesign:HintAssist.Hint="Name"
-                            materialDesign:HintAssist.HelperText="Element name, only used by Paradoxical.">
+                            materialDesign:HintAssist.Hint="Name">
 
                             <TextBox.Text>
                                 <Binding
@@ -179,8 +178,7 @@
 
                     <TextBox
                         Text="{Binding Selected.Theme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        materialDesign:HintAssist.Hint="Theme"
-                        materialDesign:HintAssist.HelperText="Determines background, icon, sound, and environment." />
+                        materialDesign:HintAssist.Hint="Theme" />
 
                     <TextBox
                         materialDesign:HintAssist.Hint="Cooldown in days">
@@ -475,7 +473,8 @@
 
                     <Grid
                         Grid.Column="1"
-                        Margin="6,12">
+                        Margin="6,12,6,12"
+                        Grid.RowSpan="2">
 
                         <Grid.RowDefinitions>
                             <RowDefinition
@@ -618,7 +617,9 @@
                         Grid.Column="0"
                         FontFamily="Consolas"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Custom Trigger Code">
+                        materialDesign:HintAssist.Hint="Custom Trigger Code"
+                        Margin="6,12,6,12"
+                        Grid.RowSpan="2">
 
                         <TextBox.Text>
                             <Binding
