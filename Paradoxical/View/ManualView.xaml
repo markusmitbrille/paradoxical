@@ -63,6 +63,9 @@
                         <Setter
                             Property="TextAlignment"
                             Value="Center" />
+                        <Setter
+                            Property="Margin"
+                            Value="0,80,0,15" />
 
                     </Style>
 
@@ -80,16 +83,19 @@
                     </Style>
 
                     <Style
-                        x:Key="ReturnButton"
+                        x:Key="ReturnButtonStyle"
                         TargetType="Button"
-                        BasedOn="{StaticResource MaterialDesignIconButton}">
+                        BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}">
 
-                        <Setter
-                            Property="Content"
-                            Value="{materialDesign:PackIcon Kind=TableOfContents}" />
                         <Setter
                             Property="ToolTip"
                             Value="Return to TOC" />
+                        <Setter
+                            Property="Width"
+                            Value="25" />
+                        <Setter
+                            Property="Height"
+                            Value="25" />
 
                     </Style>
 
@@ -139,19 +145,18 @@
 
                 <Paragraph
                     x:Name="pSavingAndLoading"
-                    Style="{StaticResource H1}">
+                    Style="{StaticResource H1}">Saving &amp; Loading</Paragraph>
 
-                    Saving &amp; Loading
-
-                    <InlineUIContainer
-                        BaselineAlignment="Center">
-                        <Button
-                            Command="{Binding GoToCommand}"
-                            CommandParameter="{Binding ElementName=pTableOfContents}"
-                            Style="{StaticResource ReturnButton}" />
-                    </InlineUIContainer>
-
-                </Paragraph>
+                <BlockUIContainer
+                    TextAlignment="Center">
+                    <Button
+                        Command="{Binding GoToCommand}"
+                        CommandParameter="{Binding ElementName=pTableOfContents}"
+                        Style="{StaticResource ReturnButtonStyle}">
+                        <materialDesign:PackIcon
+                            Kind="Toc" />
+                    </Button>
+                </BlockUIContainer>
 
                 <Paragraph>
                     The data of your mod project is saved in an SQLite database. When starting up Paradoxical™, an in-memory database is created so you can start modding immediately. This in-memory database, however, is lost upon exiting, or opening another database. Therefore it's important to remember to save it to the disk before doing so, by backing it up first (don't worry, Paradoxical™ will remind you, if you forget).
@@ -173,19 +178,18 @@
 
                 <Paragraph
                     x:Name="pAiChance"
-                    Style="{StaticResource H1}">
+                    Style="{StaticResource H1}">AI Chance</Paragraph>
 
-                    AI Chance
-
-                    <InlineUIContainer
-                        BaselineAlignment="Center">
-                        <Button
-                            Command="{Binding GoToCommand}"
-                            CommandParameter="{Binding ElementName=pTableOfContents}"
-                            Style="{StaticResource ReturnButton}" />
-                    </InlineUIContainer>
-
-                </Paragraph>
+                <BlockUIContainer 
+                    TextAlignment="Center">
+                    <Button
+                        Command="{Binding GoToCommand}"
+                        CommandParameter="{Binding ElementName=pTableOfContents}"
+                        Style="{StaticResource ReturnButtonStyle}">
+                        <materialDesign:PackIcon
+                            Kind="Toc" />
+                    </Button>
+                </BlockUIContainer>
 
                 <Paragraph>
                     Since events are not only available to players, the AI will sometimes have to choose between event options. To this end, you can configure the AI chance. While Paradox scripting allows you to create complex AI chance modifiers, Paradoxical™ simplifies this process: Each option defines a base chance, which can be further fine-tuned according to the AI's personality values. There are nine of these: boldness, compassion, greed, energy, honor, rationality, sociability, vengefulness, and zeal. These values can range from -100 to +100, with ±75 being considered a very high value.
@@ -193,10 +197,10 @@
 
                 <Paragraph>
                     The CK3 wiki provides
-                    
+
                     <Hyperlink
                         NavigateUri="https://ck3.paradoxwikis.com/Character#AI_Personality"
-                        RequestNavigate="RequestNavigate">further reading</Hyperlink>,
+                        RequestNavigate="RequestNavigate">further reading</Hyperlink> ,
                     
                     if you are interested in exactly what these personality values stand for, and how they influence AI behaviour in general.
                 </Paragraph>
