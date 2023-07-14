@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Paradoxical.Extensions;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -9,6 +10,7 @@ public interface IFileService
 {
     void New();
     void Open();
+    void Backup();
     void Export();
     void ExportAs();
 }
@@ -40,8 +42,8 @@ public class FileService : IFileService
             Title = "Create Mod",
             CreatePrompt = false,
             OverwritePrompt = true,
-            Filter = "Paradoxical Mod|*.paradoxical",
-            DefaultExt = ".paradoxical",
+            Filter = "Database|*.db3",
+            DefaultExt = ".db3",
             AddExtension = true,
             InitialDirectory = SaveDir,
             FileName = SaveFile,
@@ -60,8 +62,41 @@ public class FileService : IFileService
         if (SaveFile == string.Empty)
         { return; }
 
-        Data.Connect(SavePath);
+        Data.Connect(SavePath, false);
+
         Data.DropTables();
+        Data.CreateTables();
+    }
+
+    public void Backup()
+    {
+        SaveFileDialog dlg = new()
+        {
+            Title = "Backup Mod",
+            CreatePrompt = false,
+            OverwritePrompt = true,
+            Filter = "Database|*.db3",
+            DefaultExt = ".db3",
+            AddExtension = true,
+            InitialDirectory = SaveDir,
+            FileName = SaveFile,
+        };
+
+        if (dlg.ShowDialog() != true)
+        { return; }
+
+        SaveDir = Path.GetDirectoryName(dlg.FileName) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        SaveFile = Path.GetFileNameWithoutExtension(dlg.FileName) ?? string.Empty;
+        SavePath = dlg.FileName;
+
+        if (Directory.Exists(SaveDir) == false)
+        { return; }
+
+        if (SaveFile == string.Empty)
+        { return; }
+
+        Data.Connect(SavePath, true);
+
         Data.CreateTables();
     }
 
@@ -70,8 +105,8 @@ public class FileService : IFileService
         OpenFileDialog dlg = new()
         {
             Title = "Open Mod",
-            Filter = "Paradoxical Mod|*.paradoxical",
-            DefaultExt = ".paradoxical",
+            Filter = "Database|*.db3",
+            DefaultExt = ".db3",
             AddExtension = true,
             InitialDirectory = SaveDir,
             FileName = SaveFile,
@@ -87,7 +122,8 @@ public class FileService : IFileService
         if (File.Exists(SavePath) == false)
         { return; }
 
-        Data.Connect(SavePath);
+        Data.Connect(SavePath, false);
+
         Data.CreateTables();
     }
 

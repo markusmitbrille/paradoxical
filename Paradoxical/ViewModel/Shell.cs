@@ -12,7 +12,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Application = System.Windows.Application;
+using MessageBox = System.Windows.MessageBox;
+using MessageBoxButton = System.Windows.MessageBoxButton;
+using MessageBoxImage = System.Windows.MessageBoxImage;
+using MessageBoxResult = System.Windows.MessageBoxResult;
 
 namespace Paradoxical.ViewModel;
 
@@ -40,6 +45,7 @@ public class Shell : ObservableObject, IShell
     public IFinder Finder { get; }
 
     public IMediatorService Mediator { get; }
+    public IDataService Data { get; }
     public IFileService File { get; }
 
     public IEventService EventService { get; }
@@ -68,6 +74,7 @@ public class Shell : ObservableObject, IShell
         IServiceProvider serviceProvider,
         IFinder finder,
         IMediatorService mediator,
+        IDataService data,
         IFileService file,
         IEventService eventService,
         ITriggerService triggerService,
@@ -78,6 +85,7 @@ public class Shell : ObservableObject, IShell
         Finder = finder;
 
         Mediator = mediator;
+        Data = data;
         File = file;
 
         EventService = eventService;
@@ -103,11 +111,31 @@ public class Shell : ObservableObject, IShell
         GoHome();
     }
 
+    private RelayCommand? saveCommand;
+    public RelayCommand SaveCommand => saveCommand ??= new(Save);
+
+    private void Save()
+    {
+        Mediator.Send<SaveMessage>(new());
+    }
+
+    private RelayCommand? backupCommand;
+    public RelayCommand BackupCommand => backupCommand ??= new(Backup);
+
+    private void Backup()
+    {
+        Mediator.Send<SaveMessage>(new());
+        File.Backup();
+
+        GoHome();
+    }
+
     private RelayCommand? exportCommand;
     public RelayCommand ExportCommand => exportCommand ??= new(Export);
 
     private void Export()
     {
+        Mediator.Send<SaveMessage>(new());
         File.Export();
     }
 
@@ -116,6 +144,7 @@ public class Shell : ObservableObject, IShell
 
     private void ExportAs()
     {
+        Mediator.Send<SaveMessage>(new());
         File.ExportAs();
     }
 
@@ -123,6 +152,33 @@ public class Shell : ObservableObject, IShell
     public RelayCommand ExitCommand => exitCommand ??= new(Exit);
 
     private void Exit()
+    {
+        if (Data.IsInMemory != true)
+        {
+            Shutdown();
+            return;
+        }
+
+        var result = MessageBox.Show(
+@"You are currently working on an in-memory database, 
+do you want to back it up? Your changes will be lost, 
+if you don't save them.",
+            "Database Backup",
+            MessageBoxButton.YesNoCancel,
+            MessageBoxImage.Warning);
+
+        if (result == MessageBoxResult.Yes)
+        {
+            Backup();
+            Shutdown();
+        }
+        if (result == MessageBoxResult.No)
+        {
+            Shutdown();
+        }
+    }
+
+    private void Shutdown()
     {
         Mediator.Send<ShutdownMessage>(new());
         Application.Current.Shutdown();

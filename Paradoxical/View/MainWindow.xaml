@@ -44,8 +44,11 @@
             Command="{Binding OpenCommand}"
             Gesture="CTRL+O" />
         <KeyBinding
-            Command="{Binding ExportCommand}"
+            Command="{Binding SaveCommand}"
             Gesture="CTRL+S" />
+        <KeyBinding
+            Command="{Binding ExportCommand}"
+            Gesture="CTRL+SHIFT+S" />
         <KeyBinding
             Command="{Binding FindCommand}"
             Gesture="CTRL+F" />
@@ -215,13 +218,13 @@
                                 ToolTip="Navigate Forward" />
 
                         </StackPanel>
-                     
+
                         <StackPanel
                             Grid.Column="3"
                             Margin="8,0"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right">
-                            
+
                         </StackPanel>
 
                         <materialDesign:PopupBox
@@ -232,7 +235,7 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center">
                             <StackPanel>
-                              
+
                                 <MenuItem
                                     Header="New"
                                     Icon="{materialDesign:PackIcon Kind=Create}"
@@ -244,17 +247,26 @@
                                     Command="{Binding OpenCommand}"
                                     InputGestureText="CTRL+O" />
                                 <MenuItem
-                                    Header="Export"
+                                    Header="Save"
                                     Icon="{materialDesign:PackIcon Kind=ContentSave}"
-                                    Command="{Binding ExportCommand}"
+                                    Command="{Binding SaveCommand}"
                                     InputGestureText="CTRL+S" />
                                 <MenuItem
+                                    Header="Backup..."
+                                    Icon="{materialDesign:PackIcon Kind=Backup}"
+                                    Command="{Binding BackupCommand}" />
+                                <MenuItem
+                                    Header="Export"
+                                    Icon="{materialDesign:PackIcon Kind=FileExport}"
+                                    Command="{Binding ExportCommand}"
+                                    InputGestureText="CTRL+SHIFT+S" />
+                                <MenuItem
                                     Header="Export As..."
-                                    Icon="{materialDesign:PackIcon Kind=ContentSaveEdit}"
+                                    Icon="{materialDesign:PackIcon Kind=FileExportOutline}"
                                     Command="{Binding ExportAsCommand}" />
 
                                 <Separator />
-                              
+
                                 <MenuItem
                                     Header="Find..."
                                     Icon="{materialDesign:PackIcon Kind=Search}"
@@ -266,7 +278,7 @@
                                     Header="About"
                                     Icon="{materialDesign:PackIcon Kind=Information}"
                                     Command="{Binding GoToAboutCommand}"
-                                    Click="PopupMenuButtonClickHandler"/>
+                                    Click="PopupMenuButtonClickHandler" />
 
                                 <Separator />
 
@@ -275,7 +287,7 @@
                                     Icon="{materialDesign:PackIcon Kind=ExitToApp}"
                                     Command="{Binding ExitCommand}"
                                     InputGestureText="ALT+F4" />
-                                
+
                             </StackPanel>
                         </materialDesign:PopupBox>
 

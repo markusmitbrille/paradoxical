@@ -9,8 +9,9 @@ namespace Paradoxical.Services;
 public interface IDataService
 {
     SQLiteConnection Connection { get; }
+    bool IsInMemory { get; }
 
-    void Connect(string file);
+    void Connect(string file, bool backup);
 
     void CreateTables();
     void DropTables();
@@ -26,19 +27,26 @@ public class DataService : IDataService
         private set => connection = value;
     }
 
+    public bool IsInMemory => Connection.DatabasePath == ":memory:";
+
     public DataService()
     {
         CreateTables();
     }
 
-    public void Connect(string connectionString)
+    public void Connect(string file, bool backup)
     {
+        if (backup == true)
+        {
+            Connection.Backup(file);
+        }
+
         SQLiteConnection connection;
 
         try
         {
             // open new connection
-            connection = new(connectionString);
+            connection = new(file);
         }
         catch (Exception)
         {
