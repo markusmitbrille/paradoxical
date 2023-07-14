@@ -306,233 +306,208 @@
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition
-                            Width="*" />
+                            Width="5*" />
                         <ColumnDefinition
-                            Width="*" />
+                            Width="2*" />
                     </Grid.ColumnDefinitions>
 
                     <Grid
-                        Grid.Column="1">
+                        Grid.Column="1"
+                        Margin="6,12">
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition
                                 Width="*" />
                             <ColumnDefinition
-                                Width="*" />
-                            <ColumnDefinition
-                                Width="*" />
+                                Width="auto" />
                         </Grid.ColumnDefinitions>
+
                         <Grid.RowDefinitions>
                             <RowDefinition
-                                Height="auto" />
+                                Height="*" />
                             <RowDefinition
-                                Height="auto" />
+                                Height="*" />
                             <RowDefinition
-                                Height="auto" />
+                                Height="*" />
                             <RowDefinition
-                                Height="auto" />
+                                Height="*" />
+                            <RowDefinition
+                                Height="*" />
+                            <RowDefinition
+                                Height="*" />
+                            <RowDefinition
+                                Height="*" />
+                            <RowDefinition
+                                Height="*" />
+                            <RowDefinition
+                                Height="*" />
+                            <RowDefinition
+                                Height="*" />
                         </Grid.RowDefinitions>
 
-                        <TextBox
+                        <Grid.Resources>
+
+                            <Style
+                                TargetType="TextBlock"
+                                BasedOn="{StaticResource MaterialDesignCaptionTextBlock}">
+
+                                <Setter
+                                    Property="Margin"
+                                    Value="6,12" />
+                                <Setter
+                                    Property="VerticalAlignment"
+                                    Value="Center" />
+                                <Setter
+                                    Property="HorizontalAlignment"
+                                    Value="Left" />
+
+                            </Style>
+
+                            <Style
+                                TargetType="Slider" BasedOn="{StaticResource MaterialDesignDiscreteHorizontalSlider}">
+
+                                <Setter
+                                    Property="Margin"
+                                    Value="6,12" />
+                                <Setter
+                                    Property="VerticalAlignment"
+                                    Value="Center" />
+                                <Setter
+                                    Property="IsSelectionRangeEnabled"
+                                    Value="True" />
+                                <Setter
+                                    Property="Minimum"
+                                    Value="-200" />
+                                <Setter
+                                    Property="Maximum"
+                                    Value="200" />
+                                <!--<Setter
+                                    Property="SelectionStart"
+                                    Value="-100" />
+                                <Setter
+                                    Property="SelectionEnd"
+                                    Value="100" />-->
+                                <Setter
+                                    Property="TickFrequency"
+                                    Value="10" />
+                                <Setter
+                                    Property="TickPlacement"
+                                    Value="None" />
+                                <Setter
+                                    Property="LargeChange"
+                                    Value="20" />
+                                <Setter
+                                    Property="SmallChange"
+                                    Value="10" />
+                                <Setter
+                                    Property="materialDesign:SliderAssist.OnlyShowFocusVisualWhileDragging"
+                                    Value="True" />
+
+                            </Style>
+                            
+                        </Grid.Resources>
+
+                        <TextBlock
+                            Grid.Column="1"
                             Grid.Row="0"
+                            Text="Base" />
+
+                        <Slider
                             Grid.Column="0"
-                            Grid.ColumnSpan="3"
-                            materialDesign:HintAssist.Hint="Base Chance">
+                            Grid.Row="0"
+                            Minimum="0"
+                            Maximum="500"
+                            Value="{Binding Selected.AiBaseChance}" />
 
-                            <TextBox.Text>
-                                <Binding
-                                    Path="Selected.AiBaseChance"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    FallbackValue="0">
-                                    <Binding.ValidationRules>
-                                        <rules:IntRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-
-                        </TextBox>
-
-                        <TextBox
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            materialDesign:HintAssist.Hint="Boldness">
-
-                            <TextBox.Text>
-                                <Binding
-                                    Path="Selected.AiBoldnessTargetModifier"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    FallbackValue="0">
-                                    <Binding.ValidationRules>
-                                        <rules:IntRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-
-                        </TextBox>
-
-                        <TextBox
-                            Grid.Row="1"
+                        <TextBlock
                             Grid.Column="1"
-                            materialDesign:HintAssist.Hint="Compassion">
-
-                            <TextBox.Text>
-                                <Binding
-                                    Path="Selected.AiCompassionTargetModifier"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    FallbackValue="0">
-                                    <Binding.ValidationRules>
-                                        <rules:IntRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-
-                        </TextBox>
-
-                        <TextBox
                             Grid.Row="1"
-                            Grid.Column="2"
-                            materialDesign:HintAssist.Hint="Boldness">
+                            Text="Boldness" />
 
-                            <TextBox.Text>
-                                <Binding
-                                    Path="Selected.AiGreedTargetModifier"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    FallbackValue="0">
-                                    <Binding.ValidationRules>
-                                        <rules:IntRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-
-                        </TextBox>
-
-                        <TextBox
-                            Grid.Row="2"
+                        <Slider
                             Grid.Column="0"
-                            materialDesign:HintAssist.Hint="Energy">
+                            Grid.Row="1"
+                            Value="{Binding Selected.AiBoldnessTargetModifier}" />
 
-                            <TextBox.Text>
-                                <Binding
-                                    Path="Selected.AiEnergyTargetModifier"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    FallbackValue="0">
-                                    <Binding.ValidationRules>
-                                        <rules:IntRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-
-                        </TextBox>
-
-                        <TextBox
-                            Grid.Row="2"
+                        <TextBlock
                             Grid.Column="1"
-                            materialDesign:HintAssist.Hint="Honor">
-
-                            <TextBox.Text>
-                                <Binding
-                                    Path="Selected.AiHonorTargetModifier"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    FallbackValue="0">
-                                    <Binding.ValidationRules>
-                                        <rules:IntRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-
-                        </TextBox>
-
-                        <TextBox
                             Grid.Row="2"
-                            Grid.Column="2"
-                            materialDesign:HintAssist.Hint="Rationality">
+                            Text="Compassion" />
 
-                            <TextBox.Text>
-                                <Binding
-                                    Path="Selected.AiRationalityTargetModifier"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    FallbackValue="0">
-                                    <Binding.ValidationRules>
-                                        <rules:IntRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-
-                        </TextBox>
-
-                        <TextBox
-                            Grid.Row="3"
+                        <Slider
                             Grid.Column="0"
-                            materialDesign:HintAssist.Hint="Sociability">
+                            Grid.Row="2"
+                            Value="{Binding Selected.AiCompassionTargetModifier}" />
 
-                            <TextBox.Text>
-                                <Binding
-                                    Path="Selected.AiSociabilityTargetModifier"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    FallbackValue="0">
-                                    <Binding.ValidationRules>
-                                        <rules:IntRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-
-                        </TextBox>
-
-                        <TextBox
-                            Grid.Row="3"
+                        <TextBlock
                             Grid.Column="1"
-                            materialDesign:HintAssist.Hint="Vengefulness">
-
-                            <TextBox.Text>
-                                <Binding
-                                    Path="Selected.AiVengefulnessTargetModifier"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    FallbackValue="0">
-                                    <Binding.ValidationRules>
-                                        <rules:IntRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-
-                        </TextBox>
-
-                        <TextBox
                             Grid.Row="3"
-                            Grid.Column="2"
-                            materialDesign:HintAssist.Hint="Zeal">
+                            Text="Greed" />
 
-                            <TextBox.Text>
-                                <Binding
-                                    Path="Selected.AiZealTargetModifier"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    FallbackValue="0">
-                                    <Binding.ValidationRules>
-                                        <rules:IntRule
-                                            ValidatesOnTargetUpdated="True" />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
+                        <Slider
+                            Grid.Column="0"
+                            Grid.Row="3"
+                            Value="{Binding Selected.AiGreedTargetModifier}" />
 
-                        </TextBox>
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="4"
+                            Text="Energy" />
+
+                        <Slider
+                            Grid.Column="0"
+                            Grid.Row="4"
+                            Value="{Binding Selected.AiEnergyTargetModifier}" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="5"
+                            Text="Honor" />
+
+                        <Slider
+                            Grid.Column="0"
+                            Grid.Row="5"
+                            Value="{Binding Selected.AiHonorTargetModifier}" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="6"
+                            Text="Rationality" />
+
+                        <Slider
+                            Grid.Column="0"
+                            Grid.Row="6"
+                            Value="{Binding Selected.AiRationalityTargetModifier}" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="7"
+                            Text="Sociability" />
+
+                        <Slider
+                            Grid.Column="0"
+                            Grid.Row="7"
+                            Value="{Binding Selected.AiSociabilityTargetModifier}" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="8"
+                            Text="Vengefulness" />
+
+                        <Slider
+                            Grid.Column="0"
+                            Grid.Row="8"
+                            Value="{Binding Selected.AiVengefulnessTargetModifier}" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="9"
+                            Text="Zeal" />
+
+                        <Slider
+                            Grid.Column="0"
+                            Grid.Row="9"
+                            Value="{Binding Selected.AiZealTargetModifier}" />
 
                     </Grid>
 
