@@ -47,9 +47,10 @@ public partial class App : Application
 
         // misc page view models
         services.AddSingleton<AboutViewModel>();
-        services.AddSingleton<ModDetailsViewModel>();
+        services.AddSingleton<ManualViewModel>();
 
         // details page view models
+        services.AddSingleton<ModDetailsViewModel>();
         services.AddTransient<EventDetailsViewModel>();
         services.AddTransient<TriggerDetailsViewModel>();
         services.AddTransient<EffectDetailsViewModel>();

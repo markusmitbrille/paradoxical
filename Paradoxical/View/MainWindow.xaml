@@ -62,6 +62,9 @@
             Command="{Binding GoBackCommand}"
             Gesture="ALT+Left" />
         <KeyBinding
+            Command="{Binding GoToManualCommand}"
+            Gesture="F1" />
+        <KeyBinding
             Command="{Binding GoToInfoCommand}"
             Gesture="ALT+1" />
         <KeyBinding
@@ -274,6 +277,12 @@
 
                                 <Separator />
 
+                                <MenuItem
+                                    Header="Manual"
+                                    Icon="{materialDesign:PackIcon Kind=QuestionAnswer}"
+                                    Command="{Binding GoToManualCommand}"
+                                    InputGestureText="F1"
+                                    Click="PopupMenuButtonClickHandler" />
                                 <MenuItem
                                     Header="About"
                                     Icon="{materialDesign:PackIcon Kind=Information}"

@@ -1,0 +1,168 @@
+﻿<UserControl
+    x:Class="Paradoxical.View.ManualView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:view="clr-namespace:Paradoxical.View"
+    xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
+    xmlns:formatters="clr-namespace:Paradoxical.Formatters"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance {x:Type viewmodel:ManualViewModel}}">
+
+    <FlowDocumentReader
+        ViewingMode="Scroll"
+        IsScrollViewEnabled="True"
+        IsPageViewEnabled="False"
+        IsTwoPageViewEnabled="False">
+
+        <FlowDocumentReader.Document>
+            <FlowDocument>
+
+                <FlowDocument.Resources>
+
+                    <Style
+                        TargetType="Paragraph">
+
+                        <Setter
+                            Property="FontSize"
+                            Value="16" />
+                        <Setter
+                            Property="FontFamily"
+                            Value="Calibri" />
+
+                    </Style>
+
+                    <Style
+                        x:Key="Title"
+                        TargetType="Paragraph">
+
+                        <Setter
+                            Property="FontSize"
+                            Value="64" />
+                        <Setter
+                            Property="FontFamily"
+                            Value="CalibriLight" />
+                        <Setter
+                            Property="TextAlignment"
+                            Value="Center" />
+
+                    </Style>
+
+                    <Style
+                        x:Key="H1"
+                        TargetType="Paragraph">
+
+                        <Setter
+                            Property="FontSize"
+                            Value="32" />
+                        <Setter
+                            Property="FontFamily"
+                            Value="CalibriLight" />
+                        <Setter
+                            Property="TextAlignment"
+                            Value="Center" />
+
+                    </Style>
+
+                    <Style
+                        x:Key="H2"
+                        TargetType="Paragraph">
+
+                        <Setter
+                            Property="FontSize"
+                            Value="24" />
+                        <Setter
+                            Property="FontFamily"
+                            Value="CalibriLight" />
+
+                    </Style>
+
+                    <Style
+                        x:Key="ReturnButton"
+                        TargetType="Button"
+                        BasedOn="{StaticResource MaterialDesignIconButton}">
+
+                        <Setter
+                            Property="Content"
+                            Value="{materialDesign:PackIcon Kind=TableOfContents}" />
+                        <Setter
+                            Property="ToolTip"
+                            Value="Return to TOC" />
+
+                    </Style>
+
+                </FlowDocument.Resources>
+
+                <Paragraph
+                    Style="{StaticResource Title}">User Manual</Paragraph>
+
+                <Paragraph>
+                    The user manual contains nifty tricks and tips, as well as detailed explanations, and guides on how to use Paradoxical™, the Content Mod Creator.
+                </Paragraph>
+
+                <Paragraph
+                    FontSize="10"
+                    TextAlignment="Center"
+                    Foreground="Gray">
+                    (Paradoxical™ isn't actually a registered trademark, don't sue me plz.)
+                </Paragraph>
+
+                <!--#region TOC -->
+
+                <Paragraph
+                    x:Name="pTableOfContents"
+                    Style="{StaticResource H1}">Table of contents</Paragraph>
+
+                <Paragraph>
+                    <Hyperlink
+                        Command="{Binding GoToCommand}"
+                        CommandParameter="{Binding ElementName=pSavingAndLoading}">
+
+                        Saving &amp; Loading
+
+                    </Hyperlink>
+                </Paragraph>
+
+                <!--#endregion-->
+
+                <Paragraph
+                    x:Name="pSavingAndLoading"
+                    Style="{StaticResource H1}">
+
+                    Saving &amp; Loading
+
+                    <InlineUIContainer
+                        BaselineAlignment="Center">
+                        <Button
+                            Command="{Binding GoToCommand}"
+                            CommandParameter="{Binding ElementName=pTableOfContents}"
+                            Style="{StaticResource ReturnButton}" />
+                    </InlineUIContainer>
+
+                </Paragraph>
+
+                <Paragraph>
+                    The data of your mod project is saved in an SQLite database. When starting up the application, an in-memory database is created so you can start modding immediately. This in-memory database, however, is lost upon exiting, or opening another database. Therefore it's important to remember to save it to the disk before doing so, by backing it up first (don't worry, the application will remind you, if you forget).
+                </Paragraph>
+
+                <Paragraph>
+                    Project data is saved in binary format to an SQLite database. It can be opened, viewed, and edited via other software, such as
+
+                    <Hyperlink
+                        NavigateUri="https://sqlitebrowser.org/"
+                        RequestNavigate="RequestNavigate">DB Browser for SQLite</Hyperlink>
+
+                    or other ones like it.
+                </Paragraph>
+
+                <Paragraph>
+                    Opening a database establishes a connection to it, through which changes are saved automatically and continuously as you work. Though it isn't necessary, you can manually commit changes you made any time you like.
+                </Paragraph>
+
+            </FlowDocument>
+        </FlowDocumentReader.Document>
+    </FlowDocumentReader>
+
+</UserControl>

@@ -348,6 +348,14 @@ if you don't save them.",
         Navigate<AboutViewModel>();
     }
 
+    private RelayCommand? goToManualCommand;
+    public RelayCommand GoToManualCommand => goToManualCommand ??= new(GoToManual);
+
+    private void GoToManual()
+    {
+        Navigate<ManualViewModel>();
+    }
+
     private RelayCommand? goToEventTableCommand;
     public RelayCommand GoToEventTableCommand => goToEventTableCommand ??= new(GoToEventTable);
 

@@ -1,12 +1,13 @@
 ﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 
 namespace Paradoxical.View;
 
-public partial class AboutView : UserControl
+public partial class ManualView : UserControl
 {
-    public AboutView()
+    public ManualView()
     {
         InitializeComponent();
     }

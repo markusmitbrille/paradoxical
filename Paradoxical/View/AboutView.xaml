@@ -24,7 +24,7 @@
             <TextBlock>           
                 <Hyperlink
                     NavigateUri="https://icons8.com"
-                    RequestNavigate="HyperlinkRequestNavigateHandler">icons8.com</Hyperlink>
+                    RequestNavigate="RequestNavigate">icons8.com</Hyperlink>
             </TextBlock>
         </StackPanel>
 
