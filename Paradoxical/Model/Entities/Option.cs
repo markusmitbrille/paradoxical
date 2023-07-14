@@ -61,6 +61,10 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
     public int AiBaseChance { get => aiBaseChance; set => aiBaseChance = value; }
     public int aiBaseChance;
 
+    [Column("ai_custom_chance"), NotNull]
+    public string AiCustomChance { get => aiCustomChance; set => aiCustomChance = value; }
+    public string aiCustomChance = "";
+
     [Column("ai_boldness"), NotNull]
     public int AiBoldnessTargetModifier { get => aiBoldnessTargetModifier; set => aiBoldnessTargetModifier = value; }
     public int aiBoldnessTargetModifier;
@@ -109,6 +113,10 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
 
         title = other.title;
         tooltip = other.tooltip;
+        priority = other.priority;
+
+        customTrigger = other.customTrigger;
+        customEffect = other.customEffect;
 
         triggeredEventId = other.triggeredEventId;
         triggeredEventScope = other.triggeredEventScope;
@@ -116,6 +124,8 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
         triggeredEventMaxDays = other.triggeredEventMaxDays;
 
         aiBaseChance = other.aiBaseChance;
+
+        aiCustomChance = other.aiCustomChance;
 
         aiBoldnessTargetModifier = other.aiBoldnessTargetModifier;
         aiCompassionTargetModifier = other.aiCompassionTargetModifier;
@@ -242,44 +252,53 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
         else
         {
             writer.WriteLine();
-            writer.Indent().WriteLine("# no ai target modifiers");
-        }
 
-        if (AiBoldnessTargetModifier != 0)
-        {
-            writer.Indent().WriteLine($"ai_boldness_target_modifier = {{ VALUE = {AiBoldnessTargetModifier} }}");
-        }
-        if (AiCompassionTargetModifier != 0)
-        {
-            writer.Indent().WriteLine($"ai_compassion_target_modifier = {{ VALUE = {AiCompassionTargetModifier} }}");
-        }
-        if (AiGreedTargetModifier != 0)
-        {
-            writer.Indent().WriteLine($"ai_greed_target_modifier = {{ VALUE = {AiGreedTargetModifier} }}");
-        }
-        if (AiEnergyTargetModifier != 0)
-        {
-            writer.Indent().WriteLine($"ai_energy_target_modifier = {{ VALUE = {AiEnergyTargetModifier} }}");
-        }
-        if (AiHonorTargetModifier != 0)
-        {
-            writer.Indent().WriteLine($"ai_honor_target_modifier = {{ VALUE = {AiHonorTargetModifier} }}");
-        }
-        if (AiRationalityTargetModifier != 0)
-        {
-            writer.Indent().WriteLine($"ai_rationality_target_modifier = {{ VALUE = {AiRationalityTargetModifier} }}");
-        }
-        if (AiSociabilityTargetModifier != 0)
-        {
-            writer.Indent().WriteLine($"ai_sociability_target_modifier = {{ VALUE = {AiSociabilityTargetModifier} }}");
-        }
-        if (AiVengefulnessTargetModifier != 0)
-        {
-            writer.Indent().WriteLine($"ai_vengefulness_target_modifier = {{ VALUE = {AiVengefulnessTargetModifier} }}");
-        }
-        if (AiZealTargetModifier != 0)
-        {
-            writer.Indent().WriteLine($"ai_zeal_target_modifier = {{ VALUE = {AiZealTargetModifier} }}");
+            if (AiBoldnessTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_boldness_target_modifier = {{ VALUE = {AiBoldnessTargetModifier} }}");
+            }
+            if (AiCompassionTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_compassion_target_modifier = {{ VALUE = {AiCompassionTargetModifier} }}");
+            }
+            if (AiGreedTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_greed_target_modifier = {{ VALUE = {AiGreedTargetModifier} }}");
+            }
+            if (AiEnergyTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_energy_target_modifier = {{ VALUE = {AiEnergyTargetModifier} }}");
+            }
+            if (AiHonorTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_honor_target_modifier = {{ VALUE = {AiHonorTargetModifier} }}");
+            }
+            if (AiRationalityTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_rationality_target_modifier = {{ VALUE = {AiRationalityTargetModifier} }}");
+            }
+            if (AiSociabilityTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_sociability_target_modifier = {{ VALUE = {AiSociabilityTargetModifier} }}");
+            }
+            if (AiVengefulnessTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_vengefulness_target_modifier = {{ VALUE = {AiVengefulnessTargetModifier} }}");
+            }
+            if (AiZealTargetModifier != 0)
+            {
+                writer.Indent().WriteLine($"ai_zeal_target_modifier = {{ VALUE = {AiZealTargetModifier} }}");
+            }
+
+            if (AiCustomChance.IsEmpty() == false)
+            {
+                writer.Indent().WriteLine("# custom ai chance");
+
+                foreach (string line in AiCustomChance.Split(ParadoxText.NewParagraph))
+                {
+                    writer.Indent().WriteLine(line);
+                }
+            }
         }
 
         ParadoxText.IndentLevel--;

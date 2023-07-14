@@ -70,6 +70,12 @@ public class OptionViewModel : ModelWrapper<Option>
         set => SetProperty(ref model.aiBaseChance, value);
     }
 
+    public string AiCustomChance
+    {
+        get => model.aiCustomChance;
+        set => SetProperty(ref model.aiCustomChance, value);
+    }
+
     public int AiBoldnessTargetModifier
     {
         get => model.aiBoldnessTargetModifier;

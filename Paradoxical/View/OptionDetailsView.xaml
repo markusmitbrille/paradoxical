@@ -544,7 +544,7 @@
 
                         <TextBox.Text>
                             <Binding
-                                Path="Selected.AiBaseChance"
+                                Path="Selected.AiCustomChance"
                                 Mode="TwoWay"
                                 UpdateSourceTrigger="PropertyChanged">
 
