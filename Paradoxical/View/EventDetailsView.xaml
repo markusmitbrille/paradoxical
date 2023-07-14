@@ -7,7 +7,7 @@
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
-    xmlns:formatters="clr-namespace:Paradoxical.Formatters"
+    xmlns:converters="clr-namespace:Paradoxical.Converters"
     xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
@@ -125,30 +125,58 @@
 
                     </Grid>
 
-                    <view:ScriptBox
+                    <TextBox
                         Margin="6,12"
-                        Style="{DynamicResource MaterialDesignRichTextBox}"
-                        Text="{Binding Selected.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                        FontFamily="Consolas"
                         AcceptsReturn="False"
                         materialDesign:HintAssist.Hint="Title"
                         materialDesign:HintAssist.IsFloating="True"
                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
                         materialDesign:TextFieldAssist.HasOutlinedTextField="True"
                         materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
-                    </view:ScriptBox>
 
-                    <view:ScriptBox
+                        <TextBox.Text>
+                            <Binding
+                                Path="Selected.Title"
+                                Mode="TwoWay"
+                                UpdateSourceTrigger="PropertyChanged">
+
+                                <Binding.Converter>
+                                    <converters:CodeConverter />
+                                </Binding.Converter>
+
+                            </Binding>
+                        </TextBox.Text>
+
+                    </TextBox>
+
+                    <TextBox
                         Height="120"
                         Margin="6,12"
-                        Style="{DynamicResource MaterialDesignRichTextBox}"
-                        Text="{Binding Selected.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                        FontFamily="Consolas"
                         materialDesign:HintAssist.Hint="Description"
                         materialDesign:HintAssist.IsFloating="True"
                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
                         materialDesign:TextFieldAssist.HasOutlinedTextField="True"
                         materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
                         AcceptsReturn="True">
-                    </view:ScriptBox>
+
+                        <TextBox.Text>
+                            <Binding
+                                Path="Selected.Description"
+                                Mode="TwoWay"
+                                UpdateSourceTrigger="PropertyChanged">
+
+                                <Binding.Converter>
+                                    <converters:CodeConverter />
+                                </Binding.Converter>
+
+                            </Binding>
+                        </TextBox.Text>
+
+                    </TextBox>
 
                     <TextBox
                         Margin="6,12"
@@ -387,13 +415,15 @@
                             Binding="{Binding Priority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <DataGridTextColumn
-                            Header="Name"
+                            Header="Title"
                             Width="2*"
+                            FontFamily="Consolas"
                             Binding="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <DataGridTextColumn
                             Header="Tooltip"
                             Width="2*"
+                            FontFamily="Consolas"
                             Binding="{Binding Tooltip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     </DataGrid.Columns>
@@ -554,17 +584,31 @@
 
                     </Grid>
 
-                    <view:ScriptBox
+                    <TextBox
                         Grid.Column="0"
                         Margin="6,12"
-                        Style="{DynamicResource MaterialDesignRichTextBox}"
-                        Text="{Binding Selected.CustomTrigger, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                        FontFamily="Consolas"
                         materialDesign:HintAssist.Hint="Custom Trigger Code"
                         materialDesign:HintAssist.IsFloating="True"
                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
                         materialDesign:TextFieldAssist.HasOutlinedTextField="True"
                         materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
-                    </view:ScriptBox>
+
+                        <TextBox.Text>
+                            <Binding
+                                Path="Selected.CustomTrigger"
+                                Mode="TwoWay"
+                                UpdateSourceTrigger="PropertyChanged">
+
+                                <Binding.Converter>
+                                    <converters:CodeConverter />
+                                </Binding.Converter>
+
+                            </Binding>
+                        </TextBox.Text>
+
+                    </TextBox>
 
                 </Grid>
             </TabItem>
@@ -719,17 +763,31 @@
 
                     </Grid>
 
-                    <view:ScriptBox
+                    <TextBox
                         Grid.Column="0"
                         Margin="6,12"
-                        Style="{DynamicResource MaterialDesignRichTextBox}"
-                        Text="{Binding Selected.CustomImmediateEffect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                        FontFamily="Consolas"
                         materialDesign:HintAssist.Hint="Custom Effect Code"
                         materialDesign:HintAssist.IsFloating="True"
                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
                         materialDesign:TextFieldAssist.HasOutlinedTextField="True"
                         materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
-                    </view:ScriptBox>
+
+                        <TextBox.Text>
+                            <Binding
+                                Path="Selected.CustomImmediateEffect"
+                                Mode="TwoWay"
+                                UpdateSourceTrigger="PropertyChanged">
+
+                                <Binding.Converter>
+                                    <converters:CodeConverter />
+                                </Binding.Converter>
+
+                            </Binding>
+                        </TextBox.Text>
+
+                    </TextBox>
 
                 </Grid>
             </TabItem>
@@ -884,17 +942,31 @@
 
                     </Grid>
 
-                    <view:ScriptBox
+                    <TextBox
                         Grid.Column="0"
                         Margin="6,12"
-                        Style="{DynamicResource MaterialDesignRichTextBox}"
-                        Text="{Binding Selected.CustomAfterEffect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                        FontFamily="Consolas"
                         materialDesign:HintAssist.Hint="Custom Effect Code"
                         materialDesign:HintAssist.IsFloating="True"
                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
                         materialDesign:TextFieldAssist.HasOutlinedTextField="True"
                         materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
-                    </view:ScriptBox>
+
+                        <TextBox.Text>
+                            <Binding
+                                Path="Selected.CustomAfterEffect"
+                                Mode="TwoWay"
+                                UpdateSourceTrigger="PropertyChanged">
+
+                                <Binding.Converter>
+                                    <converters:CodeConverter />
+                                </Binding.Converter>
+
+                            </Binding>
+                        </TextBox.Text>
+
+                    </TextBox>
 
                 </Grid>
             </TabItem>
