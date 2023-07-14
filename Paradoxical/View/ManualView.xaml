@@ -125,6 +125,16 @@
                     </Hyperlink>
                 </Paragraph>
 
+                <Paragraph>
+                    <Hyperlink
+                        Command="{Binding GoToCommand}"
+                        CommandParameter="{Binding ElementName=pAiChance}">
+
+                        AI Chance
+
+                    </Hyperlink>
+                </Paragraph>
+
                 <!--#endregion-->
 
                 <Paragraph
@@ -144,7 +154,7 @@
                 </Paragraph>
 
                 <Paragraph>
-                    The data of your mod project is saved in an SQLite database. When starting up the application, an in-memory database is created so you can start modding immediately. This in-memory database, however, is lost upon exiting, or opening another database. Therefore it's important to remember to save it to the disk before doing so, by backing it up first (don't worry, the application will remind you, if you forget).
+                    The data of your mod project is saved in an SQLite database. When starting up Paradoxical™, an in-memory database is created so you can start modding immediately. This in-memory database, however, is lost upon exiting, or opening another database. Therefore it's important to remember to save it to the disk before doing so, by backing it up first (don't worry, Paradoxical™ will remind you, if you forget).
                 </Paragraph>
 
                 <Paragraph>
@@ -159,6 +169,44 @@
 
                 <Paragraph>
                     Opening a database establishes a connection to it, through which changes are saved automatically and continuously as you work. Though it isn't necessary, you can manually commit changes you made any time you like.
+                </Paragraph>
+
+                <Paragraph
+                    x:Name="pAiChance"
+                    Style="{StaticResource H1}">
+
+                    AI Chance
+
+                    <InlineUIContainer
+                        BaselineAlignment="Center">
+                        <Button
+                            Command="{Binding GoToCommand}"
+                            CommandParameter="{Binding ElementName=pTableOfContents}"
+                            Style="{StaticResource ReturnButton}" />
+                    </InlineUIContainer>
+
+                </Paragraph>
+
+                <Paragraph>
+                    Since events are not only available to players, the AI will sometimes have to choose between event options. To this end, you can configure the AI chance. While Paradox scripting allows you to create complex AI chance modifiers, Paradoxical™ simplifies this process: Each option defines a base chance, which can be further fine-tuned according to the AI's personality values. There are nine of these: boldness, compassion, greed, energy, honor, rationality, sociability, vengefulness, and zeal. These values can range from -100 to +100, with ±75 being considered a very high value.
+                </Paragraph>
+
+                <Paragraph>
+                    The CK3 wiki provides
+                    
+                    <Hyperlink
+                        NavigateUri="https://ck3.paradoxwikis.com/Character#AI_Personality"
+                        RequestNavigate="RequestNavigate">further reading</Hyperlink>,
+                    
+                    if you are interested in exactly what these personality values stand for, and how they influence AI behaviour in general.
+                </Paragraph>
+
+                <Paragraph>
+                    For the purposes of Paradoxical™, you only need to know that the base AI chance for event options can be further modified by special AI target modifiers, of which there is one for every personality value. You can define a modifier value for each personality value, which will be weighed by it, before being added to the option's base AI chance.
+                </Paragraph>
+
+                <Paragraph>
+                    The weighing process simply divides the AI's personality value, by what Paradox considers to be a high personality value (as of the time of writing this, that would be 75), then multiplies this factor with the specified modifier value. So if you specify a boldness AI chance modifier of 40, you can expect 40 to be added to the base chance, if the AI has a boldness value of 75; or you can expect 8 to be added, if the AI has a boldness value of 15 (15÷75×40).
                 </Paragraph>
 
             </FlowDocument>
