@@ -350,7 +350,7 @@
 
                 <DataGrid
                     x:Name="OptionsDataGrid"
-                    Margin="20"
+                    Margin="6,12"
                     BorderBrush="Gray"
                     BorderThickness="1"
                     ItemsSource="{Binding Source={StaticResource OptionsCollectionViewSource}}"

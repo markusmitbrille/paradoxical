@@ -80,7 +80,7 @@
 
                 <DataGrid
                     x:Name="ItemsDataGrid"
-                    Margin="20"
+                    Margin="6,12"
                     BorderBrush="Gray"
                     BorderThickness="1"
                     ItemsSource="{Binding Items}"
