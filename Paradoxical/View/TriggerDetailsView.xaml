@@ -93,21 +93,13 @@
                         Height="120"
                         Margin="6,12"
                         Style="{DynamicResource MaterialDesignRichTextBox}"
+                        Text="{Binding Selected.Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         materialDesign:HintAssist.Hint="Code"
                         materialDesign:HintAssist.IsFloating="True"
                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
                         materialDesign:TextFieldAssist.HasOutlinedTextField="True"
                         materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
                         AcceptsReturn="True">
-
-                        <view:ScriptBox.Text>
-                            <Binding
-                                Path="Selected.Code"
-                                Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged">
-                            </Binding>
-                        </view:ScriptBox.Text>
-
                     </view:ScriptBox>
 
                     <view:ScriptBox
