@@ -135,10 +135,6 @@
                         materialDesign:TextFieldAssist.HasOutlinedTextField="True"
                         materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
 
-                        <view:ScriptBox.TextFormatter>
-                            <formatters:EventTextFormatter />
-                        </view:ScriptBox.TextFormatter>
-
                         <view:ScriptBox.Text>
                             <Binding
                                 Path="Selected.Title"
@@ -159,10 +155,6 @@
                         materialDesign:TextFieldAssist.HasOutlinedTextField="True"
                         materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
                         AcceptsReturn="True">
-
-                        <view:ScriptBox.TextFormatter>
-                            <formatters:EventTextFormatter />
-                        </view:ScriptBox.TextFormatter>
 
                         <view:ScriptBox.Text>
                             <Binding
@@ -588,9 +580,6 @@
                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
                         materialDesign:TextFieldAssist.HasOutlinedTextField="True"
                         materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
-                        <view:ScriptBox.TextFormatter>
-                            <formatters:CodeFormatter />
-                        </view:ScriptBox.TextFormatter>
                     </view:ScriptBox>
 
                 </Grid>
@@ -756,9 +745,6 @@
                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
                         materialDesign:TextFieldAssist.HasOutlinedTextField="True"
                         materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
-                        <view:ScriptBox.TextFormatter>
-                            <formatters:CodeFormatter />
-                        </view:ScriptBox.TextFormatter>
                     </view:ScriptBox>
 
                 </Grid>
@@ -924,9 +910,6 @@
                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Visible"
                         materialDesign:TextFieldAssist.HasOutlinedTextField="True"
                         materialDesign:TextFieldAssist.TextFieldCornerRadius="4">
-                        <view:ScriptBox.TextFormatter>
-                            <formatters:CodeFormatter />
-                        </view:ScriptBox.TextFormatter>
                     </view:ScriptBox>
 
                 </Grid>

@@ -6,7 +6,7 @@ using Xceed.Wpf.Toolkit;
 
 namespace Paradoxical.Formatters
 {
-    public class EventTextFormatter : ITextFormatter
+    public class ScriptFormatter : ITextFormatter
     {
         private readonly StringBuilder builder = new();
 
