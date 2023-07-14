@@ -19,32 +19,13 @@ public abstract class PageViewModel : ObservableObject
     {
         Shell = shell;
         Mediator = mediator;
-
-        Shell.Navigating += NavigatingHandler;
-        Shell.Navigated += NavigatedHandler;
     }
 
-    private void NavigatedHandler(object? sender, EventArgs e)
-    {
-        if (Shell.CurrentPage == this)
-        {
-            OnNavigatedTo();
-        }
-    }
-
-    private void NavigatingHandler(object? sender, EventArgs e)
-    {
-        if (Shell.CurrentPage == this)
-        {
-            OnNavigatingFrom();
-        }
-    }
-
-    protected virtual void OnNavigatingFrom()
+    public virtual void OnNavigatingFrom()
     {
     }
 
-    protected virtual void OnNavigatedTo()
+    public virtual void OnNavigatedTo()
     {
     }
 }

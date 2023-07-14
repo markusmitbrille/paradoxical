@@ -33,7 +33,7 @@ public class TriggerDetailsViewModel : PageViewModel
         TriggerService = triggerService;
     }
 
-    protected override void OnNavigatedTo()
+    public override void OnNavigatedTo()
     {
         Reload();
 
@@ -41,7 +41,7 @@ public class TriggerDetailsViewModel : PageViewModel
         Mediator.Register<ShutdownMessage>(this);
     }
 
-    protected override void OnNavigatingFrom()
+    public override void OnNavigatingFrom()
     {
         Save();
 

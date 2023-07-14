@@ -28,9 +28,6 @@ public interface IShell
     public List<PageViewModel> PageHistory { get; }
     public List<PageViewModel> PageFuture { get; }
 
-    public event EventHandler Navigating;
-    public event EventHandler Navigated;
-
     public T Navigate<T>() where T : PageViewModel;
 
     public void GoHome();
@@ -58,17 +55,21 @@ public class Shell : ObservableObject, IShell
         get => currentPage;
         private set
         {
-            Navigating.Invoke(this, new());
-            SetProperty(ref currentPage, value);
-            Navigated.Invoke(this, new());
+            OnPropertyChanging();
+
+            currentPage?.OnNavigatingFrom();
+            currentPage = value;
+            currentPage?.OnNavigatedTo();
+
+            GoForwardCommand.NotifyCanExecuteChanged();
+            GoBackCommand.NotifyCanExecuteChanged();
+
+            OnPropertyChanged();
         }
     }
 
     public List<PageViewModel> PageHistory { get; } = new();
     public List<PageViewModel> PageFuture { get; } = new();
-
-    public event EventHandler Navigating = delegate { };
-    public event EventHandler Navigated = delegate { };
 
     public Shell(
         IServiceProvider serviceProvider,
@@ -263,9 +264,6 @@ if you don't save them.",
         }
 
         CurrentPage = page;
-
-        GoForwardCommand.NotifyCanExecuteChanged();
-        GoBackCommand.NotifyCanExecuteChanged();
     }
     public bool CanNavigate(PageViewModel? page)
     {
@@ -284,9 +282,6 @@ if you don't save them.",
         PageFuture.Clear();
 
         CurrentPage = null;
-
-        GoForwardCommand.NotifyCanExecuteChanged();
-        GoBackCommand.NotifyCanExecuteChanged();
     }
 
     private RelayCommand? goHomeCommand;
@@ -302,19 +297,19 @@ if you don't save them.",
 
     public void GoBack()
     {
+        if (PageHistory.Any() == false)
+        { return; }
+
         if (CurrentPage != null)
         {
             PageFuture.Push(CurrentPage);
         }
 
         CurrentPage = PageHistory.Pop();
-
-        GoForwardCommand.NotifyCanExecuteChanged();
-        GoBackCommand.NotifyCanExecuteChanged();
     }
     public bool CanGoBack()
     {
-        return PageHistory.Any();
+        return PageHistory.Any() == true;
     }
 
     private RelayCommand? goForwardCommand;
@@ -322,19 +317,19 @@ if you don't save them.",
 
     public void GoForward()
     {
+        if (PageFuture.Any() == false)
+        { return; }
+
         if (CurrentPage != null)
         {
             PageHistory.Push(CurrentPage);
         }
 
         CurrentPage = PageFuture.Pop();
-
-        GoForwardCommand.NotifyCanExecuteChanged();
-        GoBackCommand.NotifyCanExecuteChanged();
     }
     public bool CanGoForward()
     {
-        return PageFuture.Any();
+        return PageFuture.Any() == true;
     }
 
     private RelayCommand? goToInfoCommand;

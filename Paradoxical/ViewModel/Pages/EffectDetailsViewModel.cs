@@ -33,7 +33,7 @@ public class EffectDetailsViewModel : PageViewModel
         EffectService = effectService;
     }
 
-    protected override void OnNavigatedTo()
+    public override void OnNavigatedTo()
     {
         Reload();
 
@@ -41,7 +41,7 @@ public class EffectDetailsViewModel : PageViewModel
         Mediator.Register<ShutdownMessage>(this);
     }
 
-    protected override void OnNavigatingFrom()
+    public override void OnNavigatingFrom()
     {
         Save();
 

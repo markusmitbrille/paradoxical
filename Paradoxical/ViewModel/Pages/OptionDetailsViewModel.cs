@@ -79,7 +79,7 @@ public class OptionDetailsViewModel : PageViewModel
         PortraitService = portraitService;
     }
 
-    protected override void OnNavigatedTo()
+    public override void OnNavigatedTo()
     {
         Reload();
 
@@ -87,7 +87,7 @@ public class OptionDetailsViewModel : PageViewModel
         Mediator.Register<ShutdownMessage>(this);
     }
 
-    protected override void OnNavigatingFrom()
+    public override void OnNavigatingFrom()
     {
         Save();
 
