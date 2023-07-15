@@ -197,6 +197,7 @@ public class BuildService : IBuildService
     private void WriteTriggersFile(TextWriter writer)
     {
         writer.WriteLine($"# {modService.GetModName()} Triggers");
+        writer.WriteLine();
 
         foreach (Trigger element in triggerService.Get())
         {
@@ -210,6 +211,7 @@ public class BuildService : IBuildService
     private void WriteEffectsFile(TextWriter writer)
     {
         writer.WriteLine($"# {modService.GetModName()} Effects");
+        writer.WriteLine();
 
         foreach (Effect element in effectService.Get())
         {
