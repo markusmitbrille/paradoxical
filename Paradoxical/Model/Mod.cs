@@ -36,7 +36,7 @@ public class Mod : IEntity, IModel
 
         writer.Indent().WriteLine("Events");
 
-        ParadoxText.IndentLevel++;
+        ParadoxText.IndentLevel--;
         writer.Indent().WriteLine("}");
 
         writer.Indent().WriteLine($"name=\"{ModName}\"");
