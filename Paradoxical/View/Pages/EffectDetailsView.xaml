@@ -150,7 +150,7 @@
                                 UpdateSourceTrigger="PropertyChanged">
 
                                 <Binding.Converter>
-                                    <converters:CodeConverter />
+                                    <converters:ScriptConverter />
                                 </Binding.Converter>
 
                             </Binding>
@@ -173,7 +173,7 @@
                                 UpdateSourceTrigger="PropertyChanged">
 
                                 <Binding.Converter>
-                                    <converters:CodeConverter />
+                                    <converters:ScriptConverter />
                                 </Binding.Converter>
 
                             </Binding>

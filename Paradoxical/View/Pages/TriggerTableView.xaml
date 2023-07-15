@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="Paradoxical.View.EventTableView"
+    x:Class="Paradoxical.View.TriggerTableView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,7 +10,7 @@
     xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance {x:Type viewmodel:EventTableViewModel}}"
+    d:DataContext="{d:DesignInstance {x:Type viewmodel:TriggerTableViewModel}}"
     d:DesignWidth="800">
 
     <DockPanel>
@@ -27,21 +27,21 @@
                     Command="{Binding CreateCommand}"
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=Add}"
-                    ToolTip="Create Event" />
+                    ToolTip="Create Trigger" />
 
                 <Button
                     Margin="4,0"
                     Command="{Binding DeleteCommand}"
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=Remove}"
-                    ToolTip="Delete Event" />
+                    ToolTip="Delete Trigger" />
 
                 <Button
                     Margin="4,0"
                     Command="{Binding EditCommand}"
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=Pencil}"
-                    ToolTip="Edit Event" />
+                    ToolTip="Edit Trigger" />
 
                 <Separator />
 
@@ -65,7 +65,7 @@
                     Style="{DynamicResource MaterialDesignFilledTextBox}"
                     Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     PreviewTextInput="TextBox_PreviewTextInput"
-                    materialDesign:HintAssist.Hint="Filter Events ..."
+                    materialDesign:HintAssist.Hint="Filter Triggers ..."
                     materialDesign:TextFieldAssist.HasClearButton="True" />
 
             </ToolBar>
@@ -126,27 +126,7 @@
                             Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <DataGridTextColumn
-                            Header="Title"
-                            Width="2*"
-                            FontFamily="Consolas">
-
-                            <DataGridTextColumn.Binding>
-                                <Binding
-                                    Path="Title"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged">
-
-                                    <Binding.Converter>
-                                        <converters:CodeConverter />
-                                    </Binding.Converter>
-
-                                </Binding>
-                            </DataGridTextColumn.Binding>
-
-                        </DataGridTextColumn>
-
-                        <DataGridTextColumn
-                            Header="Description"
+                            Header="Code"
                             Width="5*"
                             FontFamily="Consolas">
 
@@ -173,19 +153,60 @@
 
                             <DataGridTextColumn.Binding>
                                 <Binding
-                                    Path="Description"
+                                    Path="Code"
                                     Mode="TwoWay"
                                     UpdateSourceTrigger="PropertyChanged">
 
                                     <Binding.Converter>
-                                        <converters:CodeConverter />
+                                        <converters:ScriptConverter />
                                     </Binding.Converter>
 
                                 </Binding>
                             </DataGridTextColumn.Binding>
 
                         </DataGridTextColumn>
-                        
+
+                        <DataGridTextColumn
+                            Header="Tooltip"
+                            Width="5*"
+                            FontFamily="Consolas">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style
+                                    TargetType="TextBlock">
+                                    <Setter
+                                        Property="TextWrapping"
+                                        Value="Wrap" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
+                            <DataGridTextColumn.EditingElementStyle>
+                                <Style
+                                    TargetType="TextBox">
+                                    <Setter
+                                        Property="TextWrapping"
+                                        Value="Wrap" />
+                                    <Setter
+                                        Property="AcceptsReturn"
+                                        Value="true" />
+                                </Style>
+                            </DataGridTextColumn.EditingElementStyle>
+
+                            <DataGridTextColumn.Binding>
+                                <Binding
+                                    Path="Tooltip"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.Converter>
+                                        <converters:ScriptConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </DataGridTextColumn.Binding>
+
+                        </DataGridTextColumn>
+
                     </DataGrid.Columns>
 
                 </DataGrid>
