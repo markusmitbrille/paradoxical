@@ -21,6 +21,13 @@ public class TriggerTableViewModel : PageViewModel
 
     public ITriggerService TriggerService { get; }
 
+    private int selectedTab;
+    public int SelectedTab
+    {
+        get => selectedTab;
+        set => SetProperty(ref selectedTab, value);
+    }
+
     private ObservableCollection<TriggerViewModel> items = new();
     public ObservableCollection<TriggerViewModel> Items
     {

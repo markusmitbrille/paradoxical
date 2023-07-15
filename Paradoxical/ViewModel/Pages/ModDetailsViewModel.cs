@@ -16,6 +16,13 @@ public class ModDetailsViewModel : PageViewModel
 
     public IModService ModService { get; }
 
+    private int selectedTab;
+    public int SelectedTab
+    {
+        get => selectedTab;
+        set => SetProperty(ref selectedTab, value);
+    }
+
     private ModViewModel? selected;
     public ModViewModel? Selected
     {

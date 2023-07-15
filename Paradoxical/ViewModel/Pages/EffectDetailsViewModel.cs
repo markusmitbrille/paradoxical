@@ -17,6 +17,13 @@ public class EffectDetailsViewModel : PageViewModel
 
     public IEffectService EffectService { get; }
 
+    private int selectedTab;
+    public int SelectedTab
+    {
+        get => selectedTab;
+        set => SetProperty(ref selectedTab, value);
+    }
+
     private EffectViewModel? selected;
     public EffectViewModel? Selected
     {

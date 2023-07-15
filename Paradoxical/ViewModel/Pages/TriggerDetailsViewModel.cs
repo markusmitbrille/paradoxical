@@ -17,6 +17,13 @@ public class TriggerDetailsViewModel : PageViewModel
 
     public ITriggerService TriggerService { get; }
 
+    private int selectedTab;
+    public int SelectedTab
+    {
+        get => selectedTab;
+        set => SetProperty(ref selectedTab, value);
+    }
+
     private TriggerViewModel? selected;
     public TriggerViewModel? Selected
     {

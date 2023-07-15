@@ -26,6 +26,13 @@ public class OptionDetailsViewModel : PageViewModel
     public IEventService EventService { get; }
     public IPortraitService PortraitService { get; }
 
+    private int selectedTab;
+    public int SelectedTab
+    {
+        get => selectedTab;
+        set => SetProperty(ref selectedTab, value);
+    }
+
     private OptionViewModel? selected;
     public OptionViewModel? Selected
     {

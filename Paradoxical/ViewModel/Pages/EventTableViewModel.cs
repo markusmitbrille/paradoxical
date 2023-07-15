@@ -23,6 +23,13 @@ public class EventTableViewModel : PageViewModel
     public IOptionService OptionService { get; }
     public IPortraitService PortraitService { get; }
 
+    private int selectedTab;
+    public int SelectedTab
+    {
+        get => selectedTab;
+        set => SetProperty(ref selectedTab, value);
+    }
+
     private ObservableCollection<EventViewModel> items = new();
     public ObservableCollection<EventViewModel> Items
     {

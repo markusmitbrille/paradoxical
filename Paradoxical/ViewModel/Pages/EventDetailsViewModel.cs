@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace Paradoxical.ViewModel;
 
@@ -26,6 +27,13 @@ public class EventDetailsViewModel : PageViewModel
     public IOptionService OptionService { get; }
     public ITriggerService TriggerService { get; }
     public IEffectService EffectService { get; }
+
+    private int selectedTab;
+    public int SelectedTab
+    {
+        get => selectedTab;
+        set => SetProperty(ref selectedTab, value);
+    }
 
     private EventViewModel? selected;
     public EventViewModel? Selected

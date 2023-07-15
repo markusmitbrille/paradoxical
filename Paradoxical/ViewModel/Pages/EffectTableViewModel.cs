@@ -21,6 +21,13 @@ public class EffectTableViewModel : PageViewModel
 
     public IEffectService EffectService { get; }
 
+    private int selectedTab;
+    public int SelectedTab
+    {
+        get => selectedTab;
+        set => SetProperty(ref selectedTab, value);
+    }
+
     private ObservableCollection<EffectViewModel> items = new();
     public ObservableCollection<EffectViewModel> Items
     {

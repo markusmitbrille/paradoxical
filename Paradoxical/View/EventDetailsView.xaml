@@ -78,7 +78,8 @@
         </ToolBarTray>
 
         <TabControl
-            Padding="20">
+            Padding="20"
+            SelectedIndex="{Binding SelectedTab}">
 
             <TabItem
                 Header="Display">
