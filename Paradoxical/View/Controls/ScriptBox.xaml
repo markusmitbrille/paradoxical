@@ -1,0 +1,75 @@
+﻿<TextBox
+    x:Class="Paradoxical.View.ScriptBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:view="clr-namespace:Paradoxical.View"
+    xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
+    xmlns:converters="clr-namespace:Paradoxical.Converters"
+    xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    mc:Ignorable="d"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    FontFamily="Consolas"
+    TextChanged="TextChangedHandler"
+    SelectionChanged="SelectionChangedHandler"
+    PreviewKeyDown="KeyDownHandler">
+    
+    <TextBox.CommandBindings>
+
+        <CommandBinding
+            Command="view:ScriptBoxCommands.OpenComplete"
+            Executed="OpenCompleteExecutedHandler"
+            CanExecute="OpenCompleteCanExecuteHandler" />
+
+        <CommandBinding
+            Command="view:ScriptBoxCommands.ConfirmComplete"
+            Executed="ConfirmCompleteExecutedHandler"
+            CanExecute="ConfirmCompleteCanExecuteHandler" />
+
+        <CommandBinding
+            Command="view:ScriptBoxCommands.CancelComplete"
+            Executed="CancelCompleteExecutedHandler"
+            CanExecute="CancelCompleteCanExecuteHandler" />
+
+    </TextBox.CommandBindings>
+
+    <TextBox.ContextMenu>
+        <ContextMenu>
+
+            <MenuItem
+                Icon="{materialDesign:PackIcon Kind=LightbulbOutline}"
+                Command="view:ScriptBoxCommands.OpenComplete" />
+
+            <Separator />
+
+            <MenuItem
+                Header="Cut"
+                InputGestureText="CTRL+X"
+                Icon="{materialDesign:PackIcon Kind=ContentCut}"
+                Command="ApplicationCommands.Cut" />
+            <MenuItem
+                Header="Copy"
+                InputGestureText="CTRL+C"
+                Icon="{materialDesign:PackIcon Kind=ContentCopy}"
+                Command="ApplicationCommands.Copy" />
+            <MenuItem
+                Header="Paste"
+                InputGestureText="CTRL+V"
+                Icon="{materialDesign:PackIcon Kind=ContentPaste}"
+                Command="ApplicationCommands.Paste" />
+
+            <Separator />
+
+            <MenuItem
+                Header="Select All"
+                InputGestureText="CTRL+A"
+                Icon="{materialDesign:PackIcon Kind=SelectAll}"
+                Command="ApplicationCommands.SelectAll" />
+
+        </ContextMenu>
+    </TextBox.ContextMenu>
+
+</TextBox>
