@@ -105,6 +105,24 @@ public partial class ScriptBox : TextBox
         UpdatePopup();
     }
 
+    private void LostFocusHandler(object sender, RoutedEventArgs e)
+    {
+        if (Popup == null)
+        { return; }
+
+        Popup.Result = false;
+        ClosePopup();
+    }
+
+    private void LostKeyboardFocusHandler(object sender, KeyboardFocusChangedEventArgs e)
+    {
+        if (Popup == null)
+        { return; }
+
+        Popup.Result = false;
+        ClosePopup();
+    }
+
     private void KeyDownHandler(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Up || e.Key == Key.Down)
@@ -180,6 +198,9 @@ public partial class ScriptBox : TextBox
 
         // refocus
         Focus();
+
+        LostFocus += LostFocusHandler;
+        LostKeyboardFocus += LostKeyboardFocusHandler;
     }
 
     private void ApplyPopup()
@@ -234,6 +255,9 @@ public partial class ScriptBox : TextBox
 
         Popup = null;
         PopupIndex = null;
+
+        LostFocus -= LostFocusHandler;
+        LostKeyboardFocus -= LostKeyboardFocusHandler;
     }
 
     private void UpdatePopup()
