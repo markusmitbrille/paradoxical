@@ -192,6 +192,7 @@ public partial class ScriptBox : TextBox
 
         Popup.Closed += PopupClosedHandler;
 
+        Popup.UpdateScores();
         Popup.UpdateView();
         Popup.UpdateSelection();
         Popup.Show();
@@ -271,6 +272,8 @@ public partial class ScriptBox : TextBox
         { return; }
 
         Popup.Filter = CurrentWord?.Value;
+
+        Popup.UpdateScores();
         Popup.UpdateView();
         Popup.UpdateSelection();
     }

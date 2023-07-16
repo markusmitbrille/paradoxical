@@ -1,4 +1,5 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿using FuzzySharp;
+using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
 using Paradoxical.ViewModel;
 using System;
@@ -31,9 +32,10 @@ public partial class CompleteBox : Window
         public string Name { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty;
         public PackIconKind Icon { get; set; } = PackIconKind.CodeBraces;
+        public int Score { get; set; } = 0;
     }
 
-    private IEnumerable<Item> Items = new Item[]
+    private IEnumerable<Item> Items { get; } = new Item[]
     {
         new()
         {
@@ -59,6 +61,41 @@ public partial class CompleteBox : Window
             Code = "PREV",
             Icon = PackIconKind.ArrowRightBottom,
         },
+        new()
+        {
+            Name = "always",
+            Code = "always = ",
+        },
+        new()
+        {
+            Name = "set_variable",
+            Code = "set_variable = ",
+        },
+        new()
+        {
+            Name = "change_variable",
+            Code = "change_variable = ",
+        },
+        new()
+        {
+            Name = "has_variable",
+            Code = "has_variable = ",
+        },
+        new()
+        {
+            Name = "days",
+            Code = "days = ",
+        },
+        new()
+        {
+            Name = "months",
+            Code = "months = ",
+        },
+        new()
+        {
+            Name = "years",
+            Code = "years = ",
+        },
     };
 
     private ICollectionView View => CollectionViewSource.GetDefaultView(Items);
@@ -75,6 +112,7 @@ public partial class CompleteBox : Window
 
         ItemsBox.ItemsSource = Items;
         View.Filter = Predicate;
+        View.SortDescriptions.Add(new(nameof(Item.Score), ListSortDirection.Descending));
     }
 
     private void KeyDownHandler(object sender, KeyEventArgs e)
@@ -99,7 +137,7 @@ public partial class CompleteBox : Window
         if (string.IsNullOrEmpty(Filter) == true)
         { return true; }
 
-        if (ParadoxPattern.FilterRegex.FuzzyMatch(item.Name.ToLowerInvariant(), Filter.ToLowerInvariant()) == true)
+        if (Fuzz.PartialRatio(item.Name.ToLowerInvariant(), Filter.ToLowerInvariant()) >= 60)
         { return true; }
 
         return false;
@@ -120,6 +158,20 @@ public partial class CompleteBox : Window
         if (i < ItemsBox.Items.Count)
         {
             ItemsBox.SelectedIndex = i;
+        }
+    }
+
+    public void UpdateScores()
+    {
+        foreach (var item in Items)
+        {
+            if (string.IsNullOrEmpty(Filter) == true)
+            {
+                item.Score = 0;
+                continue;
+            }
+
+            item.Score = Fuzz.PartialRatio(item.Name.ToLowerInvariant(), Filter.ToLowerInvariant());
         }
     }
 
