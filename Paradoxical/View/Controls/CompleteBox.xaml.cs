@@ -99,7 +99,7 @@ public partial class CompleteBox : Window
         if (string.IsNullOrEmpty(Filter) == true)
         { return true; }
 
-        if (ParadoxPattern.FilterRegex.FuzzyMatch(item.Name, Filter) == true)
+        if (ParadoxPattern.FilterRegex.FuzzyMatch(item.Name.ToLowerInvariant(), Filter.ToLowerInvariant()) == true)
         { return true; }
 
         return false;
