@@ -162,6 +162,11 @@ public partial class ScriptBox : TextBox
 
     private void PreviewTextInputHandler(object sender, TextCompositionEventArgs e)
     {
+        if (e.Text == "\"")
+        {
+            InsertQuotationMarks();
+            e.Handled = true;
+        }
         if (e.Text == "(")
         {
             InsertBraces();
@@ -177,6 +182,17 @@ public partial class ScriptBox : TextBox
             InsertCurlyBraces();
             e.Handled = true;
         }
+    }
+
+    private void InsertQuotationMarks()
+    {
+        var index = CaretIndex;
+        var text = Text;
+
+        text = text.Insert(CaretIndex, "\"\"");
+
+        Text = text;
+        CaretIndex = index + 1;
     }
 
     private void InsertBraces()
