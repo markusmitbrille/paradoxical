@@ -46,7 +46,7 @@
                                         HorizontalAlignment="Center"
                                         Foreground="LightGray"
                                         FontStyle="Italic"
-                                        Text="No auto completion available" />
+                                        Text="No suggestions available" />
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
