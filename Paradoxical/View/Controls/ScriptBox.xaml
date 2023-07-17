@@ -15,7 +15,8 @@
     FontFamily="Consolas"
     TextChanged="TextChangedHandler"
     SelectionChanged="SelectionChangedHandler"
-    PreviewKeyDown="KeyDownHandler">
+    PreviewKeyDown="KeyDownHandler"
+    PreviewTextInput="PreviewTextInputHandler">
     
     <TextBox.CommandBindings>
 
