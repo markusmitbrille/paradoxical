@@ -315,28 +315,20 @@ public partial class ScriptBox : TextBox
         if (Popup.Selected == null)
         { return; }
 
-        int index = CaretIndex;
+        string text = Text;
+
+        int index = CurrentWord?.Index ?? CaretIndex;
         string code = Popup.Selected.Code;
 
         if (CurrentWord != null)
         {
-            string text = Text;
-            text = text.Remove(CurrentWord.Index, CurrentWord.Length);
-            text = text.Insert(CurrentWord.Index, code);
-            Text = text;
-        }
-        else
-        {
-            string text = Text;
-            text = text.Insert(CaretIndex, code);
-            Text = text;
+            text = text.Remove(index, CurrentWord.Length);
         }
 
-        // reset selection
-        CaretIndex = index;
+        text = text.Insert(index, code);
 
-        // set caret to end of word
-        CaretIndex = CurrentWord?.Index + CurrentWord?.Length ?? index;
+        Text = text;
+        CaretIndex = index + code.Length;
     }
 
     private void ClosePopup()
