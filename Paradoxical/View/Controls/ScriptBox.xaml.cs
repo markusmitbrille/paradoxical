@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Paradoxical.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,14 @@ public partial class ScriptBox : TextBox
     [GeneratedRegex(@"\w+")]
     private static partial Regex GetWordRegex();
     public static Regex WordRegex => GetWordRegex();
+
+    [GeneratedRegex(@"{")]
+    private static partial Regex GetBlockStartRegex();
+    public static Regex BlockStartRegex => GetBlockStartRegex();
+
+    [GeneratedRegex(@"}")]
+    private static partial Regex GetBlockEndRegex();
+    public static Regex BlockEndRegex => GetBlockEndRegex();
 
     private MatchCollection WordMatches { get; set; } = WordRegex.Matches(string.Empty);
     private Match? CurrentWord { get; set; } = null;
@@ -92,6 +101,16 @@ public partial class ScriptBox : TextBox
         e.CanExecute = true;
     }
 
+    private void FormatTextExecutedHandler(object sender, ExecutedRoutedEventArgs e)
+    {
+        FormatText();
+    }
+
+    private void FormatTextCanExecuteHandler(object sender, CanExecuteRoutedEventArgs e)
+    {
+        e.CanExecute = true;
+    }
+
     private void TextChangedHandler(object sender, TextChangedEventArgs e)
     {
         UpdateWordMatches();
@@ -131,11 +150,6 @@ public partial class ScriptBox : TextBox
             RaisePopupEvent(sender, e);
         }
 
-        if (e.Key == Key.Enter)
-        {
-            FormatText();
-        }
-
         if (e.Key == Key.Tab)
         {
             if (ScriptBoxCommands.ConfirmComplete.CanExecute(null, this) == true)
@@ -145,7 +159,7 @@ public partial class ScriptBox : TextBox
             }
             else
             {
-                InsertTabSpaces();
+                InsertIndentation();
                 e.Handled = true;
             }
         }
@@ -173,11 +187,6 @@ public partial class ScriptBox : TextBox
         e.Handled = true;
     }
 
-    private void FormatText()
-    {
-        throw new NotImplementedException();
-    }
-
     private void PreviewTextInputHandler(object sender, TextCompositionEventArgs e)
     {
         if (e.Text == "\"")
@@ -202,7 +211,7 @@ public partial class ScriptBox : TextBox
         }
         if (e.Text == "\t")
         {
-            InsertTabSpaces();
+            InsertIndentation();
             e.Handled = true;
         }
     }
@@ -251,12 +260,12 @@ public partial class ScriptBox : TextBox
         CaretIndex = index + 2;
     }
 
-    private void InsertTabSpaces()
+    private void InsertIndentation()
     {
         var index = CaretIndex;
         var text = Text;
 
-        text = text.Insert(CaretIndex, "    ");
+        text = text.Insert(CaretIndex, ParadoxText.Indentation);
 
         Text = text;
         CaretIndex = index + 4;
@@ -407,5 +416,41 @@ public partial class ScriptBox : TextBox
         var size = FontSize;
 
         return new() { X = boxPos.X + caretRect.X, Y = boxPos.Y + caretRect.Y + size + OFFSET };
+    }
+
+    private void FormatText()
+    {
+        FormatBlocks();
+    }
+
+    private void FormatBlocks()
+    {
+        string textSource = Text;
+
+        textSource = textSource.Replace(Environment.NewLine, string.Empty);
+        textSource = textSource.Replace("{", "{" + Environment.NewLine);
+        textSource = textSource.Replace("}", Environment.NewLine + "}" + Environment.NewLine);
+        textSource = textSource.Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine);
+
+        int indentLevel = 0;
+
+        var lines = textSource.Split(Environment.NewLine);
+        for (int i = 0; i < lines.Length; i++)
+        {
+            var line = lines[i];
+
+            indentLevel -= BlockEndRegex.Matches(line).Count;
+
+            line = line.Trim();
+            line = string.Concat(Enumerable.Repeat(ParadoxText.Indentation, indentLevel)) + line;
+
+            indentLevel += BlockStartRegex.Matches(line).Count;
+
+            lines[i] = line;
+        }
+
+        textSource = string.Join(Environment.NewLine, lines);
+
+        Text = textSource;
     }
 }

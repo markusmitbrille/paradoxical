@@ -14,9 +14,9 @@
     d:DesignWidth="800"
     FontFamily="Consolas"
     TextChanged="TextChangedHandler"
+    PreviewTextInput="PreviewTextInputHandler"
     SelectionChanged="SelectionChangedHandler"
-    PreviewKeyDown="KeyDownHandler"
-    PreviewTextInput="PreviewTextInputHandler">
+    PreviewKeyDown="KeyDownHandler">
     
     <TextBox.CommandBindings>
 
@@ -34,6 +34,11 @@
             Command="view:ScriptBoxCommands.CancelComplete"
             Executed="CancelCompleteExecutedHandler"
             CanExecute="CancelCompleteCanExecuteHandler" />
+
+        <CommandBinding
+            Command="view:ScriptBoxCommands.FormatText"
+            Executed="FormatTextExecutedHandler"
+            CanExecute="FormatTextCanExecuteHandler" />
 
     </TextBox.CommandBindings>
 
