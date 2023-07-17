@@ -96,7 +96,10 @@ public partial class ScriptBox : TextBox
     {
         UpdateWordMatches();
         UpdateCurrentWord();
+
         UpdatePopup();
+
+        AutoComplete(e.Changes);
     }
 
     private void SelectionChangedHandler(object sender, RoutedEventArgs e)
@@ -312,5 +315,10 @@ public partial class ScriptBox : TextBox
         var size = FontSize;
 
         return new() { X = boxPos.X + caretRect.X, Y = boxPos.Y + caretRect.Y + size + OFFSET };
+    }
+
+    private void AutoComplete(ICollection<TextChange> changes)
+    {
+        throw new NotImplementedException();
     }
 }
