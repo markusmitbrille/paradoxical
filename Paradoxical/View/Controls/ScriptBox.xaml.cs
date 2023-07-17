@@ -131,10 +131,23 @@ public partial class ScriptBox : TextBox
             RaisePopupEvent(sender, e);
         }
 
+        if (e.Key == Key.Enter)
+        {
+            FormatText();
+        }
+
         if (e.Key == Key.Tab)
         {
-            ScriptBoxCommands.ConfirmComplete.Execute(null, this);
-            e.Handled = true;
+            if (ScriptBoxCommands.ConfirmComplete.CanExecute(null, this) == true)
+            {
+                ScriptBoxCommands.ConfirmComplete.Execute(null, this);
+                e.Handled = true;
+            }
+            else
+            {
+                InsertTabSpaces();
+                e.Handled = true;
+            }
         }
     }
 
@@ -160,6 +173,11 @@ public partial class ScriptBox : TextBox
         e.Handled = true;
     }
 
+    private void FormatText()
+    {
+        throw new NotImplementedException();
+    }
+
     private void PreviewTextInputHandler(object sender, TextCompositionEventArgs e)
     {
         if (e.Text == "\"")
@@ -180,6 +198,11 @@ public partial class ScriptBox : TextBox
         if (e.Text == "{")
         {
             InsertCurlyBraces();
+            e.Handled = true;
+        }
+        if (e.Text == "\t")
+        {
+            InsertTabSpaces();
             e.Handled = true;
         }
     }
@@ -226,6 +249,17 @@ public partial class ScriptBox : TextBox
 
         Text = text;
         CaretIndex = index + 2;
+    }
+
+    private void InsertTabSpaces()
+    {
+        var index = CaretIndex;
+        var text = Text;
+
+        text = text.Insert(CaretIndex, "    ");
+
+        Text = text;
+        CaretIndex = index + 4;
     }
 
     private void UpdateWordMatches()
