@@ -85,6 +85,68 @@ public partial class ScriptBox : TextBox
         public static Regex NewLineWhitespaceRegex => GetNewLineWhitespaceRegex();
     }
 
+    private static class Formatter
+    {
+        public static (string, int) Format(string text, int index)
+        {
+            (text, index) = FormatNewLines(text, index);
+            (text, index) = FormatSpaces(text, index);
+            (text, index) = FormatIndent(text, index);
+
+            return (text, index);
+        }
+
+        private static (string, int) FormatNewLines(string text, int index)
+        {
+            text = Patterns.BlockStartWhitespaceRegex.Replace(text, " {\r\n");
+            text = Patterns.BlockEndWhitespaceRegex.Replace(text, "\r\n}");
+            text = Patterns.StatementWhitespaceRegex.Replace(text, "\r\n${statement}");
+
+            text = text.Trim();
+            text = $"{text}\r\n";
+
+            return (text, index);
+        }
+
+        private static (string, int) FormatIndent(string text, int index)
+        {
+            int level = 0;
+
+            string[] lines = text.Split(Environment.NewLine);
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string line = lines[i];
+
+                int indents = level;
+                indents = Patterns.BlockEndLineRegex.IsMatch(line) == true ? indents - 1 : indents;
+                indents = Math.Clamp(indents, 0, 16);
+
+                string indent = string.Concat(Enumerable.Repeat(ParadoxText.Indentation, indents));
+
+                line = line.Trim();
+                line = indent + line;
+
+                lines[i] = line;
+
+                level += Patterns.BlockStartRegex.Matches(line).Count;
+                level -= Patterns.BlockEndRegex.Matches(line).Count;
+            }
+
+            text = string.Join(Environment.NewLine, lines);
+
+            return (text, index);
+        }
+
+        private static (string, int) FormatSpaces(string text, int index)
+        {
+            text = Patterns.WhitespaceRegex.Replace(text, " ");
+            text = Patterns.EqualsWhitespaceRegex.Replace(text, " = ");
+            text = Patterns.NewLineWhitespaceRegex.Replace(text, "\r\n");
+
+            return (text, index);
+        }
+    }
+
     public bool AllowFormatting
     {
         get { return (bool)GetValue(AllowFormattingProperty); }
@@ -166,7 +228,7 @@ public partial class ScriptBox : TextBox
         var text = Text;
         var index = CaretIndex;
 
-        (text, index) = FormatText(text, index);
+        (text, index) = Formatter.Format(text, index);
 
         Text = text;
         CaretIndex = index;
@@ -364,7 +426,7 @@ public partial class ScriptBox : TextBox
         text = text.Insert(index, Environment.NewLine);
         index += Environment.NewLine.Length;
 
-        (text, index) = FormatText(text, index);
+        (text, index) = Formatter.Format(text, index);
 
         Text = text;
         CaretIndex = index;
@@ -515,64 +577,5 @@ public partial class ScriptBox : TextBox
         var size = FontSize;
 
         return new() { X = boxPos.X + caretRect.X, Y = boxPos.Y + caretRect.Y + size + OFFSET };
-    }
-
-    private (string, int) FormatText(string text, int index)
-    {
-        (text, index) = FormatNewLines(text, index);
-        (text, index) = FormatSpaces(text, index);
-        (text, index) = FormatIndent(text, index);
-
-        return (text, index);
-    }
-
-    private (string, int) FormatNewLines(string text, int index)
-    {
-        text = Patterns.BlockStartWhitespaceRegex.Replace(text, " {\r\n");
-        text = Patterns.BlockEndWhitespaceRegex.Replace(text, "\r\n}");
-        text = Patterns.StatementWhitespaceRegex.Replace(text, "\r\n${statement}");
-
-        text = text.Trim();
-        text = $"{text}\r\n";
-
-        return (text, index);
-    }
-
-    private (string, int) FormatIndent(string text, int index)
-    {
-        int level = 0;
-
-        string[] lines = text.Split(Environment.NewLine);
-        for (int i = 0; i < lines.Length; i++)
-        {
-            string line = lines[i];
-
-            int indents = level;
-            indents = Patterns.BlockEndLineRegex.IsMatch(line) == true ? indents - 1 : indents;
-            indents = Math.Clamp(indents, 0, 16);
-
-            string indent = string.Concat(Enumerable.Repeat(ParadoxText.Indentation, indents));
-
-            line = line.Trim();
-            line = indent + line;
-
-            lines[i] = line;
-
-            level += Patterns.BlockStartRegex.Matches(line).Count;
-            level -= Patterns.BlockEndRegex.Matches(line).Count;
-        }
-
-        text = string.Join(Environment.NewLine, lines);
-
-        return (text, index);
-    }
-
-    private (string, int) FormatSpaces(string text, int index)
-    {
-        text = Patterns.WhitespaceRegex.Replace(text, " ");
-        text = Patterns.EqualsWhitespaceRegex.Replace(text, " = ");
-        text = Patterns.NewLineWhitespaceRegex.Replace(text, "\r\n");
-
-        return (text, index);
     }
 }
