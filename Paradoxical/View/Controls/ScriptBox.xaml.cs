@@ -22,17 +22,14 @@ namespace Paradoxical.View;
 /// </summary>
 public partial class ScriptBox : TextBox
 {
-    [GeneratedRegex(@"\w+")]
-    private static partial Regex GetWordRegex();
-    public static Regex WordRegex => GetWordRegex();
+    public bool AllowFormatting
+    {
+        get { return (bool)GetValue(AllowFormattingProperty); }
+        set { SetValue(AllowFormattingProperty, value); }
+    }
 
-    [GeneratedRegex(@"{")]
-    private static partial Regex GetBlockStartRegex();
-    public static Regex BlockStartRegex => GetBlockStartRegex();
-
-    [GeneratedRegex(@"}")]
-    private static partial Regex GetBlockEndRegex();
-    public static Regex BlockEndRegex => GetBlockEndRegex();
+    public static readonly DependencyProperty AllowFormattingProperty =
+        DependencyProperty.Register("AllowFormatting", typeof(bool), typeof(ScriptBox), new PropertyMetadata(false));
 
     private MatchCollection WordMatches { get; set; } = WordRegex.Matches(string.Empty);
     private Match? CurrentWord { get; set; } = null;
@@ -108,7 +105,7 @@ public partial class ScriptBox : TextBox
 
     private void FormatTextCanExecuteHandler(object sender, CanExecuteRoutedEventArgs e)
     {
-        e.CanExecute = true;
+        e.CanExecute = AllowFormatting;
     }
 
     private void TextChangedHandler(object sender, TextChangedEventArgs e)
@@ -271,6 +268,10 @@ public partial class ScriptBox : TextBox
         CaretIndex = index + 4;
     }
 
+    [GeneratedRegex(@"\w+")]
+    private static partial Regex GetWordRegex();
+    public static Regex WordRegex => GetWordRegex();
+
     private void UpdateWordMatches()
     {
         WordMatches = WordRegex.Matches(Text);
@@ -420,21 +421,52 @@ public partial class ScriptBox : TextBox
 
     private void FormatText()
     {
-        FormatBlocks();
+        FormatNewLines();
+        FormatSpaces();
+        FormatIndent();
     }
 
-    private void FormatBlocks()
-    {
-        string textSource = Text;
+    [GeneratedRegex(@"\s*{\s*")]
+    private static partial Regex GetBlockStartWhitespaceRegex();
+    public static Regex BlockStartWhitespaceRegex => GetBlockStartWhitespaceRegex();
 
-        textSource = textSource.Replace(Environment.NewLine, string.Empty);
-        textSource = textSource.Replace("{", "{" + Environment.NewLine);
-        textSource = textSource.Replace("}", Environment.NewLine + "}" + Environment.NewLine);
-        textSource = textSource.Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine);
+    [GeneratedRegex(@"\s*}\s*")]
+    private static partial Regex GetBlockEndWhitespaceRegex();
+    public static Regex BlockEndWhitespaceRegex => GetBlockEndWhitespaceRegex();
+
+    [GeneratedRegex(@"\s*(?<statement>\w+(?:\.\w+)*\s*=)")]
+    private static partial Regex GetStatementWhitespaceRegex();
+    public static Regex StatementWhitespaceRegex => GetStatementWhitespaceRegex();
+
+    private void FormatNewLines()
+    {
+        string text = Text;
+
+        text = BlockStartWhitespaceRegex.Replace(text, " {\r\n");
+        text = BlockEndWhitespaceRegex.Replace(text, "\r\n}");
+        text = StatementWhitespaceRegex.Replace(text, "\r\n${statement}");
+
+        text = text.Trim();
+        text = text + "\r\n";
+
+        Text = text;
+    }
+
+    [GeneratedRegex(@"{")]
+    private static partial Regex GetBlockStartRegex();
+    public static Regex BlockStartRegex => GetBlockStartRegex();
+
+    [GeneratedRegex(@"}")]
+    private static partial Regex GetBlockEndRegex();
+    public static Regex BlockEndRegex => GetBlockEndRegex();
+
+    private void FormatIndent()
+    {
+        string text = Text;
 
         int indentLevel = 0;
 
-        var lines = textSource.Split(Environment.NewLine);
+        string[] lines = text.Split(Environment.NewLine);
         for (int i = 0; i < lines.Length; i++)
         {
             var line = lines[i];
@@ -449,8 +481,30 @@ public partial class ScriptBox : TextBox
             lines[i] = line;
         }
 
-        textSource = string.Join(Environment.NewLine, lines);
+        text = string.Join(Environment.NewLine, lines);
+        Text = text;
+    }
 
-        Text = textSource;
+    [GeneratedRegex(@"  +")]
+    private static partial Regex GetWhitespaceRegex();
+    public static Regex WhitespaceRegex => GetWhitespaceRegex();
+
+    [GeneratedRegex(@" ?= ?")]
+    private static partial Regex GetEqualsRegex();
+    public static Regex EqualsRegex => GetEqualsRegex();
+
+    [GeneratedRegex(@"\s*\r\n\s*(?:\r\n\s*)*")]
+    private static partial Regex GetLineBreakRegex();
+    public static Regex LineBreakRegex => GetLineBreakRegex();
+
+    private void FormatSpaces()
+    {
+        var text = Text;
+
+        text = WhitespaceRegex.Replace(text, " ");
+        text = EqualsRegex.Replace(text, " = ");
+        text = LineBreakRegex.Replace(text, "\r\n");
+
+        Text = text;
     }
 }

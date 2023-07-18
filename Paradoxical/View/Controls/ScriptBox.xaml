@@ -49,6 +49,10 @@
                 Icon="{materialDesign:PackIcon Kind=LightbulbOutline}"
                 Command="view:ScriptBoxCommands.OpenComplete" />
 
+            <MenuItem
+                Icon="{materialDesign:PackIcon Kind=FileDocumentTick}"
+                Command="view:ScriptBoxCommands.FormatText" />
+
             <Separator />
 
             <MenuItem
