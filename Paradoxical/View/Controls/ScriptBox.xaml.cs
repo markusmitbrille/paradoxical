@@ -22,6 +22,69 @@ namespace Paradoxical.View;
 /// </summary>
 public partial class ScriptBox : TextBox
 {
+    private static partial class Patterns
+    {
+        [GeneratedRegex(@"\w+")]
+        private static partial Regex GetWordRegex();
+        public static Regex WordRegex => GetWordRegex();
+
+        [GeneratedRegex(@"{")]
+        private static partial Regex GetBlockStartRegex();
+        public static Regex BlockStartRegex => GetBlockStartRegex();
+
+        [GeneratedRegex(@"}")]
+        private static partial Regex GetBlockEndRegex();
+        public static Regex BlockEndRegex => GetBlockEndRegex();
+
+        [GeneratedRegex(@"^\s*{\s*$")]
+        private static partial Regex GetBlockStartLineRegex();
+        public static Regex BlockStartLineRegex => GetBlockStartLineRegex();
+
+        [GeneratedRegex(@"^\s*}\s*$")]
+        private static partial Regex GetBlockEndLineRegex();
+        public static Regex BlockEndLineRegex => GetBlockEndLineRegex();
+
+        [GeneratedRegex(@"^\s*{\s*")]
+        private static partial Regex GetStartsWithBlockStartRegex();
+        public static Regex StartsWithBlockStartRegex => GetStartsWithBlockStartRegex();
+
+        [GeneratedRegex(@"^\s*}\s*")]
+        private static partial Regex GetStartsWithBlockEndRegex();
+        public static Regex StartsWithBlockEndRegex => GetStartsWithBlockEndRegex();
+
+        [GeneratedRegex(@"\s*{\s*$")]
+        private static partial Regex GetEndsWithBlockStartRegex();
+        public static Regex EndsWithBlockStartRegex => GetEndsWithBlockStartRegex();
+
+        [GeneratedRegex(@"\s*}\s*$")]
+        private static partial Regex GetEndsWithBlockEndRegex();
+        public static Regex EndsWithBlockEndRegex => GetEndsWithBlockEndRegex();
+
+        [GeneratedRegex(@"\s*{\s*")]
+        private static partial Regex GetBlockStartWhitespaceRegex();
+        public static Regex BlockStartWhitespaceRegex => GetBlockStartWhitespaceRegex();
+
+        [GeneratedRegex(@"\s*}\s*")]
+        private static partial Regex GetBlockEndWhitespaceRegex();
+        public static Regex BlockEndWhitespaceRegex => GetBlockEndWhitespaceRegex();
+
+        [GeneratedRegex(@"\s*(?<statement>\w+(?:\.\w+)*\s*=)")]
+        private static partial Regex GetStatementWhitespaceRegex();
+        public static Regex StatementWhitespaceRegex => GetStatementWhitespaceRegex();
+
+        [GeneratedRegex(@"  +")]
+        private static partial Regex GetWhitespaceRegex();
+        public static Regex WhitespaceRegex => GetWhitespaceRegex();
+
+        [GeneratedRegex(@" ?= ?")]
+        private static partial Regex GetEqualsWhitespaceRegex();
+        public static Regex EqualsWhitespaceRegex => GetEqualsWhitespaceRegex();
+
+        [GeneratedRegex(@"\s*\r\n\s*(?:\r\n\s*)*")]
+        private static partial Regex GetNewLineWhitespaceRegex();
+        public static Regex NewLineWhitespaceRegex => GetNewLineWhitespaceRegex();
+    }
+
     public bool AllowFormatting
     {
         get { return (bool)GetValue(AllowFormattingProperty); }
@@ -31,7 +94,7 @@ public partial class ScriptBox : TextBox
     public static readonly DependencyProperty AllowFormattingProperty =
         DependencyProperty.Register("AllowFormatting", typeof(bool), typeof(ScriptBox), new PropertyMetadata(false));
 
-    private MatchCollection WordMatches { get; set; } = WordRegex.Matches(string.Empty);
+    private MatchCollection WordMatches { get; set; } = Patterns.WordRegex.Matches(string.Empty);
     private Match? CurrentWord { get; set; } = null;
 
     private CompleteBox? Popup { get; set; }
@@ -100,7 +163,13 @@ public partial class ScriptBox : TextBox
 
     private void FormatTextExecutedHandler(object sender, ExecutedRoutedEventArgs e)
     {
-        FormatText();
+        var text = Text;
+        var index = CaretIndex;
+
+        (text, index) = FormatText(text, index);
+
+        Text = text;
+        CaretIndex = index;
     }
 
     private void FormatTextCanExecuteHandler(object sender, CanExecuteRoutedEventArgs e)
@@ -154,9 +223,23 @@ public partial class ScriptBox : TextBox
                 ScriptBoxCommands.ConfirmComplete.Execute(null, this);
                 e.Handled = true;
             }
-            else
+            else if (AcceptsTab == true)
             {
                 InsertIndentation();
+                e.Handled = true;
+            }
+        }
+
+        if (e.Key == Key.Enter)
+        {
+            if (ScriptBoxCommands.ConfirmComplete.CanExecute(null, this) == true)
+            {
+                ScriptBoxCommands.ConfirmComplete.Execute(null, this);
+                e.Handled = true;
+            }
+            else if (AcceptsReturn)
+            {
+                InsertNewLine();
                 e.Handled = true;
             }
         }
@@ -209,6 +292,11 @@ public partial class ScriptBox : TextBox
         if (e.Text == "\t")
         {
             InsertIndentation();
+            e.Handled = true;
+        }
+        if (e.Text == "\r\n")
+        {
+            InsertNewLine();
             e.Handled = true;
         }
     }
@@ -268,13 +356,23 @@ public partial class ScriptBox : TextBox
         CaretIndex = index + 4;
     }
 
-    [GeneratedRegex(@"\w+")]
-    private static partial Regex GetWordRegex();
-    public static Regex WordRegex => GetWordRegex();
+    private void InsertNewLine()
+    {
+        var text = Text;
+        var index = CaretIndex;
+
+        text = text.Insert(index, Environment.NewLine);
+        index += Environment.NewLine.Length;
+
+        (text, index) = FormatText(text, index);
+
+        Text = text;
+        CaretIndex = index;
+    }
 
     private void UpdateWordMatches()
     {
-        WordMatches = WordRegex.Matches(Text);
+        WordMatches = Patterns.WordRegex.Matches(Text);
     }
 
     private void UpdateCurrentWord()
@@ -419,92 +517,62 @@ public partial class ScriptBox : TextBox
         return new() { X = boxPos.X + caretRect.X, Y = boxPos.Y + caretRect.Y + size + OFFSET };
     }
 
-    private void FormatText()
+    private (string, int) FormatText(string text, int index)
     {
-        FormatNewLines();
-        FormatSpaces();
-        FormatIndent();
+        (text, index) = FormatNewLines(text, index);
+        (text, index) = FormatSpaces(text, index);
+        (text, index) = FormatIndent(text, index);
+
+        return (text, index);
     }
 
-    [GeneratedRegex(@"\s*{\s*")]
-    private static partial Regex GetBlockStartWhitespaceRegex();
-    public static Regex BlockStartWhitespaceRegex => GetBlockStartWhitespaceRegex();
-
-    [GeneratedRegex(@"\s*}\s*")]
-    private static partial Regex GetBlockEndWhitespaceRegex();
-    public static Regex BlockEndWhitespaceRegex => GetBlockEndWhitespaceRegex();
-
-    [GeneratedRegex(@"\s*(?<statement>\w+(?:\.\w+)*\s*=)")]
-    private static partial Regex GetStatementWhitespaceRegex();
-    public static Regex StatementWhitespaceRegex => GetStatementWhitespaceRegex();
-
-    private void FormatNewLines()
+    private (string, int) FormatNewLines(string text, int index)
     {
-        string text = Text;
-
-        text = BlockStartWhitespaceRegex.Replace(text, " {\r\n");
-        text = BlockEndWhitespaceRegex.Replace(text, "\r\n}");
-        text = StatementWhitespaceRegex.Replace(text, "\r\n${statement}");
+        text = Patterns.BlockStartWhitespaceRegex.Replace(text, " {\r\n");
+        text = Patterns.BlockEndWhitespaceRegex.Replace(text, "\r\n}");
+        text = Patterns.StatementWhitespaceRegex.Replace(text, "\r\n${statement}");
 
         text = text.Trim();
-        text = text + "\r\n";
+        text = $"{text}\r\n";
 
-        Text = text;
+        return (text, index);
     }
 
-    [GeneratedRegex(@"{")]
-    private static partial Regex GetBlockStartRegex();
-    public static Regex BlockStartRegex => GetBlockStartRegex();
-
-    [GeneratedRegex(@"}")]
-    private static partial Regex GetBlockEndRegex();
-    public static Regex BlockEndRegex => GetBlockEndRegex();
-
-    private void FormatIndent()
+    private (string, int) FormatIndent(string text, int index)
     {
-        string text = Text;
-
-        int indentLevel = 0;
+        int level = 0;
 
         string[] lines = text.Split(Environment.NewLine);
         for (int i = 0; i < lines.Length; i++)
         {
-            var line = lines[i];
+            string line = lines[i];
 
-            indentLevel -= BlockEndRegex.Matches(line).Count;
+            int indents = level;
+            indents = Patterns.BlockEndLineRegex.IsMatch(line) == true ? indents - 1 : indents;
+            indents = Math.Clamp(indents, 0, 16);
+
+            string indent = string.Concat(Enumerable.Repeat(ParadoxText.Indentation, indents));
 
             line = line.Trim();
-            line = string.Concat(Enumerable.Repeat(ParadoxText.Indentation, indentLevel)) + line;
-
-            indentLevel += BlockStartRegex.Matches(line).Count;
+            line = indent + line;
 
             lines[i] = line;
+
+            level += Patterns.BlockStartRegex.Matches(line).Count;
+            level -= Patterns.BlockEndRegex.Matches(line).Count;
         }
 
         text = string.Join(Environment.NewLine, lines);
-        Text = text;
+
+        return (text, index);
     }
 
-    [GeneratedRegex(@"  +")]
-    private static partial Regex GetWhitespaceRegex();
-    public static Regex WhitespaceRegex => GetWhitespaceRegex();
-
-    [GeneratedRegex(@" ?= ?")]
-    private static partial Regex GetEqualsRegex();
-    public static Regex EqualsRegex => GetEqualsRegex();
-
-    [GeneratedRegex(@"\s*\r\n\s*(?:\r\n\s*)*")]
-    private static partial Regex GetLineBreakRegex();
-    public static Regex LineBreakRegex => GetLineBreakRegex();
-
-    private void FormatSpaces()
+    private (string, int) FormatSpaces(string text, int index)
     {
-        var text = Text;
+        text = Patterns.WhitespaceRegex.Replace(text, " ");
+        text = Patterns.EqualsWhitespaceRegex.Replace(text, " = ");
+        text = Patterns.NewLineWhitespaceRegex.Replace(text, "\r\n");
 
-        text = WhitespaceRegex.Replace(text, " ");
-        text = EqualsRegex.Replace(text, " = ");
-        text = LineBreakRegex.Replace(text, "\r\n");
-
-        Text = text;
+        return (text, index);
     }
 }
