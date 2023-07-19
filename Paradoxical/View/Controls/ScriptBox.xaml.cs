@@ -1,4 +1,5 @@
 ﻿using Paradoxical.Core;
+using Paradoxical.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,128 +23,169 @@ namespace Paradoxical.View;
 /// </summary>
 public partial class ScriptBox : TextBox
 {
-    private static partial class Patterns
+    private static partial class Formatter
     {
-        [GeneratedRegex(@"\w+")]
-        private static partial Regex GetWordRegex();
-        public static Regex WordRegex => GetWordRegex();
+        [GeneratedRegex(@"(?<!\r\n[\s-[\r\n]]*)(?={)")]
+        private static partial Regex GetBlockStartWithoutNewLineBeforePattern();
+        private static Regex BlockStartWithoutNewLineBeforePattern => GetBlockStartWithoutNewLineBeforePattern();
+        private static string BlockStartWithoutNewLineBeforeReplacement => "\r\n";
 
-        [GeneratedRegex(@"{")]
-        private static partial Regex GetBlockStartRegex();
-        public static Regex BlockStartRegex => GetBlockStartRegex();
+        [GeneratedRegex(@"(?<!\r\n[\s-[\r\n]]*)(?=})")]
+        private static partial Regex GetBlockEndWithoutNewLineBeforePattern();
+        private static Regex BlockEndWithoutNewLineBeforePattern => GetBlockEndWithoutNewLineBeforePattern();
+        private static string BlockEndWithoutNewLineBeforeReplacement => "\r\n";
 
-        [GeneratedRegex(@"}")]
-        private static partial Regex GetBlockEndRegex();
-        public static Regex BlockEndRegex => GetBlockEndRegex();
+        [GeneratedRegex(@"(?<={)(?![\s-[\r\n]]*\r\n)")]
+        private static partial Regex GetBlockStartWithoutNewLineAfterPattern();
+        private static Regex BlockStartWithoutNewLineAfterPattern => GetBlockStartWithoutNewLineAfterPattern();
+        private static string BlockStartWithoutNewLineAfterReplacement => "\r\n";
 
-        [GeneratedRegex(@"^\s*{\s*$")]
-        private static partial Regex GetBlockStartLineRegex();
-        public static Regex BlockStartLineRegex => GetBlockStartLineRegex();
+        [GeneratedRegex(@"(?<=})(?![\s-[\r\n]]*\r\n)")]
+        private static partial Regex GetBlockEndWithoutNewLineAfterPattern();
+        private static Regex BlockEndWithoutNewLineAfterPattern => GetBlockEndWithoutNewLineAfterPattern();
+        private static string BlockEndWithoutNewLineAfterReplacement => "\r\n";
 
-        [GeneratedRegex(@"^\s*}\s*$")]
-        private static partial Regex GetBlockEndLineRegex();
-        public static Regex BlockEndLineRegex => GetBlockEndLineRegex();
+        [GeneratedRegex(@"(?<!(?: |\?|\+|\-|\*|\\))(?==)")]
+        private static partial Regex GetAssignmentWithoutSpaceBeforePattern();
+        private static Regex AssignmentWithoutSpaceBeforePattern => GetAssignmentWithoutSpaceBeforePattern();
+        private static string EqualsWithoutSpaceBeforeReplacement => " ";
 
-        [GeneratedRegex(@"^\s*{\s*")]
-        private static partial Regex GetStartsWithBlockStartRegex();
-        public static Regex StartsWithBlockStartRegex => GetStartsWithBlockStartRegex();
+        [GeneratedRegex(@"(?<==)(?! )")]
+        private static partial Regex GetAssignmentWithoutSpaceAfterPattern();
+        private static Regex AssignmentWithoutSpaceAfterPattern => GetAssignmentWithoutSpaceAfterPattern();
+        private static string EqualsWithoutSpaceAfterReplacement => " ";
 
-        [GeneratedRegex(@"^\s*}\s*")]
-        private static partial Regex GetStartsWithBlockEndRegex();
-        public static Regex StartsWithBlockEndRegex => GetStartsWithBlockEndRegex();
+        [GeneratedRegex(@"(?<!(?:\r\n[\s-[\r\n]]*|[.:]))(?=\b\w+\b(?:[.:]\b\w+\b)*[\s-[\r\n]]*(?:\?|\+|\-|\*|\\)?=)")]
+        private static partial Regex GetStatementWithoutNewLineBeforePattern();
+        private static Regex StatementWithoutNewLineBeforePattern => GetStatementWithoutNewLineBeforePattern();
+        private static string StatementWithoutNewLineBeforeReplacement => "\r\n";
 
-        [GeneratedRegex(@"\s*{\s*$")]
-        private static partial Regex GetEndsWithBlockStartRegex();
-        public static Regex EndsWithBlockStartRegex => GetEndsWithBlockStartRegex();
+        [GeneratedRegex(@"(?<=\r\n)[\s-[\r\n]]+")]
+        private static partial Regex GetWhitespaceAtLineStartPattern();
+        private static Regex WhitespaceAtLineStartPattern => GetWhitespaceAtLineStartPattern();
+        private static string WhitespaceAtLineStartReplacement => "";
 
-        [GeneratedRegex(@"\s*}\s*$")]
-        private static partial Regex GetEndsWithBlockEndRegex();
-        public static Regex EndsWithBlockEndRegex => GetEndsWithBlockEndRegex();
+        [GeneratedRegex(@"[\s-[\r\n]]+(?=\r\n)")]
+        private static partial Regex GetWhitespaceAtLineEndPattern();
+        private static Regex WhitespaceAtLineEndPattern => GetWhitespaceAtLineEndPattern();
+        private static string WhitespaceAtLineEndReplacement => "";
 
-        [GeneratedRegex(@"\s*{\s*")]
-        private static partial Regex GetBlockStartWhitespaceRegex();
-        public static Regex BlockStartWhitespaceRegex => GetBlockStartWhitespaceRegex();
+        [GeneratedRegex(@"^\s*")]
+        private static partial Regex GetWhitespaceAtTextStartPattern();
+        private static Regex WhitespaceAtTextStartPattern => GetWhitespaceAtTextStartPattern();
+        private static string WhitespaceAtTextStartReplacement => "";
 
-        [GeneratedRegex(@"\s*}\s*")]
-        private static partial Regex GetBlockEndWhitespaceRegex();
-        public static Regex BlockEndWhitespaceRegex => GetBlockEndWhitespaceRegex();
+        [GeneratedRegex(@"\s*$")]
+        private static partial Regex GetWhitespaceAtTextEndPattern();
+        private static Regex WhitespaceAtTextEndPattern => GetWhitespaceAtTextEndPattern();
+        private static string WhitespaceAtTextEndReplacement => "\r\n";
 
-        [GeneratedRegex(@"\s*(?<statement>\w+(?:\.\w+)*\s*=)")]
-        private static partial Regex GetStatementWhitespaceRegex();
-        public static Regex StatementWhitespaceRegex => GetStatementWhitespaceRegex();
+        [GeneratedRegex(@"[\s-[\r\n]][\s-[\r\n]]+")]
+        private static partial Regex GetRedundantWhitespacePattern();
+        private static Regex RedundantWhitespacePattern => GetRedundantWhitespacePattern();
+        private static string RedundantWhitespaceReplacement => " ";
 
-        [GeneratedRegex(@"  +")]
-        private static partial Regex GetWhitespaceRegex();
-        public static Regex WhitespaceRegex => GetWhitespaceRegex();
-
-        [GeneratedRegex(@" ?= ?")]
-        private static partial Regex GetEqualsWhitespaceRegex();
-        public static Regex EqualsWhitespaceRegex => GetEqualsWhitespaceRegex();
-
-        [GeneratedRegex(@"\s*\r\n\s*(?:\r\n\s*)*")]
-        private static partial Regex GetNewLineWhitespaceRegex();
-        public static Regex NewLineWhitespaceRegex => GetNewLineWhitespaceRegex();
-    }
-
-    private static class Formatter
-    {
-        public static (string, int) Format(string text, int index)
+        public static void Format(ref string text, ref int index)
         {
-            (text, index) = FormatNewLines(text, index);
-            (text, index) = FormatSpaces(text, index);
-            (text, index) = FormatIndent(text, index);
+            //ReplaceRecursive(text, index, BlockStartWithoutNewLineBeforePattern, BlockStartWithoutNewLineBeforeReplacement);
+            ReplaceRecursive(ref text, ref index, BlockEndWithoutNewLineBeforePattern, BlockEndWithoutNewLineBeforeReplacement);
 
-            return (text, index);
+            ReplaceRecursive(ref text, ref index, BlockStartWithoutNewLineAfterPattern, BlockStartWithoutNewLineAfterReplacement);
+            ReplaceRecursive(ref text, ref index, BlockEndWithoutNewLineAfterPattern, BlockEndWithoutNewLineAfterReplacement);
+
+            ReplaceRecursive(ref text, ref index, AssignmentWithoutSpaceBeforePattern, EqualsWithoutSpaceBeforeReplacement);
+            ReplaceRecursive(ref text, ref index, AssignmentWithoutSpaceAfterPattern, EqualsWithoutSpaceAfterReplacement);
+
+            ReplaceRecursive(ref text, ref index, StatementWithoutNewLineBeforePattern, StatementWithoutNewLineBeforeReplacement);
+
+            ReplaceRecursive(ref text, ref index, WhitespaceAtLineStartPattern, WhitespaceAtLineStartReplacement);
+            ReplaceRecursive(ref text, ref index, WhitespaceAtLineEndPattern, WhitespaceAtLineEndReplacement);
+
+            ReplaceRecursive(ref text, ref index, RedundantWhitespacePattern, RedundantWhitespaceReplacement);
+
+            ReplaceFirst(ref text, ref index, WhitespaceAtTextStartPattern, WhitespaceAtTextStartReplacement);
+            ReplaceFirst(ref text, ref index, WhitespaceAtTextEndPattern, WhitespaceAtTextEndReplacement);
+
+            //IndentLines(ref text, ref index);
         }
 
-        private static (string, int) FormatNewLines(string text, int index)
+        //[GeneratedRegex(@"{")]
+        //private static partial Regex GetBlockStartPattern();
+        //public static Regex BlockStartPattern => GetBlockStartPattern();
+
+        //[GeneratedRegex(@"}")]
+        //private static partial Regex GetBlockEndPattern();
+        //public static Regex BlockEndPattern => GetBlockEndPattern();
+
+        //[GeneratedRegex(@"^\s*}\s*")]
+        //private static partial Regex GetStartsWithBlockEndRegex();
+        //public static Regex StartsWithBlockEndRegex => GetStartsWithBlockEndRegex();
+
+        //private static void IndentLines(ref string text, ref int index)
+        //{
+        //    int level = 0;
+        //    int linestart = 0;
+
+        //    string[] lines = text.Split(Environment.NewLine);
+        //    for (int i = 0; i < lines.Length; i++)
+        //    {
+        //        string line = lines[i];
+
+        //        int indents = level;
+        //        indents = StartsWithBlockEndRegex.IsMatch(line) == true ? indents - 1 : indents;
+        //        indents = Math.Clamp(indents, 0, 16);
+
+        //        string indent = string.Concat(Enumerable.Repeat(ParadoxText.Indentation, indents));
+
+        //        line = indent + line;
+        //        lines[i] = line;
+
+        //        if (index >= linestart)
+        //        {
+        //            index += indent.Length;
+        //        }
+
+        //        level += BlockStartPattern.Matches(line).Count;
+        //        level -= BlockEndPattern.Matches(line).Count;
+        //        linestart += line.Length;
+        //    }
+
+        //    text = string.Join(Environment.NewLine, lines);
+        //}
+
+        private static void ReplaceFirst(ref string text, ref int index, Regex pattern, string replacement)
         {
-            text = Patterns.BlockStartWhitespaceRegex.Replace(text, " {\r\n");
-            text = Patterns.BlockEndWhitespaceRegex.Replace(text, "\r\n}");
-            text = Patterns.StatementWhitespaceRegex.Replace(text, "\r\n${statement}");
+            Match match = pattern.Match(text);
 
-            text = text.Trim();
-            text = $"{text}\r\n";
+            if (match.Success == false)
+            { return; }
 
-            return (text, index);
-        }
+            string originalText = match.Value;
+            string replacedText = pattern.Replace(originalText, replacement);
 
-        private static (string, int) FormatIndent(string text, int index)
-        {
-            int level = 0;
+            text = text.Remove(match.Index, match.Length);
+            text = text.Insert(match.Index, replacedText);
 
-            string[] lines = text.Split(Environment.NewLine);
-            for (int i = 0; i < lines.Length; i++)
+            if (index >= match.Index + match.Length)
             {
-                string line = lines[i];
-
-                int indents = level;
-                indents = Patterns.BlockEndLineRegex.IsMatch(line) == true ? indents - 1 : indents;
-                indents = Math.Clamp(indents, 0, 16);
-
-                string indent = string.Concat(Enumerable.Repeat(ParadoxText.Indentation, indents));
-
-                line = line.Trim();
-                line = indent + line;
-
-                lines[i] = line;
-
-                level += Patterns.BlockStartRegex.Matches(line).Count;
-                level -= Patterns.BlockEndRegex.Matches(line).Count;
+                index = index - originalText.Length + replacedText.Length;
             }
-
-            text = string.Join(Environment.NewLine, lines);
-
-            return (text, index);
         }
 
-        private static (string, int) FormatSpaces(string text, int index)
+        private static void ReplaceRecursive(ref string text, ref int index, Regex pattern, string replacement)
         {
-            text = Patterns.WhitespaceRegex.Replace(text, " ");
-            text = Patterns.EqualsWhitespaceRegex.Replace(text, " = ");
-            text = Patterns.NewLineWhitespaceRegex.Replace(text, "\r\n");
+            for (Match match = pattern.Match(text); match.Success == true; match = pattern.Match(text))
+            {
+                string original = match.Value;
 
-            return (text, index);
+                text = text.Remove(match.Index, match.Length);
+                text = text.Insert(match.Index, replacement);
+
+                if (index >= match.Index + match.Length)
+                {
+                    index = index - original.Length + replacement.Length;
+                }
+            }
         }
     }
 
@@ -156,7 +198,11 @@ public partial class ScriptBox : TextBox
     public static readonly DependencyProperty AllowFormattingProperty =
         DependencyProperty.Register("AllowFormatting", typeof(bool), typeof(ScriptBox), new PropertyMetadata(false));
 
-    private MatchCollection WordMatches { get; set; } = Patterns.WordRegex.Matches(string.Empty);
+    [GeneratedRegex(@"\w+")]
+    private static partial Regex GetWordRegex();
+    public static Regex WordRegex => GetWordRegex();
+
+    private MatchCollection WordMatches { get; set; } = WordRegex.Matches(string.Empty);
     private Match? CurrentWord { get; set; } = null;
 
     private CompleteBox? Popup { get; set; }
@@ -228,7 +274,7 @@ public partial class ScriptBox : TextBox
         var text = Text;
         var index = CaretIndex;
 
-        (text, index) = Formatter.Format(text, index);
+        Formatter.Format(ref text, ref index);
 
         Text = text;
         CaretIndex = index;
@@ -426,7 +472,7 @@ public partial class ScriptBox : TextBox
         text = text.Insert(index, Environment.NewLine);
         index += Environment.NewLine.Length;
 
-        (text, index) = Formatter.Format(text, index);
+        Formatter.Format(ref text, ref index);
 
         Text = text;
         CaretIndex = index;
@@ -434,7 +480,7 @@ public partial class ScriptBox : TextBox
 
     private void UpdateWordMatches()
     {
-        WordMatches = Patterns.WordRegex.Matches(Text);
+        WordMatches = WordRegex.Matches(Text);
     }
 
     private void UpdateCurrentWord()
