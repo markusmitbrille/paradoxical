@@ -13,11 +13,21 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     FontFamily="Consolas"
+    VerticalScrollBarVisibility="Visible"
+    HorizontalScrollBarVisibility="Disabled"
     TextChanged="TextChangedHandler"
     PreviewTextInput="PreviewTextInputHandler"
     SelectionChanged="SelectionChangedHandler"
     PreviewKeyDown="KeyDownHandler">
-    
+
+    <TextBox.Resources>
+
+        <Style
+            TargetType="ScrollBar"
+            BasedOn="{StaticResource MaterialDesignScrollBarMinimal}" />
+
+    </TextBox.Resources>
+
     <TextBox.CommandBindings>
 
         <CommandBinding
