@@ -109,10 +109,6 @@ public partial class ScriptBox : TextBox
             IndentLines(ref text, ref index);
         }
 
-        [GeneratedRegex(@"(?<=^)", RegexOptions.Multiline)]
-        private static partial Regex GetLineStartPattern();
-        private static Regex LineStartPattern => GetLineStartPattern();
-
         [GeneratedRegex(@"{")]
         private static partial Regex GetBlockStartPattern();
         public static Regex BlockStartPattern => GetBlockStartPattern();
