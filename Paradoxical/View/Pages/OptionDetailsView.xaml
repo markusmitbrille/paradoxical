@@ -28,6 +28,19 @@
 
         </Style>
 
+        <Style
+            TargetType="view:ScriptBox"
+            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+
+            <Setter
+                Property="Margin"
+                Value="6,12" />
+            <Setter
+                Property="materialDesign:HintAssist.FontFamily"
+                Value="{StaticResource MaterialDesignFont}" />
+
+        </Style>
+
     </UserControl.Resources>
 
     <DockPanel>
@@ -109,13 +122,14 @@
                                 Width="1*" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBox
+                        <view:ScriptBox
                             Grid.Column="0"
-                            FontFamily="Consolas"
                             AcceptsReturn="False"
+                            AcceptsTab="False"
+                            AllowFormatting="False"
                             materialDesign:HintAssist.Hint="Title">
 
-                            <TextBox.Text>
+                            <view:ScriptBox.Text>
                                 <Binding
                                     Path="Selected.Title"
                                     Mode="TwoWay"
@@ -126,9 +140,9 @@
                                     </Binding.Converter>
 
                                 </Binding>
-                            </TextBox.Text>
+                            </view:ScriptBox.Text>
 
-                        </TextBox>
+                        </view:ScriptBox>
 
                         <TextBox
                             Grid.Column="1"
@@ -138,15 +152,13 @@
 
                     </Grid>
 
-                    <TextBox
-                        Grid.Column="1"
-                        FontFamily="Consolas"
-                        MinLines="4"
-                        MaxLines="4"
-                        AcceptsReturn="True"
+                    <view:ScriptBox
+                        AcceptsReturn="False"
+                        AcceptsTab="False"
+                        AllowFormatting="False"
                         materialDesign:HintAssist.Hint="Tooltip">
 
-                        <TextBox.Text>
+                        <view:ScriptBox.Text>
                             <Binding
                                 Path="Selected.Tooltip"
                                 Mode="TwoWay"
@@ -157,9 +169,9 @@
                                 </Binding.Converter>
 
                             </Binding>
-                        </TextBox.Text>
+                        </view:ScriptBox.Text>
 
-                    </TextBox>
+                    </view:ScriptBox>
 
                 </StackPanel>
             </TabItem>
@@ -512,13 +524,14 @@
 
                     </Grid>
 
-                    <TextBox
+                    <view:ScriptBox
                         Grid.Column="0"
-                        FontFamily="Consolas"
                         AcceptsReturn="True"
+                        AcceptsTab="True"
+                        AllowFormatting="True"
                         materialDesign:HintAssist.Hint="Custom AI Chance">
 
-                        <TextBox.Text>
+                        <view:ScriptBox.Text>
                             <Binding
                                 Path="Selected.AiCustomChance"
                                 Mode="TwoWay"
@@ -529,9 +542,9 @@
                                 </Binding.Converter>
 
                             </Binding>
-                        </TextBox.Text>
+                        </view:ScriptBox.Text>
 
-                    </TextBox>
+                    </view:ScriptBox>
 
                 </Grid>
 
@@ -541,13 +554,14 @@
                 Header="Trigger">
                 <Grid>
 
-                    <TextBox
-                        Grid.Column="0"
+                    <view:ScriptBox
                         FontFamily="Consolas"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Custom Trigger Code">
+                        AcceptsTab="True"
+                        AllowFormatting="True"
+                        materialDesign:HintAssist.Hint="Custom Trigger">
 
-                        <TextBox.Text>
+                        <view:ScriptBox.Text>
                             <Binding
                                 Path="Selected.CustomTrigger"
                                 Mode="TwoWay"
@@ -558,9 +572,9 @@
                                 </Binding.Converter>
 
                             </Binding>
-                        </TextBox.Text>
+                        </view:ScriptBox.Text>
 
-                    </TextBox>
+                    </view:ScriptBox>
 
                 </Grid>
             </TabItem>
@@ -569,13 +583,14 @@
                 Header="Effect">
                 <Grid>
 
-                    <TextBox
-                        Grid.Column="0"
+                    <view:ScriptBox
                         FontFamily="Consolas"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Custom Effect Code">
+                        AcceptsTab="True"
+                        AllowFormatting="True"
+                        materialDesign:HintAssist.Hint="Custom Effect">
 
-                        <TextBox.Text>
+                        <view:ScriptBox.Text>
                             <Binding
                                 Path="Selected.CustomEffect"
                                 Mode="TwoWay"
@@ -586,9 +601,9 @@
                                 </Binding.Converter>
 
                             </Binding>
-                        </TextBox.Text>
+                        </view:ScriptBox.Text>
 
-                    </TextBox>
+                    </view:ScriptBox>
 
                 </Grid>
             </TabItem>

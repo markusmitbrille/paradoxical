@@ -150,13 +150,14 @@
 
                     </Grid>
 
-                    <TextBox
+                    <view:ScriptBox
                         Grid.Row="1"
-                        FontFamily="Consolas"
                         AcceptsReturn="False"
+                        AcceptsTab="False"
+                        AllowFormatting="False"
                         materialDesign:HintAssist.Hint="Title">
 
-                        <TextBox.Text>
+                        <view:ScriptBox.Text>
                             <Binding
                                 Path="Selected.Title"
                                 Mode="TwoWay"
@@ -167,14 +168,15 @@
                                 </Binding.Converter>
 
                             </Binding>
-                        </TextBox.Text>
+                        </view:ScriptBox.Text>
 
-                    </TextBox>
+                    </view:ScriptBox>
 
                     <view:ScriptBox
                         Grid.Row="2"
                         AcceptsReturn="True"
-                        AllowFormatting="True"
+                        AcceptsTab="False"
+                        AllowFormatting="False"
                         materialDesign:HintAssist.Hint="Description">
 
                         <view:ScriptBox.Text>
@@ -490,8 +492,7 @@
 
                     <Grid
                         Grid.Column="1"
-                        Margin="6,12,6,12"
-                        Grid.RowSpan="2">
+                        Margin="6,12">
 
                         <Grid.RowDefinitions>
                             <RowDefinition
@@ -630,15 +631,15 @@
 
                     </Grid>
 
-                    <TextBox
+                    <view:ScriptBox
                         Grid.Column="0"
                         FontFamily="Consolas"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Custom Trigger Code"
-                        Margin="6,12,6,12"
-                        Grid.RowSpan="2">
+                        AcceptsTab="True"
+                        AllowFormatting="True"
+                        materialDesign:HintAssist.Hint="Custom Trigger">
 
-                        <TextBox.Text>
+                        <view:ScriptBox.Text>
                             <Binding
                                 Path="Selected.CustomTrigger"
                                 Mode="TwoWay"
@@ -649,9 +650,9 @@
                                 </Binding.Converter>
 
                             </Binding>
-                        </TextBox.Text>
+                        </view:ScriptBox.Text>
 
-                    </TextBox>
+                    </view:ScriptBox>
 
                 </Grid>
             </TabItem>
@@ -806,13 +807,15 @@
 
                     </Grid>
 
-                    <TextBox
+                    <view:ScriptBox
                         Grid.Column="0"
                         FontFamily="Consolas"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Custom Effect Code">
+                        AcceptsTab="True"
+                        AllowFormatting="True"
+                        materialDesign:HintAssist.Hint="Custom Effect">
 
-                        <TextBox.Text>
+                        <view:ScriptBox.Text>
                             <Binding
                                 Path="Selected.CustomImmediateEffect"
                                 Mode="TwoWay"
@@ -823,9 +826,9 @@
                                 </Binding.Converter>
 
                             </Binding>
-                        </TextBox.Text>
+                        </view:ScriptBox.Text>
 
-                    </TextBox>
+                    </view:ScriptBox>
 
                 </Grid>
             </TabItem>
@@ -980,13 +983,15 @@
 
                     </Grid>
 
-                    <TextBox
+                    <view:ScriptBox
                         Grid.Column="0"
                         FontFamily="Consolas"
                         AcceptsReturn="True"
-                        materialDesign:HintAssist.Hint="Custom Effect Code">
+                        AcceptsTab="True"
+                        AllowFormatting="True"
+                        materialDesign:HintAssist.Hint="Custom Effect">
 
-                        <TextBox.Text>
+                        <view:ScriptBox.Text>
                             <Binding
                                 Path="Selected.CustomAfterEffect"
                                 Mode="TwoWay"
@@ -997,9 +1002,9 @@
                                 </Binding.Converter>
 
                             </Binding>
-                        </TextBox.Text>
+                        </view:ScriptBox.Text>
 
-                    </TextBox>
+                    </view:ScriptBox>
 
                 </Grid>
             </TabItem>

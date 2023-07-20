@@ -28,6 +28,19 @@
 
         </Style>
 
+        <Style
+            TargetType="view:ScriptBox"
+            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+
+            <Setter
+                Property="Margin"
+                Value="6,12" />
+            <Setter
+                Property="materialDesign:HintAssist.FontFamily"
+                Value="{StaticResource MaterialDesignFont}" />
+
+        </Style>
+
     </UserControl.Resources>
 
     <DockPanel>
@@ -114,13 +127,15 @@
 
                     </TextBox>
 
-                    <TextBox
+                    <view:ScriptBox
                         Grid.Row="1"
                         FontFamily="Consolas"
                         AcceptsReturn="True"
+                        AcceptsTab="True"
+                        AllowFormatting="True"
                         materialDesign:HintAssist.Hint="Code">
 
-                        <TextBox.Text>
+                        <view:ScriptBox.Text>
                             <Binding
                                 Path="Selected.Code"
                                 Mode="TwoWay"
@@ -131,19 +146,18 @@
                                 </Binding.Converter>
 
                             </Binding>
-                        </TextBox.Text>
+                        </view:ScriptBox.Text>
 
-                    </TextBox>
+                    </view:ScriptBox>
 
-                    <TextBox
+                    <view:ScriptBox
                         Grid.Row="2"
-                        FontFamily="Consolas"
-                        MinLines="4"
-                        MaxLines="4"
-                        AcceptsReturn="True"
+                        AcceptsReturn="False"
+                        AcceptsTab="False"
+                        AllowFormatting="False"
                         materialDesign:HintAssist.Hint="Tooltip">
 
-                        <TextBox.Text>
+                        <view:ScriptBox.Text>
                             <Binding
                                 Path="Selected.Tooltip"
                                 Mode="TwoWay"
@@ -154,9 +168,9 @@
                                 </Binding.Converter>
 
                             </Binding>
-                        </TextBox.Text>
+                        </view:ScriptBox.Text>
 
-                    </TextBox>
+                    </view:ScriptBox>
 
                 </Grid>
             </TabItem>
