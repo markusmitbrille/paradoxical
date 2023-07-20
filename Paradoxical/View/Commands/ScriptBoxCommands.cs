@@ -16,12 +16,13 @@ public static class ScriptBoxCommands
 
     public static readonly RoutedUICommand ConfirmComplete = new("Confirm", "ConfirmComplete", typeof(ScriptBoxCommands), new()
     {
-        new KeyGesture(Key.Escape)
+        new KeyGesture(Key.Enter),
+        new KeyGesture(Key.Tab),
     });
 
     public static readonly RoutedUICommand CancelComplete = new("Cancel", "CancelComplete", typeof(ScriptBoxCommands), new()
     {
-        new KeyGesture(Key.Tab)
+        new KeyGesture(Key.Escape)
     });
 
     public static readonly RoutedUICommand FormatText = new("Format", "FormatText", typeof(ScriptBoxCommands), new()
