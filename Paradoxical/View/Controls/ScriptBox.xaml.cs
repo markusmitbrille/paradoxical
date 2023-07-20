@@ -511,10 +511,21 @@ public partial class ScriptBox : TextBox
         var index = CaretIndex;
         var text = Text;
 
-        text = text.Insert(index, "{\r\n\r\n}");
-        index += 3;
+        if (AcceptsReturn == true)
+        {
+            text = text.Insert(index, "{\r\n\r\n}");
+            index += 3;
+        }
+        else
+        {
+            text = text.Insert(index, "{  }");
+            index += 2;
+        }
 
-        Formatter.Format(ref text, ref index);
+        if (AllowFormatting == true)
+        {
+            Formatter.Format(ref text, ref index);
+        }
 
         Text = text;
         CaretIndex = index;
@@ -540,7 +551,10 @@ public partial class ScriptBox : TextBox
         text = text.Insert(index, Environment.NewLine);
         index += Environment.NewLine.Length;
 
-        Formatter.Format(ref text, ref index);
+        if (AllowFormatting == true)
+        {
+            Formatter.Format(ref text, ref index);
+        }
 
         Text = text;
         CaretIndex = index;
