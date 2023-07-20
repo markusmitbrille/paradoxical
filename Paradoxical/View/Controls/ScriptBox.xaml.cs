@@ -45,15 +45,30 @@ public partial class ScriptBox : TextBox
         private static Regex BlockEndWithoutNewLineAfterPattern => GetBlockEndWithoutNewLineAfterPattern();
         private static string BlockEndWithoutNewLineAfterReplacement => "\r\n";
 
-        [GeneratedRegex(@"(?<!(?: |\?|\+|\-|\*|\\))(?==)")]
-        private static partial Regex GetAssignmentWithoutSpaceBeforePattern();
-        private static Regex AssignmentWithoutSpaceBeforePattern => GetAssignmentWithoutSpaceBeforePattern();
-        private static string EqualsWithoutSpaceBeforeReplacement => " ";
+        [GeneratedRegex(@"(?<!(?: |\?|\<|\>))(?==)")]
+        private static partial Regex GetEqualsSignWithoutSpaceBeforePattern();
+        private static Regex EqualsSignWithoutSpaceBeforePattern => GetEqualsSignWithoutSpaceBeforePattern();
+        private static string EqualsSignWithoutSpaceBeforeReplacement => " ";
 
         [GeneratedRegex(@"(?<==)(?! )")]
-        private static partial Regex GetAssignmentWithoutSpaceAfterPattern();
-        private static Regex AssignmentWithoutSpaceAfterPattern => GetAssignmentWithoutSpaceAfterPattern();
-        private static string EqualsWithoutSpaceAfterReplacement => " ";
+        private static partial Regex GetEqualsSignWithoutSpaceAfterPattern();
+        private static Regex EqualsSignWithoutSpaceAfterPattern => GetEqualsSignWithoutSpaceAfterPattern();
+        private static string EqualsSignWithoutSpaceAfterReplacement => " ";
+
+        [GeneratedRegex(@"(?<! )(?=(?:\<|\>))")]
+        private static partial Regex GetComparisonWithoutSpaceBeforePattern();
+        private static Regex ComparisonWithoutSpaceBeforePattern => GetComparisonWithoutSpaceBeforePattern();
+        private static string ComparisonWithoutSpaceBeforeReplacement => " ";
+
+        [GeneratedRegex(@"(?<=(?:\<|\>))(?!(?: |\=))")]
+        private static partial Regex GetComparisonWithoutSpaceAfterPattern();
+        private static Regex ComparisonWithoutSpaceAfterPattern => GetComparisonWithoutSpaceAfterPattern();
+        private static string ComparisonWithoutSpaceAfterReplacement => " ";
+
+        [GeneratedRegex(@"(?<!(?: ))(?=\?)")]
+        private static partial Regex GetQuestionMarkWithoutSpaceBeforePattern();
+        private static Regex QuestionMarkWithoutSpaceBeforePattern => GetQuestionMarkWithoutSpaceBeforePattern();
+        private static string QuestionMarkWithoutSpaceBeforeReplacement => " ";
 
         [GeneratedRegex(@"(?<!(?:\r\n[\s-[\r\n]]*|[.:]))(?=\b\w+\b(?:[.:]\b\w+\b)*[\s-[\r\n]]*(?:\?|\+|\-|\*|\\)?=)")]
         private static partial Regex GetStatementWithoutNewLineBeforePattern();
@@ -93,8 +108,13 @@ public partial class ScriptBox : TextBox
             ReplaceRecursive(ref text, ref index, BlockStartWithoutNewLineAfterPattern, BlockStartWithoutNewLineAfterReplacement);
             ReplaceRecursive(ref text, ref index, BlockEndWithoutNewLineAfterPattern, BlockEndWithoutNewLineAfterReplacement);
 
-            ReplaceRecursive(ref text, ref index, AssignmentWithoutSpaceBeforePattern, EqualsWithoutSpaceBeforeReplacement);
-            ReplaceRecursive(ref text, ref index, AssignmentWithoutSpaceAfterPattern, EqualsWithoutSpaceAfterReplacement);
+            ReplaceRecursive(ref text, ref index, EqualsSignWithoutSpaceBeforePattern, EqualsSignWithoutSpaceBeforeReplacement);
+            ReplaceRecursive(ref text, ref index, EqualsSignWithoutSpaceAfterPattern, EqualsSignWithoutSpaceAfterReplacement);
+
+            ReplaceRecursive(ref text, ref index, ComparisonWithoutSpaceBeforePattern, ComparisonWithoutSpaceBeforeReplacement);
+            ReplaceRecursive(ref text, ref index, ComparisonWithoutSpaceAfterPattern, ComparisonWithoutSpaceAfterReplacement);
+
+            ReplaceRecursive(ref text, ref index, QuestionMarkWithoutSpaceBeforePattern, QuestionMarkWithoutSpaceBeforeReplacement);
 
             ReplaceRecursive(ref text, ref index, StatementWithoutNewLineBeforePattern, StatementWithoutNewLineBeforeReplacement);
 
