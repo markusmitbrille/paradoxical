@@ -106,52 +106,77 @@ public partial class ScriptBox : TextBox
             ReplaceFirst(ref text, ref index, WhitespaceAtTextStartPattern, WhitespaceAtTextStartReplacement);
             ReplaceFirst(ref text, ref index, WhitespaceAtTextEndPattern, WhitespaceAtTextEndReplacement);
 
-            //IndentLines(ref text, ref index);
+            IndentLines(ref text, ref index);
         }
 
-        //[GeneratedRegex(@"{")]
-        //private static partial Regex GetBlockStartPattern();
-        //public static Regex BlockStartPattern => GetBlockStartPattern();
+        [GeneratedRegex(@"(?<=^)", RegexOptions.Multiline)]
+        private static partial Regex GetLineStartPattern();
+        private static Regex LineStartPattern => GetLineStartPattern();
 
-        //[GeneratedRegex(@"}")]
-        //private static partial Regex GetBlockEndPattern();
-        //public static Regex BlockEndPattern => GetBlockEndPattern();
+        [GeneratedRegex(@"{")]
+        private static partial Regex GetBlockStartPattern();
+        public static Regex BlockStartPattern => GetBlockStartPattern();
 
-        //[GeneratedRegex(@"^\s*}\s*")]
-        //private static partial Regex GetStartsWithBlockEndRegex();
-        //public static Regex StartsWithBlockEndRegex => GetStartsWithBlockEndRegex();
+        [GeneratedRegex(@"}")]
+        private static partial Regex GetBlockEndPattern();
+        public static Regex BlockEndPattern => GetBlockEndPattern();
 
-        //private static void IndentLines(ref string text, ref int index)
-        //{
-        //    int level = 0;
-        //    int linestart = 0;
+        [GeneratedRegex(@"^}")]
+        private static partial Regex GetStartsWithBlockEndPattern();
+        public static Regex StartsWithBlockEndPattern => GetStartsWithBlockEndPattern();
 
-        //    string[] lines = text.Split(Environment.NewLine);
-        //    for (int i = 0; i < lines.Length; i++)
-        //    {
-        //        string line = lines[i];
+        [GeneratedRegex(@"^\r\n")]
+        private static partial Regex GetStartsWithNewLinePattern();
+        public static Regex StartsWithNewLinePattern => GetStartsWithNewLinePattern();
 
-        //        int indents = level;
-        //        indents = StartsWithBlockEndRegex.IsMatch(line) == true ? indents - 1 : indents;
-        //        indents = Math.Clamp(indents, 0, 16);
+        private static void IndentLines(ref string text, ref int index)
+        {
+            int current = 0;
+            while (current >= 0 && current < text.Length)
+            {
+                string before = text[..current];
+                string after = text[current..];
 
-        //        string indent = string.Concat(Enumerable.Repeat(ParadoxText.Indentation, indents));
+                int level = 0;
 
-        //        line = indent + line;
-        //        lines[i] = line;
+                level += BlockStartPattern.Matches(before).Count;
+                level -= BlockEndPattern.Matches(before).Count;
 
-        //        if (index >= linestart)
-        //        {
-        //            index += indent.Length;
-        //        }
+                // line starts with block end
+                if (StartsWithBlockEndPattern.IsMatch(after) == true)
+                {
+                    // outdent by one level
+                    level -= 1;
+                }
 
-        //        level += BlockStartPattern.Matches(line).Count;
-        //        level -= BlockEndPattern.Matches(line).Count;
-        //        linestart += line.Length;
-        //    }
+                // line is empty
+                if (StartsWithNewLinePattern.IsMatch(after) == true)
+                {
+                    // do not indent
+                    level = 0;
+                }
 
-        //    text = string.Join(Environment.NewLine, lines);
-        //}
+                level = Math.Clamp(level, 0, 16);
+
+                string indent = string.Concat(Enumerable.Repeat(ParadoxText.Indentation, level));
+
+                text = text.Insert(current, indent);
+
+                // index on or after line start index
+                if (index >= current)
+                {
+                    // move index by indentation length
+                    index += indent.Length;
+                }
+
+                current = text.IndexOf(Environment.NewLine, current);
+
+                if (current == -1)
+                { break; }
+
+                current += Environment.NewLine.Length;
+            }
+        }
 
         private static void ReplaceFirst(ref string text, ref int index, Regex pattern, string replacement)
         {
@@ -160,31 +185,42 @@ public partial class ScriptBox : TextBox
             if (match.Success == false)
             { return; }
 
-            string originalText = match.Value;
-            string replacedText = pattern.Replace(originalText, replacement);
-
-            text = text.Remove(match.Index, match.Length);
-            text = text.Insert(match.Index, replacedText);
-
-            if (index >= match.Index + match.Length)
-            {
-                index = index - originalText.Length + replacedText.Length;
-            }
+            ReplaceMatch(ref text, ref index, match, replacement);
         }
 
         private static void ReplaceRecursive(ref string text, ref int index, Regex pattern, string replacement)
         {
             for (Match match = pattern.Match(text); match.Success == true; match = pattern.Match(text))
             {
-                string original = match.Value;
+                ReplaceMatch(ref text, ref index, match, replacement);
+            }
+        }
 
-                text = text.Remove(match.Index, match.Length);
-                text = text.Insert(match.Index, replacement);
+        private static void ReplaceMatch(ref string text, ref int index, Match match, string replacement)
+        {
+            string original = match.Value;
 
-                if (index >= match.Index + match.Length)
-                {
-                    index = index - original.Length + replacement.Length;
-                }
+            text = text.Remove(match.Index, match.Length);
+            text = text.Insert(match.Index, replacement);
+
+            // index after match
+            if (index >= match.Index + match.Length)
+            {
+                // move index by length delta
+                index = index - original.Length + replacement.Length;
+            }
+
+            // index in match
+            else if (index >= match.Index && index < match.Index + match.Length)
+            {
+                // keep index within bounds
+                index = Math.Clamp(index, match.Index, match.Index + replacement.Length);
+            }
+
+            // index before match
+            else if (index < match.Index)
+            {
+                // index remains the same
             }
         }
     }
