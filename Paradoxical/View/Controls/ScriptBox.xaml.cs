@@ -2,6 +2,7 @@
 using Paradoxical.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -165,8 +166,8 @@ public partial class ScriptBox : TextBox
                     level -= 1;
                 }
 
-                // line is empty
-                if (StartsWithNewLinePattern.IsMatch(after) == true)
+                // non-current line is empty
+                if (StartsWithNewLinePattern.IsMatch(after) == true && index != current)
                 {
                     // do not indent
                     level = 0;
@@ -253,6 +254,14 @@ public partial class ScriptBox : TextBox
     [GeneratedRegex(@"\w+")]
     private static partial Regex GetWordRegex();
     public static Regex WordRegex => GetWordRegex();
+
+    [GeneratedRegex(@"{")]
+    private static partial Regex GetBlockStartRegex();
+    public static Regex BlockStartRegex => GetBlockStartRegex();
+
+    [GeneratedRegex(@"}")]
+    private static partial Regex GetBlockEndRegex();
+    public static Regex BlockEndRegex => GetBlockEndRegex();
 
     private MatchCollection WordMatches { get; set; } = WordRegex.Matches(string.Empty);
     private Match? CurrentWord { get; set; } = null;
@@ -467,9 +476,10 @@ public partial class ScriptBox : TextBox
         var text = Text;
 
         text = text.Insert(CaretIndex, "\"\"");
+        index += 1;
 
         Text = text;
-        CaretIndex = index + 1;
+        CaretIndex = index;
     }
 
     private void InsertBraces()
@@ -478,9 +488,10 @@ public partial class ScriptBox : TextBox
         var text = Text;
 
         text = text.Insert(CaretIndex, "()");
+        index += 1;
 
         Text = text;
-        CaretIndex = index + 1;
+        CaretIndex = index;
     }
 
     private void InsertSquareBraces()
@@ -489,9 +500,10 @@ public partial class ScriptBox : TextBox
         var text = Text;
 
         text = text.Insert(CaretIndex, "[]");
+        index += 1;
 
         Text = text;
-        CaretIndex = index + 1;
+        CaretIndex = index;
     }
 
     private void InsertCurlyBraces()
@@ -499,10 +511,13 @@ public partial class ScriptBox : TextBox
         var index = CaretIndex;
         var text = Text;
 
-        text = text.Insert(CaretIndex, "{  }");
+        text = text.Insert(index, "{\r\n\r\n}");
+        index += 3;
+
+        Formatter.Format(ref text, ref index);
 
         Text = text;
-        CaretIndex = index + 2;
+        CaretIndex = index;
     }
 
     private void InsertIndentation()
@@ -511,9 +526,10 @@ public partial class ScriptBox : TextBox
         var text = Text;
 
         text = text.Insert(CaretIndex, ParadoxText.Indentation);
+        index += ParadoxText.Indentation.Length;
 
         Text = text;
-        CaretIndex = index + 4;
+        CaretIndex = index;
     }
 
     private void InsertNewLine()
