@@ -70,7 +70,7 @@ public partial class ScriptBox : TextBox
         private static Regex QuestionMarkWithoutSpaceBeforePattern => GetQuestionMarkWithoutSpaceBeforePattern();
         private static string QuestionMarkWithoutSpaceBeforeReplacement => " ";
 
-        [GeneratedRegex(@"(?<!(?:\r\n[\s-[\r\n]]*|[.:]))(?=\b\w+\b(?:[.:]\b\w+\b)*[\s-[\r\n]]*(?:\?|\+|\-|\*|\\)?=)")]
+        [GeneratedRegex(@"(?<!(?:\r\n[\s-[\r\n]]*|[.:]))(?=\b\w+\b(?:[.:]\b\w+\b)*[\s-[\r\n]]*(?:\=|\?\=|\<|\>|\<\=|\>\=))")]
         private static partial Regex GetStatementWithoutNewLineBeforePattern();
         private static Regex StatementWithoutNewLineBeforePattern => GetStatementWithoutNewLineBeforePattern();
         private static string StatementWithoutNewLineBeforeReplacement => "\r\n";
