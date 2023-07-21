@@ -47,7 +47,11 @@ public partial class CompleteBox : Window
         public string Name { get; init; } = string.Empty;
         public string Code { get; init; } = string.Empty;
         public PackIconKind Icon { get; init; } = PackIconKind.None;
+
+        public int? Offset { get; init; } = null;
+
         public Kind Kind { get; init; } = Kind.None;
+
         public int Score { get; set; } = 0;
     }
 
@@ -934,6 +938,7 @@ public partial class CompleteBox : Window
             Code = "|U",
             Icon = PackIconKind.QuestionMark,
             Kind = Kind.LocalizationArgument,
+            Offset = 0,
         },
         new()
         {
@@ -941,6 +946,7 @@ public partial class CompleteBox : Window
             Code = "|L",
             Icon = PackIconKind.QuestionMark,
             Kind = Kind.LocalizationArgument,
+            Offset = 0,
         },
         new()
         {
@@ -948,6 +954,7 @@ public partial class CompleteBox : Window
             Code = "|P",
             Icon = PackIconKind.QuestionMark,
             Kind = Kind.LocalizationArgument,
+            Offset = 0,
         },
         new()
         {
@@ -955,6 +962,7 @@ public partial class CompleteBox : Window
             Code = "|N",
             Icon = PackIconKind.QuestionMark,
             Kind = Kind.LocalizationArgument,
+            Offset = 0,
         },
         new()
         {
@@ -962,6 +970,7 @@ public partial class CompleteBox : Window
             Code = "|E",
             Icon = PackIconKind.QuestionMark,
             Kind = Kind.LocalizationArgument,
+            Offset = 0,
         },
         new()
         {
@@ -969,6 +978,7 @@ public partial class CompleteBox : Window
             Code = "|V",
             Icon = PackIconKind.QuestionMark,
             Kind = Kind.LocalizationArgument,
+            Offset = 0,
         },
         new()
         {
@@ -976,6 +986,7 @@ public partial class CompleteBox : Window
             Code = "#P  #!",
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
+            Offset = 3,
         },
         new()
         {
@@ -983,6 +994,7 @@ public partial class CompleteBox : Window
             Code = "#N  #!",
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
+            Offset = 3,
         },
         new()
         {
@@ -990,6 +1002,7 @@ public partial class CompleteBox : Window
             Code = "#help  #!",
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
+            Offset = 6,
         },
         new()
         {
@@ -997,6 +1010,7 @@ public partial class CompleteBox : Window
             Code = "#I  #!",
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
+            Offset = 3,
         },
         new()
         {
@@ -1004,6 +1018,7 @@ public partial class CompleteBox : Window
             Code = "#warning  #!",
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
+            Offset = 3,
         },
         new()
         {
@@ -1011,6 +1026,7 @@ public partial class CompleteBox : Window
             Code = "#T  #!",
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
+            Offset = 3,
         },
         new()
         {
@@ -1018,6 +1034,7 @@ public partial class CompleteBox : Window
             Code = "#E  #!",
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
+            Offset = 3,
         },
         new()
         {
@@ -1025,6 +1042,7 @@ public partial class CompleteBox : Window
             Code = "#X  #!",
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
+            Offset = 3,
         },
         new()
         {
@@ -1032,6 +1050,7 @@ public partial class CompleteBox : Window
             Code = "#S  #!",
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
+            Offset = 3,
         },
         new()
         {
@@ -1039,6 +1058,7 @@ public partial class CompleteBox : Window
             Code = "#V  #!",
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
+            Offset = 3,
         },
         new()
         {
@@ -1046,6 +1066,7 @@ public partial class CompleteBox : Window
             Code = "#EMP  #!",
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
+            Offset = 5,
         },
         new()
         {
@@ -1053,6 +1074,7 @@ public partial class CompleteBox : Window
             Code = "#weak  #!",
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
+            Offset = 6,
         },
         new()
         {
@@ -1060,6 +1082,7 @@ public partial class CompleteBox : Window
             Code = "#bold  #!",
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
+            Offset = 6,
         },
         new()
         {
@@ -1067,6 +1090,7 @@ public partial class CompleteBox : Window
             Code = "#italic  #!",
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
+            Offset = 8,
         },
         new()
         {
@@ -1074,6 +1098,7 @@ public partial class CompleteBox : Window
             Code = "@!",
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
+            Offset = 1,
         },
         new()
         {

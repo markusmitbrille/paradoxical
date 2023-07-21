@@ -625,9 +625,10 @@ public partial class ScriptBox : TextBox
         { return; }
 
         string text = Text;
-
         int index = CurrentWord?.Index ?? CaretIndex;
+
         string code = Popup.Selected.Code;
+        int offset = Popup.Selected.Offset ?? code.Length;
 
         if (CurrentWord != null)
         {
@@ -635,9 +636,10 @@ public partial class ScriptBox : TextBox
         }
 
         text = text.Insert(index, code);
+        index += offset;
 
         Text = text;
-        CaretIndex = index + code.Length;
+        CaretIndex = index;
     }
 
     private void ClosePopup()
