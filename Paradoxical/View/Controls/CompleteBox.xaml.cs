@@ -37,7 +37,8 @@ public partial class CompleteBox : Window
         LocalizationArgument = 0b00001000,
         LocalizationStyle = 0b00010000,
         LocalizationIcon = 0b00100000,
-        Localization = LocalizationFunction | LocalizationArgument | LocalizationStyle | LocalizationIcon | Scope,
+        LocalizationScope = 0b01000000,
+        Localization = LocalizationFunction | LocalizationArgument | LocalizationStyle | LocalizationIcon | LocalizationScope | Scope,
         Code = CodeSnippet | Scope,
     }
 
@@ -52,6 +53,13 @@ public partial class CompleteBox : Window
 
     private IEnumerable<Item> Items { get; } = new Item[]
     {
+        new()
+        {
+            Name = "scope",
+            Code = "scope:",
+            Icon = PackIconKind.ArrowRightBottom,
+            Kind = Kind.Scope,
+        },
         new()
         {
             Name = "THIS",
@@ -85,14 +93,7 @@ public partial class CompleteBox : Window
             Name = "Char",
             Code = "Char",
             Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-        },
-        new()
-        {
-            Name = "scope",
-            Code = "scope:",
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
+            Kind = Kind.LocalizationScope,
         },
         new()
         {
@@ -161,6 +162,13 @@ public partial class CompleteBox : Window
         {
             Name = "GetName",
             Code = "GetName",
+            Icon = PackIconKind.Function,
+            Kind = Kind.LocalizationFunction,
+        },
+        new()
+        {
+            Name = "GetCharacter",
+            Code = "GetCharacter",
             Icon = PackIconKind.Function,
             Kind = Kind.LocalizationFunction,
         },
