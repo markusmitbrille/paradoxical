@@ -259,7 +259,7 @@ public partial class ScriptBox : TextBox
 
     // Using a DependencyProperty as the backing store for AllowedCompleteItems.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty AllowedCompleteItemsProperty =
-        DependencyProperty.Register("AllowedCompleteItems", typeof(CompleteBox.Kind), typeof(ScriptBox), new PropertyMetadata(CompleteBox.Kind.None));
+        DependencyProperty.Register("AllowedCompleteItems", typeof(CompleteBox.Kind), typeof(ScriptBox), new PropertyMetadata(CompleteBox.Kind.All));
 
     [GeneratedRegex(@"\w+")]
     private static partial Regex GetWordRegex();

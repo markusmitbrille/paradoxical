@@ -42,19 +42,19 @@ public partial class CompleteBox : Window
             0b0000000000000010,
 
         LocalizationFunction =
-            0b1000000000000001,
+            0b0000000000000100,
 
         LocalizationArgument =
-            0b1000000000000010,
+            0b0000000000001000,
 
         LocalizationStyle =
-            0b1000000000000100,
+            0b0000000000010000,
 
         LocalizationIcon =
-            0b1000000000001000,
+            0b0000000000100000,
 
         LocalizationScope =
-            0b1000000000010000,
+            0b0000000001000000,
 
         Code =
             Scope
@@ -69,8 +69,7 @@ public partial class CompleteBox : Window
             | LocalizationScope,
 
         All =
-            Code
-            | Localization,
+            Code | Localization,
     }
 
     public class Item
