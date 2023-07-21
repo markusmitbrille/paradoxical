@@ -31,15 +31,38 @@ public partial class CompleteBox : Window
     public enum Kind
     {
         None = 0,
-        Scope = 0b00000001,
-        CodeSnippet = 0b00000010,
-        LocalizationFunction = 0b00000100,
-        LocalizationArgument = 0b00001000,
-        LocalizationStyle = 0b00010000,
-        LocalizationIcon = 0b00100000,
-        LocalizationScope = 0b01000000,
-        Localization = LocalizationFunction | LocalizationArgument | LocalizationStyle | LocalizationIcon | LocalizationScope | Scope,
-        Code = CodeSnippet | Scope,
+
+        Scope =
+            0b0000000000000001,
+
+        CodeSnippet =
+            0b0000000000000010,
+
+        LocalizationFunction =
+            0b1000000000000001,
+
+        LocalizationArgument =
+            0b1000000000000010,
+
+        LocalizationStyle =
+            0b1000000000000100,
+
+        LocalizationIcon =
+            0b1000000000001000,
+
+        LocalizationScope =
+            0b1000000000010000,
+
+        Localization =
+            Scope
+            | LocalizationFunction
+            | LocalizationArgument
+            | LocalizationStyle
+            | LocalizationIcon
+            | LocalizationScope,
+        Code =
+            Scope
+            | CodeSnippet,
     }
 
     public class Item
@@ -49,6 +72,7 @@ public partial class CompleteBox : Window
         public PackIconKind Icon { get; init; } = PackIconKind.None;
 
         public int? Offset { get; init; } = null;
+        public string? Tooltip { get; init; } = null;
 
         public Kind Kind { get; init; } = Kind.None;
 
@@ -98,6 +122,14 @@ public partial class CompleteBox : Window
             Code = "Char",
             Icon = PackIconKind.ArrowRightBottom,
             Kind = Kind.LocalizationScope,
+        },
+        new()
+        {
+            Name = "Culture → Culture Head",
+            Code = "culture_head",
+            Icon = PackIconKind.ArrowRightBottom,
+            Kind = Kind.Scope,
+            Tooltip = "Scopes to character."
         },
         new()
         {
@@ -166,6 +198,13 @@ public partial class CompleteBox : Window
         {
             Name = "GetName",
             Code = "GetName",
+            Icon = PackIconKind.Function,
+            Kind = Kind.LocalizationFunction,
+        },
+        new()
+        {
+            Name = "GetPlayer",
+            Code = "GetPlayer",
             Icon = PackIconKind.Function,
             Kind = Kind.LocalizationFunction,
         },

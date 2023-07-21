@@ -28,15 +28,113 @@
                 TargetType="ScrollBar"
                 BasedOn="{StaticResource MaterialDesignScrollBarMinimal}" />
 
+            <DataTemplate
+                x:Key="DefaultTemplate">
+                <Grid
+                    MouseDown="MouseDownHandler">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="auto" />
+                        <ColumnDefinition
+                            Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <materialDesign:PackIcon
+                        Grid.Column="0"
+                        Margin="1,0"
+                        VerticalAlignment="Center"
+                        Kind="{Binding Icon}" />
+
+                    <TextBlock
+                        Grid.Column="1"
+                        Margin="1,0"
+                        VerticalAlignment="Center"
+                        Text="{Binding Name}" />
+
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate
+                x:Key="SelectedTemplate">
+                <Grid
+                    MouseDown="MouseDownHandler">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="auto" />
+                        <ColumnDefinition
+                            Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="auto" />
+                        <RowDefinition
+                            Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <materialDesign:PackIcon
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        Margin="1,0"
+                        VerticalAlignment="Center"
+                        Kind="{Binding Icon}" />
+
+                    <TextBlock
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        Margin="1,0"
+                        VerticalAlignment="Center"
+                        Text="{Binding Name}" />
+
+                    <TextBlock
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Grid.Row="1"
+                        Margin="2"
+                        VerticalAlignment="Center"
+                        Text="{Binding Tooltip}"
+                        FontSize="10">
+                        
+                        <TextBlock.Style>
+                            <Style
+                                TargetType="TextBlock">
+
+                                <Setter
+                                    Property="Visibility"
+                                    Value="Visible" />
+
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding Tooltip}"
+                                        Value="{x:Null}">
+                                        <Setter
+                                            Property="Visibility"
+                                            Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+
+                            </Style>
+                        </TextBlock.Style>
+                    
+                    </TextBlock>
+
+                </Grid>
+            </DataTemplate>
+
         </ListView.Resources>
 
         <ListView.Style>
             <Style
                 TargetType="ListView">
+               
                 <Style.Triggers>
+                  
                     <Trigger
                         Property="HasItems"
                         Value="false">
+                        
                         <Setter
                             Property="Template">
                             <Setter.Value>
@@ -50,15 +148,22 @@
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
+                  
                     </Trigger>
+              
                 </Style.Triggers>
+           
             </Style>
         </ListView.Style>
 
         <ListView.ItemContainerStyle>
             <Style
-                TargetType="{x:Type ListBoxItem}"
+                TargetType="ListBoxItem"
                 BasedOn="{StaticResource MaterialDesignListBoxItem}">
+
+                <Setter
+                    Property="ContentTemplate"
+                    Value="{StaticResource DefaultTemplate}" />
 
                 <Setter
                     Property="Foreground"
@@ -80,6 +185,10 @@
                         Value="True">
 
                         <Setter
+                            Property="ContentTemplate"
+                            Value="{StaticResource SelectedTemplate}" />
+
+                        <Setter
                             Property="Foreground"
                             Value="{DynamicResource MaterialDesignPaper}" />
                         <Setter
@@ -92,28 +201,6 @@
 
             </Style>
         </ListView.ItemContainerStyle>
-
-        <ListView.ItemTemplate>
-            <ItemContainerTemplate>
-
-                <StackPanel
-                    Orientation="Horizontal"
-                    MouseDown="MouseDownHandler">
-
-                    <materialDesign:PackIcon
-                        Margin="1,0"
-                        VerticalAlignment="Center"
-                        Kind="{Binding Icon}" />
-
-                    <TextBlock
-                        Margin="1,0"
-                        VerticalAlignment="Center"
-                        Text="{Binding Name}" />
-
-                </StackPanel>
-
-            </ItemContainerTemplate>
-        </ListView.ItemTemplate>
 
     </ListView>
 
