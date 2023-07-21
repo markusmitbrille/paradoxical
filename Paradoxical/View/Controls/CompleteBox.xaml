@@ -10,6 +10,8 @@
     xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
+    MinHeight="100"
+    MinWidth="250"
     WindowStyle="None"
     ShowInTaskbar="False"
     ResizeMode="NoResize"
@@ -60,13 +62,6 @@
                 <Grid
                     MouseDown="MouseDownHandler">
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                            Width="auto" />
-                        <ColumnDefinition
-                            Width="*" />
-                    </Grid.ColumnDefinitions>
-
                     <Grid.RowDefinitions>
                         <RowDefinition
                             Height="auto" />
@@ -74,29 +69,39 @@
                             Height="auto" />
                     </Grid.RowDefinitions>
 
-                    <materialDesign:PackIcon
-                        Grid.Column="0"
-                        Grid.Row="0"
-                        Margin="1,0"
-                        VerticalAlignment="Center"
-                        Kind="{Binding Icon}" />
+                    <Grid x:Name="IconNameGrid"
+                        Grid.Row="0">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="auto" />
+                            <ColumnDefinition
+                                Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <materialDesign:PackIcon
+                            Grid.Column="0"
+                            Margin="1,0"
+                            VerticalAlignment="Center"
+                            Kind="{Binding Icon}" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="1,0"
+                            VerticalAlignment="Center"
+                            Text="{Binding Name}" />
+
+                    </Grid>
 
                     <TextBlock
-                        Grid.Column="1"
-                        Grid.Row="0"
-                        Margin="1,0"
-                        VerticalAlignment="Center"
-                        Text="{Binding Name}" />
-
-                    <TextBlock
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Grid.Row="1"
-                        Margin="2"
+                        Padding="8,4"
+                        Width="{Binding ActualWidth, ElementName=IconNameGrid}"
                         VerticalAlignment="Center"
                         Text="{Binding Tooltip}"
-                        FontSize="10">
-                        
+                        FontSize="10"
+                        TextWrapping="Wrap">
+
                         <TextBlock.Style>
                             <Style
                                 TargetType="TextBlock">
@@ -117,7 +122,7 @@
 
                             </Style>
                         </TextBlock.Style>
-                    
+
                     </TextBlock>
 
                 </Grid>
@@ -128,13 +133,13 @@
         <ListView.Style>
             <Style
                 TargetType="ListView">
-               
+
                 <Style.Triggers>
-                  
+
                     <Trigger
                         Property="HasItems"
                         Value="false">
-                        
+
                         <Setter
                             Property="Template">
                             <Setter.Value>
@@ -148,11 +153,11 @@
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
-                  
+
                     </Trigger>
-              
+
                 </Style.Triggers>
-           
+
             </Style>
         </ListView.Style>
 
