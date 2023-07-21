@@ -1621,7 +1621,7 @@ public partial class CompleteBox : Window
                 item.Score = 0;
             }
 
-            var defaults = Items.Take(MaxItems);
+            var defaults = Items.Where(item => AllowedItems.HasFlag(item.Kind) == true).Take(MaxItems);
             foreach (var item in defaults)
             {
                 item.Score = 100;
@@ -1657,7 +1657,7 @@ public partial class CompleteBox : Window
             }
         }
 
-        var garbage = valids.OrderBy(item => item.Score).Take(Items.Count() - MaxItems);
+        var garbage = valids.OrderBy(item => item.Score).Take(valids.Count() - MaxItems);
         foreach (var item in garbage)
         {
             item.Score = 0;
