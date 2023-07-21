@@ -27,11 +27,23 @@ namespace Paradoxical.View;
 /// </summary>
 public partial class CompleteBox : Window
 {
+    [Flags]
+    public enum Kind
+    {
+        None = 0,
+        Scope = 0b00000001,
+        CodeSnippet = 0b00000010,
+        LocalizationFunction = 0b00000100,
+        Localization = LocalizationFunction | Scope,
+        Code = CodeSnippet | Scope,
+    }
+
     public class Item
     {
-        public string Name { get; set; } = string.Empty;
-        public string Code { get; set; } = string.Empty;
-        public PackIconKind Icon { get; set; } = PackIconKind.CodeBraces;
+        public string Name { get; init; } = string.Empty;
+        public string Code { get; init; } = string.Empty;
+        public PackIconKind Icon { get; init; } = PackIconKind.None;
+        public Kind Kind { get; init; } = Kind.None;
         public int Score { get; set; } = 0;
     }
 
@@ -42,59 +54,119 @@ public partial class CompleteBox : Window
             Name = "THIS",
             Code = "THIS",
             Icon = PackIconKind.ArrowRightBottom,
+            Kind = Kind.Scope,
         },
         new()
         {
             Name = "ROOT",
             Code = "ROOT",
             Icon = PackIconKind.ArrowRightBottom,
+            Kind = Kind.Scope,
         },
         new()
         {
             Name = "FROM",
             Code = "FROM",
             Icon = PackIconKind.ArrowRightBottom,
+            Kind = Kind.Scope,
         },
         new()
         {
             Name = "PREV",
             Code = "PREV",
             Icon = PackIconKind.ArrowRightBottom,
+            Kind = Kind.Scope,
+        },
+        new()
+        {
+            Name = "scope",
+            Code = "scope:",
+            Icon = PackIconKind.ArrowRightBottom,
+            Kind = Kind.Scope,
         },
         new()
         {
             Name = "always",
             Code = "always = ",
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
+        },
+        new()
+        {
+            Name = "exists",
+            Code = "exists = ",
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
+        },
+        new()
+        {
+            Name = "save_scope_as",
+            Code = "save_scope_as = ",
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
         },
         new()
         {
             Name = "set_variable",
             Code = "set_variable = ",
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
         },
         new()
         {
             Name = "change_variable",
             Code = "change_variable = ",
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
         },
         new()
         {
             Name = "has_variable",
             Code = "has_variable = ",
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
         },
         new()
         {
             Name = "days",
             Code = "days = ",
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
         },
         new()
         {
             Name = "months",
             Code = "months = ",
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
         },
         new()
         {
             Name = "years",
             Code = "years = ",
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
+        },
+        new()
+        {
+            Name = "GetName",
+            Code = "GetName",
+            Icon = PackIconKind.Function,
+            Kind = Kind.LocalizationFunction,
+        },
+        new()
+        {
+            Name = "GetCulture",
+            Code = "GetCulture",
+            Icon = PackIconKind.Function,
+            Kind = Kind.LocalizationFunction,
+        },
+        new()
+        {
+            Name = "GetFaith",
+            Code = "GetFaith",
+            Icon = PackIconKind.Function,
+            Kind = Kind.LocalizationFunction,
         },
     };
 
@@ -103,6 +175,7 @@ public partial class CompleteBox : Window
 
     public Item? Selected { get; set; }
     public string? Filter { get; set; }
+    public Kind AllowedItems { get; set; }
 
     public bool? Result { get; set; }
 
@@ -132,6 +205,9 @@ public partial class CompleteBox : Window
     private bool Predicate(object obj)
     {
         if (obj is not Item item)
+        { return false; }
+
+        if (AllowedItems.HasFlag(item.Kind) == false)
         { return false; }
 
         if (string.IsNullOrEmpty(Filter) == true)

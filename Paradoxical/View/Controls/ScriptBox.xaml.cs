@@ -251,6 +251,16 @@ public partial class ScriptBox : TextBox
     public static readonly DependencyProperty AllowFormattingProperty =
         DependencyProperty.Register("AllowFormatting", typeof(bool), typeof(ScriptBox), new PropertyMetadata(false));
 
+    public CompleteBox.Kind AllowedCompleteItems
+    {
+        get { return (CompleteBox.Kind)GetValue(AllowedCompleteItemsProperty); }
+        set { SetValue(AllowedCompleteItemsProperty, value); }
+    }
+
+    // Using a DependencyProperty as the backing store for AllowedCompleteItems.  This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty AllowedCompleteItemsProperty =
+        DependencyProperty.Register("AllowedCompleteItems", typeof(CompleteBox.Kind), typeof(ScriptBox), new PropertyMetadata(CompleteBox.Kind.None));
+
     [GeneratedRegex(@"\w+")]
     private static partial Regex GetWordRegex();
     public static Regex WordRegex => GetWordRegex();
@@ -589,6 +599,7 @@ public partial class ScriptBox : TextBox
             Left = position.X,
             Top = position.Y,
             Filter = CurrentWord?.Value,
+            AllowedItems = AllowedCompleteItems,
         };
 
         Popup.Closed += PopupClosedHandler;

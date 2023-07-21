@@ -156,6 +156,7 @@
                         AcceptsReturn="True"
                         AcceptsTab="True"
                         AllowFormatting="True"
+                        AllowedCompleteItems="Code"
                         materialDesign:HintAssist.Hint="Code">
 
                         <view:ScriptBox.Text>
@@ -178,6 +179,7 @@
                         AcceptsReturn="False"
                         AcceptsTab="False"
                         AllowFormatting="False"
+                        AllowedCompleteItems="Localization"
                         materialDesign:HintAssist.Hint="Tooltip">
 
                         <view:ScriptBox.Text>

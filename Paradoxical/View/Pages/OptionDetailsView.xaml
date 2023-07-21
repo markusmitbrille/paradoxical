@@ -127,6 +127,7 @@
                             AcceptsReturn="False"
                             AcceptsTab="False"
                             AllowFormatting="False"
+                            AllowedCompleteItems="Localization"
                             materialDesign:HintAssist.Hint="Title">
 
                             <view:ScriptBox.Text>
@@ -156,6 +157,7 @@
                         AcceptsReturn="False"
                         AcceptsTab="False"
                         AllowFormatting="False"
+                        AllowedCompleteItems="Localization"
                         materialDesign:HintAssist.Hint="Tooltip">
 
                         <view:ScriptBox.Text>
@@ -529,6 +531,7 @@
                         AcceptsReturn="True"
                         AcceptsTab="True"
                         AllowFormatting="True"
+                        AllowedCompleteItems="Code"
                         materialDesign:HintAssist.Hint="Custom AI Chance">
 
                         <view:ScriptBox.Text>
@@ -559,6 +562,7 @@
                         AcceptsReturn="True"
                         AcceptsTab="True"
                         AllowFormatting="True"
+                        AllowedCompleteItems="Code"
                         materialDesign:HintAssist.Hint="Custom Trigger">
 
                         <view:ScriptBox.Text>
@@ -588,6 +592,7 @@
                         AcceptsReturn="True"
                         AcceptsTab="True"
                         AllowFormatting="True"
+                        AllowedCompleteItems="Code"
                         materialDesign:HintAssist.Hint="Custom Effect">
 
                         <view:ScriptBox.Text>
