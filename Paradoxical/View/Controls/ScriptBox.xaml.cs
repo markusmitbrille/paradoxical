@@ -598,8 +598,9 @@ public partial class ScriptBox : TextBox
             Owner = window,
             Left = position.X,
             Top = position.Y,
-            Filter = CurrentWord?.Value,
+            Filter = CurrentWord?.Value ?? string.Empty,
             AllowedItems = AllowedCompleteItems,
+            MaxItems = 10,
         };
 
         Popup.Closed += PopupClosedHandler;
@@ -677,7 +678,7 @@ public partial class ScriptBox : TextBox
         if (Popup == null)
         { return; }
 
-        Popup.Filter = CurrentWord?.Value;
+        Popup.Filter = CurrentWord?.Value ?? string.Empty;
 
         Popup.UpdateScores();
         Popup.UpdateView();

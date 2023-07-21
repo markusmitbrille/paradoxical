@@ -1,6 +1,7 @@
 ﻿using FuzzySharp;
 using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
+using Paradoxical.Extensions;
 using Paradoxical.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml.Linq;
+using static Paradoxical.View.CompleteBox;
 
 namespace Paradoxical.View;
 
@@ -53,6 +56,10 @@ public partial class CompleteBox : Window
         LocalizationScope =
             0b1000000000010000,
 
+        Code =
+            Scope
+            | CodeSnippet,
+
         Localization =
             Scope
             | LocalizationFunction
@@ -60,21 +67,23 @@ public partial class CompleteBox : Window
             | LocalizationStyle
             | LocalizationIcon
             | LocalizationScope,
-        Code =
-            Scope
-            | CodeSnippet,
+
+        All =
+            Code
+            | Localization,
     }
 
     public class Item
     {
         public string Name { get; init; } = string.Empty;
         public string Code { get; init; } = string.Empty;
-        public PackIconKind Icon { get; init; } = PackIconKind.None;
-
         public int? Offset { get; init; } = null;
-        public string? Tooltip { get; init; } = null;
+        public string[] Tags { get; init; } = Array.Empty<string>();
 
+        public PackIconKind Icon { get; init; } = PackIconKind.None;
         public Kind Kind { get; init; } = Kind.None;
+
+        public string? Tooltip { get; init; } = null;
 
         public int Score { get; set; } = 0;
     }
@@ -127,9 +136,10 @@ public partial class CompleteBox : Window
         {
             Name = "Culture → Culture Head",
             Code = "culture_head",
+            Tags = new[] { "culture", "culture_head" },
             Icon = PackIconKind.ArrowRightBottom,
             Kind = Kind.Scope,
-            Tooltip = "Scopes to character."
+            Tooltip = "Scopes to character.",
         },
         new()
         {
@@ -975,174 +985,195 @@ public partial class CompleteBox : Window
         {
             Name = "Uppercase Argument",
             Code = "|U",
+            Offset = 0,
+            Tags = new[] { "argumentupper", "argumentupper" },
             Icon = PackIconKind.QuestionMark,
             Kind = Kind.LocalizationArgument,
-            Offset = 0,
         },
         new()
         {
             Name = "Lowercase Argument",
             Code = "|L",
+            Offset = 0,
+            Tags = new[] { "argumentlower", "lowerargument" },
             Icon = PackIconKind.QuestionMark,
             Kind = Kind.LocalizationArgument,
-            Offset = 0,
         },
         new()
         {
             Name = "Positive Argument",
             Code = "|P",
+            Offset = 0,
+            Tags = new[] { "argumentpos", "posargument" },
             Icon = PackIconKind.QuestionMark,
             Kind = Kind.LocalizationArgument,
-            Offset = 0,
         },
         new()
         {
             Name = "Negative Argument",
             Code = "|N",
+            Offset = 0,
+            Tags = new[] { "argumentneg", "negargument" },
             Icon = PackIconKind.QuestionMark,
             Kind = Kind.LocalizationArgument,
-            Offset = 0,
         },
         new()
         {
             Name = "Game Concept Argument",
             Code = "|E",
+            Offset = 0,
+            Tags = new[] { "argumentgameconcept", "gameconceptargument" },
             Icon = PackIconKind.QuestionMark,
             Kind = Kind.LocalizationArgument,
-            Offset = 0,
         },
         new()
         {
             Name = "White Argument",
             Code = "|V",
+            Offset = 0,
+            Tags = new[] { "argument", "white" },
             Icon = PackIconKind.QuestionMark,
             Kind = Kind.LocalizationArgument,
-            Offset = 0,
         },
         new()
         {
             Name = "Positive Style",
             Code = "#P  #!",
+            Offset = 3,
+            Tags = new[] { "stylepos", "posstyle" },
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
-            Offset = 3,
         },
         new()
         {
             Name = "Negative Style",
             Code = "#N  #!",
+            Offset = 3,
+            Tags = new[] { "styleneg", "negstyle" },
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
-            Offset = 3,
         },
         new()
         {
             Name = "Help Style",
             Code = "#help  #!",
+            Offset = 6,
+            Tags = new[] { "stylehelp", "helpstyle" },
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
-            Offset = 6,
         },
         new()
         {
             Name = "Informational Style",
             Code = "#I  #!",
+            Offset = 3,
+            Tags = new[] { "styleinfo", "infostyle" },
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
-            Offset = 3,
         },
         new()
         {
             Name = "Warning Style",
             Code = "#warning  #!",
+            Offset = 3,
+            Tags = new[] { "stylewarning", "warningstyle" },
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
-            Offset = 3,
         },
         new()
         {
             Name = "Title Style",
             Code = "#T  #!",
+            Offset = 3,
+            Tags = new[] { "styletitle", "titlestyle" },
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
-            Offset = 3,
         },
         new()
         {
             Name = "Game Concept Style",
             Code = "#E  #!",
+            Offset = 3,
+            Tags = new[] { "stylegameconcept", "gameconceptstyle" },
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
-            Offset = 3,
         },
         new()
         {
             Name = "Italic Warning Style",
             Code = "#X  #!",
+            Offset = 3,
+            Tags = new[] { "styleitalicwarning", "italicwarningstyle" },
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
-            Offset = 3,
         },
         new()
         {
             Name = "Bold and Italic Style",
             Code = "#S  #!",
+            Offset = 3,
+            Tags = new[] { "stylebolditalic", "bolditalicstyle" },
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
-            Offset = 3,
         },
         new()
         {
             Name = "White Style",
             Code = "#V  #!",
+            Offset = 3,
+            Tags = new[] { "stylewhite", "whitestyle" },
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
-            Offset = 3,
         },
         new()
         {
             Name = "Emphasized Style",
             Code = "#EMP  #!",
+            Offset = 5,
+            Tags = new[] { "styleemph", "emphstyle" },
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
-            Offset = 5,
         },
         new()
         {
             Name = "Weak Style",
             Code = "#weak  #!",
+            Offset = 6,
+            Tags = new[] { "styleweak", "weakstyle" },
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
-            Offset = 6,
         },
         new()
         {
             Name = "Bold Style",
             Code = "#bold  #!",
+            Offset = 6,
+            Tags = new[] { "stylebold", "boldstyle" },
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
-            Offset = 6,
         },
         new()
         {
             Name = "Italic Style",
             Code = "#italic  #!",
+            Offset = 8,
+            Tags = new[] { "styleitalic", "italicstyle" },
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
-            Offset = 8,
         },
         new()
         {
             Name = "Icon",
             Code = "@!",
+            Offset = 1,
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
-            Offset = 1,
         },
         new()
         {
             Name = "Warning Icon",
             Code = "@warning_icon!",
+            Tags = new[] { "iconwarning", "warningicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1150,6 +1181,7 @@ public partial class CompleteBox : Window
         {
             Name = "Gold Icon",
             Code = "@gold_icon!",
+            Tags = new[] { "icon", "gold" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1157,6 +1189,7 @@ public partial class CompleteBox : Window
         {
             Name = "Prestige Icon",
             Code = "@prestige_icon!",
+            Tags = new[] { "iconprestige", "prestigeicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1164,6 +1197,7 @@ public partial class CompleteBox : Window
         {
             Name = "Piety Icon",
             Code = "@piety_icon!",
+            Tags = new[] { "iconpiety", "pietyicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1171,6 +1205,7 @@ public partial class CompleteBox : Window
         {
             Name = "Christian Piety Icon",
             Code = "@piety_icon_christian!",
+            Tags = new[] { "iconpietychristianity", "pietychristianityicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1178,6 +1213,7 @@ public partial class CompleteBox : Window
         {
             Name = "Islam Piety Icon",
             Code = "@piety_icon_islam!",
+            Tags = new[] { "iconpietyislam", "pietyislamicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1185,6 +1221,7 @@ public partial class CompleteBox : Window
         {
             Name = "Pagan Piety Icon",
             Code = "@piety_icon_pagan!",
+            Tags = new[] { "iconpietypagan", "pietypaganicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1192,6 +1229,7 @@ public partial class CompleteBox : Window
         {
             Name = "Eastern Piety Icon",
             Code = "@piety_icon_eastern!",
+            Tags = new[] { "iconpietyeastern", "pietyeasternicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1199,6 +1237,7 @@ public partial class CompleteBox : Window
         {
             Name = "Judaism Piety Icon",
             Code = "@piety_icon_judaism!",
+            Tags = new[] { "iconpietyjudaism", "pietyjudaismicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1206,6 +1245,7 @@ public partial class CompleteBox : Window
         {
             Name = "Zoroastrian Piety Icon",
             Code = "@piety_icon_zoroastrian!",
+            Tags = new[] { "iconpietyzoroastrian", "pietyzoroastrianicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1213,6 +1253,7 @@ public partial class CompleteBox : Window
         {
             Name = "Time Icon",
             Code = "@time_icon!",
+            Tags = new[] { "icontime", "timeicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1220,6 +1261,7 @@ public partial class CompleteBox : Window
         {
             Name = "Cross Icon",
             Code = "@cross_icon!",
+            Tags = new[] { "iconcross", "crossicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1227,6 +1269,7 @@ public partial class CompleteBox : Window
         {
             Name = "Stress Icon",
             Code = "@stress_icon!",
+            Tags = new[] { "iconstress", "stressicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1234,6 +1277,7 @@ public partial class CompleteBox : Window
         {
             Name = "Dread Icon",
             Code = "@dread_icon!",
+            Tags = new[] { "icondread", "dreadicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1241,13 +1285,7 @@ public partial class CompleteBox : Window
         {
             Name = "Exposed Icon",
             Code = "@exposed_icon!",
-            Icon = PackIconKind.Image,
-            Kind = Kind.LocalizationIcon,
-        },
-        new()
-        {
-            Name = "Portrait Punishment Icon",
-            Code = "@portrait_punishment_icon!",
+            Tags = new[] { "iconexposed", "exposedicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1255,6 +1293,7 @@ public partial class CompleteBox : Window
         {
             Name = "Diplomacy Skill Icon",
             Code = "@skill_diplomacy_icon!",
+            Tags = new[] { "iconskilldiplomacy", "skilldiplomacyicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1262,6 +1301,7 @@ public partial class CompleteBox : Window
         {
             Name = "Martial Skill Icon",
             Code = "@skill_martial_icon!",
+            Tags = new[] { "iconskillmartial", "skillmartialicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1269,6 +1309,7 @@ public partial class CompleteBox : Window
         {
             Name = "Stewardship Skill Icon",
             Code = "@skill_stewardship_icon!",
+            Tags = new[] { "iconskillstewardship", "skillstewardshipicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1276,6 +1317,7 @@ public partial class CompleteBox : Window
         {
             Name = "Intrigue Skill Icon",
             Code = "@skill_intrigue_icon!",
+            Tags = new[] { "iconskillintrigue", "skillintrigueicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1283,6 +1325,7 @@ public partial class CompleteBox : Window
         {
             Name = "Learning Skill Icon",
             Code = "@skill_learning_icon!",
+            Tags = new[] { "iconskilllearning", "skilllearningicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1290,6 +1333,7 @@ public partial class CompleteBox : Window
         {
             Name = "Prowess Skill Icon",
             Code = "@skill_prowess_icon!",
+            Tags = new[] { "iconskillprowess", "skillprowessicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1297,6 +1341,7 @@ public partial class CompleteBox : Window
         {
             Name = "Stress Gain Icon",
             Code = "@stress_gain_icon!",
+            Tags = new[] { "iconstressgain", "stressgainicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1304,6 +1349,7 @@ public partial class CompleteBox : Window
         {
             Name = "Stress Critical Icon",
             Code = "@stress_critical_icon!",
+            Tags = new[] { "iconstresscritical", "stresscriticalicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1311,6 +1357,7 @@ public partial class CompleteBox : Window
         {
             Name = "Stress Loss Icon",
             Code = "@stress_loss_icon!",
+            Tags = new[] { "iconstressloss", "stresslossicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1318,6 +1365,7 @@ public partial class CompleteBox : Window
         {
             Name = "Death Icon",
             Code = "@death_icon!",
+            Tags = new[] { "icondeath", "deathicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1325,6 +1373,7 @@ public partial class CompleteBox : Window
         {
             Name = "Scheme Icon",
             Code = "@scheme_icon!",
+            Tags = new[] { "iconscheme", "schemeicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1332,6 +1381,7 @@ public partial class CompleteBox : Window
         {
             Name = "Crime Icon",
             Code = "@crime_icon!",
+            Tags = new[] { "iconcrime", "crimeicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1339,6 +1389,7 @@ public partial class CompleteBox : Window
         {
             Name = "Intimidated Icon",
             Code = "@intimidated_icon!",
+            Tags = new[] { "iconintimidated", "intimidatedicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1346,6 +1397,7 @@ public partial class CompleteBox : Window
         {
             Name = "Terrified Icon",
             Code = "@terrified_icon!",
+            Tags = new[] { "iconterrified", "terrifiedicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1353,6 +1405,7 @@ public partial class CompleteBox : Window
         {
             Name = "Realm Capital Icon",
             Code = "@realm_capital_icon!",
+            Tags = new[] { "iconrealmcapital", "realmcapitalicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1360,6 +1413,7 @@ public partial class CompleteBox : Window
         {
             Name = "Alliance Icon",
             Code = "@alliance_icon!",
+            Tags = new[] { "iconalliance", "allianceicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1367,6 +1421,7 @@ public partial class CompleteBox : Window
         {
             Name = "Prison Icon",
             Code = "@prison_icon!",
+            Tags = new[] { "iconprison", "prisonicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1374,6 +1429,7 @@ public partial class CompleteBox : Window
         {
             Name = "Titles Icon",
             Code = "@titles_icon!",
+            Tags = new[] { "icontitles", "titlesicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1381,6 +1437,7 @@ public partial class CompleteBox : Window
         {
             Name = "Domain Icon",
             Code = "@domain_icon!",
+            Tags = new[] { "icondomain", "domainicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1388,6 +1445,7 @@ public partial class CompleteBox : Window
         {
             Name = "Building Icon",
             Code = "@building_icon!",
+            Tags = new[] { "iconbuilding", "buildingicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1395,6 +1453,7 @@ public partial class CompleteBox : Window
         {
             Name = "Faction Icon",
             Code = "@faction_icon!",
+            Tags = new[] { "iconfaction", "factionicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1402,6 +1461,7 @@ public partial class CompleteBox : Window
         {
             Name = "Friend Icon",
             Code = "@friend_icon!",
+            Tags = new[] { "iconfriend", "friendicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1409,6 +1469,7 @@ public partial class CompleteBox : Window
         {
             Name = "Best Friend Icon",
             Code = "@best_friend_icon!",
+            Tags = new[] { "iconbestfriend", "bestfriendicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1416,6 +1477,7 @@ public partial class CompleteBox : Window
         {
             Name = "Rival Icon",
             Code = "@rival_icon!",
+            Tags = new[] { "iconrival", "rivalicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1423,6 +1485,7 @@ public partial class CompleteBox : Window
         {
             Name = "Nemesis Icon",
             Code = "@nemesis_icon!",
+            Tags = new[] { "iconnemesis", "nemesisicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1430,6 +1493,7 @@ public partial class CompleteBox : Window
         {
             Name = "Lover Icon",
             Code = "@lover_icon!",
+            Tags = new[] { "iconlover", "lovericon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1437,6 +1501,7 @@ public partial class CompleteBox : Window
         {
             Name = "Soulmate Icon",
             Code = "@soulmate_icon!",
+            Tags = new[] { "iconsoulmate", "soulmateicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1444,6 +1509,7 @@ public partial class CompleteBox : Window
         {
             Name = "Catholic Icon",
             Code = "@catholic_icon!",
+            Tags = new[] { "iconcatholic", "catholicicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1451,6 +1517,7 @@ public partial class CompleteBox : Window
         {
             Name = "Orthodox Icon",
             Code = "@orthodox_icon!",
+            Tags = new[] { "iconorthodox", "orthodoxicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1458,6 +1525,7 @@ public partial class CompleteBox : Window
         {
             Name = "Virtue Icon",
             Code = "@virtue_icon!",
+            Tags = new[] { "iconvirtue", "virtueicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1465,6 +1533,7 @@ public partial class CompleteBox : Window
         {
             Name = "Sin Icon",
             Code = "@sin_icon!",
+            Tags = new[] { "iconsin", "sinicon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1472,6 +1541,7 @@ public partial class CompleteBox : Window
         {
             Name = "Fervor Icon",
             Code = "@fervor_icon!",
+            Tags = new[] { "iconfervor", "fervoricon" },
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
@@ -1481,8 +1551,10 @@ public partial class CompleteBox : Window
     private IEnumerable<Item> FilteredItems => View.Cast<Item>();
 
     public Item? Selected { get; set; }
-    public string? Filter { get; set; }
-    public Kind AllowedItems { get; set; }
+
+    public string Filter { get; set; } = string.Empty;
+    public Kind AllowedItems { get; set; } = Kind.All;
+    public int MaxItems { get; set; } = 10;
 
     public bool? Result { get; set; }
 
@@ -1517,10 +1589,7 @@ public partial class CompleteBox : Window
         if (AllowedItems.HasFlag(item.Kind) == false)
         { return false; }
 
-        if (string.IsNullOrEmpty(Filter) == true)
-        { return true; }
-
-        if (Fuzz.PartialRatio(item.Name.ToLowerInvariant(), Filter.ToLowerInvariant()) >= 60)
+        if (item.Score > 50)
         { return true; }
 
         return false;
@@ -1546,15 +1615,53 @@ public partial class CompleteBox : Window
 
     public void UpdateScores()
     {
-        foreach (var item in Items)
+        if (Filter.IsEmpty() == true)
         {
-            if (string.IsNullOrEmpty(Filter) == true)
+            foreach (var item in Items)
             {
                 item.Score = 0;
-                continue;
             }
 
-            item.Score = Fuzz.PartialRatio(item.Name.ToLowerInvariant(), Filter.ToLowerInvariant());
+            var defaults = Items.Take(MaxItems);
+            foreach (var item in defaults)
+            {
+                item.Score = 100;
+            }
+
+            return;
+        }
+
+        var invalids = Items.Where(item => AllowedItems.HasFlag(item.Kind) == false);
+        foreach (var item in invalids)
+        {
+            item.Score = 0;
+        }
+
+        var valids = Items.Where(item => AllowedItems.HasFlag(item.Kind) == true);
+        foreach (var item in valids)
+        {
+            string filter = Filter.ToLowerInvariant();
+            string name = item.Name.ToLowerInvariant();
+
+            item.Score = Fuzz.PartialRatio(filter, name);
+
+            foreach (string tag in item.Tags)
+            {
+                if (string.IsNullOrEmpty(tag) == true)
+                { continue; }
+
+                int score = Fuzz.PartialRatio(filter, tag);
+                if (score > item.Score)
+                {
+                    item.Score = score;
+                }
+            }
+        }
+
+        var garbage = valids.OrderBy(item => item.Score).Take(Items.Count() - MaxItems);
+        foreach (var item in garbage)
+        {
+            item.Score = 0;
         }
     }
 
