@@ -155,6 +155,7 @@
                         FontFamily="Consolas"
                         AcceptsReturn="True"
                         AcceptsTab="True"
+                        AcceptsDot="True"
                         AllowFormatting="True"
                         AllowedCompleteItems="Code"
                         materialDesign:HintAssist.Hint="Code">
@@ -178,6 +179,7 @@
                         Grid.Row="2"
                         AcceptsReturn="False"
                         AcceptsTab="False"
+                        AcceptsDot="True"
                         AllowFormatting="False"
                         AllowedCompleteItems="Localization"
                         materialDesign:HintAssist.Hint="Tooltip">

@@ -154,6 +154,7 @@
                         Grid.Row="1"
                         AcceptsReturn="False"
                         AcceptsTab="False"
+                        AcceptsDot="True"
                         AllowFormatting="False"
                         AllowedCompleteItems="Localization"
                         materialDesign:HintAssist.Hint="Title">
@@ -177,6 +178,7 @@
                         Grid.Row="2"
                         AcceptsReturn="True"
                         AcceptsTab="False"
+                        AcceptsDot="True"
                         AllowFormatting="False"
                         AllowedCompleteItems="Localization"
                         materialDesign:HintAssist.Hint="Description">
@@ -638,6 +640,7 @@
                         FontFamily="Consolas"
                         AcceptsReturn="True"
                         AcceptsTab="True"
+                        AcceptsDot="True"
                         AllowFormatting="True"
                         AllowedCompleteItems="Code"
                         materialDesign:HintAssist.Hint="Custom Trigger">
@@ -815,6 +818,7 @@
                         FontFamily="Consolas"
                         AcceptsReturn="True"
                         AcceptsTab="True"
+                        AcceptsDot="True"
                         AllowFormatting="True"
                         AllowedCompleteItems="Code"
                         materialDesign:HintAssist.Hint="Custom Effect">
@@ -992,6 +996,7 @@
                         FontFamily="Consolas"
                         AcceptsReturn="True"
                         AcceptsTab="True"
+                        AcceptsDot="True"
                         AllowFormatting="True"
                         AllowedCompleteItems="Code"
                         materialDesign:HintAssist.Hint="Custom Effect">

@@ -251,13 +251,21 @@ public partial class ScriptBox : TextBox
     public static readonly DependencyProperty AllowFormattingProperty =
         DependencyProperty.Register("AllowFormatting", typeof(bool), typeof(ScriptBox), new PropertyMetadata(false));
 
+    public bool AcceptsDot
+    {
+        get { return (bool)GetValue(AcceptsDotProperty); }
+        set { SetValue(AcceptsDotProperty, value); }
+    }
+
+    public static readonly DependencyProperty AcceptsDotProperty =
+        DependencyProperty.Register("AcceptsDot", typeof(bool), typeof(ScriptBox), new PropertyMetadata(false));
+
     public CompleteBox.Kind AllowedCompleteItems
     {
         get { return (CompleteBox.Kind)GetValue(AllowedCompleteItemsProperty); }
         set { SetValue(AllowedCompleteItemsProperty, value); }
     }
 
-    // Using a DependencyProperty as the backing store for AllowedCompleteItems.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty AllowedCompleteItemsProperty =
         DependencyProperty.Register("AllowedCompleteItems", typeof(CompleteBox.Kind), typeof(ScriptBox), new PropertyMetadata(CompleteBox.Kind.All));
 
@@ -361,12 +369,15 @@ public partial class ScriptBox : TextBox
         UpdateWordMatches();
         UpdateCurrentWord();
 
+        ValidatePopup();
         UpdatePopup();
     }
 
     private void SelectionChangedHandler(object sender, RoutedEventArgs e)
     {
         UpdateCurrentWord();
+
+        ValidatePopup();
         UpdatePopup();
     }
 
@@ -468,14 +479,19 @@ public partial class ScriptBox : TextBox
             InsertCurlyBraces();
             e.Handled = true;
         }
-        if (e.Text == "\t")
+        if (e.Text == "\t" && AcceptsTab == true)
         {
             InsertIndentation();
             e.Handled = true;
         }
-        if (e.Text == "\r\n")
+        if (e.Text == "\r\n" && AcceptsReturn == true)
         {
             InsertNewLine();
+            e.Handled = true;
+        }
+        if (e.Text == "." && AcceptsDot == true)
+        {
+            InsertDot();
             e.Handled = true;
         }
     }
@@ -568,6 +584,30 @@ public partial class ScriptBox : TextBox
 
         Text = text;
         CaretIndex = index;
+    }
+
+    private void InsertDot()
+    {
+        var popup = Popup;
+        if (popup != null)
+        {
+            popup.Result = true;
+            ClosePopup();
+        }
+
+        var index = CaretIndex;
+        var text = Text;
+
+        text = text.Insert(CaretIndex, ".");
+        index += 1;
+
+        Text = text;
+        CaretIndex = index;
+
+        if (popup != null)
+        {
+            OpenPopup();
+        }
     }
 
     private void UpdateWordMatches()
@@ -673,16 +713,19 @@ public partial class ScriptBox : TextBox
         if (Popup == null)
         { return; }
 
-        ValidatePopupPlacement();
-
-        if (Popup == null)
-        { return; }
-
         Popup.Filter = CurrentWord?.Value ?? string.Empty;
 
         Popup.UpdateScores();
         Popup.UpdateView();
         Popup.UpdateSelection();
+    }
+
+    private void ValidatePopup()
+    {
+        if (Popup == null)
+        { return; }
+
+        ValidatePopupPlacement();
     }
 
     private void ValidatePopupPlacement()
