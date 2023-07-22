@@ -1642,14 +1642,14 @@ public partial class CompleteBox : Window
             string filter = Filter.ToLowerInvariant();
             string name = item.Name.ToLowerInvariant();
 
-            item.Score = Fuzz.PartialRatio(filter, name);
+            item.Score = Fuzz.Ratio(filter, name);
 
             foreach (string tag in item.Tags)
             {
                 if (string.IsNullOrEmpty(tag) == true)
                 { continue; }
 
-                int score = Fuzz.PartialRatio(filter, tag);
+                int score = Fuzz.Ratio(filter, tag);
                 if (score > item.Score)
                 {
                     item.Score = score;
