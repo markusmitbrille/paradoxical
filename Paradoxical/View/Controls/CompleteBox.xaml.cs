@@ -38,35 +38,39 @@ public partial class CompleteBox : Window
         Scope =
             0b0000000000000001,
 
-        CodeSnippet =
+        CodeScope =
             0b0000000000000010,
 
-        LocalizationFunction =
+        CodeSnippet =
             0b0000000000000100,
 
-        LocalizationArgument =
+        LocalizationFunction =
             0b0000000000001000,
 
-        LocalizationStyle =
+        LocalizationArgument =
             0b0000000000010000,
 
-        LocalizationIcon =
+        LocalizationStyle =
             0b0000000000100000,
 
-        LocalizationScope =
+        LocalizationIcon =
             0b0000000001000000,
+
+        LocalizationScope =
+            0b0000000010000000,
 
         Code =
             Scope
+            | CodeScope
             | CodeSnippet,
 
         Localization =
             Scope
+            | LocalizationScope
             | LocalizationFunction
             | LocalizationArgument
             | LocalizationStyle
-            | LocalizationIcon
-            | LocalizationScope,
+            | LocalizationIcon,
 
         All =
             Code | Localization,
@@ -89,13 +93,7 @@ public partial class CompleteBox : Window
 
     private IEnumerable<Item> Items { get; } = new Item[]
     {
-        new()
-        {
-            Name = "scope",
-            Code = "scope:",
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-        },
+        // UNIVERSAL SCOPES
         new()
         {
             Name = "THIS",
@@ -124,6 +122,9 @@ public partial class CompleteBox : Window
             Icon = PackIconKind.ArrowRightBottom,
             Kind = Kind.Scope,
         },
+
+        // LOCALIZATION SCOPES
+
         new()
         {
             Name = "Char",
@@ -131,6 +132,19 @@ public partial class CompleteBox : Window
             Icon = PackIconKind.ArrowRightBottom,
             Kind = Kind.LocalizationScope,
         },
+
+        // CODE SCOPES
+
+        new()
+        {
+            Name = "scope",
+            Code = "scope:",
+            Icon = PackIconKind.ArrowRightBottom,
+            Kind = Kind.CodeScope,
+        },
+
+        // UNIVERSAL SCOPES
+
         new()
         {
             Name = "Culture → Culture Head",
@@ -147,7 +161,7 @@ public partial class CompleteBox : Window
             Tags = new[] { "culture_group" },
             Icon = PackIconKind.ArrowRightBottom,
             Kind = Kind.Scope,
-            Tooltip = "Scopes to culture group.\nUsable in culture, landed title, character and province scopes.",
+            Tooltip = "Scopes to culture group.",
         },
         new()
         {
@@ -1257,6 +1271,9 @@ public partial class CompleteBox : Window
             Kind = Kind.Scope,
             Tooltip = "Scopes to province.",
         },
+
+        // CODE SNIPPETS
+
         new()
         {
             Name = "always",
@@ -1320,6 +1337,9 @@ public partial class CompleteBox : Window
             Icon = PackIconKind.CodeBraces,
             Kind = Kind.CodeSnippet,
         },
+
+        // LOCALIZATION FUNCTIONS
+
         new()
         {
             Name = "GetName",
@@ -2097,6 +2117,9 @@ public partial class CompleteBox : Window
             Icon = PackIconKind.FaceMan,
             Kind = Kind.LocalizationFunction,
         },
+
+        // LOCALIZATION ARGUMENTS
+
         new()
         {
             Name = "Uppercase Argument",
@@ -2151,6 +2174,9 @@ public partial class CompleteBox : Window
             Icon = PackIconKind.QuestionMark,
             Kind = Kind.LocalizationArgument,
         },
+
+        // LOCALIZATION STYLES
+
         new()
         {
             Name = "Positive Style",
@@ -2277,6 +2303,9 @@ public partial class CompleteBox : Window
             Icon = PackIconKind.Style,
             Kind = Kind.LocalizationStyle,
         },
+
+        // LOCALIZATION ICONS
+
         new()
         {
             Name = "Icon",
