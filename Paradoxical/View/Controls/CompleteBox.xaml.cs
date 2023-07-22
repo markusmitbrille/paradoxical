@@ -1671,9 +1671,6 @@ public partial class CompleteBox : Window
 
     public void UpdateSelection()
     {
-        if (Selected != null && Predicate(Selected) == true)
-        { return; }
-
         Item? selected = FilteredItems.FirstOrDefault();
         ItemsBox.SelectedItem = selected;
     }
