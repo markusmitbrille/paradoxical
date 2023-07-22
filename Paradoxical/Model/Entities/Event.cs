@@ -96,6 +96,16 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         IOptionService optionService,
         IPortraitService portraitService)
     {
+        if (Raw != null)
+        {
+            foreach (string line in Raw.Split(ParadoxText.NewParagraph))
+            {
+                writer.Indent().WriteLine(line);
+            }
+
+            return;
+        }
+
         writer.Indent().WriteLine($"{GetQualifiedName(modService)} = {{");
         ParadoxText.IndentLevel++;
 

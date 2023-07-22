@@ -63,6 +63,16 @@ public class Effect : IEntity, IModel, IElement, IEquatable<Effect?>
         TextWriter writer,
         IModService modService)
     {
+        if (Raw != null)
+        {
+            foreach (string line in Raw.Split(ParadoxText.NewParagraph))
+            {
+                writer.Indent().WriteLine(line);
+            }
+
+            return;
+        }
+
         writer.Indent().WriteLine($"{GetQualifiedName(modService)} = {{");
         ParadoxText.IndentLevel++;
 

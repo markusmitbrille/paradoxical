@@ -157,6 +157,16 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
         IModService modService,
         IOptionService optionService)
     {
+        if (Raw != null)
+        {
+            foreach (string line in Raw.Split(ParadoxText.NewParagraph))
+            {
+                writer.Indent().WriteLine(line);
+            }
+
+            return;
+        }
+
         writer.Indent().WriteLine("option = {");
         ParadoxText.IndentLevel++;
 

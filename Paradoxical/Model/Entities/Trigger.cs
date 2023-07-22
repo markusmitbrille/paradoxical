@@ -58,6 +58,16 @@ public class Trigger : IEntity, IModel, IElement, IEquatable<Trigger?>
         TextWriter writer,
         IModService modService)
     {
+        if (Raw != null)
+        {
+            foreach (string line in Raw.Split(ParadoxText.NewParagraph))
+            {
+                writer.Indent().WriteLine(line);
+            }
+
+            return;
+        }
+
         writer.Indent().WriteLine($"{GetQualifiedName(modService)} = {{");
         ParadoxText.IndentLevel++;
 
