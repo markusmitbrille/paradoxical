@@ -135,7 +135,7 @@ public partial class CompleteBox : Window
         {
             Name = "Culture → Culture Head",
             Code = "culture_head",
-            Tags = new[] { "culture", "culture_head" },
+            Tags = new[] { "culture_head" },
             Icon = PackIconKind.ArrowRightBottom,
             Kind = Kind.Scope,
             Tooltip = "Scopes to character.",
