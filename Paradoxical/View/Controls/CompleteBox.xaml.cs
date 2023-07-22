@@ -93,7 +93,8 @@ public partial class CompleteBox : Window
 
     private IEnumerable<Item> Items { get; } = new Item[]
     {
-        // UNIVERSAL SCOPES
+        #region UNIVERSAL SCOPES
+
         new()
         {
             Name = "THIS",
@@ -123,7 +124,8 @@ public partial class CompleteBox : Window
             Kind = Kind.Scope,
         },
 
-        // LOCALIZATION SCOPES
+        #endregion
+        #region LOCALIZATION SCOPES
 
         new()
         {
@@ -133,7 +135,8 @@ public partial class CompleteBox : Window
             Kind = Kind.LocalizationScope,
         },
 
-        // CODE SCOPES
+        #endregion
+        #region CODE SCOPES
 
         new()
         {
@@ -143,7 +146,8 @@ public partial class CompleteBox : Window
             Kind = Kind.CodeScope,
         },
 
-        // UNIVERSAL SCOPES
+        #endregion
+        #region UNIVERSAL SCOPES
 
         new()
         {
@@ -1272,7 +1276,8 @@ public partial class CompleteBox : Window
             Tooltip = "Scopes to province.",
         },
 
-        // CODE SNIPPETS
+        #endregion
+        #region CODE SNIPPETS
 
         new()
         {
@@ -1337,8 +1342,76 @@ public partial class CompleteBox : Window
             Icon = PackIconKind.CodeBraces,
             Kind = Kind.CodeSnippet,
         },
+        new()
+        {
+            Name = "AND",
+            Code = "AND = {  }",
+            Offset = 8,
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
+        },
+        new()
+        {
+            Name = "OR",
+            Code = "OR = {  }",
+            Offset = 7,
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
+        },
+        new()
+        {
+            Name = "NAND",
+            Code = "NAND = {  }",
+            Offset = 9,
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
+        },
+        new()
+        {
+            Name = "NOR",
+            Code = "NOR = {  }",
+            Offset = 8,
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
+        },
+        new()
+        {
+            Name = "NOT",
+            Code = "NOT = {  }",
+            Offset = 8,
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
+        },
+        new()
+        {
+            Name = "trigger_if",
+            Code = "trigger_if = { limit = { always = yes }  }",
+            Offset = 40,
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
+            Tooltip = "Evaluates the triggers if the display_triggers of the limit are met.",
+        },
+        new()
+        {
+            Name = "trigger_else_if",
+            Code = "trigger_else_if = { limit = { always = yes }  }",
+            Offset = 45,
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
+            Tooltip = "Evaluates the enclosed triggers if the display_triggers of the preceding `trigger_if` or `trigger_else_if` is not met and its own display_trigger of the limit is met.",
+        },
+        new()
+        {
+            Name = "trigger_else",
+            Code = "trigger_else = {  }",
+            Offset = 17,
+            Icon = PackIconKind.CodeBraces,
+            Kind = Kind.CodeSnippet,
+            Tooltip = "Evaluates the triggers if the display_triggers of preceding 'trigger_if' or 'trigger_else_if' is not met.",
+        },
 
-        // LOCALIZATION FUNCTIONS
+        #endregion
+        #region LOCALIZATION FUNCTIONS
 
         new()
         {
@@ -2118,7 +2191,8 @@ public partial class CompleteBox : Window
             Kind = Kind.LocalizationFunction,
         },
 
-        // LOCALIZATION ARGUMENTS
+        #endregion
+        #region LOCALIZATION ARGUMENTS
 
         new()
         {
@@ -2175,7 +2249,8 @@ public partial class CompleteBox : Window
             Kind = Kind.LocalizationArgument,
         },
 
-        // LOCALIZATION STYLES
+        #endregion
+        #region LOCALIZATION STYLES
 
         new()
         {
@@ -2304,7 +2379,8 @@ public partial class CompleteBox : Window
             Kind = Kind.LocalizationStyle,
         },
 
-        // LOCALIZATION ICONS
+        #endregion
+        #region LOCALIZATION ICONS
 
         new()
         {
@@ -2690,6 +2766,8 @@ public partial class CompleteBox : Window
             Icon = PackIconKind.Image,
             Kind = Kind.LocalizationIcon,
         },
+
+        #endregion
     };
 
     private ICollectionView View => CollectionViewSource.GetDefaultView(Items);
