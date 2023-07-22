@@ -499,9 +499,11 @@ public partial class ScriptBox : TextBox
     private void InsertQuotationMarks()
     {
         var index = CaretIndex;
+        var length = SelectionLength;
         var text = Text;
 
-        text = text.Insert(CaretIndex, "\"\"");
+        text = text.Remove(index, length);
+        text = text.Insert(index, "\"\"");
         index += 1;
 
         Text = text;
@@ -511,9 +513,11 @@ public partial class ScriptBox : TextBox
     private void InsertBraces()
     {
         var index = CaretIndex;
+        var length = SelectionLength;
         var text = Text;
 
-        text = text.Insert(CaretIndex, "()");
+        text = text.Remove(index, length);
+        text = text.Insert(index, "()");
         index += 1;
 
         Text = text;
@@ -523,9 +527,11 @@ public partial class ScriptBox : TextBox
     private void InsertSquareBraces()
     {
         var index = CaretIndex;
+        var length = SelectionLength;
         var text = Text;
 
-        text = text.Insert(CaretIndex, "[]");
+        text = text.Remove(index, length);
+        text = text.Insert(index, "[]");
         index += 1;
 
         Text = text;
@@ -535,15 +541,18 @@ public partial class ScriptBox : TextBox
     private void InsertCurlyBraces()
     {
         var index = CaretIndex;
+        var length = SelectionLength;
         var text = Text;
 
         if (AcceptsReturn == true)
         {
+            text = text.Remove(index, length);
             text = text.Insert(index, "{\r\n\r\n}");
             index += 3;
         }
         else
         {
+            text = text.Remove(index, length);
             text = text.Insert(index, "{  }");
             index += 2;
         }
@@ -560,9 +569,11 @@ public partial class ScriptBox : TextBox
     private void InsertIndentation()
     {
         var index = CaretIndex;
+        var length = SelectionLength;
         var text = Text;
 
-        text = text.Insert(CaretIndex, ParadoxText.Indentation);
+        text = text.Remove(index, length);
+        text = text.Insert(index, ParadoxText.Indentation);
         index += ParadoxText.Indentation.Length;
 
         Text = text;
@@ -572,8 +583,10 @@ public partial class ScriptBox : TextBox
     private void InsertNewLine()
     {
         var text = Text;
+        var length = SelectionLength;
         var index = CaretIndex;
 
+        text = text.Remove(index, length);
         text = text.Insert(index, Environment.NewLine);
         index += Environment.NewLine.Length;
 
@@ -596,9 +609,11 @@ public partial class ScriptBox : TextBox
         }
 
         var index = CaretIndex;
+        var length = SelectionLength;
         var text = Text;
 
-        text = text.Insert(CaretIndex, ".");
+        text = text.Remove(index, length);
+        text = text.Insert(index, ".");
         index += 1;
 
         Text = text;
