@@ -10,6 +10,7 @@ using Paradoxical.Services.Elements;
 using Paradoxical.View;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -354,6 +355,54 @@ if you don't save them.",
     private void GoToManual()
     {
         Navigate<ManualViewModel>();
+    }
+
+    private RelayCommand? goToTriggerListCommand;
+    public RelayCommand GoToTriggerListCommand => goToTriggerListCommand ??= new(GoToTriggerList);
+
+    private void GoToTriggerList()
+    {
+        Process.Start(new ProcessStartInfo("https://raw.githubusercontent.com/OldEnt/crusader-kings-3-triggers-modifiers-effects-event-scopes-targets-on-actions-code-revisions-list/master/1.9.0.4_triggers.log")
+        {
+            UseShellExecute = true,
+            Verb = "open"
+        });
+    }
+
+    private RelayCommand? goToEffectListCommand;
+    public RelayCommand GoToEffectListCommand => goToEffectListCommand ??= new(GoToEffectList);
+
+    private void GoToEffectList()
+    {
+        Process.Start(new ProcessStartInfo("https://raw.githubusercontent.com/OldEnt/crusader-kings-3-triggers-modifiers-effects-event-scopes-targets-on-actions-code-revisions-list/master/1.9.0.4_effects.log")
+        {
+            UseShellExecute = true,
+            Verb = "open"
+        });
+    }
+
+    private RelayCommand? goToScopeListCommand;
+    public RelayCommand GoToScopeListCommand => goToScopeListCommand ??= new(GoToScopeList);
+
+    private void GoToScopeList()
+    {
+        Process.Start(new ProcessStartInfo("https://raw.githubusercontent.com/OldEnt/crusader-kings-3-triggers-modifiers-effects-event-scopes-targets-on-actions-code-revisions-list/master/1.9.0.4_event_targets.log")
+        {
+            UseShellExecute = true,
+            Verb = "open"
+        });
+    }
+
+    private RelayCommand? goToOnActionListCommand;
+    public RelayCommand GoToOnActionListCommand => goToOnActionListCommand ??= new(GoToOnActionList);
+
+    private void GoToOnActionList()
+    {
+        Process.Start(new ProcessStartInfo("https://raw.githubusercontent.com/OldEnt/crusader-kings-3-triggers-modifiers-effects-event-scopes-targets-on-actions-code-revisions-list/master/1.9.0.4_on_actions.log")
+        {
+            UseShellExecute = true,
+            Verb = "open"
+        });
     }
 
     private RelayCommand? goToEventTableCommand;

@@ -65,6 +65,18 @@
             Command="{Binding GoToManualCommand}"
             Gesture="F1" />
         <KeyBinding
+            Command="{Binding GoToTriggerListCommand}"
+            Gesture="F5" />
+        <KeyBinding
+            Command="{Binding GoToEffectListCommand}"
+            Gesture="F6" />
+        <KeyBinding
+            Command="{Binding GoToScopeListCommand}"
+            Gesture="F7" />
+        <KeyBinding
+            Command="{Binding GoToOnActionListCommand}"
+            Gesture="F8" />
+        <KeyBinding
             Command="{Binding GoToInfoCommand}"
             Gesture="ALT+1" />
         <KeyBinding
@@ -141,6 +153,69 @@
                             <TextBlock
                                 Margin="24,4,0,4"
                                 Text="Effects" />
+                        </Button>
+
+                        <Separator
+                            Margin="0,6"
+                            Background="Transparent" />
+
+                        <Button
+                            Margin="12,8"
+                            HorizontalContentAlignment="Left"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Command="{Binding GoToTriggerListCommand}"
+                            Click="MenuButtonClickHandler">
+                            <TextBlock
+                                Margin="24,4,0,4"
+                                Text="Trigger List" />
+                        </Button>
+
+                        <Button
+                            Margin="12,8"
+                            HorizontalContentAlignment="Left"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Command="{Binding GoToEffectListCommand}"
+                            Click="MenuButtonClickHandler">
+                            <TextBlock
+                                Margin="24,4,0,4"
+                                Text="Effect List" />
+                        </Button>
+
+                        <Button
+                            Margin="12,8"
+                            HorizontalContentAlignment="Left"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Command="{Binding GoToScopeListCommand}"
+                            Click="MenuButtonClickHandler">
+                            <TextBlock
+                                Margin="24,4,0,4"
+                                Text="Scope List" />
+                        </Button>
+
+                        <Button
+                            Margin="12,8"
+                            HorizontalContentAlignment="Left"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Command="{Binding GoToOnActionListCommand}"
+                            Click="MenuButtonClickHandler">
+                            <TextBlock
+                                Margin="24,4,0,4"
+                                Text="On-Action List" />
+                        </Button>
+
+                        <Separator
+                            Margin="0,6"
+                            Background="Transparent" />
+
+                        <Button
+                            Margin="12,8"
+                            HorizontalContentAlignment="Left"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Command="{Binding GoToManualCommand}"
+                            Click="MenuButtonClickHandler">
+                            <TextBlock
+                                Margin="24,4,0,4"
+                                Text="Manual" />
                         </Button>
 
                         <Button
