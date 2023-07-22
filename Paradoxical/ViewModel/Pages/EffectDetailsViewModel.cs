@@ -4,7 +4,9 @@ using Paradoxical.Messages;
 using Paradoxical.Model.Elements;
 using Paradoxical.Services;
 using Paradoxical.Services.Elements;
+using Paradoxical.Services.Entities;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace Paradoxical.ViewModel;
@@ -15,6 +17,7 @@ public class EffectDetailsViewModel : PageViewModel
 {
     public override string PageName => "Effect Details";
 
+    public IModService ModService { get; }
     public IEffectService EffectService { get; }
 
     private int selectedTab;
@@ -34,9 +37,11 @@ public class EffectDetailsViewModel : PageViewModel
     public EffectDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
+        IModService modService,
         IEffectService effectService)
         : base(shell, mediator)
     {
+        ModService = modService;
         EffectService = effectService;
     }
 
@@ -70,6 +75,29 @@ public class EffectDetailsViewModel : PageViewModel
     {
         var selected = EffectService.Get(model);
         Selected = new() { Model = selected };
+
+        LoadRaw();
+    }
+
+    private void LoadRaw()
+    {
+        if (Selected == null)
+        { return; }
+
+        if (Selected.Raw == null)
+        {
+            OverrideRaw = false;
+
+            // regenerate view model raw
+            Raw = GenerateRaw();
+        }
+        else
+        {
+            OverrideRaw = true;
+
+            // set view model raw to model and wrapper raw
+            Raw = Selected.Raw;
+        }
     }
 
     private RelayCommand? reloadCommand;
@@ -91,7 +119,29 @@ public class EffectDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
+        SaveRaw();
+
         EffectService.Update(Selected.Model);
+    }
+
+    private void SaveRaw()
+    {
+        if (Selected == null)
+        { return; }
+
+        if (OverrideRaw == true)
+        {
+            // overwrite model raw
+            Selected.Raw = Raw;
+        }
+        else
+        {
+            // regenerate view model raw
+            Raw = GenerateRaw();
+
+            // clear model and wrapper raw
+            Selected.Raw = null;
+        }
     }
 
     private RelayCommand? createCommand;
@@ -145,4 +195,67 @@ public class EffectDetailsViewModel : PageViewModel
         Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
         Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
     }
+
+    #region Raw
+
+    private bool? overrideRaw = null;
+    public bool? OverrideRaw
+    {
+        get => overrideRaw;
+        set => SetProperty(ref overrideRaw, value);
+    }
+
+    private string raw = string.Empty;
+    public string Raw
+    {
+        get => raw;
+        set => SetProperty(ref raw, value);
+    }
+
+    private RelayCommand<bool?>? toggleOverrideRawCommand;
+    public RelayCommand<bool?> ToggleOverrideRawCommand => toggleOverrideRawCommand ??= new(ToggleOverrideRaw);
+
+    private void ToggleOverrideRaw(bool? isChecked)
+    {
+        if (isChecked == true)
+        {
+            ToggleOverrideRawOn();
+        }
+        if (isChecked == false)
+        {
+            ToggleOverrideRawOff();
+        }
+    }
+
+    private void ToggleOverrideRawOn()
+    {
+        if (Selected == null)
+        { return; }
+
+        Raw = GenerateRaw();
+        Selected.Raw = Raw;
+    }
+
+    private void ToggleOverrideRawOff()
+    {
+        if (Selected == null)
+        { return; }
+
+        Raw = GenerateRaw();
+        Selected.Raw = null;
+    }
+
+    private string GenerateRaw()
+    {
+        if (Selected == null)
+        { return string.Empty; }
+
+        using StringWriter writer = new();
+
+        Selected.Model.Write(writer, ModService);
+
+        return writer.ToString();
+    }
+
+    #endregion
 }

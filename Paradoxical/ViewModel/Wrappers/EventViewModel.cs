@@ -1,11 +1,19 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Model.Elements;
+using System;
+using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
 public class EventViewModel : ElementWrapper<Event>
 {
     public override string Kind => "event";
+
+    public string? Raw
+    {
+        get => model.raw;
+        set => SetProperty(ref model.raw, value);
+    }
 
     public override string Name
     {

@@ -5,9 +5,12 @@ using Paradoxical.Messages;
 using Paradoxical.Model.Elements;
 using Paradoxical.Services;
 using Paradoxical.Services.Elements;
+using Paradoxical.Services.Entities;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -22,6 +25,7 @@ public class EventDetailsViewModel : PageViewModel
 
     public IFinder Finder { get; }
 
+    public IModService ModService { get; }
     public IEventService EventService { get; }
     public IPortraitService PortraitService { get; }
     public IOptionService OptionService { get; }
@@ -141,6 +145,7 @@ public class EventDetailsViewModel : PageViewModel
         IShell shell,
         IMediatorService mediator,
         IFinder finder,
+        IModService modService,
         IEventService eventService,
         IPortraitService portraitService,
         IOptionService optionService,
@@ -150,6 +155,7 @@ public class EventDetailsViewModel : PageViewModel
     {
         Finder = finder;
 
+        ModService = modService;
         EventService = eventService;
         PortraitService = portraitService;
         OptionService = optionService;
@@ -223,6 +229,29 @@ public class EventDetailsViewModel : PageViewModel
 
         Afters.Clear();
         Afters.AddRange(afters);
+
+        LoadRaw();
+    }
+
+    private void LoadRaw()
+    {
+        if (Selected == null)
+        { return; }
+
+        if (Selected.Raw == null)
+        {
+            OverrideRaw = false;
+
+            // regenerate view model raw
+            Raw = GenerateRaw();
+        }
+        else
+        {
+            OverrideRaw = true;
+
+            // set view model raw to model and wrapper raw
+            Raw = Selected.Raw;
+        }
     }
 
     private RelayCommand? reloadCommand;
@@ -243,6 +272,8 @@ public class EventDetailsViewModel : PageViewModel
     {
         if (Selected == null)
         { return; }
+
+        SaveRaw();
 
         EventService.Update(Selected.Model);
 
@@ -270,6 +301,26 @@ public class EventDetailsViewModel : PageViewModel
         foreach (var option in Options)
         {
             OptionService.Update(option.Model);
+        }
+    }
+
+    private void SaveRaw()
+    {
+        if (Selected == null)
+        { return; }
+
+        if (OverrideRaw == true)
+        {
+            // overwrite model raw
+            Selected.Raw = Raw;
+        }
+        else
+        {
+            // regenerate view model raw
+            Raw = GenerateRaw();
+
+            // clear model and wrapper raw
+            Selected.Raw = null;
         }
     }
 
@@ -389,6 +440,69 @@ public class EventDetailsViewModel : PageViewModel
         Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
         Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
     }
+
+    #region Raw
+
+    private bool? overrideRaw = null;
+    public bool? OverrideRaw
+    {
+        get => overrideRaw;
+        set => SetProperty(ref overrideRaw, value);
+    }
+
+    private string raw = string.Empty;
+    public string Raw
+    {
+        get => raw;
+        set => SetProperty(ref raw, value);
+    }
+
+    private RelayCommand<bool?>? toggleOverrideRawCommand;
+    public RelayCommand<bool?> ToggleOverrideRawCommand => toggleOverrideRawCommand ??= new(ToggleOverrideRaw);
+
+    private void ToggleOverrideRaw(bool? isChecked)
+    {
+        if (isChecked == true)
+        {
+            ToggleOverrideRawOn();
+        }
+        if (isChecked == false)
+        {
+            ToggleOverrideRawOff();
+        }
+    }
+
+    private void ToggleOverrideRawOn()
+    {
+        if (Selected == null)
+        { return; }
+
+        Raw = GenerateRaw();
+        Selected.Raw = Raw;
+    }
+
+    private void ToggleOverrideRawOff()
+    {
+        if (Selected == null)
+        { return; }
+
+        Raw = GenerateRaw();
+        Selected.Raw = null;
+    }
+
+    private string GenerateRaw()
+    {
+        if (Selected == null)
+        { return string.Empty; }
+
+        using StringWriter writer = new();
+
+        Selected.Model.Write(writer, ModService, EventService, OptionService, PortraitService);
+
+        return writer.ToString();
+    }
+
+    #endregion
 
     #region Option Commands
 

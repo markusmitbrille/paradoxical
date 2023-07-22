@@ -7,6 +7,12 @@ public class EffectViewModel : ElementWrapper<Effect>
 {
     public override string Kind => "effect";
 
+    public string? Raw
+    {
+        get => model.raw;
+        set => SetProperty(ref model.raw, value);
+    }
+
     public override string Name
     {
         get => model.name;

@@ -86,6 +86,21 @@
                     Content="{materialDesign:PackIcon Kind=Refresh}"
                     ToolTip="Refresh" />
 
+                <Separator />
+
+                <TextBlock
+                    Margin="4,0"
+                    VerticalAlignment="Center"
+                    Text="Raw Override"
+                    Style="{StaticResource MaterialDesignTextBlock}" />
+
+                <ToggleButton
+                    x:Name="RawOverrideToggleButton"
+                    Margin="4,0"
+                    IsChecked="{Binding OverrideRaw}"
+                    Command="{Binding ToggleOverrideRawCommand}"
+                    CommandParameter="{Binding IsChecked, ElementName=RawOverrideToggleButton}" />
+
             </ToolBar>
         </ToolBarTray>
 
@@ -164,6 +179,64 @@
                         <view:ScriptBox.Text>
                             <Binding
                                 Path="Selected.Tooltip"
+                                Mode="TwoWay"
+                                UpdateSourceTrigger="PropertyChanged">
+
+                                <Binding.Converter>
+                                    <converters:ScriptConverter />
+                                </Binding.Converter>
+
+                            </Binding>
+                        </view:ScriptBox.Text>
+
+                    </view:ScriptBox>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem
+                Header="Raw">
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="auto" />
+                        <RowDefinition
+                            Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel
+                        Grid.Row="0"
+                        Orientation="Horizontal">
+
+                    </StackPanel>
+
+                    <view:ScriptBox
+                        Grid.Row="1"
+                        FontFamily="Consolas"
+                        AcceptsReturn="True"
+                        AcceptsTab="True"
+                        AcceptsDot="True"
+                        AllowFormatting="True"
+                        AllowedCompleteItems="All"
+                        materialDesign:HintAssist.Hint="Raw">
+
+                        <view:ScriptBox.IsReadOnly>
+                            <Binding
+                                Path="OverrideRaw"
+                                Mode="TwoWay"
+                                UpdateSourceTrigger="PropertyChanged">
+
+                                <Binding.Converter>
+                                    <converters:NegationConverter />
+                                </Binding.Converter>
+
+                            </Binding>
+                        </view:ScriptBox.IsReadOnly>
+
+                        <view:ScriptBox.Text>
+                            <Binding
+                                Path="Raw"
                                 Mode="TwoWay"
                                 UpdateSourceTrigger="PropertyChanged">
 

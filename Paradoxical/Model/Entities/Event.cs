@@ -17,6 +17,10 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
     public int Id { get => id; set => id = value; }
     public int id;
 
+    [Column("raw")]
+    public string? Raw { get => raw; set => raw = value; }
+    public string? raw = null;
+
     [Column("name"), Indexed, NotNull]
     public string Name { get => name; set => name = value; }
     public string name = $"evt_{Guid.NewGuid().ToString("N").Substring(0, 4)}";

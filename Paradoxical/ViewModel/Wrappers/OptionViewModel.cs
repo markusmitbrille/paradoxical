@@ -5,6 +5,12 @@ namespace Paradoxical.ViewModel;
 
 public class OptionViewModel : ModelWrapper<Option>
 {
+    public string? Raw
+    {
+        get => model.raw;
+        set => SetProperty(ref model.raw, value);
+    }
+
     public int EventId
     {
         get => model.eventId;

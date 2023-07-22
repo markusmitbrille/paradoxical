@@ -5,8 +5,10 @@ using Paradoxical.Messages;
 using Paradoxical.Model.Elements;
 using Paradoxical.Services;
 using Paradoxical.Services.Elements;
+using Paradoxical.Services.Entities;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,6 +22,7 @@ public class OptionDetailsViewModel : PageViewModel
 
     public IFinder Finder { get; }
 
+    public IModService ModService { get; }
     public IOptionService OptionService { get; }
     public ITriggerService TriggerService { get; }
     public IEffectService EffectService { get; }
@@ -70,6 +73,7 @@ public class OptionDetailsViewModel : PageViewModel
         IShell shell,
         IMediatorService mediator,
         IFinder finder,
+        IModService modService,
         IOptionService optionService,
         ITriggerService triggerService,
         IEffectService effectService,
@@ -79,6 +83,7 @@ public class OptionDetailsViewModel : PageViewModel
     {
         Finder = finder;
 
+        ModService = modService;
         OptionService = optionService;
         TriggerService = triggerService;
         EffectService = effectService;
@@ -137,6 +142,29 @@ public class OptionDetailsViewModel : PageViewModel
 
         AllEvents.Clear();
         AllEvents.AddRange(allEvents);
+
+        LoadRaw();
+    }
+
+    private void LoadRaw()
+    {
+        if (Selected == null)
+        { return; }
+
+        if (Selected.Raw == null)
+        {
+            OverrideRaw = false;
+
+            // regenerate view model raw
+            Raw = GenerateRaw();
+        }
+        else
+        {
+            OverrideRaw = true;
+
+            // set view model raw to model and wrapper raw
+            Raw = Selected.Raw;
+        }
     }
 
     private RelayCommand? reloadCommand;
@@ -158,7 +186,29 @@ public class OptionDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
+        SaveRaw();
+
         OptionService.Update(Selected.Model);
+    }
+
+    private void SaveRaw()
+    {
+        if (Selected == null)
+        { return; }
+
+        if (OverrideRaw == true)
+        {
+            // overwrite model raw
+            Selected.Raw = Raw;
+        }
+        else
+        {
+            // regenerate view model raw
+            Raw = GenerateRaw();
+
+            // clear model and wrapper raw
+            Selected.Raw = null;
+        }
     }
 
     private RelayCommand? createCommand;
@@ -308,6 +358,69 @@ public class OptionDetailsViewModel : PageViewModel
 
         return index < siblings.Count;
     }
+
+    #region Raw
+
+    private bool? overrideRaw = null;
+    public bool? OverrideRaw
+    {
+        get => overrideRaw;
+        set => SetProperty(ref overrideRaw, value);
+    }
+
+    private string raw = string.Empty;
+    public string Raw
+    {
+        get => raw;
+        set => SetProperty(ref raw, value);
+    }
+
+    private RelayCommand<bool?>? toggleOverrideRawCommand;
+    public RelayCommand<bool?> ToggleOverrideRawCommand => toggleOverrideRawCommand ??= new(ToggleOverrideRaw);
+
+    private void ToggleOverrideRaw(bool? isChecked)
+    {
+        if (isChecked == true)
+        {
+            ToggleOverrideRawOn();
+        }
+        if (isChecked == false)
+        {
+            ToggleOverrideRawOff();
+        }
+    }
+
+    private void ToggleOverrideRawOn()
+    {
+        if (Selected == null)
+        { return; }
+
+        Raw = GenerateRaw();
+        Selected.Raw = Raw;
+    }
+
+    private void ToggleOverrideRawOff()
+    {
+        if (Selected == null)
+        { return; }
+
+        Raw = GenerateRaw();
+        Selected.Raw = null;
+    }
+
+    private string GenerateRaw()
+    {
+        if (Selected == null)
+        { return string.Empty; }
+
+        using StringWriter writer = new();
+
+        Selected.Model.Write(writer, ModService, OptionService);
+
+        return writer.ToString();
+    }
+
+    #endregion
 
     #region Flow Commands
 
