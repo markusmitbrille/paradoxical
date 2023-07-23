@@ -273,6 +273,26 @@ public partial class ScriptBox : TextBox
     private static partial Regex GetWordRegex();
     public static Regex WordRegex => GetWordRegex();
 
+    [GeneratedRegex(@"[\s-[\r\n]]+")]
+    private static partial Regex GetWhiteSpaceRegex();
+    public static Regex WhiteSpaceRegex => GetWhiteSpaceRegex();
+
+    [GeneratedRegex(@"\r\n")]
+    private static partial Regex GetNewLineRegex();
+    public static Regex NewLineRegex => GetNewLineRegex();
+
+    [GeneratedRegex(@"(\?\=|\!\=|\+\=|\-\=|\*\=|\\\=|\<\=|\>\=)")]
+    private static partial Regex GetCompoundSymbolRegex();
+    public static Regex CompoundSymbolRegex => GetCompoundSymbolRegex();
+
+    [GeneratedRegex(@"[^\s\w]")]
+    private static partial Regex GetSymbolRegex();
+    public static Regex SymbolRegex => GetSymbolRegex();
+
+    [GeneratedRegex(@"^.*$", RegexOptions.Multiline)]
+    private static partial Regex GetLineRegex();
+    public static Regex LineRegex => GetLineRegex();
+
     [GeneratedRegex(@"{")]
     private static partial Regex GetBlockStartRegex();
     public static Regex BlockStartRegex => GetBlockStartRegex();
@@ -282,6 +302,12 @@ public partial class ScriptBox : TextBox
     public static Regex BlockEndRegex => GetBlockEndRegex();
 
     private MatchCollection WordMatches { get; set; } = WordRegex.Matches(string.Empty);
+    private MatchCollection WhiteSpaceMatches { get; set; } = WhiteSpaceRegex.Matches(string.Empty);
+    private MatchCollection NewLineMatches { get; set; } = NewLineRegex.Matches(string.Empty);
+    private MatchCollection SymbolMatches { get; set; } = SymbolRegex.Matches(string.Empty);
+    private MatchCollection CompoundSymbolMatches { get; set; } = CompoundSymbolRegex.Matches(string.Empty);
+    private MatchCollection LineMatches { get; set; } = LineRegex.Matches(string.Empty);
+
     private Match? CurrentWord { get; set; } = null;
 
     private CompleteBox? Popup { get; set; }
@@ -366,7 +392,7 @@ public partial class ScriptBox : TextBox
 
     private void TextChangedHandler(object sender, TextChangedEventArgs e)
     {
-        UpdateWordMatches();
+        UpdateMatches();
         UpdateCurrentWord();
 
         ValidatePopup();
@@ -625,9 +651,14 @@ public partial class ScriptBox : TextBox
         }
     }
 
-    private void UpdateWordMatches()
+    private void UpdateMatches()
     {
         WordMatches = WordRegex.Matches(Text);
+        WhiteSpaceMatches = WhiteSpaceRegex.Matches(Text);
+        NewLineMatches = NewLineRegex.Matches(Text);
+        SymbolMatches = SymbolRegex.Matches(Text);
+        CompoundSymbolMatches = CompoundSymbolRegex.Matches(Text);
+        LineMatches = LineRegex.Matches(Text);
     }
 
     private void UpdateCurrentWord()
@@ -777,5 +808,87 @@ public partial class ScriptBox : TextBox
         var size = FontSize;
 
         return new() { X = boxPos.X + caretRect.X, Y = boxPos.Y + caretRect.Y + size + POPUP_OFFSET };
+    }
+
+    private void MouseDownHandler(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ClickCount == 2 && e.LeftButton == MouseButtonState.Pressed)
+        {
+            var pos = e.GetPosition(this);
+            var caret = CaretIndex;
+
+            var wordMatch = WordMatches.FirstOrDefault(match => caret >= match.Index && caret <= match.Index + match.Length);
+            if (wordMatch != null)
+            {
+                CaretIndex = wordMatch.Index;
+                SelectionLength = wordMatch.Length;
+
+                e.Handled = true;
+                return;
+            }
+
+            var comsymMatch = CompoundSymbolMatches.FirstOrDefault(match => caret >= match.Index && caret <= match.Index + match.Length);
+            if (comsymMatch != null)
+            {
+                CaretIndex = comsymMatch.Index;
+                SelectionLength = comsymMatch.Length;
+
+                e.Handled = true;
+                return;
+            }
+
+            var symMatch = SymbolMatches.FirstOrDefault(match => caret >= match.Index && caret <= match.Index + match.Length);
+            if (symMatch != null)
+            {
+                CaretIndex = symMatch.Index;
+                SelectionLength = symMatch.Length;
+
+                e.Handled = true;
+                return;
+            }
+
+            var wsMatch = WhiteSpaceMatches.FirstOrDefault(match => caret >= match.Index && caret <= match.Index + match.Length);
+            if (wsMatch != null)
+            {
+                CaretIndex = wsMatch.Index;
+                SelectionLength = wsMatch.Length;
+
+                e.Handled = true;
+                return;
+            }
+
+            var nlMatch = NewLineMatches.FirstOrDefault(match => caret >= match.Index && caret <= match.Index + match.Length);
+            if (nlMatch != null)
+            {
+                // don't select anything
+
+                e.Handled = true;
+                return;
+            }
+
+            var charIndex = GetCharacterIndexFromPoint(pos, true);
+
+            CaretIndex = charIndex;
+            SelectionLength = 1;
+
+            e.Handled = true;
+            return;
+        }
+
+        if (e.ClickCount == 3 && e.LeftButton == MouseButtonState.Pressed)
+        {
+            var pos = e.GetPosition(this);
+            var caret = CaretIndex;
+
+            var lineMatch = LineMatches.FirstOrDefault(match => caret >= match.Index && caret < match.Index + match.Length);
+            if (lineMatch != null)
+            {
+                CaretIndex = lineMatch.Index;
+                SelectionLength = lineMatch.Length;
+
+                e.Handled = true;
+                return;
+            }
+        }
     }
 }

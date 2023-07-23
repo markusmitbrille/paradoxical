@@ -17,7 +17,8 @@
     TextChanged="TextChangedHandler"
     PreviewTextInput="PreviewTextInputHandler"
     SelectionChanged="SelectionChangedHandler"
-    PreviewKeyDown="KeyDownHandler">
+    PreviewKeyDown="KeyDownHandler"
+    PreviewMouseDown="MouseDownHandler">
 
     <TextBox.Resources>
 
