@@ -15,10 +15,12 @@
     VerticalScrollBarVisibility="Visible"
     HorizontalScrollBarVisibility="Disabled"
     TextChanged="TextChangedHandler"
-    PreviewTextInput="PreviewTextInputHandler"
+    PreviewTextInput="TextInputHandler"
     SelectionChanged="SelectionChangedHandler"
     PreviewKeyDown="KeyDownHandler"
-    PreviewMouseDown="MouseDownHandler">
+    PreviewMouseDown="MouseDownHandler"
+    PreviewMouseUp="MouseUpHandler"
+    PreviewMouseMove="MouseMoveHandler">
 
     <TextBox.Resources>
 

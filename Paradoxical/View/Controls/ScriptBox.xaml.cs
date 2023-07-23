@@ -1,7 +1,9 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Extensions;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
@@ -318,6 +320,23 @@ public partial class ScriptBox : TextBox
         InitializeComponent();
     }
 
+    private void UpdateMatches()
+    {
+        WordMatches = WordRegex.Matches(Text);
+        WhiteSpaceMatches = WhiteSpaceRegex.Matches(Text);
+        NewLineMatches = NewLineRegex.Matches(Text);
+        SymbolMatches = SymbolRegex.Matches(Text);
+        CompoundSymbolMatches = CompoundSymbolRegex.Matches(Text);
+        LineMatches = LineRegex.Matches(Text);
+    }
+
+    private void UpdateCurrentWord()
+    {
+        CurrentWord = WordMatches.SingleOrDefault(match => CaretIndex >= match.Index && CaretIndex <= match.Index + match.Length);
+    }
+
+    #region Event Handlers
+
     private void OpenCompleteExecutedHandler(object sender, ExecutedRoutedEventArgs e)
     {
         OpenPopup();
@@ -461,29 +480,177 @@ public partial class ScriptBox : TextBox
         }
     }
 
-    private void RaisePopupEvent(object sender, KeyEventArgs e)
+    private void MouseDownHandler(object sender, MouseButtonEventArgs e)
     {
-        if (Popup == null)
-        { return; }
-
-        var target = Popup;
-        var keyboard = Keyboard.PrimaryDevice;
-        var inputSource = PresentationSource.FromVisual(target);
-        var timestamp = 0;
-        var key = e.Key;
-
-        var routedEvent = Keyboard.KeyDownEvent;
-
-        var args = new KeyEventArgs(keyboard, inputSource, timestamp, key)
+        if (e.ClickCount == 2 && e.LeftButton == MouseButtonState.Pressed)
         {
-            RoutedEvent = routedEvent
-        };
+            var pos = e.GetPosition(this);
+            var index = CaretIndex;
 
-        Popup.RaiseEvent(args);
-        e.Handled = true;
+            var (start, length) = GetDoubleClickSelection(pos, index);
+            Select(start, length);
+
+            StartDragSelection(SelectionMode.Double, pos, index);
+
+            e.Handled = true;
+            return;
+        }
+
+        if (e.ClickCount == 3 && e.LeftButton == MouseButtonState.Pressed)
+        {
+            var pos = e.GetPosition(this);
+            var index = CaretIndex;
+
+            var (start, length) = GetTripleClickSelection(pos, index);
+            Select(start, length);
+
+            StartDragSelection(SelectionMode.Triple, pos, index);
+
+            e.Handled = true;
+            return;
+        }
     }
 
-    private void PreviewTextInputHandler(object sender, TextCompositionEventArgs e)
+    private void MouseUpHandler(object sender, MouseButtonEventArgs e)
+    {
+        if (CurrentSelection != null)
+        {
+            StopDragSelection();
+        }
+    }
+
+    private void MouseMoveHandler(object sender, MouseEventArgs e)
+    {
+        if (CurrentSelection != null && e.LeftButton == MouseButtonState.Pressed)
+        {
+            var pos = e.GetPosition(this);
+
+            ApplySelection(pos);
+
+            e.Handled = true;
+            return;
+        }
+    }
+
+    #endregion
+
+    #region Selection
+
+    private class Selection
+    {
+        public SelectionMode Mode { get; init; }
+        public Point StartPos { get; init; }
+        public int StartIndex { get; init; }
+    }
+
+    private enum SelectionMode
+    {
+        None,
+        Single,
+        Double,
+        Triple,
+    }
+
+    private Selection? CurrentSelection { get; set; }
+
+    private void StartDragSelection(SelectionMode mode, Point pos, int index)
+    {
+        if (CurrentSelection != null)
+        {
+            StopDragSelection();
+        }
+
+        CurrentSelection = new()
+        {
+            Mode = mode,
+            StartPos = pos,
+            StartIndex = index,
+        };
+    }
+
+    private void StopDragSelection()
+    {
+        CurrentSelection = null;
+    }
+
+    private void ApplySelection(Point pos)
+    {
+        if (CurrentSelection == null)
+        { return; }
+
+        if (CurrentSelection.Mode == SelectionMode.Double)
+        {
+            var index = GetCharacterIndexFromPoint(pos, true);
+
+            var (startOld, lengthOld) = GetDoubleClickSelection(CurrentSelection.StartPos, CurrentSelection.StartIndex);
+            var (startNew, lengthNew) = GetDoubleClickSelection(pos, index);
+
+            Select(Math.Min(startOld, startNew), Math.Max(startOld + lengthOld, startNew + lengthNew) - Math.Min(startOld, startNew));
+        }
+
+        if (CurrentSelection.Mode == SelectionMode.Triple)
+        {
+            var index = GetCharacterIndexFromPoint(pos, true);
+
+            var (startOld, lengthOld) = GetTripleClickSelection(CurrentSelection.StartPos, CurrentSelection.StartIndex);
+            var (startNew, lengthNew) = GetTripleClickSelection(pos, index);
+
+            Select(Math.Min(startOld, startNew), Math.Max(startOld + lengthOld, startNew + lengthNew) - Math.Min(startOld, startNew));
+        }
+    }
+
+    private (int, int) GetDoubleClickSelection(Point pos, int index)
+    {
+        var wordMatch = WordMatches.FirstOrDefault(match => index >= match.Index && index <= match.Index + match.Length);
+        if (wordMatch != null)
+        {
+            return (wordMatch.Index, wordMatch.Length);
+        }
+
+        var comsymMatch = CompoundSymbolMatches.FirstOrDefault(match => index >= match.Index && index <= match.Index + match.Length);
+        if (comsymMatch != null)
+        {
+            return (comsymMatch.Index, comsymMatch.Length);
+        }
+
+        var symMatch = SymbolMatches.FirstOrDefault(match => index >= match.Index && index <= match.Index + match.Length);
+        if (symMatch != null)
+        {
+            return (symMatch.Index, symMatch.Length);
+        }
+
+        var wsMatch = WhiteSpaceMatches.FirstOrDefault(match => index >= match.Index && index <= match.Index + match.Length);
+        if (wsMatch != null)
+        {
+            return (wsMatch.Index, wsMatch.Length);
+        }
+
+        var nlMatch = NewLineMatches.FirstOrDefault(match => index >= match.Index && index <= match.Index + match.Length);
+        if (nlMatch != null)
+        {
+            return (index, 0);
+        }
+
+        var charIndex = GetCharacterIndexFromPoint(pos, true);
+        return (charIndex, 1);
+    }
+
+    private (int, int) GetTripleClickSelection(Point pos, int index)
+    {
+        var lineMatch = LineMatches.FirstOrDefault(match => index >= match.Index && index < match.Index + match.Length);
+        if (lineMatch != null)
+        {
+            return (lineMatch.Index, lineMatch.Length);
+        }
+
+        return GetDoubleClickSelection(pos, index);
+    }
+
+    #endregion
+
+    #region Text Input
+
+    private void TextInputHandler(object sender, TextCompositionEventArgs e)
     {
         if (e.Text == "\"")
         {
@@ -651,20 +818,9 @@ public partial class ScriptBox : TextBox
         }
     }
 
-    private void UpdateMatches()
-    {
-        WordMatches = WordRegex.Matches(Text);
-        WhiteSpaceMatches = WhiteSpaceRegex.Matches(Text);
-        NewLineMatches = NewLineRegex.Matches(Text);
-        SymbolMatches = SymbolRegex.Matches(Text);
-        CompoundSymbolMatches = CompoundSymbolRegex.Matches(Text);
-        LineMatches = LineRegex.Matches(Text);
-    }
+    #endregion
 
-    private void UpdateCurrentWord()
-    {
-        CurrentWord = WordMatches.SingleOrDefault(match => CaretIndex >= match.Index && CaretIndex <= match.Index + match.Length);
-    }
+    #region Popup
 
     private void OpenPopup()
     {
@@ -674,7 +830,7 @@ public partial class ScriptBox : TextBox
         }
 
         var index = GetPopupIndex();
-        var position = GetCharPosition(index);
+        var pos = GetPopupPosition(index);
 
         PopupIndex = index;
 
@@ -682,8 +838,8 @@ public partial class ScriptBox : TextBox
         Popup = new()
         {
             Owner = window,
-            Left = position.X,
-            Top = position.Y,
+            Left = pos.X,
+            Top = pos.Y,
             Filter = CurrentWord?.Value ?? string.Empty,
             AllowedItems = AllowedCompleteItems,
             MaxItems = 10,
@@ -754,6 +910,28 @@ public partial class ScriptBox : TextBox
         LostKeyboardFocus -= LostKeyboardFocusHandler;
     }
 
+    private void RaisePopupEvent(object sender, KeyEventArgs e)
+    {
+        if (Popup == null)
+        { return; }
+
+        var target = Popup;
+        var keyboard = Keyboard.PrimaryDevice;
+        var inputSource = PresentationSource.FromVisual(target);
+        var timestamp = 0;
+        var key = e.Key;
+
+        var routedEvent = Keyboard.KeyDownEvent;
+
+        var args = new KeyEventArgs(keyboard, inputSource, timestamp, key)
+        {
+            RoutedEvent = routedEvent
+        };
+
+        Popup.RaiseEvent(args);
+        e.Handled = true;
+    }
+
     private void UpdatePopup()
     {
         if (Popup == null)
@@ -801,7 +979,7 @@ public partial class ScriptBox : TextBox
 
     private const int POPUP_OFFSET = 5;
 
-    private Point GetCharPosition(int index)
+    private Point GetPopupPosition(int index)
     {
         var boxPos = TransformToAncestor(Application.Current.MainWindow).Transform(new Point(0, 0));
         var caretRect = GetRectFromCharacterIndex(index);
@@ -810,85 +988,5 @@ public partial class ScriptBox : TextBox
         return new() { X = boxPos.X + caretRect.X, Y = boxPos.Y + caretRect.Y + size + POPUP_OFFSET };
     }
 
-    private void MouseDownHandler(object sender, MouseButtonEventArgs e)
-    {
-        if (e.ClickCount == 2 && e.LeftButton == MouseButtonState.Pressed)
-        {
-            var pos = e.GetPosition(this);
-            var caret = CaretIndex;
-
-            var wordMatch = WordMatches.FirstOrDefault(match => caret >= match.Index && caret <= match.Index + match.Length);
-            if (wordMatch != null)
-            {
-                CaretIndex = wordMatch.Index;
-                SelectionLength = wordMatch.Length;
-
-                e.Handled = true;
-                return;
-            }
-
-            var comsymMatch = CompoundSymbolMatches.FirstOrDefault(match => caret >= match.Index && caret <= match.Index + match.Length);
-            if (comsymMatch != null)
-            {
-                CaretIndex = comsymMatch.Index;
-                SelectionLength = comsymMatch.Length;
-
-                e.Handled = true;
-                return;
-            }
-
-            var symMatch = SymbolMatches.FirstOrDefault(match => caret >= match.Index && caret <= match.Index + match.Length);
-            if (symMatch != null)
-            {
-                CaretIndex = symMatch.Index;
-                SelectionLength = symMatch.Length;
-
-                e.Handled = true;
-                return;
-            }
-
-            var wsMatch = WhiteSpaceMatches.FirstOrDefault(match => caret >= match.Index && caret <= match.Index + match.Length);
-            if (wsMatch != null)
-            {
-                CaretIndex = wsMatch.Index;
-                SelectionLength = wsMatch.Length;
-
-                e.Handled = true;
-                return;
-            }
-
-            var nlMatch = NewLineMatches.FirstOrDefault(match => caret >= match.Index && caret <= match.Index + match.Length);
-            if (nlMatch != null)
-            {
-                // don't select anything
-
-                e.Handled = true;
-                return;
-            }
-
-            var charIndex = GetCharacterIndexFromPoint(pos, true);
-
-            CaretIndex = charIndex;
-            SelectionLength = 1;
-
-            e.Handled = true;
-            return;
-        }
-
-        if (e.ClickCount == 3 && e.LeftButton == MouseButtonState.Pressed)
-        {
-            var pos = e.GetPosition(this);
-            var caret = CaretIndex;
-
-            var lineMatch = LineMatches.FirstOrDefault(match => caret >= match.Index && caret < match.Index + match.Length);
-            if (lineMatch != null)
-            {
-                CaretIndex = lineMatch.Index;
-                SelectionLength = lineMatch.Length;
-
-                e.Handled = true;
-                return;
-            }
-        }
-    }
+    #endregion
 }
