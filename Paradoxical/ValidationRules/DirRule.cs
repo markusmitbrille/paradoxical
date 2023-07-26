@@ -13,7 +13,7 @@ public class DirRule : ValidationRule
 
         if (value is string file && invalids.Any(file.Contains) == true)
         {
-            return new ValidationResult(false, $"Contains invalid characters. The following characters are invalid: {string.Join(", ", invalids)}");
+            return new ValidationResult(false, $"Contains an invalid character: '{invalids.First(file.Contains)}'");
         }
 
         return ValidationResult.ValidResult;
