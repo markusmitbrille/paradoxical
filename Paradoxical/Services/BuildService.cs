@@ -73,7 +73,10 @@ public class BuildService : IBuildService
             Access = FileAccess.Write,
         };
 
-        Directory.Delete(GetModDir(dir, file), true);
+        if (Directory.Exists(GetModDir(dir, file)) == true)
+        {
+            Directory.Delete(GetModDir(dir, file), true);
+        }
 
         Directory.CreateDirectory(GetModDir(dir, file));
         Directory.CreateDirectory(GetEventsDir(dir, file));
