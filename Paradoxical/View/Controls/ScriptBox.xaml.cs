@@ -737,18 +737,9 @@ public partial class ScriptBox : TextBox
         var length = SelectionLength;
         var text = Text;
 
-        if (AcceptsReturn == true)
-        {
-            text = text.Remove(index, length);
-            text = text.Insert(index, "{\r\n\r\n}");
-            index += 3;
-        }
-        else
-        {
-            text = text.Remove(index, length);
-            text = text.Insert(index, "{  }");
-            index += 2;
-        }
+        text = text.Remove(index, length);
+        text = text.Insert(index, "{  }");
+        index += 2;
 
         if (AllowFormatting == true)
         {
