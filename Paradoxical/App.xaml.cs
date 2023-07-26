@@ -35,7 +35,8 @@ public partial class App : Application
         // mod service
         services.AddSingleton<IModService, ModService>();
 
-        // element services
+        // entity services
+        services.AddSingleton<IScriptService, ScriptService>();
         services.AddSingleton<IEventService, EventService>();
         services.AddSingleton<IOptionService, OptionService>();
         services.AddSingleton<IPortraitService, PortraitService>();
@@ -52,12 +53,14 @@ public partial class App : Application
         // details page view models
         services.AddSingleton<ModDetailsViewModel>();
         services.AddSingleton<OutputViewModel>();
+        services.AddTransient<ScriptDetailsViewModel>();
         services.AddTransient<EventDetailsViewModel>();
         services.AddTransient<TriggerDetailsViewModel>();
         services.AddTransient<EffectDetailsViewModel>();
         services.AddTransient<OptionDetailsViewModel>();
 
         // table page view models
+        services.AddSingleton<ScriptTableViewModel>();
         services.AddSingleton<EventTableViewModel>();
         services.AddSingleton<TriggerTableViewModel>();
         services.AddSingleton<EffectTableViewModel>();

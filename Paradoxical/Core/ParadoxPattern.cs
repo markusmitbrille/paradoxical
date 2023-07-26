@@ -17,11 +17,19 @@ public static partial class ParadoxPattern
     private static partial Regex GetIdFilterRegex();
     public static Regex IdFilterRegex => GetIdFilterRegex();
 
-    [GeneratedRegex(@"n:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
+    [GeneratedRegex(@"name:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
     private static partial Regex GetNameFilterRegex();
     public static Regex NameFilterRegex => GetNameFilterRegex();
 
-    [GeneratedRegex(@"c:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
+    [GeneratedRegex(@"dir:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
+    private static partial Regex GetDirFilterRegex();
+    public static Regex DirFilterRegex => GetDirFilterRegex();
+
+    [GeneratedRegex(@"file:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
+    private static partial Regex GetFileFilterRegex();
+    public static Regex FileFilterRegex => GetFileFilterRegex();
+
+    [GeneratedRegex(@"code:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
     private static partial Regex GetCodeFilterRegex();
     public static Regex CodeFilterRegex => GetCodeFilterRegex();
 
@@ -29,11 +37,11 @@ public static partial class ParadoxPattern
     private static partial Regex GetTooltipFilterRegex();
     public static Regex TooltipFilterRegex => GetTooltipFilterRegex();
 
-    [GeneratedRegex(@"t:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
+    [GeneratedRegex(@"ttl:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
     private static partial Regex GetTitleFilterRegex();
     public static Regex TitleFilterRegex => GetTitleFilterRegex();
 
-    [GeneratedRegex(@"d:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
+    [GeneratedRegex(@"desc:(?>(?<filter>\w+)|""(?<filter>[^""]*)"")")]
     private static partial Regex GetDescriptionFilterRegex();
     public static Regex DescriptionFilterRegex => GetDescriptionFilterRegex();
 

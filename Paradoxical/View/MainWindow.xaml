@@ -77,6 +77,9 @@
             Command="{Binding GoToOnActionListCommand}"
             Gesture="F8" />
         <KeyBinding
+            Command="{Binding GoToScriptTableCommand}"
+            Gesture="ALT+0" />
+        <KeyBinding
             Command="{Binding GoToInfoCommand}"
             Gesture="ALT+1" />
         <KeyBinding
@@ -153,6 +156,17 @@
                             <TextBlock
                                 Margin="24,4,0,4"
                                 Text="Effects" />
+                        </Button>
+
+                        <Button
+                            Margin="12,8"
+                            HorizontalContentAlignment="Left"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Command="{Binding GoToScriptTableCommand}"
+                            Click="MenuButtonClickHandler">
+                            <TextBlock
+                                Margin="24,4,0,4"
+                                Text="Scripts" />
                         </Button>
 
                         <Separator

@@ -30,6 +30,16 @@
     </DataTemplate>
 
     <DataTemplate
+        DataType="{x:Type viewmodel:ScriptTableViewModel}">
+        <view:ScriptTableView />
+    </DataTemplate>
+
+    <DataTemplate
+        DataType="{x:Type viewmodel:ScriptDetailsViewModel}">
+        <view:ScriptDetailsView />
+    </DataTemplate>
+
+    <DataTemplate
         DataType="{x:Type viewmodel:EventTableViewModel}">
         <view:EventTableView />
     </DataTemplate>

@@ -70,6 +70,8 @@ public class DataService : IDataService
     {
         Connection.CreateTable<Mod>();
 
+        Connection.CreateTable<Script>();
+
         Connection.CreateTable<Event>();
         Connection.CreateTable<EventImmediate>();
         Connection.CreateTable<EventAfter>();
@@ -90,6 +92,8 @@ public class DataService : IDataService
     {
         Connection.DropTable<Mod>();
 
+        Connection.DropTable<Script>();
+
         Connection.DropTable<Event>();
         Connection.DropTable<EventImmediate>();
         Connection.DropTable<EventAfter>();
@@ -109,6 +113,8 @@ public class DataService : IDataService
     public void TruncateTables()
     {
         Connection.DeleteAll<Mod>();
+
+        Connection.DeleteAll<Script>();
 
         Connection.DeleteAll<Event>();
         Connection.DeleteAll<EventImmediate>();

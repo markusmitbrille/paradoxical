@@ -436,4 +436,12 @@ if you don't save them.",
     {
         Navigate<EffectTableViewModel>();
     }
+
+    private RelayCommand? goToScriptTableCommand;
+    public RelayCommand GoToScriptTableCommand => goToScriptTableCommand ??= new(GoToScriptTable);
+
+    private void GoToScriptTable()
+    {
+        Navigate<ScriptTableViewModel>();
+    }
 }

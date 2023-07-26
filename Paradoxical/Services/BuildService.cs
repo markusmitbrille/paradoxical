@@ -36,6 +36,8 @@ public class BuildService : IBuildService
 
     private readonly IModService modService;
 
+    private readonly IScriptService scriptService;
+
     private readonly IEventService eventService;
     private readonly IOptionService optionService;
     private readonly IPortraitService portraitService;
@@ -44,6 +46,7 @@ public class BuildService : IBuildService
 
     public BuildService(
         IModService modService,
+        IScriptService scriptService,
         IEventService eventService,
         IOptionService optionService,
         IPortraitService portraitService,
@@ -51,6 +54,8 @@ public class BuildService : IBuildService
         IEffectService effectService)
     {
         this.modService = modService;
+
+        this.scriptService = scriptService;
 
         this.eventService = eventService;
         this.optionService = optionService;
@@ -67,6 +72,8 @@ public class BuildService : IBuildService
             Mode = FileMode.Create,
             Access = FileAccess.Write,
         };
+
+        Directory.Delete(GetModDir(dir, file), true);
 
         Directory.CreateDirectory(GetModDir(dir, file));
         Directory.CreateDirectory(GetEventsDir(dir, file));
@@ -105,6 +112,8 @@ public class BuildService : IBuildService
         {
             WriteLocFile(writer);
         }
+
+        WriteScriptFiles(dir, file);
     }
 
     private static string GetModDir(string dir, string file)
@@ -176,6 +185,27 @@ public class BuildService : IBuildService
     {
         var mod = modService.Get().SingleOrDefault() ?? new();
         mod.Write(writer, dir, file);
+    }
+
+    private void WriteScriptFiles(string dir, string file)
+    {
+        UTF8Encoding encoding = new(true);
+        FileStreamOptions options = new()
+        {
+            Mode = FileMode.Create,
+            Access = FileAccess.Write,
+        };
+
+        foreach (Script script in scriptService.Get())
+        {
+            string sdir = Path.Combine(dir, file, script.dir);
+            string sfile = Path.Combine(dir, file, script.dir, script.file);
+
+            Directory.CreateDirectory(sdir);
+
+            using StreamWriter writer = new(sfile, encoding, options);
+            script.Write(writer);
+        }
     }
 
     public void WriteEventsFile(TextWriter writer)
@@ -264,5 +294,4 @@ public class BuildService : IBuildService
             writer.WriteLine();
         }
     }
-
 }
