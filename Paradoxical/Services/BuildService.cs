@@ -201,6 +201,11 @@ public class BuildService : IBuildService
             string sdir = Path.Combine(dir, file, script.dir);
             string sfile = Path.Combine(dir, file, script.dir, script.file);
 
+            if (Path.HasExtension(sfile) == false)
+            {
+                sfile = Path.ChangeExtension(sfile, ".txt");
+            }
+
             Directory.CreateDirectory(sdir);
 
             using StreamWriter writer = new(sfile, encoding, options);
