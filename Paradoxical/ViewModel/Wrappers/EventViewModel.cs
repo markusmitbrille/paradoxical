@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class EventViewModel : ElementWrapper<Event>
+public class EventViewModel : ElementWrapper<Event>, IEquatable<EventViewModel?>
 {
     public override string Kind => "event";
 
@@ -67,5 +67,31 @@ public class EventViewModel : ElementWrapper<Event>
     {
         get => model.customAfterEffect;
         set => SetProperty(ref model.customAfterEffect, value);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as EventViewModel);
+    }
+
+    public bool Equals(EventViewModel? other)
+    {
+        return other is not null &&
+               EqualityComparer<Event>.Default.Equals(model, other.model);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(model);
+    }
+
+    public static bool operator ==(EventViewModel? left, EventViewModel? right)
+    {
+        return EqualityComparer<EventViewModel>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(EventViewModel? left, EventViewModel? right)
+    {
+        return !(left == right);
     }
 }

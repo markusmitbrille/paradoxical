@@ -1,11 +1,13 @@
 ﻿using Paradoxical.Core;
 using SQLite;
+using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Paradoxical.Model;
 
 [Table("mods")]
-public class Mod : IEntity, IModel
+public class Mod : IEntity, IModel, IEquatable<Mod?>
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
@@ -42,5 +44,31 @@ public class Mod : IEntity, IModel
         writer.Indent().WriteLine($"name=\"{ModName}\"");
         writer.Indent().WriteLine($"supported_version=\"{GameVersion}\"");
         writer.Indent().WriteLine($"path=\"mod/{file}\"");
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as Mod);
+    }
+
+    public bool Equals(Mod? other)
+    {
+        return other is not null &&
+               id == other.id;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(id);
+    }
+
+    public static bool operator ==(Mod? left, Mod? right)
+    {
+        return EqualityComparer<Mod>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(Mod? left, Mod? right)
+    {
+        return !(left == right);
     }
 }

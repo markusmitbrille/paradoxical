@@ -6,12 +6,14 @@ using Paradoxical.Services;
 using Paradoxical.Services.Elements;
 using Paradoxical.Services.Entities;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 namespace Paradoxical.ViewModel;
 
 public class TriggerDetailsViewModel : PageViewModel
+    , IEquatable<TriggerDetailsViewModel?>
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
@@ -255,6 +257,36 @@ public class TriggerDetailsViewModel : PageViewModel
         Selected.Model.Write(writer, ModService);
 
         return writer.ToString();
+    }
+
+    #endregion
+
+    #region Equality
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as TriggerDetailsViewModel);
+    }
+
+    public bool Equals(TriggerDetailsViewModel? other)
+    {
+        return other is not null &&
+               EqualityComparer<TriggerViewModel?>.Default.Equals(selected, other.selected);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(selected);
+    }
+
+    public static bool operator ==(TriggerDetailsViewModel? left, TriggerDetailsViewModel? right)
+    {
+        return EqualityComparer<TriggerDetailsViewModel>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(TriggerDetailsViewModel? left, TriggerDetailsViewModel? right)
+    {
+        return !(left == right);
     }
 
     #endregion

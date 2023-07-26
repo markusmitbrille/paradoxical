@@ -18,6 +18,7 @@ using System.Windows.Controls;
 namespace Paradoxical.ViewModel;
 
 public class EventDetailsViewModel : PageViewModel
+    , IEquatable<EventDetailsViewModel?>
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
@@ -830,6 +831,36 @@ public class EventDetailsViewModel : PageViewModel
     private bool CanGoToAfter(EffectViewModel? observable)
     {
         return observable != null;
+    }
+
+    #endregion
+
+    #region Equality
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as EventDetailsViewModel);
+    }
+
+    public bool Equals(EventDetailsViewModel? other)
+    {
+        return other is not null &&
+               EqualityComparer<EventViewModel?>.Default.Equals(selected, other.selected);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(selected);
+    }
+
+    public static bool operator ==(EventDetailsViewModel? left, EventDetailsViewModel? right)
+    {
+        return EqualityComparer<EventDetailsViewModel>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(EventDetailsViewModel? left, EventDetailsViewModel? right)
+    {
+        return !(left == right);
     }
 
     #endregion

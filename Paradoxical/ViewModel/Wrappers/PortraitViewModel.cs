@@ -1,9 +1,11 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Model.Elements;
+using System;
+using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public partial class PortraitViewModel : ModelWrapper<Portrait>
+public partial class PortraitViewModel : ModelWrapper<Portrait>, IEquatable<PortraitViewModel?>
 {
     public int EventId
     {
@@ -31,5 +33,31 @@ public partial class PortraitViewModel : ModelWrapper<Portrait>
     {
         get => model.outfitTags;
         set => SetProperty(ref model.outfitTags, value);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as PortraitViewModel);
+    }
+
+    public bool Equals(PortraitViewModel? other)
+    {
+        return other is not null &&
+               EqualityComparer<Portrait>.Default.Equals(model, other.model);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(model);
+    }
+
+    public static bool operator ==(PortraitViewModel? left, PortraitViewModel? right)
+    {
+        return EqualityComparer<PortraitViewModel>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(PortraitViewModel? left, PortraitViewModel? right)
+    {
+        return !(left == right);
     }
 }

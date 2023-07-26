@@ -1,9 +1,11 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Model.Elements;
+using System;
+using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class OptionViewModel : ModelWrapper<Option>
+public class OptionViewModel : ModelWrapper<Option>, IEquatable<OptionViewModel?>
 {
     public string? Raw
     {
@@ -134,5 +136,31 @@ public class OptionViewModel : ModelWrapper<Option>
     {
         get => model.aiZealTargetModifier;
         set => SetProperty(ref model.aiZealTargetModifier, value);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as OptionViewModel);
+    }
+
+    public bool Equals(OptionViewModel? other)
+    {
+        return other is not null &&
+               EqualityComparer<Option>.Default.Equals(model, other.model);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(model);
+    }
+
+    public static bool operator ==(OptionViewModel? left, OptionViewModel? right)
+    {
+        return EqualityComparer<OptionViewModel>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(OptionViewModel? left, OptionViewModel? right)
+    {
+        return !(left == right);
     }
 }

@@ -6,12 +6,14 @@ using Paradoxical.Services;
 using Paradoxical.Services.Elements;
 using Paradoxical.Services.Entities;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 namespace Paradoxical.ViewModel;
 
 public class ScriptDetailsViewModel : PageViewModel
+    , IEquatable<ScriptDetailsViewModel?>
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
@@ -150,4 +152,34 @@ public class ScriptDetailsViewModel : PageViewModel
         Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
         Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
     }
+
+    #region Equality
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as ScriptDetailsViewModel);
+    }
+
+    public bool Equals(ScriptDetailsViewModel? other)
+    {
+        return other is not null &&
+               EqualityComparer<ScriptViewModel?>.Default.Equals(selected, other.selected);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(selected);
+    }
+
+    public static bool operator ==(ScriptDetailsViewModel? left, ScriptDetailsViewModel? right)
+    {
+        return EqualityComparer<ScriptDetailsViewModel>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(ScriptDetailsViewModel? left, ScriptDetailsViewModel? right)
+    {
+        return !(left == right);
+    }
+
+    #endregion
 }

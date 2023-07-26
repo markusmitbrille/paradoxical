@@ -7,6 +7,7 @@ using Paradoxical.Services;
 using Paradoxical.Services.Elements;
 using Paradoxical.Services.Entities;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 namespace Paradoxical.ViewModel;
 
 public class OptionDetailsViewModel : PageViewModel
+    , IEquatable<OptionDetailsViewModel?>
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
@@ -720,6 +722,36 @@ public class OptionDetailsViewModel : PageViewModel
     private bool CanGoToEffect(EffectViewModel? observable)
     {
         return observable != null;
+    }
+
+    #endregion
+
+    #region Equality
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as OptionDetailsViewModel);
+    }
+
+    public bool Equals(OptionDetailsViewModel? other)
+    {
+        return other is not null &&
+               EqualityComparer<OptionViewModel?>.Default.Equals(selected, other.selected);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(selected);
+    }
+
+    public static bool operator ==(OptionDetailsViewModel? left, OptionDetailsViewModel? right)
+    {
+        return EqualityComparer<OptionDetailsViewModel>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(OptionDetailsViewModel? left, OptionDetailsViewModel? right)
+    {
+        return !(left == right);
     }
 
     #endregion
