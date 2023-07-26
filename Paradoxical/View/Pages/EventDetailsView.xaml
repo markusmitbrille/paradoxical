@@ -427,11 +427,6 @@
                         </DataGridTemplateColumn>
 
                         <DataGridTextColumn
-                            Header="Priority"
-                            Width="2*"
-                            Binding="{Binding Priority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                        <DataGridTextColumn
                             Header="Title"
                             Width="5*"
                             FontFamily="Consolas">
@@ -491,6 +486,11 @@
                             </DataGridTextColumn.Binding>
 
                         </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Header="Priority"
+                            Width="2*"
+                            Binding="{Binding Priority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     </DataGrid.Columns>
 
