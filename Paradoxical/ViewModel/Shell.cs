@@ -341,6 +341,14 @@ if you don't save them.",
         Navigate<ModDetailsViewModel>();
     }
 
+    private RelayCommand? goToOutputCommand;
+    public RelayCommand GoToOutputCommand => goToOutputCommand ??= new(GoToOutput);
+
+    private void GoToOutput()
+    {
+        Navigate<OutputViewModel>();
+    }
+
     private RelayCommand? goToAboutCommand;
     public RelayCommand GoToAboutCommand => goToAboutCommand ??= new(GoToAbout);
 

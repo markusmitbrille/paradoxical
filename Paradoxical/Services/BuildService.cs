@@ -11,6 +11,11 @@ namespace Paradoxical.Services;
 public interface IBuildService
 {
     void Export(string dir, string file);
+
+    void WriteEventsFile(TextWriter writer);
+    void WriteTriggersFile(TextWriter writer);
+    void WriteEffectsFile(TextWriter writer);
+    void WriteLocFile(TextWriter writer);
 }
 
 public class BuildService : IBuildService
@@ -173,7 +178,7 @@ public class BuildService : IBuildService
         mod.Write(writer, dir, file);
     }
 
-    private void WriteEventsFile(TextWriter writer)
+    public void WriteEventsFile(TextWriter writer)
     {
         writer.WriteLine($"# {modService.GetModName()} Events");
         writer.WriteLine($"namespace = {modService.GetPrefix()}");
@@ -194,7 +199,7 @@ public class BuildService : IBuildService
         }
     }
 
-    private void WriteTriggersFile(TextWriter writer)
+    public void WriteTriggersFile(TextWriter writer)
     {
         writer.WriteLine($"# {modService.GetModName()} Triggers");
         writer.WriteLine();
@@ -208,7 +213,7 @@ public class BuildService : IBuildService
         }
     }
 
-    private void WriteEffectsFile(TextWriter writer)
+    public void WriteEffectsFile(TextWriter writer)
     {
         writer.WriteLine($"# {modService.GetModName()} Effects");
         writer.WriteLine();
@@ -222,7 +227,7 @@ public class BuildService : IBuildService
         }
     }
 
-    private void WriteLocFile(TextWriter writer)
+    public void WriteLocFile(TextWriter writer)
     {
         writer.WriteLine("l_english:");
         writer.WriteLine();

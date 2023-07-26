@@ -1,0 +1,196 @@
+﻿<UserControl
+    x:Class="Paradoxical.View.OutputView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:view="clr-namespace:Paradoxical.View"
+    xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
+    xmlns:converters="clr-namespace:Paradoxical.Converters"
+    xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance {x:Type viewmodel:OutputViewModel}}"
+    d:DesignWidth="800">
+
+    <UserControl.Resources>
+
+        <Style
+            TargetType="TextBox"
+            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+
+            <Setter
+                Property="Margin"
+                Value="6,12" />
+            <Setter
+                Property="materialDesign:HintAssist.FontFamily"
+                Value="{StaticResource MaterialDesignFont}" />
+
+        </Style>
+
+        <Style
+            TargetType="view:ScriptBox"
+            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+
+            <Setter
+                Property="Margin"
+                Value="6,12" />
+            <Setter
+                Property="materialDesign:HintAssist.FontFamily"
+                Value="{StaticResource MaterialDesignFont}" />
+
+        </Style>
+
+    </UserControl.Resources>
+
+    <DockPanel>
+
+        <ToolBarTray
+            DockPanel.Dock="Top"
+            Margin="20">
+            <ToolBar
+                ClipToBounds="False"
+                Style="{StaticResource MaterialDesignToolBar}">
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding ReloadCommand}"
+                    Content="{materialDesign:PackIcon Kind=Refresh}"
+                    ToolTip="Refresh" />
+
+            </ToolBar>
+        </ToolBarTray>
+
+        <TabControl
+            Padding="20"
+            SelectedIndex="{Binding SelectedTab}">
+
+            <TabItem
+                Header="Events">
+                <Grid>
+
+                    <view:ScriptBox
+                        Grid.Row="1"
+                        IsReadOnly="True"
+                        FontFamily="Consolas"
+                        AcceptsReturn="True"
+                        AcceptsTab="True"
+                        AcceptsDot="True"
+                        AllowFormatting="True"
+                        AllowedCompleteItems="All">
+
+                        <view:ScriptBox.Text>
+                            <Binding
+                                Path="EventsFileOutput"
+                                Mode="OneWay">
+
+                                <Binding.Converter>
+                                    <converters:ScriptConverter />
+                                </Binding.Converter>
+
+                            </Binding>
+                        </view:ScriptBox.Text>
+
+                    </view:ScriptBox>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem
+                Header="Triggers">
+                <Grid>
+
+                    <view:ScriptBox
+                        Grid.Row="1"
+                        IsReadOnly="True"
+                        FontFamily="Consolas"
+                        AcceptsReturn="True"
+                        AcceptsTab="True"
+                        AcceptsDot="True"
+                        AllowFormatting="True"
+                        AllowedCompleteItems="All">
+
+                        <view:ScriptBox.Text>
+                            <Binding
+                                Path="TriggersFileOutput"
+                                Mode="OneWay">
+
+                                <Binding.Converter>
+                                    <converters:ScriptConverter />
+                                </Binding.Converter>
+
+                            </Binding>
+                        </view:ScriptBox.Text>
+
+                    </view:ScriptBox>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem
+                Header="Effects">
+                <Grid>
+
+                    <view:ScriptBox
+                        Grid.Row="1"
+                        IsReadOnly="True"
+                        FontFamily="Consolas"
+                        AcceptsReturn="True"
+                        AcceptsTab="True"
+                        AcceptsDot="True"
+                        AllowFormatting="True"
+                        AllowedCompleteItems="All">
+
+                        <view:ScriptBox.Text>
+                            <Binding
+                                Path="EffectsFileOutput"
+                                Mode="OneWay">
+
+                                <Binding.Converter>
+                                    <converters:ScriptConverter />
+                                </Binding.Converter>
+
+                            </Binding>
+                        </view:ScriptBox.Text>
+
+                    </view:ScriptBox>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem
+                Header="Localization">
+                <Grid>
+
+                    <view:ScriptBox
+                        Grid.Row="1"
+                        IsReadOnly="True"
+                        FontFamily="Consolas"
+                        AcceptsReturn="True"
+                        AcceptsTab="True"
+                        AcceptsDot="True"
+                        AllowFormatting="True"
+                        AllowedCompleteItems="All">
+
+                        <view:ScriptBox.Text>
+                            <Binding
+                                Path="LocFileOutput"
+                                Mode="OneWay">
+
+                                <Binding.Converter>
+                                    <converters:ScriptConverter />
+                                </Binding.Converter>
+
+                            </Binding>
+                        </view:ScriptBox.Text>
+
+                    </view:ScriptBox>
+
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+
+    </DockPanel>
+
+</UserControl>

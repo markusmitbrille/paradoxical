@@ -25,6 +25,11 @@
     </DataTemplate>
 
     <DataTemplate
+        DataType="{x:Type viewmodel:OutputViewModel}">
+        <view:OutputView />
+    </DataTemplate>
+
+    <DataTemplate
         DataType="{x:Type viewmodel:EventTableViewModel}">
         <view:EventTableView />
     </DataTemplate>

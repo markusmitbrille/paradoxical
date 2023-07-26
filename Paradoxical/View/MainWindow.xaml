@@ -163,6 +163,21 @@
                             Margin="12,8"
                             HorizontalContentAlignment="Left"
                             Style="{DynamicResource MaterialDesignFlatButton}"
+                            Command="{Binding GoToOutputCommand}"
+                            Click="MenuButtonClickHandler">
+                            <TextBlock
+                                Margin="24,4,0,4"
+                                Text="Output" />
+                        </Button>
+
+                        <Separator
+                            Margin="0,6"
+                            Background="Transparent" />
+
+                        <Button
+                            Margin="12,8"
+                            HorizontalContentAlignment="Left"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
                             Command="{Binding GoToTriggerListCommand}"
                             Click="MenuButtonClickHandler">
                             <TextBlock
