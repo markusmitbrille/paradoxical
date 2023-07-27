@@ -438,6 +438,7 @@
                     BorderBrush="Gray"
                     BorderThickness="1"
                     ItemsSource="{Binding Options}"
+                    IsSynchronizedWithCurrentItem="True"
                     SelectionMode="Single"
                     SelectionUnit="FullRow"
                     AutoGenerateColumns="False"

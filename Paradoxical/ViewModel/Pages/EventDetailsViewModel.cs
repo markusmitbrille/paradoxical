@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace Paradoxical.ViewModel;
 
@@ -512,7 +513,10 @@ public class EventDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
-        Options.Add(new());
+        OptionViewModel item = new();
+
+        Options.Add(item);
+        CollectionViewSource.GetDefaultView(Options).MoveCurrentTo(item);
     }
 
     private RelayCommand<object>? deleteOptionCommand;

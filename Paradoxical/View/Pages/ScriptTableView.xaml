@@ -86,6 +86,7 @@
                     BorderThickness="1"
                     ItemsSource="{Binding Items}"
                     SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static CollectionView.NewItemPlaceholder}}"
+                    IsSynchronizedWithCurrentItem="True"
                     SelectionMode="Single"
                     SelectionUnit="FullRow"
                     AutoGenerateColumns="False"
