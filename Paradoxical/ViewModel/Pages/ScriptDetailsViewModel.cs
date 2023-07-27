@@ -19,6 +19,22 @@ public class ScriptDetailsViewModel : PageViewModel
 {
     public override string PageName => "Script Details";
 
+    public override bool IsValid
+    {
+        get
+        {
+            if (Selected == null)
+            { return false; }
+
+            var model = ScriptService.Find(Selected.Model);
+
+            if (model == null)
+            { return false; }
+
+            return true;
+        }
+    }
+
     public IModService ModService { get; }
     public IScriptService ScriptService { get; }
 
@@ -140,17 +156,7 @@ public class ScriptDetailsViewModel : PageViewModel
         ScriptService.Delete(Selected.Model);
 
         Shell.Navigate<ScriptTableViewModel>();
-
-        var historyPages = Shell.PageHistory.OfType<ScriptDetailsViewModel>()
-            .Where(page => page.Selected?.Model == Selected.Model)
-            .ToArray();
-
-        var futurePages = Shell.PageFuture.OfType<ScriptDetailsViewModel>()
-            .Where(page => page.Selected?.Model == Selected.Model)
-            .ToArray();
-
-        Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
-        Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
+        Shell.InvalidatePage(this);
     }
 
     #region Equality

@@ -67,16 +67,7 @@ public class ScriptTableViewModel : PageViewModel
             ScriptViewModel observable = e.OldItems.Cast<ScriptViewModel>().Single();
             ScriptService.Delete(observable.Model);
 
-            var historyPages = Shell.PageHistory.OfType<ScriptDetailsViewModel>()
-                .Where(page => page.Selected?.Model == observable.Model)
-                .ToArray();
-
-            var futurePages = Shell.PageFuture.OfType<ScriptDetailsViewModel>()
-                .Where(page => page.Selected?.Model == observable.Model)
-                .ToArray();
-
-            Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
-            Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
+            Shell.ValidatePages();
         }
     }
 

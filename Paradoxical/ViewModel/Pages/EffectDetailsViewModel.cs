@@ -19,6 +19,22 @@ public class EffectDetailsViewModel : PageViewModel
 {
     public override string PageName => "Effect Details";
 
+    public override bool IsValid
+    {
+        get
+        {
+            if (Selected == null)
+            { return false; }
+
+            var model = EffectService.Find(Selected.Model);
+
+            if (model == null)
+            { return false; }
+
+            return true;
+        }
+    }
+
     public IModService ModService { get; }
     public IEffectService EffectService { get; }
 
@@ -185,17 +201,7 @@ public class EffectDetailsViewModel : PageViewModel
         EffectService.Delete(Selected.Model);
 
         Shell.Navigate<EffectTableViewModel>();
-
-        var historyPages = Shell.PageHistory.OfType<EffectDetailsViewModel>()
-            .Where(page => page.Selected?.Model == Selected.Model)
-            .ToArray();
-
-        var futurePages = Shell.PageFuture.OfType<EffectDetailsViewModel>()
-            .Where(page => page.Selected?.Model == Selected.Model)
-            .ToArray();
-
-        Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
-        Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
+        Shell.InvalidatePage(this);
     }
 
     #region Raw

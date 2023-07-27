@@ -26,11 +26,13 @@ public interface IShell
 {
     public PageViewModel? CurrentPage { get; }
 
-    public List<PageViewModel> PageHistory { get; }
-    public List<PageViewModel> PageFuture { get; }
-
     public T Navigate<T>() where T : PageViewModel;
 
+    public void NavigatePage(PageViewModel? page);
+    public void InvalidatePage(PageViewModel? page);
+    public void ValidatePages();
+
+    public void ClearPage();
     public void GoHome();
     public void GoBack();
     public void GoForward();
@@ -49,28 +51,6 @@ public class Shell : ObservableObject, IShell
     public IEventService EventService { get; }
     public ITriggerService TriggerService { get; }
     public IEffectService EffectService { get; }
-
-    private PageViewModel? currentPage;
-    public PageViewModel? CurrentPage
-    {
-        get => currentPage;
-        private set
-        {
-            OnPropertyChanging();
-
-            currentPage?.OnNavigatingFrom();
-            currentPage = value;
-            currentPage?.OnNavigatedTo();
-
-            GoForwardCommand.NotifyCanExecuteChanged();
-            GoBackCommand.NotifyCanExecuteChanged();
-
-            OnPropertyChanged();
-        }
-    }
-
-    public List<PageViewModel> PageHistory { get; } = new();
-    public List<PageViewModel> PageFuture { get; } = new();
 
     public Shell(
         IServiceProvider serviceProvider,
@@ -238,35 +218,60 @@ if you don't save them.",
         }
     }
 
+    #region Navigation
+
+    private PageViewModel? currentPage;
+    public PageViewModel? CurrentPage
+    {
+        get => currentPage;
+        private set
+        {
+            OnPropertyChanging();
+
+            currentPage?.OnNavigatingFrom();
+            currentPage = value;
+            currentPage?.OnNavigatedTo();
+
+            GoForwardCommand.NotifyCanExecuteChanged();
+            GoBackCommand.NotifyCanExecuteChanged();
+
+            OnPropertyChanged();
+        }
+    }
+
+    private List<PageViewModel> History { get; } = new();
+    private List<PageViewModel> Future { get; } = new();
+
     public T Navigate<T>() where T : PageViewModel
     {
         T page = ServiceProvider.GetRequiredService<T>();
 
-        if (CanNavigate(page) == true)
+        if (CanNavigatePage(page) == true)
         {
-            Navigate(page);
+            NavigatePage(page);
         }
 
         return page;
     }
 
-    private RelayCommand<PageViewModel?>? navigateCommand;
-    public RelayCommand<PageViewModel?> NavigateCommand => navigateCommand ??= new(Navigate, CanNavigate);
+    private RelayCommand<PageViewModel?>? navigatePageCommand;
+    public RelayCommand<PageViewModel?> NavigatePageCommand => navigatePageCommand ??= new(NavigatePage, CanNavigatePage);
 
-    public void Navigate(PageViewModel? page)
+    public void NavigatePage(PageViewModel? page)
     {
         if (page == null)
         { return; }
 
-        PageFuture.Clear();
-        if (CurrentPage != null)
+        Future.Clear();
+
+        if (CurrentPage != null && CurrentPage != History.PeekOrDefault())
         {
-            PageHistory.Push(CurrentPage);
+            History.Push(CurrentPage);
         }
 
         CurrentPage = page;
     }
-    public bool CanNavigate(PageViewModel? page)
+    public bool CanNavigatePage(PageViewModel? page)
     {
         if (page == null)
         { return false; }
@@ -277,10 +282,69 @@ if you don't save them.",
         return true;
     }
 
+    private RelayCommand<PageViewModel?>? invalidatePageCommand;
+    public RelayCommand<PageViewModel?> InvalidatePageCommand => invalidatePageCommand ??= new(InvalidatePage, CanInvalidatePage);
+
+    public void InvalidatePage(PageViewModel? page)
+    {
+        if (page == null)
+        { return; }
+
+        History.RemoveAll(page);
+        Future.RemoveAll(page);
+
+        RemoveDuplicatePages();
+
+        GoForwardCommand.NotifyCanExecuteChanged();
+        GoBackCommand.NotifyCanExecuteChanged();
+    }
+    public bool CanInvalidatePage(PageViewModel? page)
+    {
+        if (page == null)
+        { return false; }
+
+        if (CurrentPage == page)
+        { return false; }
+
+        return true;
+    }
+
+    private RelayCommand? validatePagesCommand;
+    public RelayCommand ValidatePagesCommand => validatePagesCommand ??= new(ValidatePages);
+
+    public void ValidatePages()
+    {
+        History.RemoveAll(page => page.IsValid == false);
+        Future.RemoveAll(page => page.IsValid == false);
+
+        RemoveDuplicatePages();
+
+        GoForwardCommand.NotifyCanExecuteChanged();
+        GoBackCommand.NotifyCanExecuteChanged();
+    }
+
+    private void RemoveDuplicatePages()
+    {
+        if (CurrentPage != null)
+        {
+            History.Push(CurrentPage);
+            Future.Push(CurrentPage);
+        }
+
+        History.RemoveConsecutiveDuplicates();
+        Future.RemoveConsecutiveDuplicates();
+
+        if (CurrentPage != null)
+        {
+            History.Pop();
+            Future.Pop();
+        }
+    }
+
     public void ClearPage()
     {
-        PageHistory.Clear();
-        PageFuture.Clear();
+        History.Clear();
+        Future.Clear();
 
         CurrentPage = null;
     }
@@ -298,19 +362,19 @@ if you don't save them.",
 
     public void GoBack()
     {
-        if (PageHistory.Any() == false)
+        if (History.Any() == false)
         { return; }
 
-        if (CurrentPage != null)
+        if (CurrentPage != null && CurrentPage != Future.PeekOrDefault())
         {
-            PageFuture.Push(CurrentPage);
+            Future.Push(CurrentPage);
         }
 
-        CurrentPage = PageHistory.Pop();
+        CurrentPage = History.Pop();
     }
     public bool CanGoBack()
     {
-        return PageHistory.Any() == true;
+        return History.Any() == true;
     }
 
     private RelayCommand? goForwardCommand;
@@ -318,20 +382,24 @@ if you don't save them.",
 
     public void GoForward()
     {
-        if (PageFuture.Any() == false)
+        if (Future.Any() == false)
         { return; }
 
-        if (CurrentPage != null)
+        if (CurrentPage != null && CurrentPage != History.PeekOrDefault())
         {
-            PageHistory.Push(CurrentPage);
+            History.Push(CurrentPage);
         }
 
-        CurrentPage = PageFuture.Pop();
+        CurrentPage = Future.Pop();
     }
     public bool CanGoForward()
     {
-        return PageFuture.Any() == true;
+        return Future.Any() == true;
     }
+
+    #endregion
+
+    #region Page Commands
 
     private RelayCommand? goToInfoCommand;
     public RelayCommand GoToInfoCommand => goToInfoCommand ??= new(GoToInfo);
@@ -444,4 +512,6 @@ if you don't save them.",
     {
         Navigate<ScriptTableViewModel>();
     }
+
+    #endregion
 }

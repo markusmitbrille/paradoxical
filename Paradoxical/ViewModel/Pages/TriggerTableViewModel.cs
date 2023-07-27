@@ -67,16 +67,7 @@ public class TriggerTableViewModel : PageViewModel
             TriggerViewModel observable = e.OldItems.Cast<TriggerViewModel>().Single();
             TriggerService.Delete(observable.Model);
 
-            var historyPages = Shell.PageHistory.OfType<TriggerDetailsViewModel>()
-                .Where(page => page.Selected?.Model == observable.Model)
-                .ToArray();
-
-            var futurePages = Shell.PageFuture.OfType<TriggerDetailsViewModel>()
-                .Where(page => page.Selected?.Model == observable.Model)
-                .ToArray();
-
-            Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
-            Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
+            Shell.ValidatePages();
         }
     }
 

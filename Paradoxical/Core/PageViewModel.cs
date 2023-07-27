@@ -11,7 +11,8 @@ public abstract class PageViewModel : ObservableObject
     public IShell Shell { get; }
     public IMediatorService Mediator { get; }
 
-    public abstract string PageName { get; }
+    public virtual string PageName => string.Empty;
+    public virtual bool IsValid => true;
 
     public PageViewModel(
         IShell shell,

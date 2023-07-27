@@ -24,6 +24,22 @@ public class EventDetailsViewModel : PageViewModel
 {
     public override string PageName => "Event Details";
 
+    public override bool IsValid
+    {
+        get
+        {
+            if (Selected == null)
+            { return false; }
+
+            var model = EventService.Find(Selected.Model);
+
+            if (model == null)
+            { return false; }
+
+            return true;
+        }
+    }
+
     public IFinder Finder { get; }
 
     public IModService ModService { get; }
@@ -120,16 +136,7 @@ public class EventDetailsViewModel : PageViewModel
             OptionViewModel observable = e.OldItems.Cast<OptionViewModel>().Single();
             OptionService.Delete(observable.Model);
 
-            var historyPages = Shell.PageHistory.OfType<OptionDetailsViewModel>()
-                .Where(page => page.Selected?.Model == observable.Model)
-                .ToArray();
-
-            var futurePages = Shell.PageFuture.OfType<OptionDetailsViewModel>()
-                .Where(page => page.Selected?.Model == observable.Model)
-                .ToArray();
-
-            Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
-            Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
+            Shell.ValidatePages();
         }
     }
 
@@ -429,17 +436,7 @@ public class EventDetailsViewModel : PageViewModel
         EventService.Delete(Selected.Model);
 
         Shell.Navigate<EventTableViewModel>();
-
-        var historyPages = Shell.PageHistory.OfType<EventDetailsViewModel>()
-            .Where(page => page.Selected?.Model == Selected.Model)
-            .ToArray();
-
-        var futurePages = Shell.PageFuture.OfType<EventDetailsViewModel>()
-            .Where(page => page.Selected?.Model == Selected.Model)
-            .ToArray();
-
-        Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
-        Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
+        Shell.InvalidatePage(this);
     }
 
     #region Raw

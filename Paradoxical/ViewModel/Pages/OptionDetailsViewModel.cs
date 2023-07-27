@@ -22,6 +22,22 @@ public class OptionDetailsViewModel : PageViewModel
 {
     public override string PageName => "Option Details";
 
+    public override bool IsValid
+    {
+        get
+        {
+            if (Selected == null)
+            { return false; }
+
+            var model = OptionService.Find(Selected.Model);
+
+            if (model == null)
+            { return false; }
+
+            return true;
+        }
+    }
+
     public IFinder Finder { get; }
 
     public IModService ModService { get; }
@@ -271,16 +287,7 @@ public class OptionDetailsViewModel : PageViewModel
         var page = Shell.Navigate<EventDetailsViewModel>();
         page.Load(owner);
 
-        var historyPages = Shell.PageHistory.OfType<OptionDetailsViewModel>()
-            .Where(page => page.Selected?.Model == Selected.Model)
-            .ToArray();
-
-        var futurePages = Shell.PageFuture.OfType<OptionDetailsViewModel>()
-            .Where(page => page.Selected?.Model == Selected.Model)
-            .ToArray();
-
-        Shell.PageHistory.RemoveAll(page => historyPages.Contains(page));
-        Shell.PageFuture.RemoveAll(page => futurePages.Contains(page));
+        Shell.InvalidatePage(this);
     }
 
     private RelayCommand<OptionViewModel>? editPreviousOptionCommand;
