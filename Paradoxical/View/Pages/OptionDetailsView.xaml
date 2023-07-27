@@ -52,6 +52,14 @@
                 ClipToBounds="False"
                 Style="{StaticResource MaterialDesignToolBar}">
 
+                <ToolBar.Resources>
+
+                    <converters:VisibilityConverter
+                        x:Key="VisibilityConverter"
+                        Collapse="True" />
+
+                </ToolBar.Resources>
+
                 <Button
                     Margin="4,0"
                     Command="{Binding CreateCommand}"
@@ -88,21 +96,6 @@
 
                 <Separator />
 
-                <TextBlock
-                    Margin="4,0"
-                    VerticalAlignment="Center"
-                    Text="Raw Override"
-                    Style="{StaticResource MaterialDesignTextBlock}" />
-
-                <ToggleButton
-                    x:Name="RawOverrideToggleButton"
-                    Margin="4,0"
-                    IsChecked="{Binding OverrideRaw}"
-                    Command="{Binding ToggleOverrideRawCommand}"
-                    CommandParameter="{Binding IsChecked, ElementName=RawOverrideToggleButton}" />
-
-                <Separator />
-
                 <Button
                     Margin="4,0"
                     Command="{Binding EditPreviousOptionCommand}"
@@ -117,6 +110,23 @@
                     Content="{materialDesign:PackIcon Kind=ArrowRight}"
                     ToolTip="Go to next Option" />
 
+                <Separator
+                    Visibility="{Binding ElementName=RawTab, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
+
+                <TextBlock
+                    Margin="4,2"
+                    VerticalAlignment="Center"
+                    Text="Raw Override"
+                    Visibility="{Binding ElementName=RawTab, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
+
+                <ToggleButton
+                    x:Name="RawOverrideToggleButton"
+                    Margin="4,2"
+                    IsChecked="{Binding OverrideRaw}"
+                    Command="{Binding ToggleOverrideRawCommand}"
+                    CommandParameter="{Binding IsChecked, ElementName=RawOverrideToggleButton}"
+                    Visibility="{Binding ElementName=RawTab, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
+
             </ToolBar>
         </ToolBarTray>
 
@@ -125,6 +135,7 @@
             SelectedIndex="{Binding SelectedTab}">
 
             <TabItem
+                x:Name="DisplayTab"
                 Header="Display">
                 <StackPanel>
 
@@ -196,6 +207,7 @@
             </TabItem>
 
             <TabItem
+                x:Name="FLowControlTab"
                 Header="Flow Control">
 
                 <StackPanel>
@@ -332,6 +344,7 @@
             </TabItem>
 
             <TabItem
+                x:Name="AiChanceTab"
                 Header="AI Chance">
 
                 <Grid>
@@ -396,7 +409,8 @@
                             </Style>
 
                             <Style
-                                TargetType="Slider" BasedOn="{StaticResource MaterialDesignDiscreteHorizontalSlider}">
+                                TargetType="Slider"
+                                BasedOn="{StaticResource MaterialDesignDiscreteHorizontalSlider}">
 
                                 <Setter
                                     Property="Margin"
@@ -436,7 +450,7 @@
                                     Value="True" />
 
                             </Style>
-                            
+
                         </Grid.Resources>
 
                         <TextBlock
@@ -572,6 +586,7 @@
             </TabItem>
 
             <TabItem
+                x:Name="TriggerTab"
                 Header="Trigger">
                 <Grid>
 
@@ -621,6 +636,7 @@
             </TabItem>
 
             <TabItem
+                x:Name="EffectTab"
                 Header="Effect">
                 <Grid>
 
@@ -670,6 +686,7 @@
             </TabItem>
 
             <TabItem
+                x:Name="RawTab"
                 Header="Raw">
                 <Grid>
 
