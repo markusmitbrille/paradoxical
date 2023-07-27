@@ -215,6 +215,11 @@ public class EventDetailsViewModel : PageViewModel
         LowerRightPortrait = new() { Model = lowerRightPortrait };
 
         Options = new(options);
+        OptionsView.SortDescriptions.Add(new()
+        {
+            PropertyName = nameof(OptionViewModel.Priority),
+            Direction = ListSortDirection.Ascending,
+        });
 
         Triggers.Clear();
         Triggers.AddRange(triggers);
