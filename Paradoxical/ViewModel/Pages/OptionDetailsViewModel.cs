@@ -433,99 +433,6 @@ public class OptionDetailsViewModel : PageViewModel
 
     #region Flow Commands
 
-    private RelayCommand? createTriggerCommand;
-    public RelayCommand CreateTriggerCommand => createTriggerCommand ??= new(CreateTrigger);
-
-    private void CreateTrigger()
-    {
-        if (Selected == null)
-        { return; }
-
-        Option owner = Selected.Model;
-        Trigger relation = new()
-        {
-            Name = $"trg_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Code = "# some trigger",
-        };
-
-        TriggerService.Insert(relation);
-        OptionService.AddTrigger(owner, relation);
-
-        TriggerViewModel observable = new() { Model = relation };
-        Triggers.Add(observable);
-    }
-
-    private AsyncRelayCommand? addTriggerCommand;
-    public AsyncRelayCommand AddTriggerCommand => addTriggerCommand ??= new(AddTrigger);
-
-    private async Task AddTrigger()
-    {
-        if (Selected == null)
-        { return; }
-
-        Save();
-
-        Finder.Items = TriggerService.Get()
-            .Select(model => new TriggerViewModel() { Model = model });
-
-        await Finder.Show();
-
-        if (Finder.DialogResult != true)
-        { return; }
-
-        if (Finder.Selected == null)
-        { return; }
-
-        Option owner = Selected.Model;
-        Trigger relation = ((TriggerViewModel)Finder.Selected).Model;
-
-        OptionService.AddTrigger(owner, relation);
-
-        TriggerViewModel observable = new() { Model = relation };
-        Triggers.Add(observable);
-    }
-
-    private RelayCommand<TriggerViewModel>? removeTriggerCommand;
-    public RelayCommand<TriggerViewModel> RemoveTriggerCommand => removeTriggerCommand ??= new(RemoveTrigger, CanRemoveTrigger);
-
-    private void RemoveTrigger(TriggerViewModel? observable)
-    {
-        if (Selected == null)
-        { return; }
-
-        if (observable == null)
-        { return; }
-
-        OptionService.RemoveTrigger(Selected.Model, observable.Model);
-        Triggers.Remove(observable);
-    }
-    private bool CanRemoveTrigger(TriggerViewModel? observable)
-    {
-        return observable != null;
-    }
-
-    private RelayCommand<TriggerViewModel>? goToTriggerCommand;
-    public RelayCommand<TriggerViewModel> GoToTriggerCommand => goToTriggerCommand ??= new(GoToTrigger, CanGoToTrigger);
-
-    private void GoToTrigger(TriggerViewModel? observable)
-    {
-        if (observable == null)
-        { return; }
-
-        Trigger model = observable.Model;
-
-        var page = Shell.Navigate<TriggerDetailsViewModel>();
-        page.Load(model);
-    }
-    private bool CanGoToTrigger(TriggerViewModel? observable)
-    {
-        return observable != null;
-    }
-
-    #endregion
-
-    #region Trigger Commands
-
     private RelayCommand? createTriggeredEventCommand;
     public RelayCommand CreateTriggeredEventCommand => createTriggeredEventCommand ??= new(CreateTriggeredEvent);
 
@@ -640,6 +547,99 @@ public class OptionDetailsViewModel : PageViewModel
 
     #endregion
 
+    #region Trigger Commands
+
+    private RelayCommand? createTriggerCommand;
+    public RelayCommand CreateTriggerCommand => createTriggerCommand ??= new(CreateTrigger);
+
+    private void CreateTrigger()
+    {
+        if (Selected == null)
+        { return; }
+
+        Option owner = Selected.Model;
+        Trigger relation = new()
+        {
+            Name = $"trg_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
+            Code = "# some trigger",
+        };
+
+        TriggerService.Insert(relation);
+        OptionService.AddTrigger(owner, relation);
+
+        TriggerViewModel observable = new() { Model = relation };
+        Triggers.Add(observable);
+    }
+
+    private AsyncRelayCommand? addTriggerCommand;
+    public AsyncRelayCommand AddTriggerCommand => addTriggerCommand ??= new(AddTrigger);
+
+    private async Task AddTrigger()
+    {
+        if (Selected == null)
+        { return; }
+
+        Save();
+
+        Finder.Items = TriggerService.Get()
+            .Select(model => new TriggerViewModel() { Model = model });
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Option owner = Selected.Model;
+        Trigger relation = ((TriggerViewModel)Finder.Selected).Model;
+
+        OptionService.AddTrigger(owner, relation);
+
+        TriggerViewModel observable = new() { Model = relation };
+        Triggers.Add(observable);
+    }
+
+    private RelayCommand<TriggerViewModel>? removeTriggerCommand;
+    public RelayCommand<TriggerViewModel> RemoveTriggerCommand => removeTriggerCommand ??= new(RemoveTrigger, CanRemoveTrigger);
+
+    private void RemoveTrigger(TriggerViewModel? observable)
+    {
+        if (Selected == null)
+        { return; }
+
+        if (observable == null)
+        { return; }
+
+        OptionService.RemoveTrigger(Selected.Model, observable.Model);
+        Triggers.Remove(observable);
+    }
+    private bool CanRemoveTrigger(TriggerViewModel? observable)
+    {
+        return observable != null;
+    }
+
+    private RelayCommand<TriggerViewModel>? editTriggerCommand;
+    public RelayCommand<TriggerViewModel> EditTriggerCommand => editTriggerCommand ??= new(EditTrigger, CanEditTrigger);
+
+    private void EditTrigger(TriggerViewModel? observable)
+    {
+        if (observable == null)
+        { return; }
+
+        Trigger model = observable.Model;
+
+        var page = Shell.Navigate<TriggerDetailsViewModel>();
+        page.Load(model);
+    }
+    private bool CanEditTrigger(TriggerViewModel? observable)
+    {
+        return observable != null;
+    }
+
+    #endregion
+
     #region Effect Commands
 
     private RelayCommand? createEffectCommand;
@@ -713,10 +713,10 @@ public class OptionDetailsViewModel : PageViewModel
         return observable != null;
     }
 
-    private RelayCommand<EffectViewModel>? goToEffectCommand;
-    public RelayCommand<EffectViewModel> GoToEffectCommand => goToEffectCommand ??= new(GoToEffect, CanGoToEffect);
+    private RelayCommand<EffectViewModel>? editEffectCommand;
+    public RelayCommand<EffectViewModel> EditEffectCommand => editEffectCommand ??= new(EditEffect, CanEditEffect);
 
-    private void GoToEffect(EffectViewModel? observable)
+    private void EditEffect(EffectViewModel? observable)
     {
         if (observable == null)
         { return; }
@@ -726,7 +726,7 @@ public class OptionDetailsViewModel : PageViewModel
         var page = Shell.Navigate<EffectDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanGoToEffect(EffectViewModel? observable)
+    private bool CanEditEffect(EffectViewModel? observable)
     {
         return observable != null;
     }

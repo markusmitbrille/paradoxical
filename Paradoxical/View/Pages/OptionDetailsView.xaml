@@ -575,7 +575,25 @@
                 Header="Trigger">
                 <Grid>
 
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="5*" />
+                        <ColumnDefinition
+                            Width="2*" />
+                    </Grid.ColumnDefinitions>
+
+                    <view:ElementList
+                        Grid.Column="1"
+                        Margin="6,12"
+                        ItemsSource="{Binding Triggers}"
+                        AddCommand="{Binding AddTriggerCommand}"
+                        CreateCommand="{Binding CreateTriggerCommand}"
+                        RemoveCommand="{Binding RemoveTriggerCommand}"
+                        EditCommand="{Binding EditTriggerCommand}">
+                    </view:ElementList>
+
                     <view:ScriptBox
+                        Grid.Column="0"
                         FontFamily="Consolas"
                         AcceptsReturn="True"
                         AcceptsTab="True"
@@ -606,7 +624,25 @@
                 Header="Effect">
                 <Grid>
 
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="5*" />
+                        <ColumnDefinition
+                            Width="2*" />
+                    </Grid.ColumnDefinitions>
+
+                    <view:ElementList
+                        Grid.Column="1"
+                        Margin="6,12"
+                        ItemsSource="{Binding Effects}"
+                        AddCommand="{Binding AddEffectCommand}"
+                        CreateCommand="{Binding CreateEffectCommand}"
+                        RemoveCommand="{Binding RemoveEffectCommand}"
+                        EditCommand="{Binding EditEffectCommand}">
+                    </view:ElementList>
+
                     <view:ScriptBox
+                        Grid.Column="0"
                         FontFamily="Consolas"
                         AcceptsReturn="True"
                         AcceptsTab="True"
