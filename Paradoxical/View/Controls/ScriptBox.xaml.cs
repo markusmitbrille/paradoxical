@@ -769,9 +769,10 @@ public partial class ScriptBox : TextBox
         text = text.Insert(index, Environment.NewLine);
         index += Environment.NewLine.Length;
 
-        var after = text[index..];
-        after = after.TrimStart();
-        after = after[..1];
+        var after = text[index..]
+            .TrimStart()
+            .FirstOrDefault()
+            .ToString();
 
         if (BlockEndRegex.IsMatch(after))
         {
