@@ -76,7 +76,8 @@
             SelectedIndex="{Binding SelectedTab}">
 
             <TabItem
-                Header="List">
+                x:Name="TableTab"
+                Header="Table">
 
                 <DataGrid
                     x:Name="ItemsDataGrid"

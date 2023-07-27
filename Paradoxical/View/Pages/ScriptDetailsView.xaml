@@ -94,6 +94,7 @@
             SelectedIndex="{Binding SelectedTab}">
 
             <TabItem
+                x:Name="GeneralTab"
                 Header="General">
                 <Grid>
 

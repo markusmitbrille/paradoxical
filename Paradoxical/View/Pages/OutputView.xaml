@@ -66,6 +66,7 @@
             SelectedIndex="{Binding SelectedTab}">
 
             <TabItem
+                x:Name="EventsTab"
                 Header="Events">
                 <Grid>
 
@@ -97,6 +98,7 @@
             </TabItem>
 
             <TabItem
+                x:Name="TriggersTab"
                 Header="Triggers">
                 <Grid>
 
@@ -128,6 +130,7 @@
             </TabItem>
 
             <TabItem
+                x:Name="EffectsTab"
                 Header="Effects">
                 <Grid>
 
@@ -159,6 +162,7 @@
             </TabItem>
 
             <TabItem
+                x:Name="LocTab"
                 Header="Localization">
                 <Grid>
 
