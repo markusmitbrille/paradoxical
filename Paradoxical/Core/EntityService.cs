@@ -11,6 +11,9 @@ public interface IEntityService<T>
 
     IEnumerable<T> Get();
 
+    T? Find(int id);
+    T? Find(T entity);
+
     void Insert(T entity);
     void Delete(T entity);
 
@@ -44,6 +47,15 @@ public abstract class EntityService<T> : IEntityService<T>
     public virtual IEnumerable<T> Get()
     {
         return Data.Connection.Table<T>().ToArray();
+    }
+
+    public virtual T? Find(int id)
+    {
+        return Data.Connection.Find<T>(id);
+    }
+    public virtual T? Find(T entity)
+    {
+        return Find(entity.Id);
     }
 
     public virtual void Insert(T entity)
