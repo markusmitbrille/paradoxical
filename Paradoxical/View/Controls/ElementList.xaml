@@ -197,7 +197,7 @@
             <Button
                 Command="{Binding EditCommand}"
                 CommandParameter="{Binding SelectedItem}"
-                Content="{materialDesign:PackIcon Kind=ArrowRight}"
+                Content="{materialDesign:PackIcon Kind=Edit}"
                 ToolTip="Edit" />
 
         </StackPanel>
