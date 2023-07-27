@@ -33,22 +33,22 @@
     <TextBox.CommandBindings>
 
         <CommandBinding
-            Command="view:ScriptBoxCommands.OpenComplete"
+            Command="view:ScriptBox.OpenComplete"
             Executed="OpenCompleteExecutedHandler"
             CanExecute="OpenCompleteCanExecuteHandler" />
 
         <CommandBinding
-            Command="view:ScriptBoxCommands.ConfirmComplete"
+            Command="view:ScriptBox.ConfirmComplete"
             Executed="ConfirmCompleteExecutedHandler"
             CanExecute="ConfirmCompleteCanExecuteHandler" />
 
         <CommandBinding
-            Command="view:ScriptBoxCommands.CancelComplete"
+            Command="view:ScriptBox.CancelComplete"
             Executed="CancelCompleteExecutedHandler"
             CanExecute="CancelCompleteCanExecuteHandler" />
 
         <CommandBinding
-            Command="view:ScriptBoxCommands.FormatText"
+            Command="view:ScriptBox.FormatText"
             Executed="FormatTextExecutedHandler"
             CanExecute="FormatTextCanExecuteHandler" />
 
@@ -59,11 +59,11 @@
 
             <MenuItem
                 Icon="{materialDesign:PackIcon Kind=LightbulbOutline}"
-                Command="view:ScriptBoxCommands.OpenComplete" />
+                Command="view:ScriptBox.OpenComplete" />
 
             <MenuItem
                 Icon="{materialDesign:PackIcon Kind=FileDocumentTick}"
-                Command="view:ScriptBoxCommands.FormatText" />
+                Command="view:ScriptBox.FormatText" />
 
             <Separator />
 
