@@ -515,19 +515,19 @@ public class EventDetailsViewModel : PageViewModel
         Options.Add(new());
     }
 
-    private RelayCommand<OptionViewModel>? deleteOptionCommand;
-    public RelayCommand<OptionViewModel> DeleteOptionCommand => deleteOptionCommand ??= new(DeleteOption, CanDeleteOption);
+    private RelayCommand<object>? deleteOptionCommand;
+    public RelayCommand<object> DeleteOptionCommand => deleteOptionCommand ??= new(DeleteOption, CanDeleteOption);
 
-    private void DeleteOption(OptionViewModel? observable)
+    private void DeleteOption(object? param)
     {
-        if (observable == null)
+        if (param is not OptionViewModel observable)
         { return; }
 
         Options.Remove(observable);
     }
-    private bool CanDeleteOption(OptionViewModel? observable)
+    private bool CanDeleteOption(object? param)
     {
-        return observable != null;
+        return param is OptionViewModel observable;
     }
 
     private RelayCommand<object>? editOptionCommand;
@@ -535,9 +535,6 @@ public class EventDetailsViewModel : PageViewModel
 
     private void EditOption(object? param)
     {
-        if (param == null)
-        { return; }
-
         if (param is not OptionViewModel observable)
         { return; }
 
@@ -548,7 +545,7 @@ public class EventDetailsViewModel : PageViewModel
     }
     private bool EditToOption(object? param)
     {
-        return param is OptionViewModel observable && observable != null;
+        return param is OptionViewModel observable;
     }
 
     #endregion

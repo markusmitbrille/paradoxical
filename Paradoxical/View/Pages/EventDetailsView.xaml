@@ -63,8 +63,15 @@
                 <Button
                     Margin="4,0"
                     Command="{Binding CreateCommand}"
-                    Content="{materialDesign:PackIcon Kind=Add}"
+                    Content="{materialDesign:PackIcon Kind=Creation}"
                     ToolTip="Create Event" />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding DeleteCommand}"
+                    CommandParameter="{Binding Selected}"
+                    Content="{materialDesign:PackIcon Kind=Delete}"
+                    ToolTip="Delete Event" />
 
                 <Button
                     Margin="4,0"
@@ -72,13 +79,6 @@
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=ContentDuplicate}"
                     ToolTip="Duplicate Event" />
-
-                <Button
-                    Margin="4,0"
-                    Command="{Binding DeleteCommand}"
-                    CommandParameter="{Binding Selected}"
-                    Content="{materialDesign:PackIcon Kind=Remove}"
-                    ToolTip="Delete Event" />
 
                 <Separator />
 
@@ -93,6 +93,38 @@
                     Command="{Binding ReloadCommand}"
                     Content="{materialDesign:PackIcon Kind=Refresh}"
                     ToolTip="Refresh" />
+
+                <Separator
+                    Visibility="{Binding ElementName=OptionsTab, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
+
+                <TextBlock
+                    Margin="4,2"
+                    VerticalAlignment="Center"
+                    Text="Options"
+                    Visibility="{Binding ElementName=OptionsTab, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding CreateOptionCommand}"
+                    Content="{materialDesign:PackIcon Kind=Creation}"
+                    ToolTip="Create Option"
+                    Visibility="{Binding ElementName=OptionsTab, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding DeleteOptionCommand}"
+                    CommandParameter="{Binding ElementName=OptionsDataGrid, Path=SelectedItem}"
+                    Content="{materialDesign:PackIcon Kind=Delete}"
+                    ToolTip="Delete Option"
+                    Visibility="{Binding ElementName=OptionsTab, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding EditOptionCommand}"
+                    CommandParameter="{Binding ElementName=OptionsDataGrid, Path=SelectedItem}"
+                    Content="{materialDesign:PackIcon Kind=Edit}"
+                    ToolTip="Edit Option"
+                    Visibility="{Binding ElementName=OptionsTab, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
 
                 <Separator
                     Visibility="{Binding ElementName=RawTab, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
@@ -401,6 +433,7 @@
                 Header="Options">
 
                 <DataGrid
+                    x:Name="OptionsDataGrid"
                     Margin="6,12"
                     BorderBrush="Gray"
                     BorderThickness="1"
