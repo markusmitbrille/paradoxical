@@ -26,21 +26,21 @@
                     Margin="4,0"
                     Command="{Binding CreateCommand}"
                     CommandParameter="{Binding Selected}"
-                    Content="{materialDesign:PackIcon Kind=Add}"
+                    Content="{materialDesign:PackIcon Kind=Creation}"
                     ToolTip="Create Effect" />
 
                 <Button
                     Margin="4,0"
                     Command="{Binding DeleteCommand}"
                     CommandParameter="{Binding Selected}"
-                    Content="{materialDesign:PackIcon Kind=Remove}"
+                    Content="{materialDesign:PackIcon Kind=Delete}"
                     ToolTip="Delete Effect" />
 
                 <Button
                     Margin="4,0"
                     Command="{Binding EditCommand}"
                     CommandParameter="{Binding Selected}"
-                    Content="{materialDesign:PackIcon Kind=Pencil}"
+                    Content="{materialDesign:PackIcon Kind=Edit}"
                     ToolTip="Edit Effect" />
 
                 <Separator />
