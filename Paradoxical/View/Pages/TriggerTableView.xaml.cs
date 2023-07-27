@@ -32,4 +32,14 @@ public partial class TriggerTableView : UserControl
     {
         ItemsDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
     }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+        ItemsDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+    }
+
+    private void Hyperlink_Click(object sender, RoutedEventArgs e)
+    {
+        ItemsDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+    }
 }

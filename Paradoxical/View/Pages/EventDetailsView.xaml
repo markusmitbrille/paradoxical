@@ -105,6 +105,7 @@
 
                 <Button
                     Margin="4,0"
+                    Click="Button_Click"
                     Command="{Binding CreateOptionCommand}"
                     Content="{materialDesign:PackIcon Kind=Creation}"
                     ToolTip="Create Option"
@@ -112,6 +113,7 @@
 
                 <Button
                     Margin="4,0"
+                    Click="Button_Click"
                     Command="{Binding DeleteOptionCommand}"
                     CommandParameter="{Binding ElementName=OptionsDataGrid, Path=SelectedItem}"
                     Content="{materialDesign:PackIcon Kind=Delete}"
@@ -120,6 +122,7 @@
 
                 <Button
                     Margin="4,0"
+                    Click="Button_Click"
                     Command="{Binding EditOptionCommand}"
                     CommandParameter="{Binding ElementName=OptionsDataGrid, Path=SelectedItem}"
                     Content="{materialDesign:PackIcon Kind=Edit}"
@@ -443,7 +446,7 @@
                     SelectionUnit="FullRow"
                     AutoGenerateColumns="False"
                     CanUserAddRows="False"
-                    CanUserSortColumns="False"
+                    CanUserSortColumns="True"
                     CanUserReorderColumns="False"
                     InitializingNewItem="DataGrid_InitializingNewItem">
 
@@ -463,6 +466,7 @@
                                 <DataTemplate>
                                     <TextBlock>
                                         <Hyperlink
+                                            Click="Hyperlink_Click"
                                             Command="{Binding DataContext.EditOptionCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                             CommandParameter="{Binding}">
                                             <TextBlock

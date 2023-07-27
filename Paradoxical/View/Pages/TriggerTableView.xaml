@@ -24,6 +24,7 @@
 
                 <Button
                     Margin="4,0"
+                    Click="Button_Click"
                     Command="{Binding CreateCommand}"
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=Creation}"
@@ -31,6 +32,7 @@
 
                 <Button
                     Margin="4,0"
+                    Click="Button_Click"
                     Command="{Binding DeleteCommand}"
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=Delete}"
@@ -38,6 +40,7 @@
 
                 <Button
                     Margin="4,0"
+                    Click="Button_Click"
                     Command="{Binding EditCommand}"
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=Edit}"
@@ -47,12 +50,14 @@
 
                 <Button
                     Margin="4,0"
+                    Click="Button_Click"
                     Command="{Binding SaveCommand}"
                     Content="{materialDesign:PackIcon Kind=ContentSave}"
                     ToolTip="Apply" />
 
                 <Button
                     Margin="4,0"
+                    Click="Button_Click"
                     Command="{Binding LoadCommand}"
                     Content="{materialDesign:PackIcon Kind=Refresh}"
                     ToolTip="Refresh" />
@@ -91,7 +96,7 @@
                     SelectionUnit="FullRow"
                     AutoGenerateColumns="False"
                     CanUserAddRows="False"
-                    CanUserSortColumns="False"
+                    CanUserSortColumns="True"
                     CanUserReorderColumns="False"
                     CanUserResizeColumns="False"
                     CanUserResizeRows="False"
@@ -113,6 +118,7 @@
                                 <DataTemplate>
                                     <TextBlock>
                                         <Hyperlink
+                                            Click="Hyperlink_Click"
                                             Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                             CommandParameter="{Binding}">
                                             <TextBlock

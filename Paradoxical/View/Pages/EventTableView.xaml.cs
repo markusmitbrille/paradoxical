@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Paradoxical.View;
@@ -30,6 +31,16 @@ public partial class EventTableView : UserControl
     }
 
     private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        ItemsDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+    }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+        ItemsDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+    }
+
+    private void Hyperlink_Click(object sender, RoutedEventArgs e)
     {
         ItemsDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
     }

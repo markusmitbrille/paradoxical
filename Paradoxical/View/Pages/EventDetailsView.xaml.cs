@@ -29,4 +29,14 @@ public partial class EventDetailsView : UserControl
         dataGrid.CommitEdit(DataGridEditingUnit.Row, false);
         dataGrid.BeginningEdit -= DataGrid_BeginningEdit;
     }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+        OptionsDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+    }
+
+    private void Hyperlink_Click(object sender, RoutedEventArgs e)
+    {
+        OptionsDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+    }
 }
