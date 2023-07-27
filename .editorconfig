@@ -203,15 +203,15 @@ dotnet_naming_rule.constants_should_be_upper_case.style = upper_case
 
 dotnet_naming_rule.static_field_should_be_s_camelcase.severity = suggestion
 dotnet_naming_rule.static_field_should_be_s_camelcase.symbols = static_field
-dotnet_naming_rule.static_field_should_be_s_camelcase.style = s_camelcase
+dotnet_naming_rule.static_field_should_be_s_camelcase.style = camelcase
 
 dotnet_naming_rule.private_field_should_be_m_camelcase.severity = suggestion
 dotnet_naming_rule.private_field_should_be_m_camelcase.symbols = private_field
-dotnet_naming_rule.private_field_should_be_m_camelcase.style = m_camelcase
+dotnet_naming_rule.private_field_should_be_m_camelcase.style = camelcase
 
 dotnet_naming_rule.field_should_be_m_camelcase.severity = suggestion
 dotnet_naming_rule.field_should_be_m_camelcase.symbols = field
-dotnet_naming_rule.field_should_be_m_camelcase.style = m_camelcase
+dotnet_naming_rule.field_should_be_m_camelcase.style = camelcase
 
 dotnet_naming_rule.event_should_be_pascalcase.severity = suggestion
 dotnet_naming_rule.event_should_be_pascalcase.symbols = event
