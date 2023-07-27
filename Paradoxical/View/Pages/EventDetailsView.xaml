@@ -442,6 +442,7 @@
                     SelectionMode="Single"
                     SelectionUnit="FullRow"
                     AutoGenerateColumns="False"
+                    CanUserAddRows="False"
                     CanUserSortColumns="False"
                     CanUserReorderColumns="False"
                     InitializingNewItem="DataGrid_InitializingNewItem">

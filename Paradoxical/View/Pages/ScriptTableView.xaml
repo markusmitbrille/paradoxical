@@ -90,6 +90,7 @@
                     SelectionMode="Single"
                     SelectionUnit="FullRow"
                     AutoGenerateColumns="False"
+                    CanUserAddRows="False"
                     CanUserSortColumns="False"
                     CanUserReorderColumns="False"
                     CanUserResizeColumns="False"
