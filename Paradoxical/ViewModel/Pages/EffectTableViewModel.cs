@@ -199,7 +199,10 @@ public class EffectTableViewModel : PageViewModel
 
     private void Create()
     {
-        Items.Add(new());
+        EffectViewModel item = new();
+
+        Items.Add(item);
+        Selected = item;
     }
 
     private RelayCommand<EffectViewModel>? deleteCommand;

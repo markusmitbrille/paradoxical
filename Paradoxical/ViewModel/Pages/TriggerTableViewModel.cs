@@ -199,7 +199,10 @@ public class TriggerTableViewModel : PageViewModel
 
     private void Create()
     {
-        Items.Add(new());
+        TriggerViewModel item = new();
+
+        Items.Add(item);
+        Selected = item;
     }
 
     private RelayCommand<TriggerViewModel>? deleteCommand;

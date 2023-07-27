@@ -199,7 +199,10 @@ public class ScriptTableViewModel : PageViewModel
 
     private void Create()
     {
-        Items.Add(new());
+        ScriptViewModel item = new();
+
+        Items.Add(item);
+        Selected = item;
     }
 
     private RelayCommand<ScriptViewModel>? deleteCommand;

@@ -237,7 +237,10 @@ public class EventTableViewModel : PageViewModel
 
     private void Create()
     {
-        Items.Add(new());
+        EventViewModel item = new();
+
+        Items.Add(item);
+        Selected = item;
     }
 
     private RelayCommand<EventViewModel>? deleteCommand;
