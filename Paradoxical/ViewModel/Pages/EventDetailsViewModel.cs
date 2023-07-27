@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -102,42 +103,27 @@ public class EventDetailsViewModel : PageViewModel
     private ObservableCollection<OptionViewModel>? options;
     public ObservableCollection<OptionViewModel> Options
     {
-        get
-        {
-            if (options == null)
-            {
-                options = new();
-                options.CollectionChanged += Options_CollectionChanged;
-            }
-
-            return options;
-        }
+        get => options ??= new();
         set
         {
-            OnPropertyChanging();
+            CommitOptions();
 
-            options = value;
-            options.CollectionChanged += Options_CollectionChanged;
-
-            OnPropertyChanged();
+            SetProperty(ref options, value);
         }
     }
 
-    private void Options_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private ICollectionView OptionsView => CollectionViewSource.GetDefaultView(Options);
+    private IEditableCollectionView EditableOptionsView => (IEditableCollectionView)OptionsView;
+
+    private void CommitOptions()
     {
-        if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null && e.NewItems.Count == 1)
+        if (EditableOptionsView.IsAddingNew == true)
         {
-            OptionViewModel observable = e.NewItems.Cast<OptionViewModel>().Single();
-            OptionService.Insert(observable.Model);
-
-            observable.Model.EventId = Selected?.Id ?? 0;
+            EditableOptionsView.CommitNew();
         }
-        if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null && e.OldItems.Count == 1)
+        if (EditableOptionsView.IsEditingItem == true)
         {
-            OptionViewModel observable = e.OldItems.Cast<OptionViewModel>().Single();
-            OptionService.Delete(observable.Model);
-
-            Shell.ValidatePages();
+            EditableOptionsView.CommitEdit();
         }
     }
 
@@ -513,10 +499,13 @@ public class EventDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
-        OptionViewModel item = new();
+        Option model = new() { EventId = Selected.Id };
+        OptionService.Insert(model);
 
-        Options.Add(item);
-        CollectionViewSource.GetDefaultView(Options).MoveCurrentTo(item);
+        OptionViewModel observable = new() { Model = model };
+
+        Options.Add(observable);
+        OptionsView.MoveCurrentTo(observable);
     }
 
     private RelayCommand<object>? deleteOptionCommand;
@@ -527,7 +516,14 @@ public class EventDetailsViewModel : PageViewModel
         if (param is not OptionViewModel observable)
         { return; }
 
+        CommitOptions();
+
+        Option model = observable.Model;
+        OptionService.Delete(model);
+
         Options.Remove(observable);
+
+        Shell.ValidatePages();
     }
     private bool CanDeleteOption(object? param)
     {
@@ -541,6 +537,8 @@ public class EventDetailsViewModel : PageViewModel
     {
         if (param is not OptionViewModel observable)
         { return; }
+
+        CommitOptions();
 
         Option model = observable.Model;
 

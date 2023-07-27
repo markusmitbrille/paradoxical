@@ -30,78 +30,33 @@ public class EventTableViewModel : PageViewModel
         set => SetProperty(ref selectedTab, value);
     }
 
-    private ObservableCollection<EventViewModel> items = new();
+    private ObservableCollection<EventViewModel>? items;
     public ObservableCollection<EventViewModel> Items
     {
-        get
-        {
-            if (items == null)
-            {
-                items = new();
-                items.CollectionChanged += Items_CollectionChanged;
-            }
-
-            return items;
-        }
+        get => items ??= new();
         set
         {
-            OnPropertyChanging();
+            CommitItems();
 
-            items = value;
-            items.CollectionChanged += Items_CollectionChanged;
+            SetProperty(ref items, value);
 
             UpdateView();
             UpdateSelected();
-
-            OnPropertyChanged();
         }
     }
 
-    private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private ICollectionView ItemsView => CollectionViewSource.GetDefaultView(Items);
+    private IEditableCollectionView EditableItemsView => (IEditableCollectionView)ItemsView;
+
+    private void CommitItems()
     {
-        if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null && e.NewItems.Count == 1)
+        if (EditableItemsView.IsAddingNew == true)
         {
-            EventViewModel observable = e.NewItems.Cast<EventViewModel>().Single();
-            EventService.Insert(observable.Model);
-
-            Portrait leftPortrait = new()
-            {
-                EventId = observable.Model.Id,
-                Position = PortraitPosition.Left,
-            };
-            Portrait rightPortrait = new()
-            {
-                EventId = observable.Model.Id,
-                Position = PortraitPosition.Right,
-            };
-            Portrait lowerLeftPortrait = new()
-            {
-                EventId = observable.Model.Id,
-                Position = PortraitPosition.LowerLeft,
-            };
-            Portrait lowerCenterPortrait = new()
-            {
-                EventId = observable.Model.Id,
-                Position = PortraitPosition.LowerCenter,
-            };
-            Portrait lowerRightPortrait = new()
-            {
-                EventId = observable.Model.Id,
-                Position = PortraitPosition.LowerRight,
-            };
-
-            PortraitService.Insert(leftPortrait);
-            PortraitService.Insert(rightPortrait);
-            PortraitService.Insert(lowerLeftPortrait);
-            PortraitService.Insert(lowerCenterPortrait);
-            PortraitService.Insert(lowerRightPortrait);
+            EditableItemsView.CommitNew();
         }
-        if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null && e.OldItems.Count == 1)
+        if (EditableItemsView.IsEditingItem == true)
         {
-            EventViewModel observable = e.OldItems.Cast<EventViewModel>().Single();
-            EventService.Delete(observable.Model);
-
-            Shell.ValidatePages();
+            EditableItemsView.CommitEdit();
         }
     }
 
@@ -174,10 +129,9 @@ public class EventTableViewModel : PageViewModel
     private void Load()
     {
         Selected = null;
-        Items = new(EventService.Get().Select(model => new EventViewModel() { Model = model }));
 
-        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
-        view.Filter = Predicate;
+        Items = new(EventService.Get().Select(model => new EventViewModel() { Model = model }));
+        ItemsView.Filter = Predicate;
     }
 
     private RelayCommand? saveCommand;
@@ -219,8 +173,8 @@ public class EventTableViewModel : PageViewModel
 
     private void UpdateView()
     {
-        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
-        view.Refresh();
+        CommitItems();
+        ItemsView.Refresh();
     }
 
     private void UpdateSelected()
@@ -228,8 +182,7 @@ public class EventTableViewModel : PageViewModel
         if (Selected != null && Predicate(Selected) == true)
         { return; }
 
-        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
-        Selected = view.OfType<EventViewModel>().FirstOrDefault();
+        Selected = ItemsView.OfType<EventViewModel>().FirstOrDefault();
     }
 
     private RelayCommand? createCommand;
@@ -237,10 +190,45 @@ public class EventTableViewModel : PageViewModel
 
     private void Create()
     {
-        EventViewModel item = new();
+        Event model = new();
+        EventService.Insert(model);
 
-        Items.Add(item);
-        Selected = item;
+        EventViewModel observable = new() { Model = model };
+
+        Portrait leftPortrait = new()
+        {
+            EventId = observable.Model.Id,
+            Position = PortraitPosition.Left,
+        };
+        Portrait rightPortrait = new()
+        {
+            EventId = observable.Model.Id,
+            Position = PortraitPosition.Right,
+        };
+        Portrait lowerLeftPortrait = new()
+        {
+            EventId = observable.Model.Id,
+            Position = PortraitPosition.LowerLeft,
+        };
+        Portrait lowerCenterPortrait = new()
+        {
+            EventId = observable.Model.Id,
+            Position = PortraitPosition.LowerCenter,
+        };
+        Portrait lowerRightPortrait = new()
+        {
+            EventId = observable.Model.Id,
+            Position = PortraitPosition.LowerRight,
+        };
+
+        PortraitService.Insert(leftPortrait);
+        PortraitService.Insert(rightPortrait);
+        PortraitService.Insert(lowerLeftPortrait);
+        PortraitService.Insert(lowerCenterPortrait);
+        PortraitService.Insert(lowerRightPortrait);
+
+        Items.Add(observable);
+        Selected = observable;
     }
 
     private RelayCommand<EventViewModel>? deleteCommand;
@@ -251,7 +239,14 @@ public class EventTableViewModel : PageViewModel
         if (param is not EventViewModel observable)
         { return; }
 
+        CommitItems();
+
+        Event model = observable.Model;
+        EventService.Delete(model);
+
         Items.Remove(observable);
+
+        Shell.ValidatePages();
     }
     private bool CanDelete(object? param)
     {
@@ -265,6 +260,8 @@ public class EventTableViewModel : PageViewModel
     {
         if (param is not EventViewModel observable)
         { return; }
+
+        CommitItems();
 
         var model = observable.Model;
 

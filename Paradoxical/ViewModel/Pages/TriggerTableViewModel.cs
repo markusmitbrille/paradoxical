@@ -28,46 +28,33 @@ public class TriggerTableViewModel : PageViewModel
         set => SetProperty(ref selectedTab, value);
     }
 
-    private ObservableCollection<TriggerViewModel> items = new();
+    private ObservableCollection<TriggerViewModel>? items;
     public ObservableCollection<TriggerViewModel> Items
     {
-        get
-        {
-            if (items == null)
-            {
-                items = new();
-                items.CollectionChanged += Items_CollectionChanged;
-            }
-
-            return items;
-        }
+        get => items ??= new();
         set
         {
-            OnPropertyChanging();
+            CommitItems();
 
-            items = value;
-            items.CollectionChanged += Items_CollectionChanged;
+            SetProperty(ref items, value);
 
             UpdateView();
             UpdateSelected();
-
-            OnPropertyChanged();
         }
     }
 
-    private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null && e.NewItems.Count == 1)
-        {
-            TriggerViewModel observable = e.NewItems.Cast<TriggerViewModel>().Single();
-            TriggerService.Insert(observable.Model);
-        }
-        if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null && e.OldItems.Count == 1)
-        {
-            TriggerViewModel observable = e.OldItems.Cast<TriggerViewModel>().Single();
-            TriggerService.Delete(observable.Model);
+    private ICollectionView ItemsView => CollectionViewSource.GetDefaultView(Items);
+    private IEditableCollectionView EditableItemsView => (IEditableCollectionView)ItemsView;
 
-            Shell.ValidatePages();
+    private void CommitItems()
+    {
+        if (EditableItemsView.IsAddingNew == true)
+        {
+            EditableItemsView.CommitNew();
+        }
+        if (EditableItemsView.IsEditingItem == true)
+        {
+            EditableItemsView.CommitEdit();
         }
     }
 
@@ -136,10 +123,9 @@ public class TriggerTableViewModel : PageViewModel
     private void Load()
     {
         Selected = null;
-        Items = new(TriggerService.Get().Select(model => new TriggerViewModel() { Model = model }));
 
-        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
-        view.Filter = Predicate;
+        Items = new(TriggerService.Get().Select(model => new TriggerViewModel() { Model = model }));
+        ItemsView.Filter = Predicate;
     }
 
     private RelayCommand? saveCommand;
@@ -181,8 +167,8 @@ public class TriggerTableViewModel : PageViewModel
 
     private void UpdateView()
     {
-        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
-        view.Refresh();
+        CommitItems();
+        ItemsView.Refresh();
     }
 
     private void UpdateSelected()
@@ -190,8 +176,7 @@ public class TriggerTableViewModel : PageViewModel
         if (Selected != null && Predicate(Selected) == true)
         { return; }
 
-        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
-        Selected = view.OfType<TriggerViewModel>().FirstOrDefault();
+        Selected = ItemsView.OfType<TriggerViewModel>().FirstOrDefault();
     }
 
     private RelayCommand? createCommand;
@@ -199,10 +184,13 @@ public class TriggerTableViewModel : PageViewModel
 
     private void Create()
     {
-        TriggerViewModel item = new();
+        Trigger model = new();
+        TriggerService.Insert(model);
 
-        Items.Add(item);
-        Selected = item;
+        TriggerViewModel observable = new() { Model = model };
+
+        Items.Add(observable);
+        Selected = observable;
     }
 
     private RelayCommand<TriggerViewModel>? deleteCommand;
@@ -213,7 +201,14 @@ public class TriggerTableViewModel : PageViewModel
         if (param is not TriggerViewModel observable)
         { return; }
 
+        CommitItems();
+
+        Trigger model = observable.Model;
+        TriggerService.Delete(model);
+
         Items.Remove(observable);
+
+        Shell.ValidatePages();
     }
     private bool CanDelete(object? param)
     {
@@ -227,6 +222,8 @@ public class TriggerTableViewModel : PageViewModel
     {
         if (param is not TriggerViewModel observable)
         { return; }
+
+        CommitItems();
 
         var model = observable.Model;
 

@@ -28,46 +28,33 @@ public class ScriptTableViewModel : PageViewModel
         set => SetProperty(ref selectedTab, value);
     }
 
-    private ObservableCollection<ScriptViewModel> items = new();
+    private ObservableCollection<ScriptViewModel>? items;
     public ObservableCollection<ScriptViewModel> Items
     {
-        get
-        {
-            if (items == null)
-            {
-                items = new();
-                items.CollectionChanged += Items_CollectionChanged;
-            }
-
-            return items;
-        }
+        get => items ??= new();
         set
         {
-            OnPropertyChanging();
+            CommitItems();
 
-            items = value;
-            items.CollectionChanged += Items_CollectionChanged;
+            SetProperty(ref items, value);
 
             UpdateView();
             UpdateSelected();
-
-            OnPropertyChanged();
         }
     }
 
-    private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null && e.NewItems.Count == 1)
-        {
-            ScriptViewModel observable = e.NewItems.Cast<ScriptViewModel>().Single();
-            ScriptService.Insert(observable.Model);
-        }
-        if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null && e.OldItems.Count == 1)
-        {
-            ScriptViewModel observable = e.OldItems.Cast<ScriptViewModel>().Single();
-            ScriptService.Delete(observable.Model);
+    private ICollectionView ItemsView => CollectionViewSource.GetDefaultView(Items);
+    private IEditableCollectionView EditableItemsView => (IEditableCollectionView)ItemsView;
 
-            Shell.ValidatePages();
+    private void CommitItems()
+    {
+        if (EditableItemsView.IsAddingNew == true)
+        {
+            EditableItemsView.CommitNew();
+        }
+        if (EditableItemsView.IsEditingItem == true)
+        {
+            EditableItemsView.CommitEdit();
         }
     }
 
@@ -136,10 +123,9 @@ public class ScriptTableViewModel : PageViewModel
     private void Load()
     {
         Selected = null;
-        Items = new(ScriptService.Get().Select(model => new ScriptViewModel() { Model = model }));
 
-        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
-        view.Filter = Predicate;
+        Items = new(ScriptService.Get().Select(model => new ScriptViewModel() { Model = model }));
+        ItemsView.Filter = Predicate;
     }
 
     private RelayCommand? saveCommand;
@@ -181,8 +167,8 @@ public class ScriptTableViewModel : PageViewModel
 
     private void UpdateView()
     {
-        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
-        view.Refresh();
+        CommitItems();
+        ItemsView.Refresh();
     }
 
     private void UpdateSelected()
@@ -190,8 +176,7 @@ public class ScriptTableViewModel : PageViewModel
         if (Selected != null && Predicate(Selected) == true)
         { return; }
 
-        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
-        Selected = view.OfType<ScriptViewModel>().FirstOrDefault();
+        Selected = ItemsView.OfType<ScriptViewModel>().FirstOrDefault();
     }
 
     private RelayCommand? createCommand;
@@ -199,10 +184,13 @@ public class ScriptTableViewModel : PageViewModel
 
     private void Create()
     {
-        ScriptViewModel item = new();
+        Script model = new();
+        ScriptService.Insert(model);
 
-        Items.Add(item);
-        Selected = item;
+        ScriptViewModel observable = new() { Model = model };
+
+        Items.Add(observable);
+        Selected = observable;
     }
 
     private RelayCommand<ScriptViewModel>? deleteCommand;
@@ -213,7 +201,14 @@ public class ScriptTableViewModel : PageViewModel
         if (param is not ScriptViewModel observable)
         { return; }
 
+        CommitItems();
+
+        Script model = observable.Model;
+        ScriptService.Delete(model);
+
         Items.Remove(observable);
+
+        Shell.ValidatePages();
     }
     private bool CanDelete(object? param)
     {
@@ -227,6 +222,8 @@ public class ScriptTableViewModel : PageViewModel
     {
         if (param is not ScriptViewModel observable)
         { return; }
+
+        CommitItems();
 
         var model = observable.Model;
 

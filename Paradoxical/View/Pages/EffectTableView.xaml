@@ -24,7 +24,6 @@
 
                 <Button
                     Margin="4,0"
-                    Click="Button_Click"
                     Command="{Binding CreateCommand}"
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=Creation}"
@@ -32,7 +31,6 @@
 
                 <Button
                     Margin="4,0"
-                    Click="Button_Click"
                     Command="{Binding DeleteCommand}"
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=Delete}"
@@ -40,7 +38,6 @@
 
                 <Button
                     Margin="4,0"
-                    Click="Button_Click"
                     Command="{Binding EditCommand}"
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=Edit}"
@@ -50,14 +47,12 @@
 
                 <Button
                     Margin="4,0"
-                    Click="Button_Click"
                     Command="{Binding SaveCommand}"
                     Content="{materialDesign:PackIcon Kind=ContentSave}"
                     ToolTip="Apply" />
 
                 <Button
                     Margin="4,0"
-                    Click="Button_Click"
                     Command="{Binding LoadCommand}"
                     Content="{materialDesign:PackIcon Kind=Refresh}"
                     ToolTip="Refresh" />
@@ -69,7 +64,6 @@
                     Margin="4,0"
                     Style="{DynamicResource MaterialDesignFilledTextBox}"
                     Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    PreviewTextInput="TextBox_PreviewTextInput"
                     materialDesign:HintAssist.Hint="Filter Effects ..."
                     materialDesign:TextFieldAssist.HasClearButton="True" />
 
@@ -99,8 +93,7 @@
                     CanUserSortColumns="True"
                     CanUserReorderColumns="False"
                     CanUserResizeColumns="False"
-                    CanUserResizeRows="False"
-                    InitializingNewItem="DataGrid_InitializingNewItem">
+                    CanUserResizeRows="False">
 
                     <DataGrid.InputBindings>
                         <MouseBinding
@@ -118,7 +111,6 @@
                                 <DataTemplate>
                                     <TextBlock>
                                         <Hyperlink
-                                            Click="Hyperlink_Click"
                                             Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                             CommandParameter="{Binding}">
                                             <TextBlock

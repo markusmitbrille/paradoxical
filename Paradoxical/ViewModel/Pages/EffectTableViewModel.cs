@@ -28,46 +28,33 @@ public class EffectTableViewModel : PageViewModel
         set => SetProperty(ref selectedTab, value);
     }
 
-    private ObservableCollection<EffectViewModel> items = new();
+    private ObservableCollection<EffectViewModel>? items;
     public ObservableCollection<EffectViewModel> Items
     {
-        get
-        {
-            if (items == null)
-            {
-                items = new();
-                items.CollectionChanged += Items_CollectionChanged;
-            }
-
-            return items;
-        }
+        get => items ??= new();
         set
         {
-            OnPropertyChanging();
+            CommitItems();
 
-            items = value;
-            items.CollectionChanged += Items_CollectionChanged;
+            SetProperty(ref items, value);
 
             UpdateView();
             UpdateSelected();
-
-            OnPropertyChanged();
         }
     }
 
-    private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null && e.NewItems.Count == 1)
-        {
-            EffectViewModel observable = e.NewItems.Cast<EffectViewModel>().Single();
-            EffectService.Insert(observable.Model);
-        }
-        if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null && e.OldItems.Count == 1)
-        {
-            EffectViewModel observable = e.OldItems.Cast<EffectViewModel>().Single();
-            EffectService.Delete(observable.Model);
+    private ICollectionView ItemsView => CollectionViewSource.GetDefaultView(Items);
+    private IEditableCollectionView EditableItemsView => (IEditableCollectionView)ItemsView;
 
-            Shell.ValidatePages();
+    private void CommitItems()
+    {
+        if (EditableItemsView.IsAddingNew == true)
+        {
+            EditableItemsView.CommitNew();
+        }
+        if (EditableItemsView.IsEditingItem == true)
+        {
+            EditableItemsView.CommitEdit();
         }
     }
 
@@ -136,10 +123,9 @@ public class EffectTableViewModel : PageViewModel
     private void Load()
     {
         Selected = null;
-        Items = new(EffectService.Get().Select(model => new EffectViewModel() { Model = model }));
 
-        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
-        view.Filter = Predicate;
+        Items = new(EffectService.Get().Select(model => new EffectViewModel() { Model = model }));
+        ItemsView.Filter = Predicate;
     }
 
     private RelayCommand? saveCommand;
@@ -181,8 +167,8 @@ public class EffectTableViewModel : PageViewModel
 
     private void UpdateView()
     {
-        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
-        view.Refresh();
+        CommitItems();
+        ItemsView.Refresh();
     }
 
     private void UpdateSelected()
@@ -190,8 +176,7 @@ public class EffectTableViewModel : PageViewModel
         if (Selected != null && Predicate(Selected) == true)
         { return; }
 
-        ICollectionView view = CollectionViewSource.GetDefaultView(Items);
-        Selected = view.OfType<EffectViewModel>().FirstOrDefault();
+        Selected = ItemsView.OfType<EffectViewModel>().FirstOrDefault();
     }
 
     private RelayCommand? createCommand;
@@ -199,10 +184,13 @@ public class EffectTableViewModel : PageViewModel
 
     private void Create()
     {
-        EffectViewModel item = new();
+        Effect model = new();
+        EffectService.Insert(model);
 
-        Items.Add(item);
-        Selected = item;
+        EffectViewModel observable = new() { Model = model };
+
+        Items.Add(observable);
+        Selected = observable;
     }
 
     private RelayCommand<EffectViewModel>? deleteCommand;
@@ -213,7 +201,14 @@ public class EffectTableViewModel : PageViewModel
         if (param is not EffectViewModel observable)
         { return; }
 
+        CommitItems();
+
+        Effect model = observable.Model;
+        EffectService.Delete(model);
+
         Items.Remove(observable);
+
+        Shell.ValidatePages();
     }
     private bool CanDelete(object? param)
     {
@@ -227,6 +222,8 @@ public class EffectTableViewModel : PageViewModel
     {
         if (param is not EffectViewModel observable)
         { return; }
+
+        CommitItems();
 
         var model = observable.Model;
 
