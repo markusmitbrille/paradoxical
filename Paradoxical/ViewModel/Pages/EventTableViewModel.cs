@@ -246,16 +246,16 @@ public class EventTableViewModel : PageViewModel
     private RelayCommand<EventViewModel>? deleteCommand;
     public RelayCommand<EventViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
 
-    private void Delete(EventViewModel? observable)
+    private void Delete(object? param)
     {
-        if (observable == null)
+        if (param is not EventViewModel observable)
         { return; }
 
         Items.Remove(observable);
     }
-    private bool CanDelete(EventViewModel? observable)
+    private bool CanDelete(object? param)
     {
-        return observable != null;
+        return param is EventViewModel;
     }
 
     private RelayCommand<object>? editCommand;
@@ -263,9 +263,6 @@ public class EventTableViewModel : PageViewModel
 
     private void Edit(object? param)
     {
-        if (param == null)
-        { return; }
-
         if (param is not EventViewModel observable)
         { return; }
 
@@ -276,6 +273,6 @@ public class EventTableViewModel : PageViewModel
     }
     private bool CanEdit(object? param)
     {
-        return param is EventViewModel observable && observable != null;
+        return param is EventViewModel;
     }
 }

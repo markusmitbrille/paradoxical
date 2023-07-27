@@ -208,16 +208,16 @@ public class EffectTableViewModel : PageViewModel
     private RelayCommand<EffectViewModel>? deleteCommand;
     public RelayCommand<EffectViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
 
-    private void Delete(EffectViewModel? observable)
+    private void Delete(object? param)
     {
-        if (observable == null)
+        if (param is not EffectViewModel observable)
         { return; }
 
         Items.Remove(observable);
     }
-    private bool CanDelete(EffectViewModel? observable)
+    private bool CanDelete(object? param)
     {
-        return observable != null;
+        return param is EffectViewModel;
     }
 
     private RelayCommand<object>? editCommand;
@@ -225,9 +225,6 @@ public class EffectTableViewModel : PageViewModel
 
     private void Edit(object? param)
     {
-        if (param == null)
-        { return; }
-
         if (param is not EffectViewModel observable)
         { return; }
 
@@ -238,6 +235,6 @@ public class EffectTableViewModel : PageViewModel
     }
     private bool CanEdit(object? param)
     {
-        return param is EffectViewModel observable && observable != null;
+        return param is EffectViewModel;
     }
 }

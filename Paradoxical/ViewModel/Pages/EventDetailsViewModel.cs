@@ -531,7 +531,7 @@ public class EventDetailsViewModel : PageViewModel
     }
     private bool CanDeleteOption(object? param)
     {
-        return param is OptionViewModel observable;
+        return param is OptionViewModel;
     }
 
     private RelayCommand<object>? editOptionCommand;
@@ -549,7 +549,7 @@ public class EventDetailsViewModel : PageViewModel
     }
     private bool EditToOption(object? param)
     {
-        return param is OptionViewModel observable;
+        return param is OptionViewModel;
     }
 
     #endregion

@@ -208,16 +208,16 @@ public class ScriptTableViewModel : PageViewModel
     private RelayCommand<ScriptViewModel>? deleteCommand;
     public RelayCommand<ScriptViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
 
-    private void Delete(ScriptViewModel? observable)
+    private void Delete(object? param)
     {
-        if (observable == null)
+        if (param is not ScriptViewModel observable)
         { return; }
 
         Items.Remove(observable);
     }
-    private bool CanDelete(ScriptViewModel? observable)
+    private bool CanDelete(object? param)
     {
-        return observable != null;
+        return param is ScriptViewModel;
     }
 
     private RelayCommand<object>? editCommand;
@@ -225,9 +225,6 @@ public class ScriptTableViewModel : PageViewModel
 
     private void Edit(object? param)
     {
-        if (param == null)
-        { return; }
-
         if (param is not ScriptViewModel observable)
         { return; }
 
@@ -238,6 +235,6 @@ public class ScriptTableViewModel : PageViewModel
     }
     private bool CanEdit(object? param)
     {
-        return param is ScriptViewModel observable && observable != null;
+        return param is ScriptViewModel;
     }
 }

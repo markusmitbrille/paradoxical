@@ -208,16 +208,16 @@ public class TriggerTableViewModel : PageViewModel
     private RelayCommand<TriggerViewModel>? deleteCommand;
     public RelayCommand<TriggerViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
 
-    private void Delete(TriggerViewModel? observable)
+    private void Delete(object? param)
     {
-        if (observable == null)
+        if (param is not TriggerViewModel observable)
         { return; }
 
         Items.Remove(observable);
     }
-    private bool CanDelete(TriggerViewModel? observable)
+    private bool CanDelete(object? param)
     {
-        return observable != null;
+        return param is TriggerViewModel;
     }
 
     private RelayCommand<object>? editCommand;
@@ -225,9 +225,6 @@ public class TriggerTableViewModel : PageViewModel
 
     private void Edit(object? param)
     {
-        if (param == null)
-        { return; }
-
         if (param is not TriggerViewModel observable)
         { return; }
 
@@ -238,6 +235,6 @@ public class TriggerTableViewModel : PageViewModel
     }
     private bool CanEdit(object? param)
     {
-        return param is TriggerViewModel observable && observable != null;
+        return param is TriggerViewModel;
     }
 }
