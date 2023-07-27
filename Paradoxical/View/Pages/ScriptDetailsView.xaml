@@ -55,8 +55,15 @@
                 <Button
                     Margin="4,0"
                     Command="{Binding CreateCommand}"
-                    Content="{materialDesign:PackIcon Kind=Add}"
+                    Content="{materialDesign:PackIcon Kind=Creation}"
                     ToolTip="Create Script" />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding DeleteCommand}"
+                    CommandParameter="{Binding Selected}"
+                    Content="{materialDesign:PackIcon Kind=Delete}"
+                    ToolTip="Delete Script" />
 
                 <Button
                     Margin="4,0"
@@ -64,13 +71,6 @@
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=ContentDuplicate}"
                     ToolTip="Duplicate Script" />
-
-                <Button
-                    Margin="4,0"
-                    Command="{Binding DeleteCommand}"
-                    CommandParameter="{Binding Selected}"
-                    Content="{materialDesign:PackIcon Kind=Remove}"
-                    ToolTip="Delete Script" />
 
                 <Separator />
 

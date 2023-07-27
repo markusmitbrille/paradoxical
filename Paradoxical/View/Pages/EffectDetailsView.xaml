@@ -63,8 +63,15 @@
                 <Button
                     Margin="4,0"
                     Command="{Binding CreateCommand}"
-                    Content="{materialDesign:PackIcon Kind=Add}"
+                    Content="{materialDesign:PackIcon Kind=Creation}"
                     ToolTip="Create Effect" />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding DeleteCommand}"
+                    CommandParameter="{Binding Selected}"
+                    Content="{materialDesign:PackIcon Kind=Delete}"
+                    ToolTip="Delete Effect" />
 
                 <Button
                     Margin="4,0"
@@ -72,13 +79,6 @@
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=ContentDuplicate}"
                     ToolTip="Duplicate Effect" />
-
-                <Button
-                    Margin="4,0"
-                    Command="{Binding DeleteCommand}"
-                    CommandParameter="{Binding Selected}"
-                    Content="{materialDesign:PackIcon Kind=Remove}"
-                    ToolTip="Delete Effect" />
 
                 <Separator />
 
