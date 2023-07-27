@@ -388,7 +388,6 @@
                 Header="Options">
 
                 <DataGrid
-                    x:Name="OptionsDataGrid"
                     Margin="6,12"
                     BorderBrush="Gray"
                     BorderThickness="1"
@@ -399,12 +398,12 @@
                     CanUserSortColumns="False"
                     CanUserReorderColumns="False"
                     InitializingNewItem="DataGrid_InitializingNewItem">
-
+                    
                     <DataGrid.InputBindings>
                         <MouseBinding
                             MouseAction="LeftDoubleClick"
                             Command="{Binding EditOptionCommand}"
-                            CommandParameter="{Binding SelectedItem, ElementName=OptionsDataGrid}" />
+                            CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
                     </DataGrid.InputBindings>
 
                     <DataGrid.Columns>
