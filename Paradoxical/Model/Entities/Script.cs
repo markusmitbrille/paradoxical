@@ -20,11 +20,11 @@ public class Script : IEntity, IModel, IEquatable<Script?>
 
     [Column("dir"), NotNull]
     public string Dir { get => dir; set => dir = value; }
-    public string dir = "";
+    public string dir = "./";
 
     [Column("file"), NotNull]
     public string File { get => file; set => file = value; }
-    public string file = "";
+    public string file = $"src_{Guid.NewGuid().ToString("N").Substring(0, 4)}";
 
     public Script()
     {

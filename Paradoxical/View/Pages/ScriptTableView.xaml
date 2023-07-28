@@ -123,13 +123,45 @@
 
                         <DataGridTextColumn
                             Header="Dir"
-                            Width="2*"
-                            Binding="{Binding Dir, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Width="2*">
+
+                            <DataGridTextColumn.Binding>
+                                <Binding
+                                    Path="Dir"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    FallbackValue="./">
+                                    <Binding.ValidationRules>
+                                        <rules:RequiredRule
+                                            ValidatesOnTargetUpdated="True" />
+                                        <rules:DirRule
+                                            ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </DataGridTextColumn.Binding>
+
+                        </DataGridTextColumn>
 
                         <DataGridTextColumn
                             Header="File"
-                            Width="1*"
-                            Binding="{Binding File, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Width="1*">
+
+                            <DataGridTextColumn.Binding>
+                                <Binding
+                                    Path="File"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    FallbackValue="file_name">
+                                    <Binding.ValidationRules>
+                                        <rules:RequiredRule
+                                            ValidatesOnTargetUpdated="True" />
+                                        <rules:FileRule
+                                            ValidatesOnTargetUpdated="True" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </DataGridTextColumn.Binding>
+
+                        </DataGridTextColumn>
 
                         <DataGridTextColumn
                             Header="Code"

@@ -542,8 +542,26 @@
 
                         <DataGridTextColumn
                             Header="Priority"
-                            Width="2*"
-                            Binding="{Binding Priority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Width="2*">
+                         
+                            <DataGridTextColumn.Binding>
+                                <Binding
+                                    Path="Priority"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.ValidationRules>
+                                        <rules:IntRule />
+                                    </Binding.ValidationRules>
+
+                                    <Binding.Converter>
+                                        <converters:ScriptConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </DataGridTextColumn.Binding>
+
+                        </DataGridTextColumn>
 
                     </DataGrid.Columns>
 
