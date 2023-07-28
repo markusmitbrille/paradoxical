@@ -245,6 +245,11 @@ public class EventDetailsViewModel : PageViewModel
             PropertyName = nameof(OptionViewModel.Priority),
             Direction = ListSortDirection.Ascending,
         });
+        OptionsView.SortDescriptions.Add(new()
+        {
+            PropertyName = nameof(OptionViewModel.Id),
+            Direction = ListSortDirection.Ascending,
+        });
     }
 
     private void LoadTriggers()
