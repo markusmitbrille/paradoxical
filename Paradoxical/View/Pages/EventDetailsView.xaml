@@ -333,12 +333,30 @@
                             FontFamily="Consolas"
                             Text="{Binding LeftPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Left Character" />
-                        <TextBox
+                        <view:ScriptBox
                             Grid.Row="1"
                             Grid.Column="0"
-                            FontFamily="Consolas"
-                            Text="{Binding LeftPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Left Animation" />
+                            AcceptsReturn="False"
+                            AcceptsTab="False"
+                            AcceptsDot="False"
+                            AllowFormatting="False"
+                            AllowedCompleteItems="Animation"
+                            materialDesign:HintAssist.Hint="Left Animation">
+
+                            <view:ScriptBox.Text>
+                                <Binding
+                                    Path="LeftPortrait.Animation"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.Converter>
+                                        <converters:ScriptConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </view:ScriptBox.Text>
+
+                        </view:ScriptBox>
                         <TextBox
                             Grid.Row="2"
                             Grid.Column="0"
@@ -352,12 +370,30 @@
                             FontFamily="Consolas"
                             Text="{Binding RightPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Right Character" />
-                        <TextBox
+                        <view:ScriptBox
                             Grid.Row="1"
                             Grid.Column="1"
-                            FontFamily="Consolas"
-                            Text="{Binding RightPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Right Animation" />
+                            AcceptsReturn="False"
+                            AcceptsTab="False"
+                            AcceptsDot="False"
+                            AllowFormatting="False"
+                            AllowedCompleteItems="Animation"
+                            materialDesign:HintAssist.Hint="Right Animation">
+
+                            <view:ScriptBox.Text>
+                                <Binding
+                                    Path="RightPortrait.Animation"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.Converter>
+                                        <converters:ScriptConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </view:ScriptBox.Text>
+
+                        </view:ScriptBox>
                         <TextBox
                             Grid.Row="2"
                             Grid.Column="1"
@@ -393,11 +429,30 @@
                             FontFamily="Consolas"
                             Text="{Binding LowerLeftPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Left Character" />
-                        <TextBox
+                        <view:ScriptBox
                             Grid.Row="1"
                             Grid.Column="0"
-                            Text="{Binding LowerLeftPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Left Animation" />
+                            AcceptsReturn="False"
+                            AcceptsTab="False"
+                            AcceptsDot="False"
+                            AllowFormatting="False"
+                            AllowedCompleteItems="Animation"
+                            materialDesign:HintAssist.Hint="Left Animation">
+
+                            <view:ScriptBox.Text>
+                                <Binding
+                                    Path="LowerLeftPortrait.Animation"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.Converter>
+                                        <converters:ScriptConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </view:ScriptBox.Text>
+
+                        </view:ScriptBox>
                         <TextBox
                             Grid.Row="2"
                             Grid.Column="0"
@@ -411,12 +466,30 @@
                             FontFamily="Consolas"
                             Text="{Binding LowerCenterPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Center Character" />
-                        <TextBox
+                        <view:ScriptBox
                             Grid.Row="1"
                             Grid.Column="1"
-                            FontFamily="Consolas"
-                            Text="{Binding LowerCenterPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Center Animation" />
+                            AcceptsReturn="False"
+                            AcceptsTab="False"
+                            AcceptsDot="False"
+                            AllowFormatting="False"
+                            AllowedCompleteItems="Animation"
+                            materialDesign:HintAssist.Hint="Center Animation">
+
+                            <view:ScriptBox.Text>
+                                <Binding
+                                    Path="LowerCenterPortrait.Animation"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.Converter>
+                                        <converters:ScriptConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </view:ScriptBox.Text>
+
+                        </view:ScriptBox>
                         <TextBox
                             Grid.Row="2"
                             Grid.Column="1"
@@ -430,12 +503,30 @@
                             FontFamily="Consolas"
                             Text="{Binding LowerRightPortrait.Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="Right Character" />
-                        <TextBox
+                        <view:ScriptBox
                             Grid.Row="1"
                             Grid.Column="2"
-                            FontFamily="Consolas"
-                            Text="{Binding LowerRightPortrait.Animation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Right Animation" />
+                            AcceptsReturn="False"
+                            AcceptsTab="False"
+                            AcceptsDot="False"
+                            AllowFormatting="False"
+                            AllowedCompleteItems="Animation"
+                            materialDesign:HintAssist.Hint="Right Animation">
+
+                            <view:ScriptBox.Text>
+                                <Binding
+                                    Path="LowerRightPortrait.Animation"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.Converter>
+                                        <converters:ScriptConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </view:ScriptBox.Text>
+
+                        </view:ScriptBox>
                         <TextBox
                             Grid.Row="2"
                             Grid.Column="2"
@@ -562,7 +653,7 @@
                         <DataGridTextColumn
                             Header="Priority"
                             Width="2*">
-                         
+
                             <DataGridTextColumn.Binding>
                                 <Binding
                                     Path="Priority"

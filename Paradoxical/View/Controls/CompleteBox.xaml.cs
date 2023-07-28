@@ -62,6 +62,9 @@ public partial class CompleteBox : Window
         Theme =
             0b0000000100000000,
 
+        Animation =
+            0b0000001000000000,
+
         Code =
             Scope
             | CodeScope
@@ -3269,6 +3272,766 @@ public partial class CompleteBox : Window
             Code = "witchcraft",
             Icon = PackIconKind.Landscape,
             Kind = Kind.Theme,
+        },
+
+        #endregion
+        #region ANIMATIONS
+        
+        new()
+        {
+            Name = "idle",
+            Code = "idle",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "chancellor",
+            Code = "chancellor",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "steward",
+            Code = "steward",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "marshal",
+            Code = "marshal",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "spymaster",
+            Code = "spymaster",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "chaplain",
+            Code = "chaplain",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "anger",
+            Code = "anger",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "rage",
+            Code = "rage",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "disapproval",
+            Code = "disapproval",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "disbelief",
+            Code = "disbelief",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "disgust",
+            Code = "disgust",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "fear",
+            Code = "fear",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "sadness",
+            Code = "sadness",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "shame",
+            Code = "shame",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "shock",
+            Code = "shock",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "worry",
+            Code = "worry",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "boredom",
+            Code = "boredom",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "grief",
+            Code = "grief",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "paranoia",
+            Code = "paranoia",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "dismissal",
+            Code = "dismissal",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "flirtation",
+            Code = "flirtation",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "flirtation_left",
+            Code = "flirtation_left",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "love",
+            Code = "love",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "schadenfreude",
+            Code = "schadenfreude",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "stress",
+            Code = "stress",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "happiness",
+            Code = "happiness",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "ecstasy",
+            Code = "ecstasy",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "admiration",
+            Code = "admiration",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "lunatic",
+            Code = "lunatic",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "scheme",
+            Code = "scheme",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "beg",
+            Code = "beg",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "pain",
+            Code = "pain",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "poison",
+            Code = "poison",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "aggressive_axe",
+            Code = "aggressive_axe",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "aggressive_mace",
+            Code = "aggressive_mace",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "aggressive_sword",
+            Code = "aggressive_sword",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "aggressive_dagger",
+            Code = "aggressive_dagger",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "aggressive_spear",
+            Code = "aggressive_spear",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "aggressive_hammer",
+            Code = "aggressive_hammer",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "celebrate_axe",
+            Code = "celebrate_axe",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "celebrate_mace",
+            Code = "celebrate_mace",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "celebrate_sword",
+            Code = "celebrate_sword",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "celebrate_dagger",
+            Code = "celebrate_dagger",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "celebrate_spear",
+            Code = "celebrate_spear",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "celebrate_hammer",
+            Code = "celebrate_hammer",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "loss_1",
+            Code = "loss_1",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "chess_certain_win",
+            Code = "chess_certain_win",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "chess_cocky",
+            Code = "chess_cocky",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "laugh",
+            Code = "laugh",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "lantern",
+            Code = "lantern",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "eyeroll",
+            Code = "eyeroll",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "eavesdrop",
+            Code = "eavesdrop",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "assassin",
+            Code = "assassin",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "toast",
+            Code = "toast",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "toast_goblet",
+            Code = "toast_goblet",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "drink",
+            Code = "drink",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "drink_goblet",
+            Code = "drink_goblet",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "newborn",
+            Code = "newborn",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "sick",
+            Code = "sick",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "severelywounded",
+            Code = "severelywounded",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "prisonhouse",
+            Code = "prisonhouse",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "prisondungeon",
+            Code = "prisondungeon",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "war_attacker",
+            Code = "war_attacker",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "war_defender",
+            Code = "war_defender",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "war_over_tie",
+            Code = "war_over_tie",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "war_over_win",
+            Code = "war_over_win",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "war_over_loss",
+            Code = "war_over_loss",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "pregnant",
+            Code = "pregnant",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "personality_honorable",
+            Code = "personality_honorable",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "personality_dishonorable",
+            Code = "personality_dishonorable",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "personality_bold",
+            Code = "personality_bold",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "personality_coward",
+            Code = "personality_coward",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "personality_greedy",
+            Code = "personality_greedy",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "personality_content",
+            Code = "personality_content",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "personality_vengeful",
+            Code = "personality_vengeful",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "personality_forgiving",
+            Code = "personality_forgiving",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "personality_rational",
+            Code = "personality_rational",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "personality_irrational",
+            Code = "personality_irrational",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "personality_compassionate",
+            Code = "personality_compassionate",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "personality_callous",
+            Code = "personality_callous",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "personality_zealous",
+            Code = "personality_zealous",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "personality_cynical",
+            Code = "personality_cynical",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "frontend_center_idle",
+            Code = "frontend_center_idle",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "frontend_left_idle",
+            Code = "frontend_left_idle",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "frontend_right_idle",
+            Code = "frontend_right_idle",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_chancellor",
+            Code = "throne_room_chancellor",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_kneel_1",
+            Code = "throne_room_kneel_1",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_kneel_2",
+            Code = "throne_room_kneel_2",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_curtsey_1",
+            Code = "throne_room_curtsey_1",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_messenger_1",
+            Code = "throne_room_messenger_1",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_messenger_2",
+            Code = "throne_room_messenger_2",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_messenger_3",
+            Code = "throne_room_messenger_3",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_conversation_1",
+            Code = "throne_room_conversation_1",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_conversation_2",
+            Code = "throne_room_conversation_2",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_conversation_3",
+            Code = "throne_room_conversation_3",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_conversation_4",
+            Code = "throne_room_conversation_4",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_cheer_1",
+            Code = "throne_room_cheer_1",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_cheer_2",
+            Code = "throne_room_cheer_2",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_applaud_1",
+            Code = "throne_room_applaud_1",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_bow_1",
+            Code = "throne_room_bow_1",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_bow_2",
+            Code = "throne_room_bow_2",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_bow_3",
+            Code = "throne_room_bow_3",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_one_handed_passive_1",
+            Code = "throne_room_one_handed_passive_1",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_one_handed_passive_2",
+            Code = "throne_room_one_handed_passive_2",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_two_handed_passive_1",
+            Code = "throne_room_two_handed_passive_1",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_writer",
+            Code = "throne_room_writer",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "test_case_1",
+            Code = "test_case_1",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
+        },
+        new()
+        {
+            Name = "throne_room_ruler",
+            Code = "throne_room_ruler",
+            Icon = PackIconKind.Animation,
+            Kind = Kind.Animation,
         },
 
 	    #endregion
