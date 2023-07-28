@@ -53,7 +53,7 @@
 
                 <Button
                     Margin="4,0"
-                    Command="{Binding LoadCommand}"
+                    Command="{Binding ReloadCommand}"
                     Content="{materialDesign:PackIcon Kind=Refresh}"
                     ToolTip="Refresh" />
 
