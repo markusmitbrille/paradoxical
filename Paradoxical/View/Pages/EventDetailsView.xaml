@@ -256,10 +256,29 @@
 
                     </view:ScriptBox>
 
-                    <TextBox
+                    <view:ScriptBox
                         Grid.Row="3"
-                        Text="{Binding Selected.Theme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        materialDesign:HintAssist.Hint="Theme" />
+                        AcceptsReturn="False"
+                        AcceptsTab="False"
+                        AcceptsDot="False"
+                        AllowFormatting="False"
+                        AllowedCompleteItems="Theme"
+                        materialDesign:HintAssist.Hint="Theme">
+
+                        <view:ScriptBox.Text>
+                            <Binding
+                                Path="Selected.Theme"
+                                Mode="TwoWay"
+                                UpdateSourceTrigger="PropertyChanged">
+
+                                <Binding.Converter>
+                                    <converters:ScriptConverter />
+                                </Binding.Converter>
+
+                            </Binding>
+                        </view:ScriptBox.Text>
+
+                    </view:ScriptBox>
 
                     <TextBox
                         Grid.Row="4"

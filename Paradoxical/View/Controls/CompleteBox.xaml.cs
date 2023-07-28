@@ -59,6 +59,9 @@ public partial class CompleteBox : Window
         LocalizationScope =
             0b0000000010000000,
 
+        Theme =
+            0b0000000100000000,
+
         Code =
             Scope
             | CodeScope
@@ -2768,6 +2771,507 @@ public partial class CompleteBox : Window
         },
 
         #endregion
+        #region THEMES
+
+        new()
+        {
+            Name = "abduct_scheme",
+            Code = "abduct_scheme",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "alliance",
+            Code = "alliance",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "bastardy",
+            Code = "bastardy",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "battle",
+            Code = "battle",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "befriend_scheme",
+            Code = "befriend_scheme",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "claim_throne_scheme",
+            Code = "claim_throne_scheme",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "corruption",
+            Code = "corruption",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "crown",
+            Code = "crown",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "culture_change",
+            Code = "culture_change",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "death",
+            Code = "death",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "default",
+            Code = "default",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "diplomacy",
+            Code = "diplomacy",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "diplomacy_family_focus",
+            Code = "diplomacy_family_focus",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "diplomacy_foreign_affairs_focus",
+            Code = "diplomacy_foreign_affairs_focus",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "diplomacy_majesty_focus",
+            Code = "diplomacy_majesty_focus",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "dread",
+            Code = "dread",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "dungeon",
+            Code = "dungeon",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "dynasty",
+            Code = "dynasty",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "education",
+            Code = "education",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "fabricate_hook_scheme",
+            Code = "fabricate_hook_scheme",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "faith",
+            Code = "faith",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "family",
+            Code = "family",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "feast_activity",
+            Code = "feast_activity",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "friend_relation",
+            Code = "friend_relation",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "friendly",
+            Code = "friendly",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "generic_intrigue_scheme",
+            Code = "generic_intrigue_scheme",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "healthcare",
+            Code = "healthcare",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "hunt_activity",
+            Code = "hunt_activity",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "hunting",
+            Code = "hunting",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "intrigue",
+            Code = "intrigue",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "intrigue_intimidation_focus",
+            Code = "intrigue_intimidation_focus",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "intrigue_skulduggery_focus",
+            Code = "intrigue_skulduggery_focus",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "intrigue_temptation_focus",
+            Code = "intrigue_temptation_focus",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "learning",
+            Code = "learning",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "learning_medicine_focus",
+            Code = "learning_medicine_focus",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "learning_scholarship_focus",
+            Code = "learning_scholarship_focus",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "learning_theology_focus",
+            Code = "learning_theology_focus",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "love",
+            Code = "love",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "lover_relation",
+            Code = "lover_relation",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "marriage",
+            Code = "marriage",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "martial",
+            Code = "martial",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "martial_authority_focus",
+            Code = "martial_authority_focus",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "martial_chivalry_focus",
+            Code = "martial_chivalry_focus",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "martial_strategy_focus",
+            Code = "martial_strategy_focus",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "medicine",
+            Code = "medicine",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "mental_break",
+            Code = "mental_break",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "mental_health",
+            Code = "mental_health",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "murder_scheme",
+            Code = "murder_scheme",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "party",
+            Code = "party",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "pet",
+            Code = "pet",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "physical_health",
+            Code = "physical_health",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "pilgrimage_activity",
+            Code = "pilgrimage_activity",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "pregnancy",
+            Code = "pregnancy",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "prison",
+            Code = "prison",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "realm",
+            Code = "realm",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "recovery",
+            Code = "recovery",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "rival_relation",
+            Code = "rival_relation",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "romance_scheme",
+            Code = "romance_scheme",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "secret",
+            Code = "secret",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "seduce_scheme",
+            Code = "seduce_scheme",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "seduction",
+            Code = "seduction",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "skull",
+            Code = "skull",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "stewardship",
+            Code = "stewardship",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "stewardship_domain_focus",
+            Code = "stewardship_domain_focus",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "stewardship_duty_focus",
+            Code = "stewardship_duty_focus",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "stewardship_wealth_focus",
+            Code = "stewardship_wealth_focus",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "sway_scheme",
+            Code = "sway_scheme",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "unfriendly",
+            Code = "unfriendly",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "vassal",
+            Code = "vassal",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "war",
+            Code = "war",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+        new()
+        {
+            Name = "witchcraft",
+            Code = "witchcraft",
+            Icon = PackIconKind.Landscape,
+            Kind = Kind.Theme,
+        },
+
+	    #endregion
     };
 
     private ICollectionView View => CollectionViewSource.GetDefaultView(Items);
