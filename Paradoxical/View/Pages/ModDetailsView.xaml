@@ -48,8 +48,8 @@
                 <Button
                     Margin="4,0"
                     Command="{Binding ReloadCommand}"
-                    Content="{materialDesign:PackIcon Kind=Refresh}"
-                    ToolTip="Refresh" />
+                    Content="{materialDesign:PackIcon Kind=Reload}"
+                    ToolTip="Reload" />
 
             </ToolBar>
         </ToolBarTray>
