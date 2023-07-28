@@ -63,7 +63,7 @@
                 <Button
                     Margin="4,0"
                     Command="{Binding CreateCommand}"
-                    Content="{materialDesign:PackIcon Kind=Creation}"
+                    Content="{materialDesign:PackIcon Kind=Add}"
                     ToolTip="Create Event" />
 
                 <Button
@@ -106,7 +106,7 @@
                 <Button
                     Margin="4,0"
                     Command="{Binding CreateOptionCommand}"
-                    Content="{materialDesign:PackIcon Kind=Creation}"
+                    Content="{materialDesign:PackIcon Kind=Add}"
                     ToolTip="Create Option"
                     Visibility="{Binding ElementName=OptionsTab, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
 

@@ -26,7 +26,7 @@
                     Margin="4,0"
                     Command="{Binding CreateCommand}"
                     CommandParameter="{Binding Selected}"
-                    Content="{materialDesign:PackIcon Kind=Creation}"
+                    Content="{materialDesign:PackIcon Kind=Add}"
                     ToolTip="Create Trigger" />
 
                 <Button

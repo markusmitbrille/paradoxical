@@ -55,7 +55,7 @@
                 <Button
                     Margin="4,0"
                     Command="{Binding CreateCommand}"
-                    Content="{materialDesign:PackIcon Kind=Creation}"
+                    Content="{materialDesign:PackIcon Kind=Add}"
                     ToolTip="Create Script" />
 
                 <Button
