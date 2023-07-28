@@ -461,8 +461,11 @@ public partial class ScriptBox : TextBox
         if (Popup == null)
         { return; }
 
-        Popup.Result = false;
-        ClosePopup();
+        if (e.NewFocus != Popup)
+        {
+            Popup.Result = false;
+            ClosePopup();
+        }
     }
 
     private void KeyDownHandler(object sender, KeyEventArgs e)

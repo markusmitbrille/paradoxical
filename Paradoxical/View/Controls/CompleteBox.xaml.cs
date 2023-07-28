@@ -4177,7 +4177,7 @@ public partial class CompleteBox : Window
         Selected = selected;
     }
 
-    private void MouseDownHandler(object sender, MouseButtonEventArgs e)
+    private void MouseUpHandler(object sender, MouseButtonEventArgs e)
     {
         Result = true;
         Close();

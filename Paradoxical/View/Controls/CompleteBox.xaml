@@ -32,8 +32,7 @@
 
             <DataTemplate
                 x:Key="DefaultTemplate">
-                <Grid
-                    MouseDown="MouseDownHandler">
+                <Grid>
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition
@@ -59,8 +58,7 @@
 
             <DataTemplate
                 x:Key="SelectedTemplate">
-                <Grid
-                    MouseDown="MouseDownHandler">
+                <Grid>
 
                     <Grid.RowDefinitions>
                         <RowDefinition
@@ -69,7 +67,8 @@
                             Height="auto" />
                     </Grid.RowDefinitions>
 
-                    <Grid x:Name="IconNameGrid"
+                    <Grid
+                        x:Name="IconNameGrid"
                         Grid.Row="0">
 
                         <Grid.ColumnDefinitions>
@@ -165,6 +164,10 @@
             <Style
                 TargetType="ListBoxItem"
                 BasedOn="{StaticResource MaterialDesignListBoxItem}">
+
+                <EventSetter
+                    Event="MouseUp"
+                    Handler="MouseUpHandler" />
 
                 <Setter
                     Property="ContentTemplate"
