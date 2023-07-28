@@ -161,6 +161,8 @@ public class TriggerTableViewModel : PageViewModel
 
     private void Save()
     {
+        CommitItems();
+
         TriggerService.UpdateAll(Items.Select(vm => vm.Model));
 
         DataService.CommitTransaction();

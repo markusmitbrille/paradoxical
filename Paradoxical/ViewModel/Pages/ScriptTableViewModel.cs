@@ -161,6 +161,8 @@ public class ScriptTableViewModel : PageViewModel
 
     private void Save()
     {
+        CommitItems();
+
         ScriptService.UpdateAll(Items.Select(vm => vm.Model));
 
         DataService.CommitTransaction();

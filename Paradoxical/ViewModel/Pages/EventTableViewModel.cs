@@ -167,6 +167,8 @@ public class EventTableViewModel : PageViewModel
 
     private void Save()
     {
+        CommitItems();
+
         EventService.UpdateAll(Items.Select(vm => vm.Model));
 
         DataService.CommitTransaction();

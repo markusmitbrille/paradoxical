@@ -161,6 +161,8 @@ public class EffectTableViewModel : PageViewModel
 
     private void Save()
     {
+        CommitItems();
+
         EffectService.UpdateAll(Items.Select(vm => vm.Model));
 
         DataService.CommitTransaction();

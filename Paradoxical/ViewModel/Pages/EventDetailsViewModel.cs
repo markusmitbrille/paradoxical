@@ -333,6 +333,8 @@ public class EventDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
+        CommitOptions();
+
         SaveRaw();
 
         SavePortraits();
