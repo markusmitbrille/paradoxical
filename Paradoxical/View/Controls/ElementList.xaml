@@ -15,17 +15,15 @@
 
     <Grid>
 
-        <Grid.RowDefinitions>
-            <RowDefinition
-                Height="*" />
-            <RowDefinition
-                Height="auto" />
-            <RowDefinition
-                Height="auto" />
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*" />
+            <ColumnDefinition
+                Width="auto" />
+        </Grid.ColumnDefinitions>
 
         <ListBox
-            Grid.Row="0"
+            Grid.Column="0"
             DataContext="{Binding RelativeSource={RelativeSource AncestorType=view:ElementList}}"
             ItemsSource="{Binding ItemsSource}"
             SelectedItem="{Binding SelectedItem}"
@@ -144,16 +142,13 @@
 
         </ListBox>
 
-        <Separator
-            Grid.Row="1"
-            Style="{DynamicResource MaterialDesignDarkSeparator}" />
-
         <StackPanel
-            Grid.Row="2"
-            DataContext="{Binding RelativeSource={RelativeSource AncestorType=view:ElementList}}"
-            Orientation="Horizontal"
+            Grid.Column="1"
+            Margin="8,0,0,0"
+            Orientation="Vertical"
             HorizontalAlignment="Center"
-            VerticalAlignment="Center">
+            VerticalAlignment="Center"
+            DataContext="{Binding RelativeSource={RelativeSource AncestorType=view:ElementList}}">
 
             <StackPanel.Resources>
 
