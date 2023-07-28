@@ -174,9 +174,21 @@
 
                         <TextBox
                             Grid.Column="1"
-                            Text="{Binding Selected.Priority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             AcceptsReturn="False"
-                            materialDesign:HintAssist.Hint="Priority" />
+                            materialDesign:HintAssist.Hint="Priority">
+
+                            <TextBox.Text>
+                                <Binding
+                                    Path="Selected.Priority"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <rules:IntRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            
+                        </TextBox>
 
                     </Grid>
 

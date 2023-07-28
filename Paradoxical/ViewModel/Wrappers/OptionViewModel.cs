@@ -30,7 +30,7 @@ public class OptionViewModel : ModelWrapper<Option>, IEquatable<OptionViewModel?
         set => SetProperty(ref model.tooltip, value);
     }
 
-    public string Priority
+    public int? Priority
     {
         get => model.priority;
         set => SetProperty(ref model.priority, value);

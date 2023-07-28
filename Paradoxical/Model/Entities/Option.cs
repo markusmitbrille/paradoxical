@@ -34,8 +34,8 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
     public string tooltip = "";
 
     [Column("priority")]
-    public string Priority { get => priority; set => priority = value; }
-    public string priority = "";
+    public int? Priority { get => priority; set => priority = value; }
+    public int? priority = null;
 
     [Column("custom_trigger"), NotNull]
     public string CustomTrigger { get => customTrigger; set => customTrigger = value; }
@@ -414,7 +414,7 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
 
     public int CompareTo(Option? other)
     {
-        return Comparer<string>.Default.Compare(priority, other?.priority);
+        return Comparer<int?>.Default.Compare(priority, other?.priority);
     }
 
     public static bool operator ==(Option? left, Option? right)
