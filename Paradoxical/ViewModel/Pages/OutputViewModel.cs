@@ -19,7 +19,7 @@ namespace Paradoxical.ViewModel;
 
 public class OutputViewModel : PageViewModel
 {
-    public override string PageName => "Localization";
+    public override string PageName => "Output";
 
     public IBuildService BuildService { get; }
 
