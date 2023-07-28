@@ -2817,20 +2817,6 @@ public partial class CompleteBox : Window
         }
     }
 
-    static string ReadEmbeddedResource(string resourceName)
-    {
-        Assembly assembly = Assembly.GetExecutingAssembly();
-
-        using Stream? stream = assembly.GetManifestResourceStream(resourceName);
-        if (stream == null)
-        {
-            throw new Exception($"Resource '{resourceName}' not found in the assembly.");
-        }
-
-        using StreamReader reader = new(stream);
-        return reader.ReadToEnd();
-    }
-
     private void KeyDownHandler(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Up)
