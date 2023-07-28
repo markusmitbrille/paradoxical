@@ -59,7 +59,8 @@
 
             <DataTemplate
                 x:Key="SelectedTemplate">
-                <Grid>
+                <Grid
+                    MinWidth="250">
 
                     <Grid.RowDefinitions>
                         <RowDefinition
@@ -69,7 +70,6 @@
                     </Grid.RowDefinitions>
 
                     <Grid
-                        x:Name="IconNameGrid"
                         Grid.Row="0">
 
                         <Grid.ColumnDefinitions>
@@ -96,7 +96,7 @@
                     <TextBlock
                         Grid.Row="1"
                         Padding="8,4"
-                        Width="{Binding ActualWidth, ElementName=IconNameGrid}"
+                        Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}"
                         VerticalAlignment="Center"
                         Text="{Binding Tooltip}"
                         FontSize="10"

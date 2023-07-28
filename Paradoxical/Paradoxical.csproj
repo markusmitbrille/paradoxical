@@ -17,7 +17,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Dumps\custom_localization.log" />
+    <None Remove="Dumps\effects.log" />
+    <None Remove="Dumps\event_targets.log" />
+    <None Remove="Dumps\on_actions.log" />
+    <None Remove="Dumps\triggers.log" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Dumps\Logs\custom_localization.log" />
+    <EmbeddedResource Include="Dumps\Logs\effects.log" />
+    <EmbeddedResource Include="Dumps\Logs\event_targets.log" />
+    <EmbeddedResource Include="Dumps\Logs\on_actions.log" />
+    <EmbeddedResource Include="Dumps\Logs\triggers.log" />
   </ItemGroup>
 
   <ItemGroup>

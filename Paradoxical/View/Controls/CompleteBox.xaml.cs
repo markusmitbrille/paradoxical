@@ -1,13 +1,16 @@
 ﻿using FuzzySharp;
 using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
+using Paradoxical.Dumps;
 using Paradoxical.Extensions;
 using Paradoxical.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -98,40 +101,8 @@ public partial class CompleteBox : Window
         public int Score { get; set; } = 0;
     }
 
-    private IEnumerable<Item> Items { get; } = new Item[]
+    private static List<Item> Suggestions { get; } = new List<Item>()
     {
-        #region UNIVERSAL SCOPES
-
-        new()
-        {
-            Name = "THIS",
-            Code = "THIS",
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-        },
-        new()
-        {
-            Name = "ROOT",
-            Code = "ROOT",
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-        },
-        new()
-        {
-            Name = "FROM",
-            Code = "FROM",
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-        },
-        new()
-        {
-            Name = "PREV",
-            Code = "PREV",
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-        },
-
-        #endregion
         #region LOCALIZATION SCOPES
 
         new()
@@ -151,1270 +122,6 @@ public partial class CompleteBox : Window
             Code = "scope:",
             Icon = PackIconKind.ArrowRightBottom,
             Kind = Kind.CodeScope,
-        },
-
-        #endregion
-        #region UNIVERSAL SCOPES
-
-        new()
-        {
-            Name = "Culture → Culture Head",
-            Code = "culture_head",
-            Tags = new[] { "culture_head" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Culture → Culture Group",
-            Code = "culture_group",
-            Tags = new[] { "culture_group" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to culture group.",
-        },
-        new()
-        {
-            Name = "Landed Title → Title ID",
-            Code = "title:%%",
-            Offset = 7,
-            Tags = new[] { "title id" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Landed Title → barony_controller",
-            Code = "barony_controller",
-            Tags = new[] { "barony_controller" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Landed Title → County Controller",
-            Code = "county_controller",
-            Tags = new[] { "county_controller" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Landed Title → Current Heir",
-            Code = "current_heir",
-            Tags = new[] { "current_heir" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Landed Title → Holder",
-            Code = "holder",
-            Tags = new[] { "holder" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Landed Title → Lessee",
-            Code = "lessee",
-            Tags = new[] { "lessee" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Landed Title → Lessee Title",
-            Code = "lessee_title",
-            Tags = new[] { "lessee_title" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Landed Title → Previous Holder",
-            Code = "previous_holder",
-            Tags = new[] { "previous_holder" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Landed Title → Culture",
-            Code = "culture",
-            Tags = new[] { "culture" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to culture.",
-        },
-        new()
-        {
-            Name = "Landed Title → Culture Group",
-            Code = "culture_group",
-            Tags = new[] { "culture_group" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to culture group.",
-        },
-        new()
-        {
-            Name = "Landed Title → Controlled Faith",
-            Code = "controlled_faith",
-            Tags = new[] { "controlled_faith" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to faith.",
-        },
-        new()
-        {
-            Name = "Landed Title → Faith",
-            Code = "faith",
-            Tags = new[] { "faith" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to faith.",
-        },
-        new()
-        {
-            Name = "Landed Title → Barony",
-            Code = "barony",
-            Tags = new[] { "barony" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Landed Title → County",
-            Code = "county",
-            Tags = new[] { "county" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Landed Title → Duchy",
-            Code = "duchy",
-            Tags = new[] { "duchy" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Landed Title → kingdom",
-            Code = "kingdom",
-            Tags = new[] { "kingdom" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Landed Title → Empire",
-            Code = "empire",
-            Tags = new[] { "empire" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Landed Title → De Facto Liege",
-            Code = "de_facto_liege",
-            Tags = new[] { "de_facto_liege" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Landed Title → De Jure Liege",
-            Code = "de_jure_liege",
-            Tags = new[] { "de_jure_liege" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Landed Title → Title Capital County",
-            Code = "title_capital_county",
-            Tags = new[] { "title_capital_county" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Landed Title → Title Province",
-            Code = "title_province",
-            Tags = new[] { "title_province" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to province.",
-        },
-        new()
-        {
-            Name = "Landed Title → Religion",
-            Code = "religion",
-            Tags = new[] { "religion" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to religion.",
-        },
-        new()
-        {
-            Name = "Dynasty House → House Head",
-            Code = "house_head",
-            Tags = new[] { "house_head" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to .",
-        },
-        new()
-        {
-            Name = "Dynasty → Dynast",
-            Code = "dynast",
-            Tags = new[] { "dynast" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Secret → Secret Owner",
-            Code = "secret_owner",
-            Tags = new[] { "secret_owner" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Secret → Secret Target",
-            Code = "secret_target",
-            Tags = new[] { "secret_target" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Holy Order → Holy Order Patron",
-            Code = "holy_order_patron",
-            Tags = new[] { "holy_order_patron" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Holy Order → Leader",
-            Code = "leader",
-            Tags = new[] { "leader" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Holy Order → Title",
-            Code = "title",
-            Tags = new[] { "title" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Character → Commanding Army",
-            Code = "commanding_army",
-            Tags = new[] { "commanding_army" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to army.",
-        },
-        new()
-        {
-            Name = "Character → Knight Army",
-            Code = "knight_army",
-            Tags = new[] { "knight_army" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to army.",
-        },
-        new()
-        {
-            Name = "Character → Betrothed",
-            Code = "betrothed",
-            Tags = new[] { "betrothed" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Concubinist",
-            Code = "concubinist",
-            Tags = new[] { "concubinist" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Court Owner",
-            Code = "court_owner",
-            Tags = new[] { "court_owner" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Designated Heir",
-            Code = "designated_heir",
-            Tags = new[] { "designated_heir" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Employer",
-            Code = "employer",
-            Tags = new[] { "employer" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Father",
-            Code = "father",
-            Tags = new[] { "father" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → GHW Beneficiary",
-            Code = "ghw_beneficiary",
-            Tags = new[] { "ghw_beneficiary" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Host",
-            Code = "host",
-            Tags = new[] { "host" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Imprisoner",
-            Code = "imprisoner",
-            Tags = new[] { "imprisoner" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Killer",
-            Code = "killer",
-            Tags = new[] { "killer" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Liege",
-            Code = "liege",
-            Tags = new[] { "liege" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Liege or Court Owner",
-            Code = "liege_or_court_owner",
-            Tags = new[] { "liege_or_court_owner" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Matchmaker",
-            Code = "matchmaker",
-            Tags = new[] { "matchmaker" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Mother",
-            Code = "mother",
-            Tags = new[] { "mother" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Player Heir",
-            Code = "player_heir",
-            Tags = new[] { "player_heir" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Pregnancy Assumed Father",
-            Code = "pregnancy_assumed_father",
-            Tags = new[] { "pregnancy_assumed_father" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Pregnancy Real Father",
-            Code = "pregnancy_real_father",
-            Tags = new[] { "pregnancy_real_father" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Primary Heir",
-            Code = "primary_heir",
-            Tags = new[] { "primary_heir" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Primary Partner",
-            Code = "primary_partner",
-            Tags = new[] { "primary_partner" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Primary Spouse",
-            Code = "primary_spouse",
-            Tags = new[] { "primary_spouse" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Prisoner",
-            Code = "prisoner",
-            Tags = new[] { "prisoner" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Real Father",
-            Code = "real_father",
-            Tags = new[] { "real_father" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Realm Priest",
-            Code = "realm_priest",
-            Tags = new[] { "realm_priest" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Top Liege",
-            Code = "top_liege",
-            Tags = new[] { "top_liege" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Character → Council Task",
-            Code = "council_task",
-            Tags = new[] { "council_task" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to council task.",
-        },
-        new()
-        {
-            Name = "Character → Culture",
-            Code = "culture",
-            Tags = new[] { "culture" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to culture.",
-        },
-        new()
-        {
-            Name = "Character → Culture Group",
-            Code = "culture_group",
-            Tags = new[] { "culture_group" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to culture group.",
-        },
-        new()
-        {
-            Name = "Character → Dynasty",
-            Code = "dynasty",
-            Tags = new[] { "dynasty" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to dynasty.",
-        },
-        new()
-        {
-            Name = "Character → House",
-            Code = "house",
-            Tags = new[] { "house" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to dynasty house.",
-        },
-        new()
-        {
-            Name = "Character → Joined Faction",
-            Code = "joined_faction",
-            Tags = new[] { "joined_faction" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to .",
-        },
-        new()
-        {
-            Name = "Character → Faith",
-            Code = "faith",
-            Tags = new[] { "faith" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to faith.",
-        },
-        new()
-        {
-            Name = "Character → Capital Barony",
-            Code = "capital_barony",
-            Tags = new[] { "capital_barony" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Character → Capital County",
-            Code = "capital_county",
-            Tags = new[] { "capital_county" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Character → Primary Title",
-            Code = "primary_title",
-            Tags = new[] { "primary_title" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Character → Capital Province",
-            Code = "capital_province",
-            Tags = new[] { "capital_province" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to province.",
-        },
-        new()
-        {
-            Name = "Character → Location",
-            Code = "location",
-            Tags = new[] { "location" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to province.",
-        },
-        new()
-        {
-            Name = "Character → Religion",
-            Code = "religion",
-            Tags = new[] { "religion" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to religion.",
-        },
-        new()
-        {
-            Name = "Army → Army Commander",
-            Code = "army_commander",
-            Tags = new[] { "army_commander" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Army → Army Owner",
-            Code = "army_owner",
-            Tags = new[] { "army_owner" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Army → Location",
-            Code = "location",
-            Tags = new[] { "location" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to province.",
-        },
-        new()
-        {
-            Name = "Province → Barony Controller",
-            Code = "barony_controller",
-            Tags = new[] { "barony_controller" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Province → County Controller",
-            Code = "county_controller",
-            Tags = new[] { "county_controller" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Province → Province Owner",
-            Code = "province_owner",
-            Tags = new[] { "province_owner" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Province → Culture",
-            Code = "culture",
-            Tags = new[] { "culture" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to culture.",
-        },
-        new()
-        {
-            Name = "Province → Culture Group",
-            Code = "culture_group",
-            Tags = new[] { "culture_group" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to culture group.",
-        },
-        new()
-        {
-            Name = "Province → Faith",
-            Code = "faith",
-            Tags = new[] { "faith" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to faith.",
-        },
-        new()
-        {
-            Name = "Province → Barony",
-            Code = "barony",
-            Tags = new[] { "barony" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Province → County",
-            Code = "county",
-            Tags = new[] { "county" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Province → Duchy",
-            Code = "duchy",
-            Tags = new[] { "duchy" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Province → Kingdom",
-            Code = "kingdom",
-            Tags = new[] { "kingdom" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Province → Empire",
-            Code = "empire",
-            Tags = new[] { "empire" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Province → Religion",
-            Code = "religion",
-            Tags = new[] { "religion" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to religion.",
-        },
-        new()
-        {
-            Name = "Faith → Religious Head",
-            Code = "religious_head",
-            Tags = new[] { "religious_head" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Faith → Great Holy War",
-            Code = "great_holy_war",
-            Tags = new[] { "great_holy_war" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to great holy war.",
-        },
-        new()
-        {
-            Name = "Faith → Religious Head Title",
-            Code = "religious_head_title",
-            Tags = new[] { "religious_head_title" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Faith → Religion",
-            Code = "religion",
-            Tags = new[] { "religion" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to religion.",
-        },
-        new()
-        {
-            Name = "Great Goly War → GHW War",
-            Code = "ghw_war",
-            Tags = new[] { "ghw_war" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to war.",
-        },
-        new()
-        {
-            Name = "Great Goly War → Religion",
-            Code = "religion",
-            Tags = new[] { "religion" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to religion.",
-        },
-        new()
-        {
-            Name = "Great Goly War → GHW Target Title",
-            Code = "ghw_target_title",
-            Tags = new[] { "ghw_target_title" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Great Goly War → Faith",
-            Code = "faith",
-            Tags = new[] { "faith" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to faith.",
-        },
-        new()
-        {
-            Name = "Great Goly War → GHW Designated Winner",
-            Code = "ghw_designated_winner",
-            Tags = new[] { "ghw_designated_winner" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Great Goly War → GHW Target Character",
-            Code = "ghw_target_character",
-            Tags = new[] { "ghw_target_character" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Great Goly War → GHW Title Recipient",
-            Code = "ghw_title_recipient",
-            Tags = new[] { "ghw_title_recipient" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Great Goly War → GHW War Declarer",
-            Code = "ghw_war_declarer",
-            Tags = new[] { "ghw_war_declarer" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Combat Side → Side Commander",
-            Code = "side_commander",
-            Tags = new[] { "side_commander" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Combat Side → Side Primary Participant",
-            Code = "side_primary_participant",
-            Tags = new[] { "side_primary_participant" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Combat Side → Combat",
-            Code = "combat",
-            Tags = new[] { "combat" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to combat.",
-        },
-        new()
-        {
-            Name = "Combat Side → Enemy Side",
-            Code = "enemy_side",
-            Tags = new[] { "enemy_side" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to combat side.",
-        },
-        new()
-        {
-            Name = "Scheme → Scheme Owner",
-            Code = "scheme_owner",
-            Tags = new[] { "scheme_owner" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Scheme → Scheme Target",
-            Code = "scheme_target",
-            Tags = new[] { "scheme_target" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Scheme → Scheme Defender",
-            Code = "scheme_defender",
-            Tags = new[] { "scheme_defender" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Council Task → Councillor",
-            Code = "councillor",
-            Tags = new[] { "councillor" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "War → Casus Belli",
-            Code = "casus_belli",
-            Tags = new[] { "casus_belli" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to casus belli.",
-        },
-        new()
-        {
-            Name = "War → Claimant",
-            Code = "claimant",
-            Tags = new[] { "claimant" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "War → Primary Attacker",
-            Code = "primary_attacker",
-            Tags = new[] { "primary_attacker" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "War → Primary Defender",
-            Code = "primary_defender",
-            Tags = new[] { "primary_defender" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Casus belli → Claimant",
-            Code = "claimant",
-            Tags = new[] { "claimant" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Casus belli → Primary Attacker",
-            Code = "primary_attacker",
-            Tags = new[] { "primary_attacker" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Casus belli → Primary Defender",
-            Code = "primary_defender",
-            Tags = new[] { "primary_defender" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Casus belli → War",
-            Code = "war",
-            Tags = new[] { "war" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to war.",
-        },
-        new()
-        {
-            Name = "Combat → Combat Attacker",
-            Code = "combat_attacker",
-            Tags = new[] { "combat_attacker" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to combat side.",
-        },
-        new()
-        {
-            Name = "Combat → Combat Defender",
-            Code = "combat_defender",
-            Tags = new[] { "combat_defender" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to combat side.",
-        },
-        new()
-        {
-            Name = "Combat → Location",
-            Code = "location",
-            Tags = new[] { "location" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to province.",
-        },
-        new()
-        {
-            Name = "Combat → Combat War",
-            Code = "combat_war",
-            Tags = new[] { "combat_war" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to war.",
-        },
-        new()
-        {
-            Name = "Story Cycle → Story Owner",
-            Code = "story_owner",
-            Tags = new[] { "story_owner" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Faction → Faction Leader",
-            Code = "faction_leader",
-            Tags = new[] { "faction_leader" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Faction → Faction Target",
-            Code = "faction_target",
-            Tags = new[] { "faction_target" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Faction → Special Character",
-            Code = "special_character",
-            Tags = new[] { "special_character" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Faction → Special Title",
-            Code = "special_title",
-            Tags = new[] { "special_title" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to landed title.",
-        },
-        new()
-        {
-            Name = "Faction → Faction War",
-            Code = "faction_war",
-            Tags = new[] { "faction_war" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to war.",
-        },
-        new()
-        {
-            Name = "Activity → Activity Owner",
-            Code = "activity_owner",
-            Tags = new[] { "activity_owner" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to character.",
-        },
-        new()
-        {
-            Name = "Activity → Activity Province",
-            Code = "activity_province",
-            Tags = new[] { "activity_province" },
-            Icon = PackIconKind.ArrowRightBottom,
-            Kind = Kind.Scope,
-            Tooltip = "Scopes to province.",
-        },
-
-        #endregion
-        #region CODE SNIPPETS
-
-        new()
-        {
-            Name = "always",
-            Code = "always = ",
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-        },
-        new()
-        {
-            Name = "exists",
-            Code = "exists = ",
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-        },
-        new()
-        {
-            Name = "save_scope_as",
-            Code = "save_scope_as = ",
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-        },
-        new()
-        {
-            Name = "set_variable",
-            Code = "set_variable = ",
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-        },
-        new()
-        {
-            Name = "change_variable",
-            Code = "change_variable = ",
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-        },
-        new()
-        {
-            Name = "has_variable",
-            Code = "has_variable = ",
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-        },
-        new()
-        {
-            Name = "days",
-            Code = "days = ",
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-        },
-        new()
-        {
-            Name = "months",
-            Code = "months = ",
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-        },
-        new()
-        {
-            Name = "years",
-            Code = "years = ",
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-        },
-        new()
-        {
-            Name = "AND",
-            Code = "AND = {  }",
-            Offset = 8,
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-        },
-        new()
-        {
-            Name = "OR",
-            Code = "OR = {  }",
-            Offset = 7,
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-        },
-        new()
-        {
-            Name = "NAND",
-            Code = "NAND = {  }",
-            Offset = 9,
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-        },
-        new()
-        {
-            Name = "NOR",
-            Code = "NOR = {  }",
-            Offset = 8,
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-        },
-        new()
-        {
-            Name = "NOT",
-            Code = "NOT = {  }",
-            Offset = 8,
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-        },
-        new()
-        {
-            Name = "trigger_if",
-            Code = "trigger_if = { limit = { always = yes }  }",
-            Offset = 40,
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-            Tooltip = "Evaluates the triggers if the display_triggers of the limit are met.",
-        },
-        new()
-        {
-            Name = "trigger_else_if",
-            Code = "trigger_else_if = { limit = { always = yes }  }",
-            Offset = 45,
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-            Tooltip = "Evaluates the enclosed triggers if the display_triggers of the preceding `trigger_if` or `trigger_else_if` is not met and its own display_trigger of the limit is met.",
-        },
-        new()
-        {
-            Name = "trigger_else",
-            Code = "trigger_else = {  }",
-            Offset = 17,
-            Icon = PackIconKind.CodeBraces,
-            Kind = Kind.CodeSnippet,
-            Tooltip = "Evaluates the triggers if the display_triggers of preceding 'trigger_if' or 'trigger_else_if' is not met.",
         },
 
         #endregion
@@ -2207,7 +914,7 @@ public partial class CompleteBox : Window
             Code = "|U",
             Offset = 0,
             Tags = new[] { "argumentupper", "argumentupper" },
-            Icon = PackIconKind.QuestionMark,
+            Icon = PackIconKind.FormatPaint,
             Kind = Kind.LocalizationArgument,
         },
         new()
@@ -2216,7 +923,7 @@ public partial class CompleteBox : Window
             Code = "|L",
             Offset = 0,
             Tags = new[] { "argumentlower", "lowerargument" },
-            Icon = PackIconKind.QuestionMark,
+            Icon = PackIconKind.FormatPaint,
             Kind = Kind.LocalizationArgument,
         },
         new()
@@ -2225,7 +932,7 @@ public partial class CompleteBox : Window
             Code = "|P",
             Offset = 0,
             Tags = new[] { "argumentpos", "posargument" },
-            Icon = PackIconKind.QuestionMark,
+            Icon = PackIconKind.FormatPaint,
             Kind = Kind.LocalizationArgument,
         },
         new()
@@ -2234,7 +941,7 @@ public partial class CompleteBox : Window
             Code = "|N",
             Offset = 0,
             Tags = new[] { "argumentneg", "negargument" },
-            Icon = PackIconKind.QuestionMark,
+            Icon = PackIconKind.FormatPaint,
             Kind = Kind.LocalizationArgument,
         },
         new()
@@ -2243,7 +950,7 @@ public partial class CompleteBox : Window
             Code = "|E",
             Offset = 0,
             Tags = new[] { "argumentgameconcept", "gameconceptargument" },
-            Icon = PackIconKind.QuestionMark,
+            Icon = PackIconKind.FormatPaint,
             Kind = Kind.LocalizationArgument,
         },
         new()
@@ -2252,7 +959,7 @@ public partial class CompleteBox : Window
             Code = "|V",
             Offset = 0,
             Tags = new[] { "argument", "white" },
-            Icon = PackIconKind.QuestionMark,
+            Icon = PackIconKind.FormatPaint,
             Kind = Kind.LocalizationArgument,
         },
 
@@ -4038,6 +2745,8 @@ public partial class CompleteBox : Window
 	    #endregion
     };
 
+    private IEnumerable<Item> Items { get; } = Suggestions.ToArray();
+
     private ICollectionView View => CollectionViewSource.GetDefaultView(Items);
     private IEnumerable<Item> FilteredItems => View.Cast<Item>();
 
@@ -4063,6 +2772,63 @@ public partial class CompleteBox : Window
         ItemsBox.ItemsSource = Items;
         View.Filter = Predicate;
         View.SortDescriptions.Add(new(nameof(Item.Score), ListSortDirection.Descending));
+    }
+
+    static CompleteBox()
+    {
+        var triggers = TriggerInfo.ParseLog();
+        var effects = EffectInfo.ParseLog();
+        var scopes = ScopeInfo.ParseLog();
+
+        foreach (var info in triggers)
+        {
+            Suggestions.Add(new()
+            {
+                Name = info.Name,
+                Code = info.Name,
+                Tooltip = info.Tooltip,
+                Icon = PackIconKind.CodeBraces,
+                Kind = Kind.CodeSnippet,
+            });
+        }
+
+        foreach (var info in effects)
+        {
+            Suggestions.Add(new()
+            {
+                Name = info.Name,
+                Code = info.Name,
+                Tooltip = info.Tooltip,
+                Icon = PackIconKind.CodeBraces,
+                Kind = Kind.CodeSnippet,
+            });
+        }
+
+        foreach (var info in scopes)
+        {
+            Suggestions.Add(new()
+            {
+                Name = info.Name,
+                Code = info.Name,
+                Tooltip = info.Tooltip,
+                Icon = PackIconKind.ArrowRightBottom,
+                Kind = Kind.Scope,
+            });
+        }
+    }
+
+    static string ReadEmbeddedResource(string resourceName)
+    {
+        Assembly assembly = Assembly.GetExecutingAssembly();
+
+        using Stream? stream = assembly.GetManifestResourceStream(resourceName);
+        if (stream == null)
+        {
+            throw new Exception($"Resource '{resourceName}' not found in the assembly.");
+        }
+
+        using StreamReader reader = new(stream);
+        return reader.ReadToEnd();
     }
 
     private void KeyDownHandler(object sender, KeyEventArgs e)
