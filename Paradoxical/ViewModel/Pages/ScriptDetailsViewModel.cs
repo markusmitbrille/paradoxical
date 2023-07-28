@@ -17,7 +17,9 @@ public class ScriptDetailsViewModel : PageViewModel
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
-    public override string PageName => "Script Details";
+    public override string PageName => $"Script {Selected?.Id.ToString() ?? "Details"}";
+
+    private void RefreshPageName() => OnPropertyChanged(nameof(PageName));
 
     public override bool IsValid
     {
@@ -107,6 +109,8 @@ public class ScriptDetailsViewModel : PageViewModel
         model = ScriptService.Get(model);
         Selected = new() { Model = model };
 
+        RefreshPageName();
+
         DataService.BeginTransaction();
     }
 
@@ -135,6 +139,8 @@ public class ScriptDetailsViewModel : PageViewModel
         { return; }
 
         ScriptService.Update(Selected.Model);
+
+        RefreshPageName();
 
         DataService.CommitTransaction();
         DataService.BeginTransaction();

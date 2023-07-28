@@ -17,7 +17,9 @@ public class TriggerDetailsViewModel : PageViewModel
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
-    public override string PageName => "Trigger Details";
+    public override string PageName => $"Trigger {Selected?.Id.ToString() ?? "Details"}";
+
+    private void RefreshPageName() => OnPropertyChanged(nameof(PageName));
 
     public override bool IsValid
     {
@@ -124,6 +126,7 @@ public class TriggerDetailsViewModel : PageViewModel
         model = TriggerService.Get(model);
         Selected = new() { Model = model };
 
+        RefreshPageName();
         RefreshOutput();
 
         DataService.BeginTransaction();
@@ -155,6 +158,7 @@ public class TriggerDetailsViewModel : PageViewModel
 
         TriggerService.Update(Selected.Model);
 
+        RefreshPageName();
         RefreshOutput();
 
         DataService.CommitTransaction();

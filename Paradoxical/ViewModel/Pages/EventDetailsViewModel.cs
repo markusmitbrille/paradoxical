@@ -24,7 +24,9 @@ public class EventDetailsViewModel : PageViewModel
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
-    public override string PageName => "Event Details";
+    public override string PageName => $"Event {Selected?.Id.ToString() ?? "Details"}";
+
+    private void RefreshPageName() => OnPropertyChanged(nameof(PageName));
 
     public override bool IsValid
     {
@@ -225,6 +227,7 @@ public class EventDetailsViewModel : PageViewModel
         LoadImmediateEffects();
         LoadAfterEffects();
 
+        RefreshPageName();
         RefreshOutput();
 
         DataService.BeginTransaction();
@@ -336,6 +339,7 @@ public class EventDetailsViewModel : PageViewModel
 
         EventService.Update(Selected.Model);
 
+        RefreshPageName();
         RefreshOutput();
 
         DataService.CommitTransaction();

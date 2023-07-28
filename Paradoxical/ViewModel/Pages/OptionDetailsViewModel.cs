@@ -20,7 +20,9 @@ public class OptionDetailsViewModel : PageViewModel
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
-    public override string PageName => "Option Details";
+    public override string PageName => $"Option {Selected?.Id.ToString() ?? "Details"}";
+
+    private void RefreshPageName() => OnPropertyChanged(nameof(PageName));
 
     public override bool IsValid
     {
@@ -174,6 +176,7 @@ public class OptionDetailsViewModel : PageViewModel
         LoadEffects();
         LoadAllEvents();
 
+        RefreshPageName();
         RefreshOutput();
 
         DataService.BeginTransaction();
@@ -241,6 +244,7 @@ public class OptionDetailsViewModel : PageViewModel
 
         OptionService.Update(Selected.Model);
 
+        RefreshPageName();
         RefreshOutput();
 
         DataService.CommitTransaction();
