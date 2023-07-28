@@ -14,6 +14,7 @@ public class ModDetailsViewModel : PageViewModel
 {
     public override string PageName => "Mod Info";
 
+    public IDataService DataService { get; }
     public IModService ModService { get; }
 
     private int selectedTab;
@@ -33,14 +34,21 @@ public class ModDetailsViewModel : PageViewModel
     public ModDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
+        IDataService dataService,
         IModService modService)
         : base(shell, mediator)
     {
+        DataService = dataService;
         ModService = modService;
     }
 
     public override void OnNavigatedTo()
     {
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
+
         Reload();
 
         Mediator.Register<SaveMessage>(this);
@@ -50,6 +58,11 @@ public class ModDetailsViewModel : PageViewModel
     public override void OnNavigatingFrom()
     {
         Save();
+
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
 
         Mediator.Unregister<SaveMessage>(this);
         Mediator.Unregister<ShutdownMessage>(this);
@@ -75,6 +88,8 @@ public class ModDetailsViewModel : PageViewModel
         }
 
         Selected = new() { Model = selected };
+
+        DataService.BeginTransaction();
     }
 
     private RelayCommand? reloadCommand;
@@ -82,6 +97,11 @@ public class ModDetailsViewModel : PageViewModel
 
     private void Reload()
     {
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
+
         Load();
     }
 
@@ -94,5 +114,8 @@ public class ModDetailsViewModel : PageViewModel
         { return; }
 
         ModService.Update(Selected.Model);
+
+        DataService.CommitTransaction();
+        DataService.BeginTransaction();
     }
 }

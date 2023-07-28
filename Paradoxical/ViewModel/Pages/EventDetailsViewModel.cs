@@ -44,6 +44,7 @@ public class EventDetailsViewModel : PageViewModel
 
     public IFinder Finder { get; }
 
+    public IDataService DataService { get; }
     public IModService ModService { get; }
     public IEventService EventService { get; }
     public IPortraitService PortraitService { get; }
@@ -140,6 +141,7 @@ public class EventDetailsViewModel : PageViewModel
         IShell shell,
         IMediatorService mediator,
         IFinder finder,
+        IDataService dataService,
         IModService modService,
         IEventService eventService,
         IPortraitService portraitService,
@@ -150,6 +152,7 @@ public class EventDetailsViewModel : PageViewModel
     {
         Finder = finder;
 
+        DataService = dataService;
         ModService = modService;
         EventService = eventService;
         PortraitService = portraitService;
@@ -160,6 +163,11 @@ public class EventDetailsViewModel : PageViewModel
 
     public override void OnNavigatedTo()
     {
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
+
         Reload();
 
         Mediator.Register<SaveMessage>(this);
@@ -169,6 +177,11 @@ public class EventDetailsViewModel : PageViewModel
     public override void OnNavigatingFrom()
     {
         Save();
+
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
 
         Mediator.Unregister<SaveMessage>(this);
         Mediator.Unregister<ShutdownMessage>(this);
@@ -186,33 +199,45 @@ public class EventDetailsViewModel : PageViewModel
 
     public void Load(Event model)
     {
-        var selected = EventService.Get(model);
+        model = EventService.Get(model);
+        Selected = new() { Model = model };
 
-        var leftPortrait = EventService.GetLeftPortrait(model);
-        var rightPortrait = EventService.GetRightPortrait(model);
-        var lowerLeftPortrait = EventService.GetLowerLeftPortrait(model);
-        var lowerCenterPortrait = EventService.GetLowerCenterPortrait(model);
-        var lowerRightPortrait = EventService.GetLowerRightPortrait(model);
+        LoadPortraits();
+        LoadOptions();
+        LoadTriggers();
+        LoadImmediateEffects();
+        LoadAfterEffects();
 
-        var options = EventService.GetOptions(selected)
-            .Select(model => new OptionViewModel() { Model = model });
+        LoadRaw();
 
-        var triggers = EventService.GetTriggers(selected)
-            .Select(model => new TriggerViewModel() { Model = model });
+        DataService.BeginTransaction();
+    }
 
-        var immediates = EventService.GetImmediates(selected)
-            .Select(model => new EffectViewModel() { Model = model });
+    private void LoadPortraits()
+    {
+        if (Selected == null)
+        { return; }
 
-        var afters = EventService.GetAfters(selected)
-            .Select(model => new EffectViewModel() { Model = model });
-
-        Selected = new() { Model = selected };
+        var leftPortrait = EventService.GetLeftPortrait(Selected.Model);
+        var rightPortrait = EventService.GetRightPortrait(Selected.Model);
+        var lowerLeftPortrait = EventService.GetLowerLeftPortrait(Selected.Model);
+        var lowerCenterPortrait = EventService.GetLowerCenterPortrait(Selected.Model);
+        var lowerRightPortrait = EventService.GetLowerRightPortrait(Selected.Model);
 
         LeftPortrait = new() { Model = leftPortrait };
         RightPortrait = new() { Model = rightPortrait };
         LowerLeftPortrait = new() { Model = lowerLeftPortrait };
         LowerCenterPortrait = new() { Model = lowerCenterPortrait };
         LowerRightPortrait = new() { Model = lowerRightPortrait };
+    }
+
+    private void LoadOptions()
+    {
+        if (Selected == null)
+        { return; }
+
+        var options = EventService.GetOptions(Selected.Model)
+                    .Select(model => new OptionViewModel() { Model = model });
 
         Options = new(options);
         OptionsView.SortDescriptions.Add(new()
@@ -220,17 +245,42 @@ public class EventDetailsViewModel : PageViewModel
             PropertyName = nameof(OptionViewModel.Priority),
             Direction = ListSortDirection.Ascending,
         });
+    }
+
+    private void LoadTriggers()
+    {
+        if (Selected == null)
+        { return; }
+
+        var triggers = EventService.GetTriggers(Selected.Model)
+            .Select(model => new TriggerViewModel() { Model = model });
 
         Triggers.Clear();
         Triggers.AddRange(triggers);
+    }
+
+    private void LoadImmediateEffects()
+    {
+        if (Selected == null)
+        { return; }
+
+        var immediates = EventService.GetImmediates(Selected.Model)
+            .Select(model => new EffectViewModel() { Model = model });
 
         ImmediateEffects.Clear();
         ImmediateEffects.AddRange(immediates);
+    }
+
+    private void LoadAfterEffects()
+    {
+        if (Selected == null)
+        { return; }
+
+        var afters = EventService.GetAfters(Selected.Model)
+            .Select(model => new EffectViewModel() { Model = model });
 
         AfterEffects.Clear();
         AfterEffects.AddRange(afters);
-
-        LoadRaw();
     }
 
     private void LoadRaw()
@@ -262,6 +312,11 @@ public class EventDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
+
         Load(Selected.Model);
     }
 
@@ -275,8 +330,17 @@ public class EventDetailsViewModel : PageViewModel
 
         SaveRaw();
 
+        SavePortraits();
+        SaveOptions();
+
         EventService.Update(Selected.Model);
 
+        DataService.CommitTransaction();
+        DataService.BeginTransaction();
+    }
+
+    private void SavePortraits()
+    {
         if (LeftPortrait != null)
         {
             PortraitService.Update(LeftPortrait.Model);
@@ -297,7 +361,10 @@ public class EventDetailsViewModel : PageViewModel
         {
             PortraitService.Update(LowerRightPortrait.Model);
         }
+    }
 
+    private void SaveOptions()
+    {
         foreach (var option in Options)
         {
             OptionService.Update(option.Model);

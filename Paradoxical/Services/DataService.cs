@@ -16,6 +16,11 @@ public interface IDataService
     void CreateTables();
     void DropTables();
     void TruncateTables();
+
+    bool IsInTransaction { get; }
+    void BeginTransaction();
+    void CommitTransaction();
+    void RollbackTransaction();
 }
 
 public class DataService : IDataService
@@ -130,5 +135,22 @@ public class DataService : IDataService
         Connection.DeleteAll<Trigger>();
 
         Connection.DeleteAll<Effect>();
+    }
+
+    public bool IsInTransaction => Connection.IsInTransaction;
+
+    public void BeginTransaction()
+    {
+        Connection.BeginTransaction();
+    }
+
+    public void CommitTransaction()
+    {
+        Connection.Commit();
+    }
+
+    public void RollbackTransaction()
+    {
+        Connection.Rollback();
     }
 }

@@ -40,6 +40,7 @@ public class OptionDetailsViewModel : PageViewModel
 
     public IFinder Finder { get; }
 
+    public IDataService DataService { get; }
     public IModService ModService { get; }
     public IOptionService OptionService { get; }
     public ITriggerService TriggerService { get; }
@@ -91,6 +92,7 @@ public class OptionDetailsViewModel : PageViewModel
         IShell shell,
         IMediatorService mediator,
         IFinder finder,
+        IDataService dataService,
         IModService modService,
         IOptionService optionService,
         ITriggerService triggerService,
@@ -101,6 +103,7 @@ public class OptionDetailsViewModel : PageViewModel
     {
         Finder = finder;
 
+        DataService = dataService;
         ModService = modService;
         OptionService = optionService;
         TriggerService = triggerService;
@@ -111,6 +114,11 @@ public class OptionDetailsViewModel : PageViewModel
 
     public override void OnNavigatedTo()
     {
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
+
         Reload();
 
         Mediator.Register<SaveMessage>(this);
@@ -120,6 +128,11 @@ public class OptionDetailsViewModel : PageViewModel
     public override void OnNavigatingFrom()
     {
         Save();
+
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
 
         Mediator.Unregister<SaveMessage>(this);
         Mediator.Unregister<ShutdownMessage>(this);
@@ -137,31 +150,52 @@ public class OptionDetailsViewModel : PageViewModel
 
     public void Load(Option model)
     {
-        var selected = OptionService.Get(model);
+        model = OptionService.Get(model);
+        Selected = new() { Model = model };
 
-        var owner = OptionService.GetEvent(model);
+        LoadTriggers();
+        LoadEffects();
+        LoadAllEvents();
 
-        var triggers = OptionService.GetTriggers(selected)
+        LoadRaw();
+
+        DataService.BeginTransaction();
+    }
+
+    private void LoadTriggers()
+    {
+        if (Selected == null)
+        { return; }
+
+        var triggers = OptionService.GetTriggers(Selected.Model)
             .Select(model => new TriggerViewModel() { Model = model });
 
-        var effects = OptionService.GetEffects(selected)
-            .Select(model => new EffectViewModel() { Model = model });
+        Triggers.Clear();
+        Triggers.AddRange(triggers);
+    }
+
+    private void LoadEffects()
+    {
+        if (Selected == null)
+        { return; }
+
+        var effects = OptionService.GetEffects(Selected.Model)
+                    .Select(model => new EffectViewModel() { Model = model });
+
+        Effects.Clear();
+        Effects.AddRange(effects);
+    }
+
+    private void LoadAllEvents()
+    {
+        if (Selected == null)
+        { return; }
 
         var allEvents = EventService.Get()
             .Select(model => new EventViewModel() { Model = model });
 
-        Selected = new() { Model = selected };
-
-        Triggers.Clear();
-        Triggers.AddRange(triggers);
-
-        Effects.Clear();
-        Effects.AddRange(effects);
-
         AllEvents.Clear();
         AllEvents.AddRange(allEvents);
-
-        LoadRaw();
     }
 
     private void LoadRaw()
@@ -193,6 +227,11 @@ public class OptionDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
+
         Load(Selected.Model);
     }
 
@@ -207,6 +246,9 @@ public class OptionDetailsViewModel : PageViewModel
         SaveRaw();
 
         OptionService.Update(Selected.Model);
+
+        DataService.CommitTransaction();
+        DataService.BeginTransaction();
     }
 
     private void SaveRaw()

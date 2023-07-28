@@ -19,6 +19,7 @@ public class TriggerTableViewModel : PageViewModel
 {
     public override string PageName => "Triggers";
 
+    public IDataService DataService { get; }
     public ITriggerService TriggerService { get; }
 
     private int selectedTab;
@@ -85,14 +86,21 @@ public class TriggerTableViewModel : PageViewModel
     public TriggerTableViewModel(
         IShell shell,
         IMediatorService mediator,
+        IDataService dataService,
         ITriggerService triggerService)
         : base(shell, mediator)
     {
+        DataService = dataService;
         TriggerService = triggerService;
     }
 
     public override void OnNavigatedTo()
     {
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
+
         Load();
 
         Mediator.Register<SaveMessage>(this);
@@ -102,6 +110,11 @@ public class TriggerTableViewModel : PageViewModel
     public override void OnNavigatingFrom()
     {
         Save();
+
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
 
         Mediator.Unregister<SaveMessage>(this);
         Mediator.Unregister<ShutdownMessage>(this);
@@ -126,6 +139,21 @@ public class TriggerTableViewModel : PageViewModel
 
         Items = new(TriggerService.Get().Select(model => new TriggerViewModel() { Model = model }));
         ItemsView.Filter = Predicate;
+
+        DataService.BeginTransaction();
+    }
+
+    private RelayCommand? reloadCommand;
+    public RelayCommand ReloadCommand => reloadCommand ??= new(Reload);
+
+    private void Reload()
+    {
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
+
+        Load();
     }
 
     private RelayCommand? saveCommand;
@@ -134,6 +162,9 @@ public class TriggerTableViewModel : PageViewModel
     private void Save()
     {
         TriggerService.UpdateAll(Items.Select(vm => vm.Model));
+
+        DataService.CommitTransaction();
+        DataService.BeginTransaction();
     }
 
     private bool Predicate(object obj)

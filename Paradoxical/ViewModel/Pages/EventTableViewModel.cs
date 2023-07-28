@@ -19,6 +19,7 @@ public class EventTableViewModel : PageViewModel
 {
     public override string PageName => "Events";
 
+    public IDataService DataService { get; }
     public IEventService EventService { get; }
     public IOptionService OptionService { get; }
     public IPortraitService PortraitService { get; }
@@ -87,11 +88,13 @@ public class EventTableViewModel : PageViewModel
     public EventTableViewModel(
         IShell shell,
         IMediatorService mediator,
+        IDataService dataService,
         IEventService eventService,
         IOptionService optionService,
         IPortraitService portraitService)
         : base(shell, mediator)
     {
+        DataService = dataService;
         EventService = eventService;
         OptionService = optionService;
         PortraitService = portraitService;
@@ -99,6 +102,11 @@ public class EventTableViewModel : PageViewModel
 
     public override void OnNavigatedTo()
     {
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
+
         Load();
 
         Mediator.Register<SaveMessage>(this);
@@ -108,6 +116,11 @@ public class EventTableViewModel : PageViewModel
     public override void OnNavigatingFrom()
     {
         Save();
+
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
 
         Mediator.Unregister<SaveMessage>(this);
         Mediator.Unregister<ShutdownMessage>(this);
@@ -132,6 +145,21 @@ public class EventTableViewModel : PageViewModel
 
         Items = new(EventService.Get().Select(model => new EventViewModel() { Model = model }));
         ItemsView.Filter = Predicate;
+
+        DataService.BeginTransaction();
+    }
+
+    private RelayCommand? reloadCommand;
+    public RelayCommand ReloadCommand => reloadCommand ??= new(Reload);
+
+    private void Reload()
+    {
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
+
+        Load();
     }
 
     private RelayCommand? saveCommand;
@@ -140,6 +168,9 @@ public class EventTableViewModel : PageViewModel
     private void Save()
     {
         EventService.UpdateAll(Items.Select(vm => vm.Model));
+
+        DataService.CommitTransaction();
+        DataService.BeginTransaction();
     }
 
     private bool Predicate(object obj)

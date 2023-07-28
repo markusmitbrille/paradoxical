@@ -35,6 +35,7 @@ public class EffectDetailsViewModel : PageViewModel
         }
     }
 
+    public IDataService DataService { get; }
     public IModService ModService { get; }
     public IEffectService EffectService { get; }
 
@@ -55,16 +56,23 @@ public class EffectDetailsViewModel : PageViewModel
     public EffectDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
+        IDataService dataService,
         IModService modService,
         IEffectService effectService)
         : base(shell, mediator)
     {
+        DataService = dataService;
         ModService = modService;
         EffectService = effectService;
     }
 
     public override void OnNavigatedTo()
     {
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
+
         Reload();
 
         Mediator.Register<SaveMessage>(this);
@@ -74,6 +82,11 @@ public class EffectDetailsViewModel : PageViewModel
     public override void OnNavigatingFrom()
     {
         Save();
+
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
 
         Mediator.Unregister<SaveMessage>(this);
         Mediator.Unregister<ShutdownMessage>(this);
@@ -91,10 +104,12 @@ public class EffectDetailsViewModel : PageViewModel
 
     public void Load(Effect model)
     {
-        var selected = EffectService.Get(model);
-        Selected = new() { Model = selected };
+        model = EffectService.Get(model);
+        Selected = new() { Model = model };
 
         LoadRaw();
+
+        DataService.BeginTransaction();
     }
 
     private void LoadRaw()
@@ -126,6 +141,11 @@ public class EffectDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
+
         Load(Selected.Model);
     }
 
@@ -140,6 +160,9 @@ public class EffectDetailsViewModel : PageViewModel
         SaveRaw();
 
         EffectService.Update(Selected.Model);
+
+        DataService.CommitTransaction();
+        DataService.BeginTransaction();
     }
 
     private void SaveRaw()

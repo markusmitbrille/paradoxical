@@ -35,6 +35,7 @@ public class TriggerDetailsViewModel : PageViewModel
         }
     }
 
+    public IDataService DataService { get; }
     public IModService ModService { get; }
     public ITriggerService TriggerService { get; }
 
@@ -55,16 +56,23 @@ public class TriggerDetailsViewModel : PageViewModel
     public TriggerDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
+        IDataService dataService,
         IModService modService,
         ITriggerService triggerService)
         : base(shell, mediator)
     {
+        DataService = dataService;
         ModService = modService;
         TriggerService = triggerService;
     }
 
     public override void OnNavigatedTo()
     {
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
+
         Reload();
 
         Mediator.Register<SaveMessage>(this);
@@ -74,6 +82,11 @@ public class TriggerDetailsViewModel : PageViewModel
     public override void OnNavigatingFrom()
     {
         Save();
+
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
 
         Mediator.Unregister<SaveMessage>(this);
         Mediator.Unregister<ShutdownMessage>(this);
@@ -91,10 +104,12 @@ public class TriggerDetailsViewModel : PageViewModel
 
     public void Load(Trigger model)
     {
-        var selected = TriggerService.Get(model);
-        Selected = new() { Model = selected };
+        model = TriggerService.Get(model);
+        Selected = new() { Model = model };
 
         LoadRaw();
+
+        DataService.BeginTransaction();
     }
 
     private void LoadRaw()
@@ -126,6 +141,11 @@ public class TriggerDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
+
         Load(Selected.Model);
     }
 
@@ -140,6 +160,9 @@ public class TriggerDetailsViewModel : PageViewModel
         SaveRaw();
 
         TriggerService.Update(Selected.Model);
+
+        DataService.CommitTransaction();
+        DataService.BeginTransaction();
     }
 
     private void SaveRaw()

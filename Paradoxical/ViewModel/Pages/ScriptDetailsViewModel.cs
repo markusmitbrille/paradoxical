@@ -35,6 +35,7 @@ public class ScriptDetailsViewModel : PageViewModel
         }
     }
 
+    public IDataService DataService { get; }
     public IModService ModService { get; }
     public IScriptService ScriptService { get; }
 
@@ -55,16 +56,23 @@ public class ScriptDetailsViewModel : PageViewModel
     public ScriptDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
+        IDataService dataService,
         IModService modService,
         IScriptService scriptService)
         : base(shell, mediator)
     {
+        DataService = dataService;
         ModService = modService;
         ScriptService = scriptService;
     }
 
     public override void OnNavigatedTo()
     {
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
+
         Reload();
 
         Mediator.Register<SaveMessage>(this);
@@ -74,6 +82,11 @@ public class ScriptDetailsViewModel : PageViewModel
     public override void OnNavigatingFrom()
     {
         Save();
+
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
 
         Mediator.Unregister<SaveMessage>(this);
         Mediator.Unregister<ShutdownMessage>(this);
@@ -91,8 +104,10 @@ public class ScriptDetailsViewModel : PageViewModel
 
     public void Load(Script model)
     {
-        var selected = ScriptService.Get(model);
-        Selected = new() { Model = selected };
+        model = ScriptService.Get(model);
+        Selected = new() { Model = model };
+
+        DataService.BeginTransaction();
     }
 
     private RelayCommand? reloadCommand;
@@ -102,6 +117,11 @@ public class ScriptDetailsViewModel : PageViewModel
     {
         if (Selected == null)
         { return; }
+
+        if (DataService.IsInTransaction)
+        {
+            DataService.RollbackTransaction();
+        }
 
         Load(Selected.Model);
     }
@@ -115,6 +135,9 @@ public class ScriptDetailsViewModel : PageViewModel
         { return; }
 
         ScriptService.Update(Selected.Model);
+
+        DataService.CommitTransaction();
+        DataService.BeginTransaction();
     }
 
     private RelayCommand? createCommand;
