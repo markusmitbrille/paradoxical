@@ -858,8 +858,12 @@ public partial class ScriptBox : TextBox
         Popup = new()
         {
             Owner = window,
-            Left = pos.X,
-            Top = pos.Y,
+            AnchorX = pos.X,
+            AnchorY = pos.Y,
+            OffsetX = 0,
+            OffsetY = FontSize + 5,
+            InverseOffsetX = 0,
+            InverseOffsetY = 5,
             Filter = CurrentWord?.Value ?? string.Empty,
             AllowedItems = AllowedCompleteItems,
             MaxItems = 10,
@@ -870,6 +874,7 @@ public partial class ScriptBox : TextBox
         Popup.UpdateScores();
         Popup.UpdateView();
         Popup.UpdateSelection();
+
         Popup.Show();
 
         // refocus
@@ -997,15 +1002,12 @@ public partial class ScriptBox : TextBox
         return CaretIndex;
     }
 
-    private const int POPUP_OFFSET = 5;
-
     private Point GetPopupPosition(int index)
     {
         var boxPos = TransformToAncestor(Application.Current.MainWindow).Transform(new Point(0, 0));
         var caretRect = GetRectFromCharacterIndex(index);
-        var size = FontSize;
 
-        return new() { X = boxPos.X + caretRect.X, Y = boxPos.Y + caretRect.Y + size + POPUP_OFFSET };
+        return new() { X = boxPos.X + caretRect.X, Y = boxPos.Y + caretRect.Y };
     }
 
     #endregion

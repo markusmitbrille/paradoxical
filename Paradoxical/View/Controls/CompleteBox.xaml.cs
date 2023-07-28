@@ -17,6 +17,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -4048,6 +4049,13 @@ public partial class CompleteBox : Window
 
     public bool? Result { get; set; }
 
+    public double AnchorX { get; set; }
+    public double AnchorY { get; set; }
+    public double OffsetX { get; set; }
+    public double OffsetY { get; set; }
+    public double InverseOffsetX { get; set; }
+    public double InverseOffsetY { get; set; }
+
     public CompleteBox()
     {
         InitializeComponent();
@@ -4181,5 +4189,29 @@ public partial class CompleteBox : Window
     {
         Result = true;
         Close();
+    }
+
+    private void SizeChangedHandler(object sender, SizeChangedEventArgs e)
+    {
+        double screenWidth = SystemParameters.PrimaryScreenWidth;
+        double screenHeight = SystemParameters.PrimaryScreenHeight;
+
+        if (AnchorX + ActualWidth > screenWidth)
+        {
+            Left = screenWidth - ActualWidth - InverseOffsetX;
+        }
+        else
+        {
+            Left = AnchorX + OffsetX;
+        }
+
+        if (AnchorY + ActualHeight > screenHeight)
+        {
+            Top = AnchorY - ActualHeight - InverseOffsetY;
+        }
+        else
+        {
+            Top = AnchorY + OffsetY;
+        }
     }
 }

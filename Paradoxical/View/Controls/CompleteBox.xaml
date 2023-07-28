@@ -16,7 +16,8 @@
     ShowInTaskbar="False"
     ResizeMode="NoResize"
     SizeToContent="WidthAndHeight"
-    KeyDown="KeyDownHandler">
+    KeyDown="KeyDownHandler"
+    SizeChanged="SizeChangedHandler">
 
     <ListView
         x:Name="ItemsBox"
