@@ -86,7 +86,7 @@
                                             HorizontalAlignment="Center"
                                             Foreground="LightGray"
                                             FontStyle="Italic"
-                                            Text="No elements selected ..." />
+                                            Text="{Binding PlaceHolderText, RelativeSource={RelativeSource AncestorType=view:ElementList}, FallbackValue='Placeholder Text'}" />
 
                                     </ControlTemplate>
                                 </Setter.Value>

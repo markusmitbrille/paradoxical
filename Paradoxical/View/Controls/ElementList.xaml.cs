@@ -80,6 +80,17 @@ public partial class ElementList : UserControl
         DependencyProperty.Register("EditCommand", typeof(ICommand), typeof(ElementList), new PropertyMetadata(null));
 
 
+    public string PlaceHolderText
+    {
+        get { return (string)GetValue(PlaceHolderTextProperty); }
+        set { SetValue(PlaceHolderTextProperty, value); }
+    }
+
+    // Using a DependencyProperty as the backing store for PlaceHolderText.  This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty PlaceHolderTextProperty =
+        DependencyProperty.Register("PlaceHolderText", typeof(string), typeof(ElementList), new PropertyMetadata("No elements selected…"));
+
+
     public ElementList()
     {
         InitializeComponent();

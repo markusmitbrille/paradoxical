@@ -681,7 +681,8 @@
                         AddCommand="{Binding AddTriggerCommand}"
                         CreateCommand="{Binding CreateTriggerCommand}"
                         RemoveCommand="{Binding RemoveTriggerCommand}"
-                        EditCommand="{Binding EditTriggerCommand}">
+                        EditCommand="{Binding EditTriggerCommand}"
+                        PlaceHolderText="No scripted triggers selected…">
                     </view:ElementList>
 
                     <view:ScriptBox
@@ -731,7 +732,8 @@
                         AddCommand="{Binding AddImmediateEffectCommand}"
                         CreateCommand="{Binding CreateImmediateEffectCommand}"
                         RemoveCommand="{Binding RemoveImmediateEffectCommand}"
-                        EditCommand="{Binding EditImmediateEffectCommand}">
+                        EditCommand="{Binding EditImmediateEffectCommand}"
+                        PlaceHolderText="No scripted effects selected…">
                     </view:ElementList>
 
                     <view:ScriptBox
@@ -781,7 +783,8 @@
                         AddCommand="{Binding AddAfterEffectCommand}"
                         CreateCommand="{Binding CreateAfterEffectCommand}"
                         RemoveCommand="{Binding RemoveAfterEffectCommand}"
-                        EditCommand="{Binding EditAfterEffectCommand}">
+                        EditCommand="{Binding EditAfterEffectCommand}"
+                        PlaceHolderText="No scripted effects selected…">
                     </view:ElementList>
 
                     <view:ScriptBox
