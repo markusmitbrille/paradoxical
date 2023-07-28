@@ -9,12 +9,6 @@ public class EventViewModel : ElementWrapper<Event>, IEquatable<EventViewModel?>
 {
     public override string Kind => "event";
 
-    public string? Raw
-    {
-        get => model.raw;
-        set => SetProperty(ref model.raw, value);
-    }
-
     public override string Name
     {
         get => model.name;

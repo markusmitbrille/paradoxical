@@ -15,10 +15,6 @@ public class Effect : IEntity, IModel, IElement, IEquatable<Effect?>
     public int Id { get => id; set => id = value; }
     public int id;
 
-    [Column("raw")]
-    public string? Raw { get => raw; set => raw = value; }
-    public string? raw = null;
-
     [Column("name"), Indexed, NotNull]
     public string Name { get => name; set => name = value; }
     public string name = $"eff_{Guid.NewGuid().ToString("N").Substring(0, 4)}";
@@ -63,16 +59,6 @@ public class Effect : IEntity, IModel, IElement, IEquatable<Effect?>
         TextWriter writer,
         IModService modService)
     {
-        if (Raw != null)
-        {
-            foreach (string line in Raw.Split(ParadoxText.NewParagraph))
-            {
-                writer.Indent().WriteLine(line);
-            }
-
-            return;
-        }
-
         writer.Indent().WriteLine($"{GetQualifiedName(modService)} = {{");
         ParadoxText.IndentLevel++;
 

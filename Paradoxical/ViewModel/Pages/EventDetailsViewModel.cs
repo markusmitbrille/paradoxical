@@ -137,6 +137,23 @@ public class EventDetailsViewModel : PageViewModel
     private ObservableCollection<EffectViewModel>? afterEffects;
     public ObservableCollection<EffectViewModel> AfterEffects => afterEffects ??= new();
 
+    public string Output
+    {
+        get
+        {
+            if (Selected == null)
+            { return string.Empty; }
+
+            using StringWriter writer = new();
+
+            Selected.Model.Write(writer, ModService, EventService, OptionService, PortraitService);
+
+            return writer.ToString();
+        }
+    }
+
+    private void RefreshOutput() => OnPropertyChanged(nameof(Output));
+
     public EventDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
@@ -208,7 +225,7 @@ public class EventDetailsViewModel : PageViewModel
         LoadImmediateEffects();
         LoadAfterEffects();
 
-        LoadRaw();
+        RefreshOutput();
 
         DataService.BeginTransaction();
     }
@@ -288,27 +305,6 @@ public class EventDetailsViewModel : PageViewModel
         AfterEffects.AddRange(afters);
     }
 
-    private void LoadRaw()
-    {
-        if (Selected == null)
-        { return; }
-
-        if (Selected.Raw == null)
-        {
-            OverrideRaw = false;
-
-            // regenerate view model raw
-            Raw = GenerateRaw();
-        }
-        else
-        {
-            OverrideRaw = true;
-
-            // set view model raw to model and wrapper raw
-            Raw = Selected.Raw;
-        }
-    }
-
     private RelayCommand? reloadCommand;
     public RelayCommand ReloadCommand => reloadCommand ??= new(Reload);
 
@@ -335,12 +331,12 @@ public class EventDetailsViewModel : PageViewModel
 
         CommitOptions();
 
-        SaveRaw();
-
         SavePortraits();
         SaveOptions();
 
         EventService.Update(Selected.Model);
+
+        RefreshOutput();
 
         DataService.CommitTransaction();
         DataService.BeginTransaction();
@@ -375,26 +371,6 @@ public class EventDetailsViewModel : PageViewModel
         foreach (var option in Options)
         {
             OptionService.Update(option.Model);
-        }
-    }
-
-    private void SaveRaw()
-    {
-        if (Selected == null)
-        { return; }
-
-        if (OverrideRaw == true)
-        {
-            // overwrite model raw
-            Selected.Raw = Raw;
-        }
-        else
-        {
-            // regenerate view model raw
-            Raw = GenerateRaw();
-
-            // clear model and wrapper raw
-            Selected.Raw = null;
         }
     }
 
@@ -504,69 +480,6 @@ public class EventDetailsViewModel : PageViewModel
         Shell.Navigate<EventTableViewModel>();
         Shell.InvalidatePage(this);
     }
-
-    #region Raw
-
-    private bool? overrideRaw = null;
-    public bool? OverrideRaw
-    {
-        get => overrideRaw;
-        set => SetProperty(ref overrideRaw, value);
-    }
-
-    private string raw = string.Empty;
-    public string Raw
-    {
-        get => raw;
-        set => SetProperty(ref raw, value);
-    }
-
-    private RelayCommand<bool?>? toggleOverrideRawCommand;
-    public RelayCommand<bool?> ToggleOverrideRawCommand => toggleOverrideRawCommand ??= new(ToggleOverrideRaw);
-
-    private void ToggleOverrideRaw(bool? isChecked)
-    {
-        if (isChecked == true)
-        {
-            ToggleOverrideRawOn();
-        }
-        if (isChecked == false)
-        {
-            ToggleOverrideRawOff();
-        }
-    }
-
-    private void ToggleOverrideRawOn()
-    {
-        if (Selected == null)
-        { return; }
-
-        Raw = GenerateRaw();
-        Selected.Raw = Raw;
-    }
-
-    private void ToggleOverrideRawOff()
-    {
-        if (Selected == null)
-        { return; }
-
-        Raw = GenerateRaw();
-        Selected.Raw = null;
-    }
-
-    private string GenerateRaw()
-    {
-        if (Selected == null)
-        { return string.Empty; }
-
-        using StringWriter writer = new();
-
-        Selected.Model.Write(writer, ModService, EventService, OptionService, PortraitService);
-
-        return writer.ToString();
-    }
-
-    #endregion
 
     #region Option Commands
 

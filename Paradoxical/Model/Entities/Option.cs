@@ -17,10 +17,6 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
     public int Id { get => id; set => id = value; }
     public int id;
 
-    [Column("raw")]
-    public string? Raw { get => raw; set => raw = value; }
-    public string? raw = null;
-
     [Column("event_id"), Indexed, NotNull]
     public int EventId { get => eventId; set => eventId = value; }
     public int eventId;
@@ -157,16 +153,6 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
         IModService modService,
         IOptionService optionService)
     {
-        if (Raw != null)
-        {
-            foreach (string line in Raw.Split(ParadoxText.NewParagraph))
-            {
-                writer.Indent().WriteLine(line);
-            }
-
-            return;
-        }
-
         writer.Indent().WriteLine("option = {");
         ParadoxText.IndentLevel++;
 

@@ -88,6 +88,23 @@ public class OptionDetailsViewModel : PageViewModel
         }
     }
 
+    public string Output
+    {
+        get
+        {
+            if (Selected == null)
+            { return string.Empty; }
+
+            using StringWriter writer = new();
+
+            Selected.Model.Write(writer, ModService, OptionService);
+
+            return writer.ToString();
+        }
+    }
+
+    private void RefreshOutput() => OnPropertyChanged(nameof(Output));
+
     public OptionDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
@@ -157,7 +174,7 @@ public class OptionDetailsViewModel : PageViewModel
         LoadEffects();
         LoadAllEvents();
 
-        LoadRaw();
+        RefreshOutput();
 
         DataService.BeginTransaction();
     }
@@ -198,27 +215,6 @@ public class OptionDetailsViewModel : PageViewModel
         AllEvents.AddRange(allEvents);
     }
 
-    private void LoadRaw()
-    {
-        if (Selected == null)
-        { return; }
-
-        if (Selected.Raw == null)
-        {
-            OverrideRaw = false;
-
-            // regenerate view model raw
-            Raw = GenerateRaw();
-        }
-        else
-        {
-            OverrideRaw = true;
-
-            // set view model raw to model and wrapper raw
-            Raw = Selected.Raw;
-        }
-    }
-
     private RelayCommand? reloadCommand;
     public RelayCommand ReloadCommand => reloadCommand ??= new(Reload);
 
@@ -243,32 +239,12 @@ public class OptionDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
-        SaveRaw();
-
         OptionService.Update(Selected.Model);
+
+        RefreshOutput();
 
         DataService.CommitTransaction();
         DataService.BeginTransaction();
-    }
-
-    private void SaveRaw()
-    {
-        if (Selected == null)
-        { return; }
-
-        if (OverrideRaw == true)
-        {
-            // overwrite model raw
-            Selected.Raw = Raw;
-        }
-        else
-        {
-            // regenerate view model raw
-            Raw = GenerateRaw();
-
-            // clear model and wrapper raw
-            Selected.Raw = null;
-        }
     }
 
     private RelayCommand? createCommand;
@@ -409,69 +385,6 @@ public class OptionDetailsViewModel : PageViewModel
 
         return index < siblings.Count;
     }
-
-    #region Raw
-
-    private bool? overrideRaw = null;
-    public bool? OverrideRaw
-    {
-        get => overrideRaw;
-        set => SetProperty(ref overrideRaw, value);
-    }
-
-    private string raw = string.Empty;
-    public string Raw
-    {
-        get => raw;
-        set => SetProperty(ref raw, value);
-    }
-
-    private RelayCommand<bool?>? toggleOverrideRawCommand;
-    public RelayCommand<bool?> ToggleOverrideRawCommand => toggleOverrideRawCommand ??= new(ToggleOverrideRaw);
-
-    private void ToggleOverrideRaw(bool? isChecked)
-    {
-        if (isChecked == true)
-        {
-            ToggleOverrideRawOn();
-        }
-        if (isChecked == false)
-        {
-            ToggleOverrideRawOff();
-        }
-    }
-
-    private void ToggleOverrideRawOn()
-    {
-        if (Selected == null)
-        { return; }
-
-        Raw = GenerateRaw();
-        Selected.Raw = Raw;
-    }
-
-    private void ToggleOverrideRawOff()
-    {
-        if (Selected == null)
-        { return; }
-
-        Raw = GenerateRaw();
-        Selected.Raw = null;
-    }
-
-    private string GenerateRaw()
-    {
-        if (Selected == null)
-        { return string.Empty; }
-
-        using StringWriter writer = new();
-
-        Selected.Model.Write(writer, ModService, OptionService);
-
-        return writer.ToString();
-    }
-
-    #endregion
 
     #region Flow Commands
 

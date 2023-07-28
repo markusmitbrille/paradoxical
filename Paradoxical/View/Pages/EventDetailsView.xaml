@@ -126,23 +126,6 @@
                     ToolTip="Edit Option"
                     Visibility="{Binding ElementName=OptionsTab, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
 
-                <Separator
-                    Visibility="{Binding ElementName=RawTab, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
-
-                <TextBlock
-                    Margin="4,2"
-                    VerticalAlignment="Center"
-                    Text="Raw Override"
-                    Visibility="{Binding ElementName=RawTab, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
-
-                <ToggleButton
-                    x:Name="RawOverrideToggleButton"
-                    Margin="4,2"
-                    IsChecked="{Binding OverrideRaw}"
-                    Command="{Binding ToggleOverrideRawCommand}"
-                    CommandParameter="{Binding IsChecked, ElementName=RawOverrideToggleButton}"
-                    Visibility="{Binding ElementName=RawTab, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
-
             </ToolBar>
         </ToolBarTray>
 
@@ -830,8 +813,8 @@
             </TabItem>
 
             <TabItem
-                x:Name="RawTab"
-                Header="Raw">
+                x:Name="OutputTab"
+                Header="Output">
                 <Grid>
 
                     <Grid.RowDefinitions>
@@ -850,31 +833,18 @@
                     <view:ScriptBox
                         Grid.Row="1"
                         FontFamily="Consolas"
+                        IsReadOnly="True"
                         AcceptsReturn="True"
                         AcceptsTab="True"
                         AcceptsDot="True"
                         AllowFormatting="True"
                         AllowedCompleteItems="All"
-                        materialDesign:HintAssist.Hint="Raw">
-
-                        <view:ScriptBox.IsReadOnly>
-                            <Binding
-                                Path="OverrideRaw"
-                                Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged">
-
-                                <Binding.Converter>
-                                    <converters:NegationConverter />
-                                </Binding.Converter>
-
-                            </Binding>
-                        </view:ScriptBox.IsReadOnly>
+                        materialDesign:HintAssist.Hint="Output">
 
                         <view:ScriptBox.Text>
                             <Binding
-                                Path="Raw"
-                                Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged">
+                                Path="Output"
+                                Mode="OneWay">
 
                                 <Binding.Converter>
                                     <converters:ScriptConverter />
