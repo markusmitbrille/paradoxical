@@ -80,7 +80,7 @@ public partial class ScopeInfo
             }
 
             string? outputScopes = null;
-            Match outputScopesMatch = InputScopesRegex.Match(chunk);
+            Match outputScopesMatch = OutputScopesRegex.Match(chunk);
             if (inputScopesMatch.Success == true)
             {
                 outputScopes = outputScopesMatch.Groups["scopes"].Value;
