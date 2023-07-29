@@ -17,11 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Dumps\custom_localization.log" />
-    <None Remove="Dumps\effects.log" />
-    <None Remove="Dumps\event_targets.log" />
-    <None Remove="Dumps\on_actions.log" />
-    <None Remove="Dumps\triggers.log" />
+    <None Remove="Info\custom_localization.log" />
+    <None Remove="Info\effects.log" />
+    <None Remove="Info\event_targets.log" />
+    <None Remove="Info\on_actions.log" />
+    <None Remove="Info\triggers.log" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,11 +29,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Dumps\Logs\custom_localization.log" />
-    <EmbeddedResource Include="Dumps\Logs\effects.log" />
-    <EmbeddedResource Include="Dumps\Logs\event_targets.log" />
-    <EmbeddedResource Include="Dumps\Logs\on_actions.log" />
-    <EmbeddedResource Include="Dumps\Logs\triggers.log" />
+    <EmbeddedResource Include="Resources\Logs\custom_localization.log" />
+    <EmbeddedResource Include="Resources\Logs\effects.log" />
+    <EmbeddedResource Include="Resources\Logs\event_targets.log" />
+    <EmbeddedResource Include="Resources\Logs\on_actions.log" />
+    <EmbeddedResource Include="Resources\Logs\triggers.log" />
   </ItemGroup>
 
   <ItemGroup>

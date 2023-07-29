@@ -1,35 +1,30 @@
-﻿using System;
+﻿using Paradoxical.Extensions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace Paradoxical.Dumps;
+namespace Paradoxical.Info;
 
 public partial class OnionInfo
 {
-    private const string LOG_FILE = "Paradoxical.Dumps.Logs.on_actions.log";
+    private const string LOG_FILE = "Paradoxical.Resources.Logs.on_actions.log";
 
     public string Name { get; init; } = string.Empty;
     public string? ExpectedScope { get; init; }
 
     public static IEnumerable<OnionInfo> ParseLog()
     {
-        return ParseLog(ReadEmbeddedResource(LOG_FILE));
-    }
-
-    static string ReadEmbeddedResource(string resourceName)
-    {
         Assembly assembly = Assembly.GetExecutingAssembly();
+        string? log = assembly.ReadEmbeddedResource(LOG_FILE);
 
-        using Stream? stream = assembly.GetManifestResourceStream(resourceName);
-        if (stream == null)
+        if (log == null)
         {
-            throw new Exception($"Resource '{resourceName}' not found in the assembly.");
+            throw new Exception($"Did not find embedded log resource '{LOG_FILE}'!");
         }
 
-        using StreamReader reader = new(stream);
-        return reader.ReadToEnd();
+        return ParseLog(log);
     }
 
     [GeneratedRegex(@"^(?<name>\w+):")]

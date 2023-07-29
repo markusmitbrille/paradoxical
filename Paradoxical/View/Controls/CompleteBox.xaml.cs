@@ -1,7 +1,7 @@
 ﻿using FuzzySharp;
 using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
-using Paradoxical.Dumps;
+using Paradoxical.Info;
 using Paradoxical.Extensions;
 using Paradoxical.ViewModel;
 using System;

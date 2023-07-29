@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Windows.Input;
 
-namespace Paradoxical.Dumps;
+namespace Paradoxical.Info;
 
-public partial class TriggerInfo
+public partial class EffectInfo
 {
-    private const string LOG_FILE = "Paradoxical.Dumps.Logs.triggers.log";
+    private const string LOG_FILE = "Paradoxical.Resources.Logs.effects.log";
 
     public string Name { get; init; } = string.Empty;
     public string Description { get; init; } = string.Empty;
     public string? SupportedScopes { get; init; }
     public string? SupportedTargets { get; init; }
-    public string? Traits { get; init; }
 
     public string Tooltip
     {
@@ -32,23 +32,17 @@ public partial class TriggerInfo
         }
     }
 
-    public static IEnumerable<TriggerInfo> ParseLog()
-    {
-        return ParseLog(ReadEmbeddedResource(LOG_FILE));
-    }
-
-    static string ReadEmbeddedResource(string resourceName)
+    public static IEnumerable<EffectInfo> ParseLog()
     {
         Assembly assembly = Assembly.GetExecutingAssembly();
+        string? log = assembly.ReadEmbeddedResource(LOG_FILE);
 
-        using Stream? stream = assembly.GetManifestResourceStream(resourceName);
-        if (stream == null)
+        if (log == null)
         {
-            throw new Exception($"Resource '{resourceName}' not found in the assembly.");
+            throw new Exception($"Did not find embedded log resource '{LOG_FILE}'!");
         }
 
-        using StreamReader reader = new(stream);
-        return reader.ReadToEnd();
+        return ParseLog(log);
     }
 
     [GeneratedRegex(@"(?<name>\w+) - (?<desc>[^\r\n]+)")]
@@ -63,11 +57,7 @@ public partial class TriggerInfo
     private static partial Regex GetSupportedTargetsRegex();
     private static Regex SupportedTargetsRegex => GetSupportedTargetsRegex();
 
-    [GeneratedRegex(@"Traits: (?<traits>[^\r\n]+)")]
-    private static partial Regex GetTraitsRegex();
-    private static Regex TraitsRegex => GetTraitsRegex();
-
-    public static IEnumerable<TriggerInfo> ParseLog(string log)
+    public static IEnumerable<EffectInfo> ParseLog(string log)
     {
         string[] chunks = log.Split("--------------------", StringSplitOptions.TrimEntries);
         foreach (string chunk in chunks)
@@ -95,20 +85,12 @@ public partial class TriggerInfo
                 supportedTargets = supportedTargetsMatch.Groups["targets"].Value;
             }
 
-            string? traits = null;
-            Match traitsMatch = TraitsRegex.Match(chunk);
-            if (traitsMatch.Success == true)
-            {
-                traits = traitsMatch.Groups["traits"].Value;
-            }
-
             yield return new()
             {
                 Name = name,
                 Description = description,
                 SupportedScopes = supportedScopes,
                 SupportedTargets = supportedTargets,
-                Traits = traits,
             };
         }
     }
