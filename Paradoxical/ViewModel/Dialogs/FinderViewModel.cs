@@ -35,7 +35,7 @@ public class FinderViewModel : ObservableObject, IFinder
     private IEnumerable<IElementWrapper>? items;
     public IEnumerable<IElementWrapper> Items
     {
-        get => items ?? Enumerable.Empty<IElementWrapper>();
+        get => items ??= Enumerable.Empty<IElementWrapper>();
         set => SetProperty(ref items, value);
     }
 
