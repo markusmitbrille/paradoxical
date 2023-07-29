@@ -231,7 +231,7 @@ if you don't save them.",
     private bool? useAltTheme;
     public bool UseAltTheme
     {
-        get => useAltTheme ?? false;
+        get => useAltTheme ??= false;
         set
         {
             SetProperty(ref useAltTheme, value);
