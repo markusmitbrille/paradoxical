@@ -62,19 +62,19 @@
             Command="{Binding GoBackCommand}"
             Gesture="ALT+Left" />
         <KeyBinding
-            Command="{Binding GoToManualCommand}"
+            Command="{Binding GoToWikiCommand}"
             Gesture="F1" />
         <KeyBinding
-            Command="{Binding GoToTriggerListCommand}"
+            Command="{Binding GoToTriggerDocCommand}"
             Gesture="F5" />
         <KeyBinding
-            Command="{Binding GoToEffectListCommand}"
+            Command="{Binding GoToEffectDocCommand}"
             Gesture="F6" />
         <KeyBinding
-            Command="{Binding GoToScopeListCommand}"
+            Command="{Binding GoToScopeDocCommand}"
             Gesture="F7" />
         <KeyBinding
-            Command="{Binding GoToOnActionListCommand}"
+            Command="{Binding GoToOnionDocCommand}"
             Gesture="F8" />
         <KeyBinding
             Command="{Binding GoToScriptTableCommand}"
@@ -192,44 +192,44 @@
                             Margin="12,8"
                             HorizontalContentAlignment="Left"
                             Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToTriggerListCommand}"
+                            Command="{Binding GoToTriggerDocCommand}"
                             Click="MenuButtonClickHandler">
                             <TextBlock
                                 Margin="24,4,0,4"
-                                Text="Trigger List" />
+                                Text="Trigger Doc" />
                         </Button>
 
                         <Button
                             Margin="12,8"
                             HorizontalContentAlignment="Left"
                             Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToEffectListCommand}"
+                            Command="{Binding GoToEffectDocCommand}"
                             Click="MenuButtonClickHandler">
                             <TextBlock
                                 Margin="24,4,0,4"
-                                Text="Effect List" />
+                                Text="Effect Doc" />
                         </Button>
 
                         <Button
                             Margin="12,8"
                             HorizontalContentAlignment="Left"
                             Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToScopeListCommand}"
+                            Command="{Binding GoToScopeDocCommand}"
                             Click="MenuButtonClickHandler">
                             <TextBlock
                                 Margin="24,4,0,4"
-                                Text="Scope List" />
+                                Text="Scope Doc" />
                         </Button>
 
                         <Button
                             Margin="12,8"
                             HorizontalContentAlignment="Left"
                             Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToOnActionListCommand}"
+                            Command="{Binding GoToOnionDocCommand}"
                             Click="MenuButtonClickHandler">
                             <TextBlock
                                 Margin="24,4,0,4"
-                                Text="On-Action List" />
+                                Text="On-Action Doc" />
                         </Button>
 
                         <Separator
@@ -240,11 +240,11 @@
                             Margin="12,8"
                             HorizontalContentAlignment="Left"
                             Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToManualCommand}"
+                            Command="{Binding GoToWikiCommand}"
                             Click="MenuButtonClickHandler">
                             <TextBlock
                                 Margin="24,4,0,4"
-                                Text="Manual" />
+                                Text="Paradoxical Wiki" />
                         </Button>
 
                         <Button
@@ -382,9 +382,9 @@
                                 <Separator />
 
                                 <MenuItem
-                                    Header="Manual"
+                                    Header="Help"
                                     Icon="{materialDesign:PackIcon Kind=QuestionAnswer}"
-                                    Command="{Binding GoToManualCommand}"
+                                    Command="{Binding GoToWikiCommand}"
                                     InputGestureText="F1"
                                     Click="PopupMenuButtonClickHandler" />
                                 <MenuItem

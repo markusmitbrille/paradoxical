@@ -15,11 +15,6 @@
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:ManualViewModel}">
-        <view:ManualView />
-    </DataTemplate>
-
-    <DataTemplate
         DataType="{x:Type viewmodel:ModDetailsViewModel}">
         <view:ModDetailsView />
     </DataTemplate>

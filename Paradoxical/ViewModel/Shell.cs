@@ -40,6 +40,12 @@ public interface IShell
 
 public class Shell : ObservableObject, IShell
 {
+    private const string WIKI_URL = "https://github.com/markusmitbrille/paradoxical/wiki";
+    private const string EFFECT_DOC_URL = "https://raw.githubusercontent.com/OldEnt/crusader-kings-3-triggers-modifiers-effects-event-scopes-targets-on-actions-code-revisions-list/master/1.9.0.4_effects.log";
+    private const string TRIGGER_DOC_URL = "https://raw.githubusercontent.com/OldEnt/crusader-kings-3-triggers-modifiers-effects-event-scopes-targets-on-actions-code-revisions-list/master/1.9.0.4_triggers.log";
+    private const string SCOPE_DOC_URL = "https://raw.githubusercontent.com/OldEnt/crusader-kings-3-triggers-modifiers-effects-event-scopes-targets-on-actions-code-revisions-list/master/1.9.0.4_event_targets.log";
+    private const string ONION_DOC_URL = "https://raw.githubusercontent.com/OldEnt/crusader-kings-3-triggers-modifiers-effects-event-scopes-targets-on-actions-code-revisions-list/master/1.9.0.4_on_actions.log";
+
     public IServiceProvider ServiceProvider { get; }
 
     public IFinder Finder { get; }
@@ -254,6 +260,21 @@ if you don't save them.",
         return page;
     }
 
+    private RelayCommand<string>? navigateUrlCommand;
+    public RelayCommand<string> NavigateUrlCommand => navigateUrlCommand ??= new(NavigateUrl);
+
+    public static void NavigateUrl(string? url)
+    {
+        if (url == null)
+        { return; }
+
+        Process.Start(new ProcessStartInfo(url)
+        {
+            UseShellExecute = true,
+            Verb = "open"
+        });
+    }
+
     private RelayCommand<PageViewModel?>? navigatePageCommand;
     public RelayCommand<PageViewModel?> NavigatePageCommand => navigatePageCommand ??= new(NavigatePage, CanNavigatePage);
 
@@ -425,60 +446,44 @@ if you don't save them.",
         Navigate<AboutViewModel>();
     }
 
-    private RelayCommand? goToManualCommand;
-    public RelayCommand GoToManualCommand => goToManualCommand ??= new(GoToManual);
+    private RelayCommand? goToWikiCommand;
+    public RelayCommand GoToWikiCommand => goToWikiCommand ??= new(GoToWiki);
 
-    private void GoToManual()
+    private void GoToWiki()
     {
-        Navigate<ManualViewModel>();
+        NavigateUrl(WIKI_URL);
     }
 
-    private RelayCommand? goToTriggerListCommand;
-    public RelayCommand GoToTriggerListCommand => goToTriggerListCommand ??= new(GoToTriggerList);
+    private RelayCommand? goToTriggerDocCommand;
+    public RelayCommand GoToTriggerDocCommand => goToTriggerDocCommand ??= new(GoToTriggerDoc);
 
-    private void GoToTriggerList()
+    private void GoToTriggerDoc()
     {
-        Process.Start(new ProcessStartInfo("https://raw.githubusercontent.com/OldEnt/crusader-kings-3-triggers-modifiers-effects-event-scopes-targets-on-actions-code-revisions-list/master/1.9.0.4_triggers.log")
-        {
-            UseShellExecute = true,
-            Verb = "open"
-        });
+        NavigateUrl(TRIGGER_DOC_URL);
     }
 
-    private RelayCommand? goToEffectListCommand;
-    public RelayCommand GoToEffectListCommand => goToEffectListCommand ??= new(GoToEffectList);
+    private RelayCommand? goToEffectDocCommand;
+    public RelayCommand GoToEffectDocCommand => goToEffectDocCommand ??= new(GoToEffectDoc);
 
-    private void GoToEffectList()
+    private void GoToEffectDoc()
     {
-        Process.Start(new ProcessStartInfo("https://raw.githubusercontent.com/OldEnt/crusader-kings-3-triggers-modifiers-effects-event-scopes-targets-on-actions-code-revisions-list/master/1.9.0.4_effects.log")
-        {
-            UseShellExecute = true,
-            Verb = "open"
-        });
+        NavigateUrl(EFFECT_DOC_URL);
     }
 
-    private RelayCommand? goToScopeListCommand;
-    public RelayCommand GoToScopeListCommand => goToScopeListCommand ??= new(GoToScopeList);
+    private RelayCommand? goToScopeDocCommand;
+    public RelayCommand GoToScopeDocCommand => goToScopeDocCommand ??= new(GoToScopeDoc);
 
-    private void GoToScopeList()
+    private void GoToScopeDoc()
     {
-        Process.Start(new ProcessStartInfo("https://raw.githubusercontent.com/OldEnt/crusader-kings-3-triggers-modifiers-effects-event-scopes-targets-on-actions-code-revisions-list/master/1.9.0.4_event_targets.log")
-        {
-            UseShellExecute = true,
-            Verb = "open"
-        });
+        NavigateUrl(SCOPE_DOC_URL);
     }
 
-    private RelayCommand? goToOnActionListCommand;
-    public RelayCommand GoToOnActionListCommand => goToOnActionListCommand ??= new(GoToOnActionList);
+    private RelayCommand? goToOnionDocCommand;
+    public RelayCommand GoToOnionDocCommand => goToOnionDocCommand ??= new(GoToOnionDoc);
 
-    private void GoToOnActionList()
+    private void GoToOnionDoc()
     {
-        Process.Start(new ProcessStartInfo("https://raw.githubusercontent.com/OldEnt/crusader-kings-3-triggers-modifiers-effects-event-scopes-targets-on-actions-code-revisions-list/master/1.9.0.4_on_actions.log")
-        {
-            UseShellExecute = true,
-            Verb = "open"
-        });
+        NavigateUrl(ONION_DOC_URL);
     }
 
     private RelayCommand? goToEventTableCommand;

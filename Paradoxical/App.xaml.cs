@@ -48,7 +48,6 @@ public partial class App : Application
 
         // misc page view models
         services.AddSingleton<AboutViewModel>();
-        services.AddSingleton<ManualViewModel>();
 
         // details page view models
         services.AddSingleton<ModDetailsViewModel>();
