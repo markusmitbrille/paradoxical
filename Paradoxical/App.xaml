@@ -6,25 +6,29 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+               
                 <!--#region Material Design -->
                 <materialDesign:BundledTheme
                     BaseTheme="Inherit"
                     ColorAdjustment="{materialDesign:ColorAdjustment}"
                     PrimaryColor="Indigo"
-                    SecondaryColor="Lime" />
+                    SecondaryColor="Teal" />
                 <ResourceDictionary
                     Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <!--#endregion-->
+                
                 <!--#region Data Templates -->
                 <ResourceDictionary
                     Source="DataTemplates.xaml" />
                 <!--#endregion-->
+                
                 <!--#region Styles -->
                 <ResourceDictionary
                     Source="Styles/Borders.xaml" />
                 <ResourceDictionary
                     Source="Styles/Text.xaml" />
                 <!--#endregion-->
+          
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

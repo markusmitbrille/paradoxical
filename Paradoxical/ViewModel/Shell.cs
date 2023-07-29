@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MaterialDesignColors;
+using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.DependencyInjection;
 using Paradoxical.Core;
 using Paradoxical.Extensions;
@@ -13,7 +15,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-
+using System.Windows.Media;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
 using MessageBoxButton = System.Windows.MessageBoxButton;
@@ -223,6 +225,49 @@ if you don't save them.",
             page.Load(model);
         }
     }
+
+    #region Theme
+
+    private bool? useAltTheme;
+    public bool UseAltTheme
+    {
+        get => useAltTheme ?? false;
+        set
+        {
+            SetProperty(ref useAltTheme, value);
+
+            if (value == false)
+            {
+                SetMainTheme();
+            }
+            else
+            {
+                SetAltTheme();
+            }
+        }
+    }
+
+    private static void SetMainTheme()
+    {
+        var paletteHelper = new PaletteHelper();
+
+        ITheme theme = paletteHelper.GetTheme();
+        theme.SetBaseTheme(Theme.Light);
+
+        paletteHelper.SetTheme(theme);
+    }
+
+    private static void SetAltTheme()
+    {
+        var paletteHelper = new PaletteHelper();
+
+        ITheme theme = paletteHelper.GetTheme();
+        theme.SetBaseTheme(Theme.Dark);
+
+        paletteHelper.SetTheme(theme);
+    }
+
+    #endregion
 
     #region Navigation
 

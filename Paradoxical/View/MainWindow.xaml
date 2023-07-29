@@ -12,12 +12,8 @@
     mc:Ignorable="d"
     Title="Paradoxical"
     d:DataContext="{d:DesignInstance {x:Type viewmodel:Shell}}"
-    d:DesignHeight="450"
+    d:DesignHeight="200"
     d:DesignWidth="800"
-    Height="900"
-    Width="800"
-    MinHeight="800"
-    MinWidth="700"
     Style="{DynamicResource MaterialDesignWindow}"
     WindowStyle="None"
     WindowState="Maximized"
@@ -332,11 +328,18 @@
                             Orientation="Horizontal"
                             HorizontalAlignment="Right">
 
+                            <ToggleButton
+                                IsChecked="{Binding UseAltTheme}"
+                                Content="{materialDesign:PackIcon Kind=WeatherSunny}"
+                                materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=WeatherNight}"
+                                Style="{StaticResource MaterialDesignActionToggleButton}"
+                                ToolTip="Switch Theme" />
+
                         </StackPanel>
 
                         <materialDesign:PopupBox
                             x:Name="PopupMenu"
-                            Grid.Column="4"
+                            Grid.Column="5"
                             PlacementMode="BottomAndAlignRightEdges"
                             StaysOpen="False"
                             HorizontalAlignment="Center"
