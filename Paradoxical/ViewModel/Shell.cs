@@ -13,7 +13,9 @@ using Paradoxical.View;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using Application = System.Windows.Application;
@@ -26,6 +28,9 @@ namespace Paradoxical.ViewModel;
 
 public interface IShell
 {
+    public void LoadConfig();
+    public void SaveConfig();
+
     public PageViewModel? CurrentPage { get; }
 
     public T Navigate<T>() where T : PageViewModel;
@@ -53,8 +58,8 @@ public class Shell : ObservableObject, IShell
     public IFinder Finder { get; }
 
     public IMediatorService Mediator { get; }
-    public IDataService Data { get; }
-    public IFileService File { get; }
+    public IDataService DataService { get; }
+    public IFileService FileService { get; }
 
     public IEventService EventService { get; }
     public ITriggerService TriggerService { get; }
@@ -64,8 +69,8 @@ public class Shell : ObservableObject, IShell
         IServiceProvider serviceProvider,
         IFinder finder,
         IMediatorService mediator,
-        IDataService data,
-        IFileService file,
+        IDataService dataService,
+        IFileService fileService,
         IEventService eventService,
         ITriggerService triggerService,
         IEffectService effectService)
@@ -75,13 +80,96 @@ public class Shell : ObservableObject, IShell
         Finder = finder;
 
         Mediator = mediator;
-        Data = data;
-        File = file;
+        DataService = dataService;
+        FileService = fileService;
 
         EventService = eventService;
         TriggerService = triggerService;
         EffectService = effectService;
     }
+
+    #region Config
+
+    private class ConfigData
+    {
+        public bool UseAltTheme { get; set; } = false;
+    }
+
+    private const string CONFIG_DIR = "./Paradoxical/";
+    private const string CONFIG_FILE = "config.json";
+
+    private static string ConfigBase => Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+    private static string ConfigDir => Path.Combine(ConfigBase, CONFIG_DIR);
+    private static string ConfigPath => Path.Combine(ConfigDir, CONFIG_FILE);
+
+    private ConfigData? config;
+    private ConfigData Config
+    {
+        get => config ??= new();
+        set
+        {
+            config = value;
+
+            UseAltTheme = config.UseAltTheme;
+        }
+    }
+
+    public void LoadConfig()
+    {
+        if (Directory.Exists(ConfigDir) == false)
+        {
+            Directory.CreateDirectory(ConfigDir);
+        }
+
+        if (File.Exists(ConfigPath) == false)
+        {
+            CreateConfig();
+            return;
+        }
+
+        ConfigData? config = null;
+
+        try
+        {
+            string json = File.ReadAllText(ConfigPath);
+            config = JsonSerializer.Deserialize<ConfigData>(json);
+        }
+        catch (JsonException)
+        {
+            Trace.TraceError("Could not deserialize config!");
+
+            CreateConfig();
+            return;
+        }
+
+        Config = config ?? new();
+    }
+
+    public void SaveConfig()
+    {
+        if (Directory.Exists(ConfigDir) == false)
+        {
+            Directory.CreateDirectory(ConfigDir);
+        }
+
+        string json = JsonSerializer.Serialize(Config);
+        File.WriteAllText(ConfigPath, json);
+    }
+
+    private void CreateConfig()
+    {
+        if (Directory.Exists(ConfigDir) == false)
+        {
+            Directory.CreateDirectory(ConfigDir);
+        }
+
+        Config = new();
+
+        string json = JsonSerializer.Serialize(Config);
+        File.WriteAllText(ConfigPath, json);
+    }
+
+    #endregion
 
     private RelayCommand? newCommand;
     public RelayCommand NewCommand => newCommand ??= new(New);
@@ -91,7 +179,7 @@ public class Shell : ObservableObject, IShell
         Mediator.Send<SaveMessage>(new());
 
         ClearPage();
-        File.New();
+        FileService.New();
         GoHome();
     }
 
@@ -103,7 +191,7 @@ public class Shell : ObservableObject, IShell
         Mediator.Send<SaveMessage>(new());
 
         ClearPage();
-        File.Open();
+        FileService.Open();
         GoHome();
     }
 
@@ -123,7 +211,7 @@ public class Shell : ObservableObject, IShell
         Mediator.Send<SaveMessage>(new());
 
         ClearPage();
-        File.Backup();
+        FileService.Backup();
         GoHome();
     }
 
@@ -133,7 +221,7 @@ public class Shell : ObservableObject, IShell
     private void Export()
     {
         Mediator.Send<SaveMessage>(new());
-        File.Export();
+        FileService.Export();
     }
 
     private RelayCommand? exportAsCommand;
@@ -142,7 +230,7 @@ public class Shell : ObservableObject, IShell
     private void ExportAs()
     {
         Mediator.Send<SaveMessage>(new());
-        File.ExportAs();
+        FileService.ExportAs();
     }
 
     private RelayCommand? exitCommand;
@@ -150,7 +238,7 @@ public class Shell : ObservableObject, IShell
 
     private void Exit()
     {
-        if (Data.IsInMemory != true)
+        if (DataService.IsInMemory != true)
         {
             Shutdown();
             return;
@@ -177,6 +265,8 @@ if you don't save them.",
 
     private void Shutdown()
     {
+        SaveConfig();
+
         Mediator.Send<ShutdownMessage>(new());
         Application.Current.Shutdown();
     }
@@ -235,6 +325,8 @@ if you don't save them.",
         set
         {
             SetProperty(ref useAltTheme, value);
+
+            Config.UseAltTheme = UseAltTheme;
 
             if (value == false)
             {

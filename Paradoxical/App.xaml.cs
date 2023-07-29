@@ -71,10 +71,12 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
+        IShell shell = ServiceProvider.GetRequiredService<IShell>();
+        shell.LoadConfig();
+
         MainWindow main = ServiceProvider.GetRequiredService<MainWindow>();
         main.Show();
 
-        IShell shell = ServiceProvider.GetRequiredService<IShell>();
         shell.GoHome();
     }
 
