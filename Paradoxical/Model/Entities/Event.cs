@@ -45,11 +45,11 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
     public string CustomTrigger { get => customTrigger; set => customTrigger = value; }
     public string customTrigger = "";
 
-    [Column("custom_immediate"), NotNull]
+    [Column("custom_immediate_effect"), NotNull]
     public string CustomImmediateEffect { get => customImmediateEffect; set => customImmediateEffect = value; }
     public string customImmediateEffect = "";
 
-    [Column("custom_after"), NotNull]
+    [Column("custom_after_effect"), NotNull]
     public string CustomAfterEffect { get => customAfterEffect; set => customAfterEffect = value; }
     public string customAfterEffect = "";
 
