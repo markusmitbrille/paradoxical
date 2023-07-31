@@ -41,6 +41,16 @@
 
         </Style>
 
+        <Style
+            TargetType="CheckBox"
+            BasedOn="{StaticResource MaterialDesignCheckBox}">
+
+            <Setter
+                Property="Margin"
+                Value="6,12" />
+
+        </Style>
+
     </UserControl.Resources>
 
     <DockPanel>
@@ -184,10 +194,8 @@
 
                         <CheckBox
                             Grid.Column="1"
-                            Margin="6,12"
                             Content="Hidden"
-                            IsChecked="{Binding Selected.Hidden, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=false}"
-                            ToolTip="If an event is hidden, fields relating to appearance and options are ignored." />
+                            IsChecked="{Binding Selected.Hidden, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=false}" />
 
                     </Grid>
 
