@@ -123,8 +123,6 @@
                                 Width="*" />
                             <ColumnDefinition
                                 Width="auto" />
-                            <ColumnDefinition
-                                Width="auto" />
                         </Grid.ColumnDefinitions>
 
                         <TextBox
@@ -151,12 +149,8 @@
                         <CheckBox
                             Grid.Column="1"
                             VerticalAlignment="Center"
+                            Content="Hidden"
                             IsChecked="{Binding Selected.Hidden, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                        <TextBlock
-                            Grid.Column="2"
-                            VerticalAlignment="Center"
-                            Text="Hidden" />
 
                     </Grid>
 
