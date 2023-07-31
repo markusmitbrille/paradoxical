@@ -124,7 +124,6 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
         triggeredEventMaxDays = other.triggeredEventMaxDays;
 
         aiBaseChance = other.aiBaseChance;
-
         aiCustomChance = other.aiCustomChance;
 
         aiBoldnessTargetModifier = other.aiBoldnessTargetModifier;
