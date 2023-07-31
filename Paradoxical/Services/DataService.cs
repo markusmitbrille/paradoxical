@@ -88,6 +88,12 @@ public class DataService : IDataService
         Connection.CreateTable<OptionTrigger>();
         Connection.CreateTable<OptionEffect>();
 
+        Connection.CreateTable<Decision>();
+        Connection.CreateTable<DecisionShownTrigger>();
+        Connection.CreateTable<DecisionFailureTrigger>();
+        Connection.CreateTable<DecisionValidTrigger>();
+        Connection.CreateTable<DecisionAiPotentialTrigger>();
+
         Connection.CreateTable<Trigger>();
 
         Connection.CreateTable<Effect>();
@@ -110,6 +116,12 @@ public class DataService : IDataService
         Connection.DropTable<OptionTrigger>();
         Connection.DropTable<OptionEffect>();
 
+        Connection.DropTable<Decision>();
+        Connection.DropTable<DecisionShownTrigger>();
+        Connection.DropTable<DecisionFailureTrigger>();
+        Connection.DropTable<DecisionValidTrigger>();
+        Connection.DropTable<DecisionAiPotentialTrigger>();
+
         Connection.DropTable<Trigger>();
 
         Connection.DropTable<Effect>();
@@ -131,6 +143,12 @@ public class DataService : IDataService
         Connection.DeleteAll<Option>();
         Connection.DeleteAll<OptionTrigger>();
         Connection.DeleteAll<OptionEffect>();
+
+        Connection.DeleteAll<Decision>();
+        Connection.DeleteAll<DecisionShownTrigger>();
+        Connection.DeleteAll<DecisionFailureTrigger>();
+        Connection.DeleteAll<DecisionValidTrigger>();
+        Connection.DeleteAll<DecisionAiPotentialTrigger>();
 
         Connection.DeleteAll<Trigger>();
 
