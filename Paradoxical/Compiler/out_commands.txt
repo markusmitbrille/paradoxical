@@ -1317,3 +1317,12 @@ GetYearlyFervorChangeDesc
 GetYearsUntilDecay
 GetYearsUntilHouseClaim
 GetYoungMiddleAgedOld
+Geta
+Getachew
+Geteina
+Geteye
+Getinge
+Getong
+Getrude
+Gets
+Getting

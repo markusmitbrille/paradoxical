@@ -1,0 +1,10 @@
+beggar_rags
+bishop_outfit
+emotion_angry_decal
+jester_outfit
+monk_outfit
+nightgown
+no_clothes
+priest_outfit
+travel_cloak
+western_stealth_hood
