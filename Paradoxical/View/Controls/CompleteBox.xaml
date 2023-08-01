@@ -25,6 +25,7 @@
         BorderThickness="0"
         SelectionMode="Single"
         SelectionChanged="SelectedHandler"
+        IsSynchronizedWithCurrentItem="True"
         ScrollViewer.VerticalScrollBarVisibility="Disabled"
         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 

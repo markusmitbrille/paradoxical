@@ -904,11 +904,11 @@ public partial class ScriptBox : TextBox
 
         Popup.Closed += PopupClosedHandler;
 
+        Popup.Show();
+
         Popup.UpdateScores();
         Popup.UpdateView();
         Popup.UpdateSelection();
-
-        Popup.Show();
 
         // refocus
         Focus();
