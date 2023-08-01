@@ -276,7 +276,7 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>
             return;
         }
 
-        writer.Indent().WriteLine($"picture = {Picture}");
+        writer.Indent().WriteLine($"picture = \"{Picture}\"");
     }
 
     private void WriteCooldown(
