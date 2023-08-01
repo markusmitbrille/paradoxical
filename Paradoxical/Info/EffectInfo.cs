@@ -24,7 +24,7 @@ public partial class EffectInfo
             string tooltip = "";
             if (Description.IsEmpty() == false)
             {
-                tooltip += Description + "\r\n";
+                tooltip += Description + Environment.NewLine;
             }
             tooltip += $"{SupportedScopes ?? "global"}{(SupportedTargets != null ? $"🠆 {SupportedTargets}" : "")}";
 

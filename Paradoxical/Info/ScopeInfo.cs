@@ -24,7 +24,7 @@ public partial class ScopeInfo
             string tooltip = "";
             if (Description.IsEmpty() == false)
             {
-                tooltip += Description + "\r\n";
+                tooltip += Description + Environment.NewLine;
             }
 
             tooltip += $"{InputScopes ?? "global"}{(OutputScopes != null ? $"🠆 {OutputScopes}" : "")}";

@@ -12,7 +12,7 @@ public class ScriptConverter : IValueConverter
         if (value is not string text)
         { return value; }
 
-        text = text.Replace(ParadoxText.NewParagraph, "\r\n");
+        text = text.Replace(ParadoxText.NewParagraph, Environment.NewLine);
 
         return text;
     }
@@ -22,7 +22,7 @@ public class ScriptConverter : IValueConverter
         if (value is not string text)
         { return value; }
 
-        text = text.Replace("\r\n", ParadoxText.NewParagraph);
+        text = text.Replace(Environment.NewLine, ParadoxText.NewParagraph);
 
         return text;
     }
