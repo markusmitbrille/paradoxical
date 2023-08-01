@@ -70,8 +70,6 @@ public class EffectDetailsViewModel : PageViewModel
         }
     }
 
-    private void RefreshOutput() => OnPropertyChanged(nameof(Output));
-
     public EffectDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
@@ -205,6 +203,17 @@ public class EffectDetailsViewModel : PageViewModel
 
         Shell.Navigate<EffectTableViewModel>();
         Shell.InvalidatePage(this);
+    }
+
+    private RelayCommand? refreshOutputCommand;
+    public RelayCommand RefreshOutputCommand => refreshOutputCommand ??= new(RefreshOutput);
+
+    private void RefreshOutput()
+    {
+        if (Selected == null)
+        { return; }
+
+        OnPropertyChanged(nameof(Output));
     }
 
     #region Equality

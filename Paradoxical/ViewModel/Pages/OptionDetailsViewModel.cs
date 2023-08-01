@@ -117,8 +117,6 @@ public class OptionDetailsViewModel : PageViewModel
         }
     }
 
-    private void RefreshOutput() => OnPropertyChanged(nameof(Output));
-
     public OptionDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
@@ -319,6 +317,17 @@ public class OptionDetailsViewModel : PageViewModel
         page.Load(owner);
 
         Shell.InvalidatePage(this);
+    }
+
+    private RelayCommand? refreshOutputCommand;
+    public RelayCommand RefreshOutputCommand => refreshOutputCommand ??= new(RefreshOutput);
+
+    private void RefreshOutput()
+    {
+        if (Selected == null)
+        { return; }
+
+        OnPropertyChanged(nameof(Output));
     }
 
     private RelayCommand<OptionViewModel>? editPreviousOptionCommand;

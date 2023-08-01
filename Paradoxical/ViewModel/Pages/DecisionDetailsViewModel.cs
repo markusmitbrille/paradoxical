@@ -112,8 +112,6 @@ public class DecisionDetailsViewModel : PageViewModel
         }
     }
 
-    private void RefreshOutput() => OnPropertyChanged(nameof(Output));
-
     public DecisionDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
@@ -315,6 +313,17 @@ public class DecisionDetailsViewModel : PageViewModel
 
         Shell.Navigate<DecisionTableViewModel>();
         Shell.InvalidatePage(this);
+    }
+
+    private RelayCommand? refreshOutputCommand;
+    public RelayCommand RefreshOutputCommand => refreshOutputCommand ??= new(RefreshOutput);
+
+    private void RefreshOutput()
+    {
+        if (Selected == null)
+        { return; }
+
+        OnPropertyChanged(nameof(Output));
     }
 
     #region Shown Trigger Commands

@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:view="clr-namespace:Paradoxical.View"
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
     xmlns:converters="clr-namespace:Paradoxical.Converters"
@@ -142,6 +143,14 @@
         <TabControl
             Padding="20"
             SelectedIndex="{Binding SelectedTab}">
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger
+                    EventName="SelectionChanged">
+                    <i:InvokeCommandAction
+                        Command="{Binding RefreshOutputCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
 
             <TabItem
                 x:Name="DisplayTab"

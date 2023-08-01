@@ -166,8 +166,6 @@ public class EventDetailsViewModel : PageViewModel
         }
     }
 
-    private void RefreshOutput() => OnPropertyChanged(nameof(Output));
-
     public EventDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
@@ -492,6 +490,17 @@ public class EventDetailsViewModel : PageViewModel
 
         Shell.Navigate<EventTableViewModel>();
         Shell.InvalidatePage(this);
+    }
+
+    private RelayCommand? refreshOutputCommand;
+    public RelayCommand RefreshOutputCommand => refreshOutputCommand ??= new(RefreshOutput);
+
+    private void RefreshOutput()
+    {
+        if (Selected == null)
+        { return; }
+
+        OnPropertyChanged(nameof(Output));
     }
 
     #region Option Commands

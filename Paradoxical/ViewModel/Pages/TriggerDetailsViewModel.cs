@@ -70,8 +70,6 @@ public class TriggerDetailsViewModel : PageViewModel
         }
     }
 
-    private void RefreshOutput() => OnPropertyChanged(nameof(Output));
-
     public TriggerDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
@@ -205,6 +203,17 @@ public class TriggerDetailsViewModel : PageViewModel
 
         Shell.Navigate<TriggerTableViewModel>();
         Shell.InvalidatePage(this);
+    }
+
+    private RelayCommand? refreshOutputCommand;
+    public RelayCommand RefreshOutputCommand => refreshOutputCommand ??= new(RefreshOutput);
+
+    private void RefreshOutput()
+    {
+        if (Selected == null)
+        { return; }
+
+        OnPropertyChanged(nameof(Output));
     }
 
     #region Equality
