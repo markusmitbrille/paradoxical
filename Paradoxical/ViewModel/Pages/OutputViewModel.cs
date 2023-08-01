@@ -37,6 +37,13 @@ public class OutputViewModel : PageViewModel
         set => SetProperty(ref eventsFileOutput, value);
     }
 
+    private string decisionsFileOutput = string.Empty;
+    public string DecisionsFileOutput
+    {
+        get => decisionsFileOutput;
+        set => SetProperty(ref decisionsFileOutput, value);
+    }
+
     private string triggersFileOutput = string.Empty;
     public string TriggersFileOutput
     {
@@ -78,6 +85,11 @@ public class OutputViewModel : PageViewModel
         {
             BuildService.WriteEventsFile(writer);
             EventsFileOutput = writer.ToString();
+        }
+        using (StringWriter writer = new())
+        {
+            BuildService.WriteDecisionsFile(writer);
+            DecisionsFileOutput = writer.ToString();
         }
         using (StringWriter writer = new())
         {

@@ -98,6 +98,38 @@
             </TabItem>
 
             <TabItem
+                x:Name="DecisionsTab"
+                Header="Decisions">
+                <Grid>
+
+                    <view:ScriptBox
+                        Grid.Row="1"
+                        IsReadOnly="True"
+                        FontFamily="Consolas"
+                        AcceptsReturn="True"
+                        AcceptsTab="True"
+                        AcceptsDot="True"
+                        AllowFormatting="True"
+                        AllowedCompleteItems="All">
+
+                        <view:ScriptBox.Text>
+                            <Binding
+                                Path="DecisionsFileOutput"
+                                Mode="OneWay">
+
+                                <Binding.Converter>
+                                    <converters:ScriptConverter />
+                                </Binding.Converter>
+
+                            </Binding>
+                        </view:ScriptBox.Text>
+
+                    </view:ScriptBox>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem
                 x:Name="TriggersTab"
                 Header="Triggers">
                 <Grid>
