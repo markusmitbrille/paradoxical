@@ -45,6 +45,12 @@ public class EventViewModel : ElementWrapper<Event>, IEquatable<EventViewModel?>
         set => SetProperty(ref model.cooldown, value);
     }
 
+    public string Onion
+    {
+        get => model.onion;
+        set => SetProperty(ref model.onion, value);
+    }
+
     public string CustomTrigger
     {
         get => model.customTrigger;

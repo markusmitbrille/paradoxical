@@ -71,6 +71,9 @@ public partial class CompleteBox : Window
         Picture =
             0b0001000000000000,
 
+        Onion =
+            0b0010000000000000,
+
         Code =
             Scope
             | CodeScope
@@ -773,6 +776,19 @@ public partial class CompleteBox : Window
                 Tooltip = info.Tooltip,
                 Icon = PackIconKind.ArrowRightBottom,
                 Kind = Kind.Scope,
+            });
+        }
+
+        var onions = OnionInfo.ParseLog();
+        foreach (var info in onions)
+        {
+            Suggestions.Add(new()
+            {
+                Name = info.Name,
+                Code = info.Name,
+                Tooltip = info.Tooltip,
+                Icon = PackIconKind.Cog,
+                Kind = Kind.Onion,
             });
         }
 

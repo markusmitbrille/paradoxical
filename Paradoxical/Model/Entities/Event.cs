@@ -41,6 +41,10 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
     public int Cooldown { get => cooldown; set => cooldown = value; }
     public int cooldown;
 
+    [Column("on_action"), NotNull]
+    public string Onion { get => onion; set => onion = value; }
+    public string onion = "";
+
     [Column("custom_trigger"), NotNull]
     public string CustomTrigger { get => customTrigger; set => customTrigger = value; }
     public string customTrigger = "";

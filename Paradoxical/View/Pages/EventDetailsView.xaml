@@ -160,6 +160,8 @@
                             Height="auto" />
                         <RowDefinition
                             Height="auto" />
+                        <RowDefinition
+                            Height="auto" />
                     </Grid.RowDefinitions>
 
                     <Grid
@@ -292,6 +294,30 @@
                         </TextBox.Text>
 
                     </TextBox>
+
+                    <view:ScriptBox
+                        Grid.Row="5"
+                        AcceptsReturn="False"
+                        AcceptsTab="False"
+                        AcceptsDot="False"
+                        AllowFormatting="False"
+                        AllowedCompleteItems="Onion"
+                        materialDesign:HintAssist.Hint="On-Actions">
+
+                        <view:ScriptBox.Text>
+                            <Binding
+                                Path="Selected.Onion"
+                                Mode="TwoWay"
+                                UpdateSourceTrigger="PropertyChanged">
+
+                                <Binding.Converter>
+                                    <converters:ScriptConverter />
+                                </Binding.Converter>
+
+                            </Binding>
+                        </view:ScriptBox.Text>
+
+                    </view:ScriptBox>
 
                 </Grid>
             </TabItem>

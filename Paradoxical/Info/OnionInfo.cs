@@ -14,6 +14,17 @@ public partial class OnionInfo
     public string Name { get; init; } = string.Empty;
     public string? ExpectedScope { get; init; }
 
+    public string Tooltip
+    {
+        get
+        {
+            string tooltip = "";
+            tooltip += $"{ExpectedScope}";
+
+            return tooltip;
+        }
+    }
+
     public static IEnumerable<OnionInfo> ParseLog()
     {
         Assembly assembly = Assembly.GetExecutingAssembly();
