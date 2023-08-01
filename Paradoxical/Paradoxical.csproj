@@ -22,6 +22,9 @@
     <None Remove="Info\event_targets.log" />
     <None Remove="Info\on_actions.log" />
     <None Remove="Info\triggers.log" />
+    <None Remove="Resources\Lists\Commands.txt" />
+    <None Remove="Resources\Logs\Animations.txt" />
+    <None Remove="Resources\Logs\Themes.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,10 +32,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Lists\Commands.txt" />
     <EmbeddedResource Include="Resources\Logs\custom_localization.log" />
     <EmbeddedResource Include="Resources\Logs\effects.log" />
     <EmbeddedResource Include="Resources\Logs\event_targets.log" />
     <EmbeddedResource Include="Resources\Logs\on_actions.log" />
+    <EmbeddedResource Include="Resources\Lists\Animations.txt" />
+    <EmbeddedResource Include="Resources\Lists\Themes.txt" />
     <EmbeddedResource Include="Resources\Logs\triggers.log" />
   </ItemGroup>
 
