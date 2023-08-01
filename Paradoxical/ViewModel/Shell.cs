@@ -200,6 +200,12 @@ public class Shell : ObservableObject, IShell
 
     private void Save()
     {
+        if (DataService.IsInMemory == true)
+        {
+            Backup();
+            return;
+        }
+
         Mediator.Send<SaveMessage>(new());
     }
 
