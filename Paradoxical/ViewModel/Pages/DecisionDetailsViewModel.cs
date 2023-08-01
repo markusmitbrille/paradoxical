@@ -47,6 +47,8 @@ public class DecisionDetailsViewModel : PageViewModel
     public IDecisionService DecisionService { get; }
     public ITriggerService TriggerService { get; }
     public IEffectService EffectService { get; }
+    public IEventService EventService { get; }
+    public IPortraitService PortraitService { get; }
 
     private int selectedTab;
     public int SelectedTab
@@ -90,6 +92,30 @@ public class DecisionDetailsViewModel : PageViewModel
         set => SetProperty(ref effects, value);
     }
 
+    private ObservableCollection<EventViewModel>? allEvents;
+    public ObservableCollection<EventViewModel> AllEvents
+    {
+        get => allEvents ??= new();
+        set => SetProperty(ref allEvents, value);
+    }
+
+    public int? TriggeredEventId
+    {
+        get => Selected?.TriggeredEventId;
+        set
+        {
+            if (Selected == null)
+            { return; }
+
+            OnPropertyChanging();
+            Selected.TriggeredEventId = value;
+            OnPropertyChanged();
+
+            EditTriggeredEventCommand.NotifyCanExecuteChanged();
+            RemoveTriggeredEventCommand.NotifyCanExecuteChanged();
+        }
+    }
+
     private ObservableCollection<TriggerViewModel>? aiPotentialTriggers;
     public ObservableCollection<TriggerViewModel> AiPotentialTriggers
     {
@@ -120,7 +146,9 @@ public class DecisionDetailsViewModel : PageViewModel
         IModService modService,
         IDecisionService decisionService,
         ITriggerService triggerService,
-        IEffectService effectService)
+        IEffectService effectService,
+        IEventService eventService,
+        IPortraitService portraitService)
         : base(shell, mediator)
     {
         Finder = finder;
@@ -130,6 +158,8 @@ public class DecisionDetailsViewModel : PageViewModel
         DecisionService = decisionService;
         TriggerService = triggerService;
         EffectService = effectService;
+        EventService = eventService;
+        PortraitService = portraitService;
     }
 
     public override void OnNavigatedTo()
@@ -177,6 +207,7 @@ public class DecisionDetailsViewModel : PageViewModel
         LoadFailureTriggers();
         LoadValidTriggers();
         LoadEffects();
+        LoadAllEvents();
         LoadAiPotentialTriggers();
 
         RefreshPageName();
@@ -227,6 +258,17 @@ public class DecisionDetailsViewModel : PageViewModel
             .Select(model => new EffectViewModel() { Model = model });
 
         Effects = new(effects);
+    }
+
+    private void LoadAllEvents()
+    {
+        if (Selected == null)
+        { return; }
+
+        var allEvents = EventService.Get()
+            .Select(model => new EventViewModel() { Model = model });
+
+        AllEvents = new(allEvents);
     }
 
     private void LoadAiPotentialTriggers()
@@ -328,6 +370,122 @@ public class DecisionDetailsViewModel : PageViewModel
 
         OnPropertyChanged(nameof(Output));
     }
+
+    #region Flow Commands
+
+    private RelayCommand? createTriggeredEventCommand;
+    public RelayCommand CreateTriggeredEventCommand => createTriggeredEventCommand ??= new(CreateTriggeredEvent);
+
+    private void CreateTriggeredEvent()
+    {
+        if (Selected == null)
+        { return; }
+
+        Event model = new();
+        EventService.Insert(model);
+
+        Portrait leftPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.Left,
+        };
+        Portrait rightPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.Right,
+        };
+        Portrait lowerLeftPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.LowerLeft,
+        };
+        Portrait lowerCenterPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.LowerCenter,
+        };
+        Portrait lowerRightPortrait = new()
+        {
+            EventId = model.Id,
+            Position = PortraitPosition.LowerRight,
+        };
+
+        PortraitService.Insert(leftPortrait);
+        PortraitService.Insert(rightPortrait);
+        PortraitService.Insert(lowerLeftPortrait);
+        PortraitService.Insert(lowerCenterPortrait);
+        PortraitService.Insert(lowerRightPortrait);
+
+        EventViewModel observable = new() { Model = model };
+        AllEvents.Add(observable);
+
+        TriggeredEventId = model.Id;
+    }
+
+    private AsyncRelayCommand? addTriggeredEventCommand;
+    public AsyncRelayCommand AddTriggeredEventCommand => addTriggeredEventCommand ??= new(AddTriggeredEvent);
+
+    private async Task AddTriggeredEvent()
+    {
+        if (Selected == null)
+        { return; }
+
+        Save();
+
+        Finder.Items = EventService.Get()
+            .Select(model => new EventViewModel() { Model = model });
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        TriggeredEventId = Finder.Selected.Id;
+    }
+
+    private RelayCommand? removeTriggeredEventCommand;
+    public RelayCommand RemoveTriggeredEventCommand => removeTriggeredEventCommand ??= new(RemoveTriggeredEvent, CanRemoveTriggeredEvent);
+
+    private void RemoveTriggeredEvent()
+    {
+        if (Selected == null)
+        { return; }
+
+        if (TriggeredEventId == null)
+        { return; }
+
+        TriggeredEventId = null;
+    }
+    private bool CanRemoveTriggeredEvent()
+    {
+        return TriggeredEventId != null;
+    }
+
+    private RelayCommand? editTriggeredEventCommand;
+    public RelayCommand EditTriggeredEventCommand => editTriggeredEventCommand ??= new(EditTriggeredEvent, CanEditTriggeredEvent);
+
+    private void EditTriggeredEvent()
+    {
+        if (Selected == null)
+        { return; }
+
+        if (TriggeredEventId == null)
+        { return; }
+
+        Event model = EventService.Get(TriggeredEventId.Value);
+
+        var page = Shell.Navigate<EventDetailsViewModel>();
+        page.Load(model);
+    }
+    private bool CanEditTriggeredEvent()
+    {
+        return TriggeredEventId != null;
+    }
+
+    #endregion
 
     #region Shown Trigger Commands
 

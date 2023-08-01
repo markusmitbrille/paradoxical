@@ -93,6 +93,22 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>
     public string CustomEffect { get => customEffect; set => customEffect = value; }
     public string customEffect = "";
 
+    [Column("triggered_event_id"), Indexed]
+    public int? TriggeredEventId { get => triggeredEventId; set => triggeredEventId = value; }
+    public int? triggeredEventId;
+
+    [Column("triggered_event_scope"), NotNull]
+    public string TriggeredEventScope { get => triggeredEventScope; set => triggeredEventScope = value; }
+    public string triggeredEventScope = "";
+
+    [Column("triggered_event_min_days")]
+    public int TriggeredEventMinDays { get => triggeredEventMinDays; set => triggeredEventMinDays = value; }
+    public int triggeredEventMinDays;
+
+    [Column("triggered_event_max_days")]
+    public int TriggeredEventMaxDays { get => triggeredEventMaxDays; set => triggeredEventMaxDays = value; }
+    public int triggeredEventMaxDays;
+
     [Column("ai_goal"), NotNull]
     public bool AiGoal { get => aiGoal; set => aiGoal = value; }
     public bool aiGoal;
@@ -179,6 +195,11 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>
         customFailureTrigger = other.customFailureTrigger;
         customValidTrigger = other.customValidTrigger;
         customEffect = other.customEffect;
+
+        triggeredEventId = other.triggeredEventId;
+        triggeredEventScope = other.triggeredEventScope;
+        triggeredEventMinDays = other.triggeredEventMinDays;
+        triggeredEventMaxDays = other.triggeredEventMaxDays;
 
         aiGoal = other.aiGoal;
         aiCheckFrequency = other.aiCheckFrequency;
@@ -470,7 +491,9 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>
         IDecisionService decisionService)
     {
         var effects = decisionService.GetEffects(this);
-        if (effects.Any() == false && CustomEffect.IsEmpty() == true)
+        var triggeredEvent = decisionService.GetTriggeredEvent(this);
+
+        if (effects.Any() == false && CustomEffect.IsEmpty() == true && triggeredEvent == null)
         {
             writer.Indent().WriteLine("# no effect");
             return;
@@ -478,6 +501,8 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>
 
         writer.Indent().WriteLine("effect = {");
         ParadoxText.IndentLevel++;
+
+        WriteTriggeredEvent(writer, modService, decisionService);
 
         if (effects.Any() == true)
         {
@@ -501,6 +526,41 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>
 
         ParadoxText.IndentLevel--;
         writer.Indent().WriteLine("}");
+    }
+
+    private void WriteTriggeredEvent(
+        TextWriter writer,
+        IModService modService,
+        IDecisionService decisionService)
+    {
+        var triggeredEvent = decisionService.GetTriggeredEvent(this);
+        if (triggeredEvent == null)
+        {
+            return;
+        }
+
+        writer.Indent().WriteLine("# follow-up event");
+
+        if (TriggeredEventScope != string.Empty)
+        {
+            writer.Indent().WriteLine($"{TriggeredEventScope} = {{");
+            ParadoxText.IndentLevel++;
+        }
+
+        writer.Indent().WriteLine("trigger_event = {");
+        ParadoxText.IndentLevel++;
+
+        writer.Indent().WriteLine($"id = {triggeredEvent.GetQualifiedName(modService)}");
+        writer.Indent().WriteLine($"days = {{ {TriggeredEventMinDays} {TriggeredEventMaxDays} }}");
+
+        ParadoxText.IndentLevel--;
+        writer.Indent().WriteLine("}");
+
+        if (TriggeredEventScope != string.Empty)
+        {
+            ParadoxText.IndentLevel--;
+            writer.Indent().WriteLine("}");
+        }
     }
 
     private void WriteAiPotential(

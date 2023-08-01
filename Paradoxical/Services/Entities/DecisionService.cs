@@ -9,6 +9,8 @@ namespace Paradoxical.Services.Elements;
 
 public interface IDecisionService : IEntityService<Decision>
 {
+    Event? GetTriggeredEvent(Decision model);
+
     IEnumerable<Trigger> GetShownTriggers(Decision model);
     void AddShownTrigger(Decision model, Trigger relation);
     void RemoveShownTrigger(Decision model, Trigger relation);
@@ -65,6 +67,18 @@ public class DecisionService : EntityService<Decision>, IDecisionService
         Data.Connection.Execute(deleteDecisionValidTriggers, model.Id);
         Data.Connection.Execute(deleteDecisionEffects, model.Id);
         Data.Connection.Execute(deleteDecisionAiPotentialTriggers, model.Id);
+    }
+
+    public Event? GetTriggeredEvent(Decision model)
+    {
+        string query = ParadoxQuery.Composite(
+            c: "decisions",
+            o: "events",
+            fk: "triggered_event_id",
+            cpk: "id",
+            opk: "id");
+
+        return Data.Connection.Query<Event>(query, model.Id).SingleOrDefault();
     }
 
     public IEnumerable<Trigger> GetShownTriggers(Decision model)
