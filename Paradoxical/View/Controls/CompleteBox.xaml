@@ -21,9 +21,12 @@
 
     <ListView
         x:Name="ItemsBox"
+        MinHeight="100"
         BorderThickness="0"
         SelectionMode="Single"
-        SelectionChanged="SelectedHandler">
+        SelectionChanged="SelectedHandler"
+        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+        ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
         <ListView.Resources>
 
@@ -59,8 +62,7 @@
 
             <DataTemplate
                 x:Key="SelectedTemplate">
-                <Grid
-                    MinWidth="250">
+                <Grid>
 
                     <Grid.RowDefinitions>
                         <RowDefinition
@@ -89,18 +91,18 @@
                             Grid.Column="1"
                             Margin="1,0"
                             VerticalAlignment="Center"
-                            Text="{Binding Name}" />
+                            Text="{Binding Name}"
+                            TextWrapping="Wrap" />
 
                     </Grid>
 
                     <TextBlock
                         Grid.Row="1"
+                        Width="200"
                         Padding="8,4"
-                        Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}"
-                        VerticalAlignment="Center"
                         Text="{Binding Tooltip}"
-                        FontSize="10"
-                        TextWrapping="Wrap">
+                        TextWrapping="Wrap"
+                        FontSize="10">
 
                         <TextBlock.Style>
                             <Style

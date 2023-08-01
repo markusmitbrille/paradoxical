@@ -859,7 +859,7 @@ public partial class CompleteBox : Window
         if (AllowedItems.HasFlag(item.Kind) == false)
         { return false; }
 
-        if (item.Score > 50)
+        if (item.Score > 10)
         { return true; }
 
         return false;
