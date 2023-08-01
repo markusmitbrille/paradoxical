@@ -13,6 +13,7 @@ public interface IBuildService
     void Export(string dir, string file);
 
     void WriteEventsFile(TextWriter writer);
+    void WriteDecisionsFile(TextWriter writer);
     void WriteTriggersFile(TextWriter writer);
     void WriteEffectsFile(TextWriter writer);
     void WriteLocFile(TextWriter writer);
@@ -30,6 +31,7 @@ public class BuildService : IBuildService
     private const string LOCALIZATION_ENGLISH_DIR = "localization/english";
 
     private string EventsFile => $"{modService.GetPrefix()}_events.txt";
+    private string DecisionsFile => $"{modService.GetPrefix()}_decisions.txt";
     private string TriggersFile => $"{modService.GetPrefix()}_triggers.txt";
     private string EffectsFile => $"{modService.GetPrefix()}_effects.txt";
     private string LocFile => $"{modService.GetPrefix()}_l_english.yml";
@@ -40,6 +42,7 @@ public class BuildService : IBuildService
 
     private readonly IEventService eventService;
     private readonly IOptionService optionService;
+    private readonly IDecisionService decisionService;
     private readonly IPortraitService portraitService;
     private readonly ITriggerService triggerService;
     private readonly IEffectService effectService;
@@ -49,6 +52,7 @@ public class BuildService : IBuildService
         IScriptService scriptService,
         IEventService eventService,
         IOptionService optionService,
+        IDecisionService decisionService,
         IPortraitService portraitService,
         ITriggerService triggerService,
         IEffectService effectService)
@@ -59,6 +63,7 @@ public class BuildService : IBuildService
 
         this.eventService = eventService;
         this.optionService = optionService;
+        this.decisionService = decisionService;
         this.portraitService = portraitService;
         this.triggerService = triggerService;
         this.effectService = effectService;
@@ -80,6 +85,7 @@ public class BuildService : IBuildService
 
         Directory.CreateDirectory(GetModDir(dir, file));
         Directory.CreateDirectory(GetEventsDir(dir, file));
+        Directory.CreateDirectory(GetDecisionsDir(dir, file));
         Directory.CreateDirectory(GetCommonDir(dir, file));
         Directory.CreateDirectory(GetScriptedTriggersDir(dir, file));
         Directory.CreateDirectory(GetScriptedEffectsDir(dir, file));
@@ -99,6 +105,11 @@ public class BuildService : IBuildService
         using (StreamWriter writer = new(GetEventsFilePath(dir, file), encoding, options))
         {
             WriteEventsFile(writer);
+        }
+
+        using (StreamWriter writer = new(GetDecisionsFilePath(dir, file), encoding, options))
+        {
+            WriteDecisionsFile(writer);
         }
 
         using (StreamWriter writer = new(GetTriggersFilePath(dir, file), encoding, options))
@@ -127,6 +138,11 @@ public class BuildService : IBuildService
     private static string GetEventsDir(string dir, string file)
     {
         return Path.Combine(dir, file, EVENTS_DIR);
+    }
+
+    private static string GetDecisionsDir(string dir, string file)
+    {
+        return Path.Combine(dir, file, DECISIONS_DIR);
     }
 
     private static string GetCommonDir(string dir, string file)
@@ -167,6 +183,11 @@ public class BuildService : IBuildService
     private string GetEventsFilePath(string dir, string file)
     {
         return Path.Combine(GetEventsDir(dir, file), EventsFile);
+    }
+
+    private string GetDecisionsFilePath(string dir, string file)
+    {
+        return Path.Combine(GetDecisionsDir(dir, file), DecisionsFile);
     }
 
     private string GetTriggersFilePath(string dir, string file)
@@ -237,6 +258,24 @@ public class BuildService : IBuildService
         }
     }
 
+    public void WriteDecisionsFile(TextWriter writer)
+    {
+        writer.WriteLine($"# {modService.GetModName()} Decisions");
+        writer.WriteLine();
+
+        foreach (Decision element in decisionService.Get())
+        {
+            ParadoxText.IndentLevel = 0;
+
+            element.Write(
+                writer,
+                modService,
+                decisionService);
+
+            writer.WriteLine();
+        }
+    }
+
     public void WriteTriggersFile(TextWriter writer)
     {
         writer.WriteLine($"# {modService.GetModName()} Triggers");
@@ -299,6 +338,14 @@ public class BuildService : IBuildService
         foreach (Option opt in optionService.Get())
         {
             opt.WriteLoc(writer, modService);
+            writer.WriteLine();
+        }
+
+        writer.WriteLine("# decisions");
+
+        foreach (Decision dec in decisionService.Get())
+        {
+            dec.WriteLoc(writer, modService);
             writer.WriteLine();
         }
     }
