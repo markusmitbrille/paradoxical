@@ -1,8 +1,8 @@
 ﻿using FuzzySharp;
 using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
-using Paradoxical.Info;
 using Paradoxical.Extensions;
+using Paradoxical.Info;
 using Paradoxical.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -68,6 +68,9 @@ public partial class CompleteBox : Window
 
         Animation =
             0b0000001000000000,
+
+        Picture =
+            0b0000010000000000,
 
         Code =
             Scope

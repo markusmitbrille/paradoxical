@@ -40,6 +40,7 @@ public partial class App : Application
         services.AddSingleton<IEventService, EventService>();
         services.AddSingleton<IOptionService, OptionService>();
         services.AddSingleton<IPortraitService, PortraitService>();
+        services.AddSingleton<IDecisionService, DecisionService>();
         services.AddSingleton<ITriggerService, TriggerService>();
         services.AddSingleton<IEffectService, EffectService>();
 
@@ -54,13 +55,15 @@ public partial class App : Application
         services.AddSingleton<OutputViewModel>();
         services.AddTransient<ScriptDetailsViewModel>();
         services.AddTransient<EventDetailsViewModel>();
+        services.AddTransient<OptionDetailsViewModel>();
+        services.AddTransient<DecisionDetailsViewModel>();
         services.AddTransient<TriggerDetailsViewModel>();
         services.AddTransient<EffectDetailsViewModel>();
-        services.AddTransient<OptionDetailsViewModel>();
 
         // table page view models
         services.AddSingleton<ScriptTableViewModel>();
         services.AddSingleton<EventTableViewModel>();
+        services.AddSingleton<DecisionTableViewModel>();
         services.AddSingleton<TriggerTableViewModel>();
         services.AddSingleton<EffectTableViewModel>();
 

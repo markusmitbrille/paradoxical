@@ -631,6 +631,14 @@ if you don't save them.",
         Navigate<EventTableViewModel>();
     }
 
+    private RelayCommand? goToDecisionTableCommand;
+    public RelayCommand GoToDecisionTableCommand => goToDecisionTableCommand ??= new(GoToDecisionTable);
+
+    private void GoToDecisionTable()
+    {
+        Navigate<DecisionTableViewModel>();
+    }
+
     private RelayCommand? goToTriggerTableCommand;
     public RelayCommand GoToTriggerTableCommand => goToTriggerTableCommand ??= new(GoToTriggerTable);
 

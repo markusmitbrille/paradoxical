@@ -82,11 +82,14 @@
             Command="{Binding GoToEventTableCommand}"
             Gesture="ALT+2" />
         <KeyBinding
-            Command="{Binding GoToTriggerTableCommand}"
+            Command="{Binding GoToDecisionTableCommand}"
             Gesture="ALT+3" />
         <KeyBinding
-            Command="{Binding GoToEffectTableCommand}"
+            Command="{Binding GoToTriggerTableCommand}"
             Gesture="ALT+4" />
+        <KeyBinding
+            Command="{Binding GoToEffectTableCommand}"
+            Gesture="ALT+5" />
     </Window.InputBindings>
 
     <materialDesign:DialogHost
@@ -130,6 +133,17 @@
                             <TextBlock
                                 Margin="24,4,0,4"
                                 Text="Events" />
+                        </Button>
+
+                        <Button
+                            Margin="12,8"
+                            HorizontalContentAlignment="Left"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Command="{Binding GoToDecisionTableCommand}"
+                            Click="MenuButtonClickHandler">
+                            <TextBlock
+                                Margin="24,4,0,4"
+                                Text="Decisions" />
                         </Button>
 
                         <Button
