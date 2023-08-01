@@ -302,15 +302,15 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>
         writer.Indent().WriteLine("cost = {");
         ParadoxText.IndentLevel++;
 
-        if (CostGold >= 0)
+        if (CostGold > 0)
         {
             writer.Indent().WriteLine($"gold = {CostGold}");
         }
-        if (CostPiety >= 0)
+        if (CostPiety > 0)
         {
             writer.Indent().WriteLine($"piety = {CostPiety}");
         }
-        if (CostPrestige >= 0)
+        if (CostPrestige > 0)
         {
             writer.Indent().WriteLine($"prestige = {CostPrestige}");
         }
@@ -330,15 +330,15 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>
         writer.Indent().WriteLine("minimum_cost = {");
         ParadoxText.IndentLevel++;
 
-        if (MinCostGold >= 0)
+        if (MinCostGold > 0)
         {
             writer.Indent().WriteLine($"gold = {CostGold}");
         }
-        if (MinCostPiety >= 0)
+        if (MinCostPiety > 0)
         {
             writer.Indent().WriteLine($"piety = {CostPiety}");
         }
-        if (MinCostPrestige >= 0)
+        if (MinCostPrestige > 0)
         {
             writer.Indent().WriteLine($"prestige = {CostPrestige}");
         }
