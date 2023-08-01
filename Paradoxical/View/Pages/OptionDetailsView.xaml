@@ -559,7 +559,7 @@
                         AcceptsDot="True"
                         AllowFormatting="True"
                         AllowedCompleteItems="Code"
-                        materialDesign:HintAssist.Hint="Custom AI Chance">
+                        materialDesign:HintAssist.Hint="Custom Modifier">
 
                         <view:ScriptBox.Text>
                             <Binding
