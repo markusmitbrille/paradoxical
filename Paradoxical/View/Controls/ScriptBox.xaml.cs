@@ -714,12 +714,20 @@ public partial class ScriptBox : TextBox
         var length = SelectionLength;
         var text = Text;
 
-        text = text.Remove(index, length);
-        text = text.Insert(index, "\"\"");
-        index += 1;
+        if (SelectionLength > 0)
+        {
+            text = text.Insert(index + length, "\"");
+            text = text.Insert(index, "\"");
+            index += 1;
+        }
+        else
+        {
+            text = text.Insert(index, "\"\"");
+            index += 1;
+        }
 
         Text = text;
-        CaretIndex = index;
+        Select(index, length);
     }
 
     private void InsertBraces()
@@ -728,12 +736,20 @@ public partial class ScriptBox : TextBox
         var length = SelectionLength;
         var text = Text;
 
-        text = text.Remove(index, length);
-        text = text.Insert(index, "()");
-        index += 1;
+        if (SelectionLength > 0)
+        {
+            text = text.Insert(index + length, ")");
+            text = text.Insert(index, "(");
+            index += 1;
+        }
+        else
+        {
+            text = text.Insert(index, "()");
+            index += 1;
+        }
 
         Text = text;
-        CaretIndex = index;
+        Select(index, length);
     }
 
     private void InsertSquareBraces()
@@ -742,12 +758,20 @@ public partial class ScriptBox : TextBox
         var length = SelectionLength;
         var text = Text;
 
-        text = text.Remove(index, length);
-        text = text.Insert(index, "[]");
-        index += 1;
+        if (SelectionLength > 0)
+        {
+            text = text.Insert(index + length, "]");
+            text = text.Insert(index, "[");
+            index += 1;
+        }
+        else
+        {
+            text = text.Insert(index, "[]");
+            index += 1;
+        }
 
         Text = text;
-        CaretIndex = index;
+        Select(index, length);
     }
 
     private void InsertCurlyBraces()
@@ -756,12 +780,20 @@ public partial class ScriptBox : TextBox
         var length = SelectionLength;
         var text = Text;
 
-        text = text.Remove(index, length);
-        text = text.Insert(index, "{  }");
-        index += 2;
+        if (SelectionLength > 0)
+        {
+            text = text.Insert(index + length, "}");
+            text = text.Insert(index, "{");
+            index += 1;
+        }
+        else
+        {
+            text = text.Insert(index, "{  }");
+            index += 2;
+        }
 
         Text = text;
-        CaretIndex = index;
+        Select(index, length);
     }
 
     private void InsertIndentation()
