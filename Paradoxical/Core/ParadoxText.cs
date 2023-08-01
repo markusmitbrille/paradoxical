@@ -29,6 +29,9 @@ public static class ParadoxText
 
     public static void WriteLocLine(this TextWriter writer, string key, string loc)
     {
+        // replace quotation marks with escape sequence
+        loc = loc.Replace("\"", "\\\"");
+
         writer.WriteLine($@" {key}:0 ""{loc}""");
     }
 }
