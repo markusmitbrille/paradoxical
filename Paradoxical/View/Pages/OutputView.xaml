@@ -84,11 +84,6 @@
                             <Binding
                                 Path="EventsFileOutput"
                                 Mode="OneWay">
-
-                                <Binding.Converter>
-                                    <converters:ScriptConverter />
-                                </Binding.Converter>
-
                             </Binding>
                         </view:ScriptBox.Text>
 
@@ -116,11 +111,6 @@
                             <Binding
                                 Path="DecisionsFileOutput"
                                 Mode="OneWay">
-
-                                <Binding.Converter>
-                                    <converters:ScriptConverter />
-                                </Binding.Converter>
-
                             </Binding>
                         </view:ScriptBox.Text>
 
@@ -148,11 +138,6 @@
                             <Binding
                                 Path="TriggersFileOutput"
                                 Mode="OneWay">
-
-                                <Binding.Converter>
-                                    <converters:ScriptConverter />
-                                </Binding.Converter>
-
                             </Binding>
                         </view:ScriptBox.Text>
 
@@ -180,11 +165,6 @@
                             <Binding
                                 Path="EffectsFileOutput"
                                 Mode="OneWay">
-
-                                <Binding.Converter>
-                                    <converters:ScriptConverter />
-                                </Binding.Converter>
-
                             </Binding>
                         </view:ScriptBox.Text>
 
@@ -212,11 +192,6 @@
                             <Binding
                                 Path="LocFileOutput"
                                 Mode="OneWay">
-
-                                <Binding.Converter>
-                                    <converters:ScriptConverter />
-                                </Binding.Converter>
-
                             </Binding>
                         </view:ScriptBox.Text>
 
