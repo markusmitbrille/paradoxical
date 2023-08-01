@@ -5,7 +5,7 @@ namespace Paradoxical.Core;
 public static class ParadoxText
 {
     public static string Indentation => "    ";
-    public static string NewParagraph => @"\n\n";
+    public static string NewParagraph => @"\n";
 
     public static int IndentLevel { get; set; } = 0;
 
