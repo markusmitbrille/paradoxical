@@ -112,14 +112,6 @@
             Padding="20"
             SelectedIndex="{Binding SelectedTab}">
 
-            <i:Interaction.Triggers>
-                <i:EventTrigger
-                    EventName="SelectionChanged">
-                    <i:InvokeCommandAction
-                        Command="{Binding RefreshOutputCommand}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-
             <TabItem
                 x:Name="DisplayTab"
                 Header="Display">
