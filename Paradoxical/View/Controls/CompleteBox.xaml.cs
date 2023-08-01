@@ -41,41 +41,41 @@ public partial class CompleteBox : Window
 
         Scope =
             0b0000000000000001,
-
         CodeScope =
             0b0000000000000010,
-
-        CodeSnippet =
+        Trigger =
             0b0000000000000100,
-
-        Command =
+        Effect =
             0b0000000000001000,
 
-        Argument =
-            0b0000000000010000,
-
-        Style =
-            0b0000000000100000,
-
-        Icon =
-            0b0000000001000000,
-
         LocalizationScope =
+            0b0000000000010000,
+        Command =
+            0b0000000000100000,
+        Argument =
+            0b0000000001000000,
+        Style =
             0b0000000010000000,
-
-        Theme =
+        Icon =
             0b0000000100000000,
 
-        Animation =
+        Theme =
             0b0000001000000000,
 
-        Picture =
+        Animation =
             0b0000010000000000,
+
+        Outfit =
+            0b0000100000000000,
+
+        Picture =
+            0b0001000000000000,
 
         Code =
             Scope
             | CodeScope
-            | CodeSnippet,
+            | Trigger
+            | Effect,
 
         Localization =
             Scope
@@ -746,7 +746,7 @@ public partial class CompleteBox : Window
                 Code = info.Name,
                 Tooltip = info.Tooltip,
                 Icon = PackIconKind.CodeBraces,
-                Kind = Kind.CodeSnippet,
+                Kind = Kind.Trigger,
             });
         }
 
@@ -759,7 +759,7 @@ public partial class CompleteBox : Window
                 Code = info.Name,
                 Tooltip = info.Tooltip,
                 Icon = PackIconKind.CodeBraces,
-                Kind = Kind.CodeSnippet,
+                Kind = Kind.Effect,
             });
         }
 
@@ -776,15 +776,15 @@ public partial class CompleteBox : Window
             });
         }
 
-        var themes = ThemeInfo.ParseText();
-        foreach (var info in themes)
+        var commands = CommandInfo.ParseText();
+        foreach (var info in commands)
         {
             Suggestions.Add(new()
             {
                 Name = info.Name,
                 Code = info.Name,
-                Icon = PackIconKind.Landscape,
-                Kind = Kind.Theme,
+                Icon = PackIconKind.Function,
+                Kind = Kind.Command,
             });
         }
 
@@ -795,20 +795,44 @@ public partial class CompleteBox : Window
             {
                 Name = info.Name,
                 Code = info.Name,
-                Icon = PackIconKind.Animation,
+                Icon = PackIconKind.HandWave,
                 Kind = Kind.Animation,
             });
         }
 
-        var commands = CommandInfo.ParseText();
-        foreach (var info in commands)
+        var outfits = OutfitInfo.ParseText();
+        foreach (var info in outfits)
         {
             Suggestions.Add(new()
             {
                 Name = info.Name,
                 Code = info.Name,
-                Icon = PackIconKind.Function,
-                Kind = Kind.Command,
+                Icon = PackIconKind.Hanger,
+                Kind = Kind.Outfit,
+            });
+        }
+
+        var pictures = PictureInfo.ParseText();
+        foreach (var info in pictures)
+        {
+            Suggestions.Add(new()
+            {
+                Name = info.Name,
+                Code = info.Name,
+                Icon = PackIconKind.FileImage,
+                Kind = Kind.Picture,
+            });
+        }
+
+        var themes = ThemeInfo.ParseText();
+        foreach (var info in themes)
+        {
+            Suggestions.Add(new()
+            {
+                Name = info.Name,
+                Code = info.Name,
+                Icon = PackIconKind.Landscape,
+                Kind = Kind.Theme,
             });
         }
     }

@@ -357,12 +357,30 @@
                             </view:ScriptBox.Text>
 
                         </view:ScriptBox>
-                        <TextBox
+                        <view:ScriptBox
                             Grid.Row="2"
                             Grid.Column="0"
-                            FontFamily="Consolas"
-                            Text="{Binding LeftPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Left Outfit Tags" />
+                            AcceptsReturn="False"
+                            AcceptsTab="False"
+                            AcceptsDot="False"
+                            AllowFormatting="False"
+                            AllowedCompleteItems="Outfit"
+                            materialDesign:HintAssist.Hint="Left Outfit">
+
+                            <view:ScriptBox.Text>
+                                <Binding
+                                    Path="LeftPortrait.OutfitTags"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.Converter>
+                                        <converters:ScriptConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </view:ScriptBox.Text>
+
+                        </view:ScriptBox>
 
                         <TextBox
                             Grid.Row="0"
@@ -394,12 +412,30 @@
                             </view:ScriptBox.Text>
 
                         </view:ScriptBox>
-                        <TextBox
+                        <view:ScriptBox
                             Grid.Row="2"
                             Grid.Column="1"
-                            FontFamily="Consolas"
-                            Text="{Binding RightPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Right Outfit Tags" />
+                            AcceptsReturn="False"
+                            AcceptsTab="False"
+                            AcceptsDot="False"
+                            AllowFormatting="False"
+                            AllowedCompleteItems="Outfit"
+                            materialDesign:HintAssist.Hint="Right Outfit">
+
+                            <view:ScriptBox.Text>
+                                <Binding
+                                    Path="RightPortrait.OutfitTags"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.Converter>
+                                        <converters:ScriptConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </view:ScriptBox.Text>
+
+                        </view:ScriptBox>
                     </Grid>
 
                     <Grid>
@@ -453,12 +489,30 @@
                             </view:ScriptBox.Text>
 
                         </view:ScriptBox>
-                        <TextBox
+                        <view:ScriptBox
                             Grid.Row="2"
                             Grid.Column="0"
-                            FontFamily="Consolas"
-                            Text="{Binding LowerLeftPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Left Outfit Tags" />
+                            AcceptsReturn="False"
+                            AcceptsTab="False"
+                            AcceptsDot="False"
+                            AllowFormatting="False"
+                            AllowedCompleteItems="Outfit"
+                            materialDesign:HintAssist.Hint="Left Outfit">
+
+                            <view:ScriptBox.Text>
+                                <Binding
+                                    Path="LowerLeftPortrait.OutfitTags"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.Converter>
+                                        <converters:ScriptConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </view:ScriptBox.Text>
+
+                        </view:ScriptBox>
 
                         <TextBox
                             Grid.Row="0"
@@ -490,12 +544,30 @@
                             </view:ScriptBox.Text>
 
                         </view:ScriptBox>
-                        <TextBox
+                        <view:ScriptBox
                             Grid.Row="2"
                             Grid.Column="1"
-                            FontFamily="Consolas"
-                            Text="{Binding LowerCenterPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Center Outfit Tags" />
+                            AcceptsReturn="False"
+                            AcceptsTab="False"
+                            AcceptsDot="False"
+                            AllowFormatting="False"
+                            AllowedCompleteItems="Outfit"
+                            materialDesign:HintAssist.Hint="Center Outfit">
+
+                            <view:ScriptBox.Text>
+                                <Binding
+                                    Path="LowerCenterPortrait.OutfitTags"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.Converter>
+                                        <converters:ScriptConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </view:ScriptBox.Text>
+
+                        </view:ScriptBox>
 
                         <TextBox
                             Grid.Row="0"
@@ -527,12 +599,30 @@
                             </view:ScriptBox.Text>
 
                         </view:ScriptBox>
-                        <TextBox
+                        <view:ScriptBox
                             Grid.Row="2"
                             Grid.Column="2"
-                            FontFamily="Consolas"
-                            Text="{Binding LowerRightPortrait.OutfitTags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            materialDesign:HintAssist.Hint="Right Outfit Tags" />
+                            AcceptsReturn="False"
+                            AcceptsTab="False"
+                            AcceptsDot="False"
+                            AllowFormatting="False"
+                            AllowedCompleteItems="Outfit"
+                            materialDesign:HintAssist.Hint="Right Outfit">
+
+                            <view:ScriptBox.Text>
+                                <Binding
+                                    Path="LowerRightPortrait.OutfitTags"
+                                    Mode="TwoWay"
+                                    UpdateSourceTrigger="PropertyChanged">
+
+                                    <Binding.Converter>
+                                        <converters:ScriptConverter />
+                                    </Binding.Converter>
+
+                                </Binding>
+                            </view:ScriptBox.Text>
+
+                        </view:ScriptBox>
                     </Grid>
 
                 </StackPanel>
