@@ -328,11 +328,7 @@ public class DecisionDetailsViewModel : PageViewModel
         { return; }
 
         Decision owner = Selected.Model;
-        Trigger relation = new()
-        {
-            Name = $"trg_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Code = "# some trigger",
-        };
+        Trigger relation = new();
 
         TriggerService.Insert(relation);
         DecisionService.AddShownTrigger(owner, relation);
@@ -421,11 +417,7 @@ public class DecisionDetailsViewModel : PageViewModel
         { return; }
 
         Decision owner = Selected.Model;
-        Trigger relation = new()
-        {
-            Name = $"trg_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Code = "# some trigger",
-        };
+        Trigger relation = new();
 
         TriggerService.Insert(relation);
         DecisionService.AddFailureTrigger(owner, relation);
@@ -514,11 +506,7 @@ public class DecisionDetailsViewModel : PageViewModel
         { return; }
 
         Decision owner = Selected.Model;
-        Trigger relation = new()
-        {
-            Name = $"trg_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Code = "# some trigger",
-        };
+        Trigger relation = new();
 
         TriggerService.Insert(relation);
         DecisionService.AddValidTrigger(owner, relation);
@@ -607,11 +595,7 @@ public class DecisionDetailsViewModel : PageViewModel
         { return; }
 
         Decision owner = Selected.Model;
-        Effect relation = new()
-        {
-            Name = $"eff_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Code = "# some effect",
-        };
+        Effect relation = new();
 
         EffectService.Insert(relation);
         DecisionService.AddEffect(owner, relation);
@@ -700,11 +684,7 @@ public class DecisionDetailsViewModel : PageViewModel
         { return; }
 
         Decision owner = Selected.Model;
-        Trigger relation = new()
-        {
-            Name = $"trg_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Code = "# some trigger",
-        };
+        Trigger relation = new();
 
         TriggerService.Insert(relation);
         DecisionService.AddAiPotentialTrigger(owner, relation);

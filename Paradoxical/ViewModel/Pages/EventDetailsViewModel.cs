@@ -568,11 +568,7 @@ public class EventDetailsViewModel : PageViewModel
         { return; }
 
         Event owner = Selected.Model;
-        Trigger relation = new()
-        {
-            Name = $"trg_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Code = "# some trigger",
-        };
+        Trigger relation = new();
 
         TriggerService.Insert(relation);
         EventService.AddTrigger(owner, relation);
@@ -661,11 +657,7 @@ public class EventDetailsViewModel : PageViewModel
         { return; }
 
         Event owner = Selected.Model;
-        Effect relation = new()
-        {
-            Name = $"eff_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Code = "# some effect",
-        };
+        Effect relation = new();
 
         EffectService.Insert(relation);
         EventService.AddImmediate(owner, relation);
@@ -754,11 +746,7 @@ public class EventDetailsViewModel : PageViewModel
         { return; }
 
         Event owner = Selected.Model;
-        Effect relation = new()
-        {
-            Name = $"eff_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Code = "# some effect",
-        };
+        Effect relation = new();
 
         EffectService.Insert(relation);
         EventService.AddAfter(owner, relation);

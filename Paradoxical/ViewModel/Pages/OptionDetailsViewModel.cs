@@ -526,11 +526,7 @@ public class OptionDetailsViewModel : PageViewModel
         { return; }
 
         Option owner = Selected.Model;
-        Trigger relation = new()
-        {
-            Name = $"trg_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Code = "# some trigger",
-        };
+        Trigger relation = new();
 
         TriggerService.Insert(relation);
         OptionService.AddTrigger(owner, relation);
@@ -619,11 +615,7 @@ public class OptionDetailsViewModel : PageViewModel
         { return; }
 
         Option owner = Selected.Model;
-        Effect relation = new()
-        {
-            Name = $"eff_{Guid.NewGuid().ToString("N").Substring(0, 4)}",
-            Code = "# some effect",
-        };
+        Effect relation = new();
 
         EffectService.Insert(relation);
         OptionService.AddEffect(owner, relation);
