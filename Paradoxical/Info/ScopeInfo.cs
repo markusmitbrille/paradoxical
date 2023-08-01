@@ -27,7 +27,7 @@ public partial class ScopeInfo
                 tooltip += Description + Environment.NewLine;
             }
 
-            tooltip += $"{InputScopes ?? "global"}{(OutputScopes != null ? $"🠆 {OutputScopes}" : "")}";
+            tooltip += $"{InputScopes ?? "global"}{(OutputScopes != null ? $" 🠆 {OutputScopes}" : "")}";
 
             return tooltip;
         }
@@ -50,11 +50,11 @@ public partial class ScopeInfo
     private static partial Regex GetCoreRegex();
     private static Regex CoreRegex => GetCoreRegex();
 
-    [GeneratedRegex(@"Input Scopes: (?<scopes>(?:\w+[\s-[\r\n]]*)+)")]
+    [GeneratedRegex(@"Input Scopes: (?<scopes>\w+(?:, \w+)*)")]
     private static partial Regex GetInputScopesRegex();
     private static Regex InputScopesRegex => GetInputScopesRegex();
 
-    [GeneratedRegex(@"Input Scopes: (?<scopes>(?:\w+[\s-[\r\n]]*)+)")]
+    [GeneratedRegex(@"Output Scopes: (?<scopes>\w+(?:, \w+)*)")]
     private static partial Regex GetOutputScopesRegex();
     private static Regex OutputScopesRegex => GetOutputScopesRegex();
 

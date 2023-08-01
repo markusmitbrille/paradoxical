@@ -26,7 +26,7 @@ public partial class TriggerInfo
             {
                 tooltip += Description + Environment.NewLine;
             }
-            tooltip += $"{SupportedScopes ?? "global"}{(SupportedTargets != null ? $"🠆 {SupportedTargets}" : "")}";
+            tooltip += $"{SupportedScopes ?? "global"}{(SupportedTargets != null ? $" 🠆 {SupportedTargets}" : "")}";
 
             return tooltip;
         }
@@ -49,11 +49,11 @@ public partial class TriggerInfo
     private static partial Regex GetCoreRegex();
     private static Regex CoreRegex => GetCoreRegex();
 
-    [GeneratedRegex(@"Supported Scopes: (?<scopes>(?:\w+[\s-[\r\n]]*)+)")]
+    [GeneratedRegex(@"Supported Scopes: (?<scopes>\w+(?:, \w+)*)")]
     private static partial Regex GetSupportedScopesRegex();
     private static Regex SupportedScopesRegex => GetSupportedScopesRegex();
 
-    [GeneratedRegex(@"Supported Targets: (?<targets>(?:\w+[\s-[\r\n]]*)+)")]
+    [GeneratedRegex(@"Supported Targets: (?<targets>\w+(?:, \w+)*)")]
     private static partial Regex GetSupportedTargetsRegex();
     private static Regex SupportedTargetsRegex => GetSupportedTargetsRegex();
 
