@@ -96,7 +96,7 @@ public partial class ScriptBox : TextBox
         [GeneratedRegex(@"\s*$")]
         private static partial Regex GetWhitespaceAtTextEndPattern();
         private static Regex WhitespaceAtTextEndPattern => GetWhitespaceAtTextEndPattern();
-        private static string WhitespaceAtTextEndReplacement => "\r\n";
+        private static string WhitespaceAtTextEndReplacement => "";
 
         [GeneratedRegex(@"[\s-[\r\n]][\s-[\r\n]]+")]
         private static partial Regex GetRedundantWhitespacePattern();
@@ -148,8 +148,11 @@ public partial class ScriptBox : TextBox
         private static partial Regex GetStartsWithNewLinePattern();
         public static Regex StartsWithNewLinePattern => GetStartsWithNewLinePattern();
 
-        private static void IndentLines(ref string text, ref int index)
+        public static void IndentLines(ref string text, ref int index)
         {
+            ReplaceRecursive(ref text, ref index, WhitespaceAtLineStartPattern, WhitespaceAtLineStartReplacement);
+            ReplaceRecursive(ref text, ref index, WhitespaceAtLineEndPattern, WhitespaceAtLineEndReplacement);
+
             int current = 0;
             while (current >= 0 && current < text.Length)
             {
@@ -315,14 +318,6 @@ public partial class ScriptBox : TextBox
     [GeneratedRegex(@"^.*$", RegexOptions.Multiline)]
     private static partial Regex GetLineRegex();
     public static Regex LineRegex => GetLineRegex();
-
-    [GeneratedRegex(@"{")]
-    private static partial Regex GetBlockStartRegex();
-    public static Regex BlockStartRegex => GetBlockStartRegex();
-
-    [GeneratedRegex(@"}")]
-    private static partial Regex GetBlockEndRegex();
-    public static Regex BlockEndRegex => GetBlockEndRegex();
 
     private MatchCollection WordMatches { get; set; } = WordRegex.Matches(string.Empty);
     private MatchCollection WhiteSpaceMatches { get; set; } = WhiteSpaceRegex.Matches(string.Empty);
@@ -783,29 +778,35 @@ public partial class ScriptBox : TextBox
         CaretIndex = index;
     }
 
+    [GeneratedRegex(@"{[\s-[\r\n]]*$")]
+    private static partial Regex GetBlockStartRegex();
+    public static Regex BlockStartRegex => GetBlockStartRegex();
+
+    [GeneratedRegex(@"^[\s-[\r\n]]*}")]
+    private static partial Regex GetBlockEndRegex();
+    public static Regex BlockEndRegex => GetBlockEndRegex();
+
     private void InsertNewLine()
     {
         var text = Text;
         var length = SelectionLength;
         var index = CaretIndex;
 
+        var before = text[..index];
+        var after = text[index..];
+
         text = text.Remove(index, length);
         text = text.Insert(index, Environment.NewLine);
         index += Environment.NewLine.Length;
 
-        var after = text[index..]
-            .TrimStart()
-            .FirstOrDefault()
-            .ToString();
-
-        if (BlockEndRegex.IsMatch(after))
+        if (BlockStartRegex.IsMatch(before) && BlockEndRegex.IsMatch(after))
         {
             text = text.Insert(index, Environment.NewLine);
         }
 
         if (AllowFormatting == true)
         {
-            Formatter.Format(ref text, ref index);
+            Formatter.IndentLines(ref text, ref index);
         }
 
         Text = text;
