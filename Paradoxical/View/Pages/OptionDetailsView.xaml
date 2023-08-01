@@ -211,7 +211,7 @@
             </TabItem>
 
             <TabItem
-                x:Name="FLowControlTab"
+                x:Name="FlowControlTab"
                 Header="Flow Control">
 
                 <StackPanel>
