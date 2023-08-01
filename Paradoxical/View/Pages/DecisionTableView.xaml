@@ -64,7 +64,7 @@
                     Margin="4,0"
                     Style="{DynamicResource MaterialDesignFilledTextBox}"
                     Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    materialDesign:HintAssist.Hint="Filter Decisions ..."
+                    materialDesign:HintAssist.Hint="Filter Decisions …"
                     materialDesign:TextFieldAssist.HasClearButton="True" />
 
             </ToolBar>

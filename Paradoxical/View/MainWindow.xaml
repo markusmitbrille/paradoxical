@@ -366,7 +366,7 @@
                                     Command="{Binding NewCommand}"
                                     InputGestureText="CTRL+N" />
                                 <MenuItem
-                                    Header="Open..."
+                                    Header="Open…"
                                     Icon="{materialDesign:PackIcon Kind=FolderOpen}"
                                     Command="{Binding OpenCommand}"
                                     InputGestureText="CTRL+O" />
@@ -376,7 +376,7 @@
                                     Command="{Binding SaveCommand}"
                                     InputGestureText="CTRL+S" />
                                 <MenuItem
-                                    Header="Backup..."
+                                    Header="Backup…"
                                     Icon="{materialDesign:PackIcon Kind=Backup}"
                                     Command="{Binding BackupCommand}" />
                                 <MenuItem
@@ -385,14 +385,14 @@
                                     Command="{Binding ExportCommand}"
                                     InputGestureText="CTRL+SHIFT+S" />
                                 <MenuItem
-                                    Header="Export As..."
+                                    Header="Export As…"
                                     Icon="{materialDesign:PackIcon Kind=FileExportOutline}"
                                     Command="{Binding ExportAsCommand}" />
 
                                 <Separator />
 
                                 <MenuItem
-                                    Header="Find..."
+                                    Header="Find…"
                                     Icon="{materialDesign:PackIcon Kind=Search}"
                                     Command="{Binding FindCommand}" />
 

@@ -86,7 +86,6 @@ public partial class ElementList : UserControl
         set { SetValue(PlaceHolderTextProperty, value); }
     }
 
-    // Using a DependencyProperty as the backing store for PlaceHolderText.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty PlaceHolderTextProperty =
         DependencyProperty.Register("PlaceHolderText", typeof(string), typeof(ElementList), new PropertyMetadata("No elements selected…"));
 
