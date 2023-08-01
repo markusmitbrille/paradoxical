@@ -131,13 +131,25 @@ public class EventDetailsViewModel : PageViewModel
     }
 
     private ObservableCollection<TriggerViewModel>? triggers;
-    public ObservableCollection<TriggerViewModel> Triggers => triggers ??= new();
+    public ObservableCollection<TriggerViewModel> Triggers
+    {
+        get => triggers ??= new();
+        set => SetProperty(ref triggers, value);
+    }
 
     private ObservableCollection<EffectViewModel>? immediateEffects;
-    public ObservableCollection<EffectViewModel> ImmediateEffects => immediateEffects ??= new();
+    public ObservableCollection<EffectViewModel> ImmediateEffects
+    {
+        get => immediateEffects ??= new();
+        set => SetProperty(ref immediateEffects, value);
+    }
 
     private ObservableCollection<EffectViewModel>? afterEffects;
-    public ObservableCollection<EffectViewModel> AfterEffects => afterEffects ??= new();
+    public ObservableCollection<EffectViewModel> AfterEffects
+    {
+        get => afterEffects ??= new();
+        set => SetProperty(ref afterEffects, value);
+    }
 
     public string Output
     {
@@ -280,8 +292,7 @@ public class EventDetailsViewModel : PageViewModel
         var triggers = EventService.GetTriggers(Selected.Model)
             .Select(model => new TriggerViewModel() { Model = model });
 
-        Triggers.Clear();
-        Triggers.AddRange(triggers);
+        Triggers = new(triggers);
     }
 
     private void LoadImmediateEffects()
@@ -289,11 +300,10 @@ public class EventDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
-        var immediates = EventService.GetImmediates(Selected.Model)
+        var effects = EventService.GetImmediates(Selected.Model)
             .Select(model => new EffectViewModel() { Model = model });
 
-        ImmediateEffects.Clear();
-        ImmediateEffects.AddRange(immediates);
+        ImmediateEffects = new(effects);
     }
 
     private void LoadAfterEffects()
@@ -301,11 +311,10 @@ public class EventDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
-        var afters = EventService.GetAfters(Selected.Model)
+        var effects = EventService.GetAfters(Selected.Model)
             .Select(model => new EffectViewModel() { Model = model });
 
-        AfterEffects.Clear();
-        AfterEffects.AddRange(afters);
+        AfterEffects = new(effects);
     }
 
     private RelayCommand? reloadCommand;

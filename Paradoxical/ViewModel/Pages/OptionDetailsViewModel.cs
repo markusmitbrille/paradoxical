@@ -65,13 +65,25 @@ public class OptionDetailsViewModel : PageViewModel
     }
 
     private ObservableCollection<TriggerViewModel>? triggers;
-    public ObservableCollection<TriggerViewModel> Triggers => triggers ??= new();
+    public ObservableCollection<TriggerViewModel> Triggers
+    {
+        get => triggers ??= new();
+        set => SetProperty(ref triggers, value);
+    }
 
     private ObservableCollection<EffectViewModel>? effects;
-    public ObservableCollection<EffectViewModel> Effects => effects ??= new();
+    public ObservableCollection<EffectViewModel> Effects
+    {
+        get => effects ??= new();
+        set => SetProperty(ref effects, value);
+    }
 
     private ObservableCollection<EventViewModel>? allEvents;
-    public ObservableCollection<EventViewModel> AllEvents => allEvents ??= new();
+    public ObservableCollection<EventViewModel> AllEvents
+    {
+        get => allEvents ??= new();
+        set => SetProperty(ref allEvents, value);
+    }
 
     public int? TriggeredEventId
     {
@@ -190,8 +202,7 @@ public class OptionDetailsViewModel : PageViewModel
         var triggers = OptionService.GetTriggers(Selected.Model)
             .Select(model => new TriggerViewModel() { Model = model });
 
-        Triggers.Clear();
-        Triggers.AddRange(triggers);
+        Triggers = new(triggers);
     }
 
     private void LoadEffects()
@@ -202,8 +213,7 @@ public class OptionDetailsViewModel : PageViewModel
         var effects = OptionService.GetEffects(Selected.Model)
                     .Select(model => new EffectViewModel() { Model = model });
 
-        Effects.Clear();
-        Effects.AddRange(effects);
+        Effects = new(effects);
     }
 
     private void LoadAllEvents()
@@ -214,8 +224,7 @@ public class OptionDetailsViewModel : PageViewModel
         var allEvents = EventService.Get()
             .Select(model => new EventViewModel() { Model = model });
 
-        AllEvents.Clear();
-        AllEvents.AddRange(allEvents);
+        AllEvents = new(allEvents);
     }
 
     private RelayCommand? reloadCommand;
