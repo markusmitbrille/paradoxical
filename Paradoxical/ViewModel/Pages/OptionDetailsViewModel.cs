@@ -238,7 +238,10 @@ public class OptionDetailsViewModel : PageViewModel
             DataService.RollbackTransaction();
         }
 
-        Load(Selected.Model);
+        var model = Selected.Model;
+        Selected = null;
+
+        Load(model);
     }
 
     private RelayCommand? saveCommand;
