@@ -58,6 +58,13 @@ public class OutputViewModel : PageViewModel
         set => SetProperty(ref effectsFileOutput, value);
     }
 
+    private string onionsFileOutput = string.Empty;
+    public string OnionsFileOutput
+    {
+        get => onionsFileOutput;
+        set => SetProperty(ref onionsFileOutput, value);
+    }
+
     private string locFileOutput = string.Empty;
     public string LocFileOutput
     {
@@ -100,6 +107,11 @@ public class OutputViewModel : PageViewModel
         {
             BuildService.WriteEffectsFile(writer);
             EffectsFileOutput = writer.ToString();
+        }
+        using (StringWriter writer = new())
+        {
+            BuildService.WriteOnionsFile(writer);
+            OnionsFileOutput = writer.ToString();
         }
         using (StringWriter writer = new())
         {

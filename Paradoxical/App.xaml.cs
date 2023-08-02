@@ -39,6 +39,7 @@ public partial class App : Application
         services.AddSingleton<IScriptService, ScriptService>();
         services.AddSingleton<IEventService, EventService>();
         services.AddSingleton<IOptionService, OptionService>();
+        services.AddSingleton<IOnionService, OnionService>();
         services.AddSingleton<IPortraitService, PortraitService>();
         services.AddSingleton<IDecisionService, DecisionService>();
         services.AddSingleton<ITriggerService, TriggerService>();

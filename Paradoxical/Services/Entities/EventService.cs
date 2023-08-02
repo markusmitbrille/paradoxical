@@ -11,6 +11,8 @@ public interface IEventService : IEntityService<Event>
 {
     IEnumerable<Option> GetOptions(Event model);
 
+    IEnumerable<Onion> GetOnions(Event model);
+
     IEnumerable<Portrait> GetPortraits(Event model);
 
     Portrait GetLeftPortrait(Event model);
@@ -79,6 +81,17 @@ public class EventService : EntityService<Event>, IEventService
             pk: "id");
 
         return Data.Connection.Query<Option>(query, model.Id);
+    }
+
+    public IEnumerable<Onion> GetOnions(Event model)
+    {
+        string query = ParadoxQuery.Composition(
+            c: "on_actions",
+            o: "events",
+            fk: "event_id",
+            pk: "id");
+
+        return Data.Connection.Query<Onion>(query, model.Id);
     }
 
     public IEnumerable<Portrait> GetPortraits(Event model)

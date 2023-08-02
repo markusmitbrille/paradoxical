@@ -51,6 +51,7 @@ public class EventDetailsViewModel : PageViewModel
     public IEventService EventService { get; }
     public IPortraitService PortraitService { get; }
     public IOptionService OptionService { get; }
+    public IOnionService OnionService { get; }
     public ITriggerService TriggerService { get; }
     public IEffectService EffectService { get; }
 
@@ -130,6 +131,33 @@ public class EventDetailsViewModel : PageViewModel
         }
     }
 
+    private ObservableCollection<OnionViewModel>? onions;
+    public ObservableCollection<OnionViewModel> Onions
+    {
+        get => onions ??= new();
+        set
+        {
+            CommitOnions();
+
+            SetProperty(ref onions, value);
+        }
+    }
+
+    private ICollectionView OnionsView => CollectionViewSource.GetDefaultView(Onions);
+    private IEditableCollectionView EditableOnionsView => (IEditableCollectionView)OnionsView;
+
+    private void CommitOnions()
+    {
+        if (EditableOnionsView.IsAddingNew == true)
+        {
+            EditableOnionsView.CommitNew();
+        }
+        if (EditableOnionsView.IsEditingItem == true)
+        {
+            EditableOnionsView.CommitEdit();
+        }
+    }
+
     private ObservableCollection<TriggerViewModel>? triggers;
     public ObservableCollection<TriggerViewModel> Triggers
     {
@@ -175,6 +203,7 @@ public class EventDetailsViewModel : PageViewModel
         IEventService eventService,
         IPortraitService portraitService,
         IOptionService optionService,
+        IOnionService onionService,
         ITriggerService triggerService,
         IEffectService effectService)
         : base(shell, mediator)
@@ -186,6 +215,7 @@ public class EventDetailsViewModel : PageViewModel
         EventService = eventService;
         PortraitService = portraitService;
         OptionService = optionService;
+        OnionService = onionService;
         TriggerService = triggerService;
         EffectService = effectService;
     }
@@ -233,6 +263,7 @@ public class EventDetailsViewModel : PageViewModel
 
         LoadPortraits();
         LoadOptions();
+        LoadOnions();
         LoadTriggers();
         LoadImmediateEffects();
         LoadAfterEffects();
@@ -267,7 +298,7 @@ public class EventDetailsViewModel : PageViewModel
         { return; }
 
         var options = EventService.GetOptions(Selected.Model)
-                    .Select(model => new OptionViewModel() { Model = model });
+            .Select(model => new OptionViewModel() { Model = model });
 
         Options = new(options);
         OptionsView.SortDescriptions.Add(new()
@@ -280,6 +311,17 @@ public class EventDetailsViewModel : PageViewModel
             PropertyName = nameof(OptionViewModel.Id),
             Direction = ListSortDirection.Ascending,
         });
+    }
+
+    private void LoadOnions()
+    {
+        if (Selected == null)
+        { return; }
+
+        var onions = EventService.GetOnions(Selected.Model)
+            .Select(model => new OnionViewModel() { Model = model });
+
+        Onions = new(onions);
     }
 
     private void LoadTriggers()
@@ -346,6 +388,7 @@ public class EventDetailsViewModel : PageViewModel
 
         SavePortraits();
         SaveOptions();
+        SaveOnions();
 
         EventService.Update(Selected.Model);
 
@@ -385,6 +428,14 @@ public class EventDetailsViewModel : PageViewModel
         foreach (var option in Options)
         {
             OptionService.Update(option.Model);
+        }
+    }
+
+    private void SaveOnions()
+    {
+        foreach (var onion in Onions)
+        {
+            OnionService.Update(onion.Model);
         }
     }
 
@@ -565,6 +616,49 @@ public class EventDetailsViewModel : PageViewModel
     private bool EditToOption(object? param)
     {
         return param is OptionViewModel;
+    }
+
+    #endregion
+
+    #region Onion Commands
+
+    private RelayCommand? createOnionCommand;
+    public RelayCommand CreateOnionCommand => createOnionCommand ??= new(CreateOnion);
+
+    private void CreateOnion()
+    {
+        if (Selected == null)
+        { return; }
+
+        Onion model = new() { EventId = Selected.Id };
+        OnionService.Insert(model);
+
+        OnionViewModel observable = new() { Model = model };
+
+        Onions.Add(observable);
+        OnionsView.MoveCurrentTo(observable);
+    }
+
+    private RelayCommand<object>? deleteOnionCommand;
+    public RelayCommand<object> DeleteOnionCommand => deleteOnionCommand ??= new(DeleteOnion, CanDeleteOnion);
+
+    private void DeleteOnion(object? param)
+    {
+        if (param is not OnionViewModel observable)
+        { return; }
+
+        CommitOnions();
+
+        Onion model = observable.Model;
+        OnionService.Delete(model);
+
+        Onions.Remove(observable);
+
+        Shell.ValidatePages();
+    }
+    private bool CanDeleteOnion(object? param)
+    {
+        return param is OnionViewModel;
     }
 
     #endregion

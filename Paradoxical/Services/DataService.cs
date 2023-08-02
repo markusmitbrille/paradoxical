@@ -88,6 +88,8 @@ public class DataService : IDataService
         Connection.CreateTable<OptionTrigger>();
         Connection.CreateTable<OptionEffect>();
 
+        Connection.CreateTable<Onion>();
+
         Connection.CreateTable<Decision>();
         Connection.CreateTable<DecisionShownTrigger>();
         Connection.CreateTable<DecisionFailureTrigger>();
@@ -117,6 +119,8 @@ public class DataService : IDataService
         Connection.DropTable<OptionTrigger>();
         Connection.DropTable<OptionEffect>();
 
+        Connection.DropTable<Onion>();
+
         Connection.DropTable<Decision>();
         Connection.DropTable<DecisionShownTrigger>();
         Connection.DropTable<DecisionFailureTrigger>();
@@ -145,6 +149,8 @@ public class DataService : IDataService
         Connection.DeleteAll<Option>();
         Connection.DeleteAll<OptionTrigger>();
         Connection.DeleteAll<OptionEffect>();
+
+        Connection.DeleteAll<Onion>();
 
         Connection.DeleteAll<Decision>();
         Connection.DeleteAll<DecisionShownTrigger>();

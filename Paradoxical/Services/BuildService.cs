@@ -2,6 +2,7 @@
 using Paradoxical.Model.Elements;
 using Paradoxical.Services.Elements;
 using Paradoxical.Services.Entities;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ public interface IBuildService
     void WriteDecisionsFile(TextWriter writer);
     void WriteTriggersFile(TextWriter writer);
     void WriteEffectsFile(TextWriter writer);
+    void WriteOnionsFile(TextWriter writer);
     void WriteLocFile(TextWriter writer);
 }
 
@@ -25,7 +27,7 @@ public class BuildService : IBuildService
     private const string COMMON_DIR = "common";
     private const string SCRIPTED_TRIGGERS_DIR = "common/scripted_triggers";
     private const string SCRIPTED_EFFECTS_DIR = "common/scripted_effects";
-    private const string ON_ACTION_DIR = "common/on_action";
+    private const string ONION_DIR = "common/on_action";
     private const string DECISIONS_DIR = "common/decisions";
     private const string LOCALIZATION_DIR = "localization";
     private const string LOCALIZATION_ENGLISH_DIR = "localization/english";
@@ -34,6 +36,7 @@ public class BuildService : IBuildService
     private string DecisionsFile => $"{modService.GetPrefix()}_decisions.txt";
     private string TriggersFile => $"{modService.GetPrefix()}_triggers.txt";
     private string EffectsFile => $"{modService.GetPrefix()}_effects.txt";
+    private string OnionsFile => $"{modService.GetPrefix()}_on_actions.txt";
     private string LocFile => $"{modService.GetPrefix()}_l_english.yml";
 
     private readonly IModService modService;
@@ -42,6 +45,7 @@ public class BuildService : IBuildService
 
     private readonly IEventService eventService;
     private readonly IOptionService optionService;
+    private readonly IOnionService onionService;
     private readonly IDecisionService decisionService;
     private readonly IPortraitService portraitService;
     private readonly ITriggerService triggerService;
@@ -52,6 +56,7 @@ public class BuildService : IBuildService
         IScriptService scriptService,
         IEventService eventService,
         IOptionService optionService,
+        IOnionService onionService,
         IDecisionService decisionService,
         IPortraitService portraitService,
         ITriggerService triggerService,
@@ -63,6 +68,7 @@ public class BuildService : IBuildService
 
         this.eventService = eventService;
         this.optionService = optionService;
+        this.onionService = onionService;
         this.decisionService = decisionService;
         this.portraitService = portraitService;
         this.triggerService = triggerService;
@@ -89,6 +95,7 @@ public class BuildService : IBuildService
         Directory.CreateDirectory(GetCommonDir(dir, file));
         Directory.CreateDirectory(GetScriptedTriggersDir(dir, file));
         Directory.CreateDirectory(GetScriptedEffectsDir(dir, file));
+        Directory.CreateDirectory(GetOnionsDir(dir, file));
         Directory.CreateDirectory(GetLocDir(dir, file));
         Directory.CreateDirectory(GetEnglishLocDir(dir, file));
 
@@ -120,6 +127,11 @@ public class BuildService : IBuildService
         using (StreamWriter writer = new(GetEffectsFilePath(dir, file), encoding, options))
         {
             WriteEffectsFile(writer);
+        }
+
+        using (StreamWriter writer = new(GetOnionFilePath(dir, file), encoding, options))
+        {
+            WriteOnionsFile(writer);
         }
 
         using (StreamWriter writer = new(GetLocFilePath(dir, file), encoding, options))
@@ -160,6 +172,11 @@ public class BuildService : IBuildService
         return Path.Combine(dir, file, SCRIPTED_EFFECTS_DIR);
     }
 
+    private static string GetOnionsDir(string dir, string file)
+    {
+        return Path.Combine(dir, file, ONION_DIR);
+    }
+
     private static string GetLocDir(string dir, string file)
     {
         return Path.Combine(dir, file, LOCALIZATION_DIR);
@@ -198,6 +215,11 @@ public class BuildService : IBuildService
     private string GetEffectsFilePath(string dir, string file)
     {
         return Path.Combine(GetScriptedEffectsDir(dir, file), EffectsFile);
+    }
+
+    private string GetOnionFilePath(string dir, string file)
+    {
+        return Path.Combine(GetOnionsDir(dir, file), OnionsFile);
     }
 
     private string GetLocFilePath(string dir, string file)
@@ -300,6 +322,54 @@ public class BuildService : IBuildService
             ParadoxText.IndentLevel = 0;
 
             element.Write(writer, modService);
+            writer.WriteLine();
+        }
+    }
+
+    public void WriteOnionsFile(TextWriter writer)
+    {
+        writer.WriteLine($"# {modService.GetModName()} On-Actions");
+        writer.WriteLine();
+
+        foreach (var onions in onionService.Get().GroupBy(onion => onion.Name))
+        {
+            string name = onions.Key;
+
+            writer.Indent().WriteLine($"{name} = {{");
+            ParadoxText.IndentLevel++;
+
+            if (onions.Any(onion => onion.Random == false))
+            {
+                writer.Indent().WriteLine("events = {");
+                ParadoxText.IndentLevel++;
+
+                foreach (var onion in onions.Where(onion => onion.Random == false))
+                {
+                    var evt = onionService.GetEvent(onion);
+                    writer.Indent().WriteLine($"{evt.GetQualifiedName(modService)}");
+                }
+
+                ParadoxText.IndentLevel--;
+                writer.Indent().WriteLine("}");
+            }
+            if (onions.Any(onion => onion.Random == true))
+            {
+                writer.Indent().WriteLine("random_events = {");
+                ParadoxText.IndentLevel++;
+
+                foreach (var onion in onions.Where(onion => onion.Random == true))
+                {
+                    var evt = onionService.GetEvent(onion);
+                    writer.Indent().WriteLine($"{onion.Weight} = {evt.GetQualifiedName(modService)}");
+                }
+
+                ParadoxText.IndentLevel--;
+                writer.Indent().WriteLine("}");
+            }
+
+            ParadoxText.IndentLevel--;
+            writer.Indent().WriteLine("}");
+
             writer.WriteLine();
         }
     }
