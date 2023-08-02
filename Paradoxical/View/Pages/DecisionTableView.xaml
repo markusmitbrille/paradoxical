@@ -154,6 +154,24 @@
                             Width="2*"
                             FontFamily="Consolas">
 
+                            <DataGridTextColumn.ElementStyle>
+                                <Style
+                                    TargetType="TextBlock">
+                                    <Setter
+                                        Property="TextWrapping"
+                                        Value="Wrap" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
+                            <DataGridTextColumn.EditingElementStyle>
+                                <Style
+                                    TargetType="TextBox">
+                                    <Setter
+                                        Property="TextWrapping"
+                                        Value="Wrap" />
+                                </Style>
+                            </DataGridTextColumn.EditingElementStyle>
+
                             <DataGridTextColumn.Binding>
                                 <Binding
                                     Path="Title"

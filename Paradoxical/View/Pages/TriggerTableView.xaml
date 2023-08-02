@@ -203,9 +203,6 @@
                                     <Setter
                                         Property="TextWrapping"
                                         Value="Wrap" />
-                                    <Setter
-                                        Property="AcceptsReturn"
-                                        Value="true" />
                                 </Style>
                             </DataGridTextColumn.EditingElementStyle>
 
