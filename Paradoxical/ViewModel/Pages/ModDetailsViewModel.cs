@@ -102,6 +102,11 @@ public class ModDetailsViewModel : PageViewModel
             DataService.RollbackTransaction();
         }
 
+        if (Selected != null)
+        {
+            Selected = null;
+        }
+
         Load();
     }
 
