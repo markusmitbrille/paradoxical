@@ -276,7 +276,7 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>
 
         writer.WriteLine();
         writer.Indent().WriteLine($"ai_goal = {(AiGoal ? "yes" : "no")}");
-        writer.Indent().WriteLine($"ai_check_frequency = {AiCheckFrequency}");
+        writer.Indent().WriteLine($"ai_check_interval = {AiCheckFrequency}");
 
         writer.WriteLine();
         WriteAiPotential(writer, modService, decisionService);

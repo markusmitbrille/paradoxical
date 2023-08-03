@@ -352,7 +352,7 @@
                         <TextBox
                             Grid.Column="1"
                             AcceptsReturn="False"
-                            materialDesign:HintAssist.Hint="AI Check Frequency">
+                            materialDesign:HintAssist.Hint="AI Check Interval">
 
                             <TextBox.Text>
                                 <Binding
