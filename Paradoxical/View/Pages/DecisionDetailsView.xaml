@@ -554,7 +554,7 @@
                             Margin="6,12"
                             Style="{DynamicResource MaterialDesignOutlinedComboBox}"
                             ItemsSource="{Binding AllEvents}"
-                            SelectedValue="{Binding TriggeredEventId}"
+                            SelectedValue="{Binding Selected.TriggeredEventId}"
                             SelectedValuePath="Id"
                             DisplayMemberPath="Name"
                             IsEditable="True"

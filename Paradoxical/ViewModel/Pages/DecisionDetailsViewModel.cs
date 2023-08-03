@@ -99,23 +99,6 @@ public class DecisionDetailsViewModel : PageViewModel
         set => SetProperty(ref allEvents, value);
     }
 
-    public int? TriggeredEventId
-    {
-        get => Selected?.TriggeredEventId;
-        set
-        {
-            if (Selected == null)
-            { return; }
-
-            OnPropertyChanging();
-            Selected.TriggeredEventId = value;
-            OnPropertyChanged();
-
-            EditTriggeredEventCommand.NotifyCanExecuteChanged();
-            RemoveTriggeredEventCommand.NotifyCanExecuteChanged();
-        }
-    }
-
     private ObservableCollection<TriggerViewModel>? aiPotentialTriggers;
     public ObservableCollection<TriggerViewModel> AiPotentialTriggers
     {
@@ -202,6 +185,8 @@ public class DecisionDetailsViewModel : PageViewModel
     {
         model = DecisionService.Get(model);
         Selected = new() { Model = model };
+
+        Selected.PropertyChanged += TriggeredEventId_PropertyChanged;
 
         LoadShownTriggers();
         LoadFailureTriggers();
@@ -419,7 +404,7 @@ public class DecisionDetailsViewModel : PageViewModel
         EventViewModel observable = new() { Model = model };
         AllEvents.Add(observable);
 
-        TriggeredEventId = model.Id;
+        Selected.TriggeredEventId = model.Id;
     }
 
     private AsyncRelayCommand? addTriggeredEventCommand;
@@ -443,7 +428,7 @@ public class DecisionDetailsViewModel : PageViewModel
         if (Finder.Selected == null)
         { return; }
 
-        TriggeredEventId = Finder.Selected.Id;
+        Selected.TriggeredEventId = Finder.Selected.Id;
     }
 
     private RelayCommand? removeTriggeredEventCommand;
@@ -454,14 +439,14 @@ public class DecisionDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
-        if (TriggeredEventId == null)
+        if (Selected.TriggeredEventId == null)
         { return; }
 
-        TriggeredEventId = null;
+        Selected.TriggeredEventId = null;
     }
     private bool CanRemoveTriggeredEvent()
     {
-        return TriggeredEventId != null;
+        return Selected != null && Selected.TriggeredEventId != null;
     }
 
     private RelayCommand? editTriggeredEventCommand;
@@ -472,17 +457,26 @@ public class DecisionDetailsViewModel : PageViewModel
         if (Selected == null)
         { return; }
 
-        if (TriggeredEventId == null)
+        if (Selected.TriggeredEventId == null)
         { return; }
 
-        Event model = EventService.Get(TriggeredEventId.Value);
+        Event model = EventService.Get(Selected.TriggeredEventId.Value);
 
         var page = Shell.Navigate<EventDetailsViewModel>();
         page.Load(model);
     }
     private bool CanEditTriggeredEvent()
     {
-        return TriggeredEventId != null;
+        return Selected != null && Selected.TriggeredEventId != null;
+    }
+
+    private void TriggeredEventId_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(OptionViewModel.TriggeredEventId))
+        { return; }
+
+        RemoveTriggeredEventCommand.NotifyCanExecuteChanged();
+        EditTriggeredEventCommand.NotifyCanExecuteChanged();
     }
 
     #endregion
