@@ -720,6 +720,10 @@ public partial class ScriptBox : TextBox
             text = text.Insert(index, "\"");
             index += 1;
         }
+        else if (index < text.Length && text[index] == '\"')
+        {
+            index += 1;
+        }
         else
         {
             text = text.Insert(index, "\"\"");
