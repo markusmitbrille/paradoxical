@@ -106,6 +106,7 @@
 
                         <DataGridTemplateColumn
                             Header="ID"
+                            Width="1*"
                             IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -123,7 +124,7 @@
 
                         <DataGridTextColumn
                             Header="Name"
-                            Width="2*">
+                            Width="9*">
 
                             <DataGridTextColumn.Binding>
                                 <Binding
@@ -137,84 +138,6 @@
                                         <rules:NameRule
                                             ValidatesOnTargetUpdated="True" />
                                     </Binding.ValidationRules>
-                                </Binding>
-                            </DataGridTextColumn.Binding>
-
-                        </DataGridTextColumn>
-
-                        <DataGridTextColumn
-                            Header="Code"
-                            Width="5*"
-                            FontFamily="Consolas">
-
-                            <DataGridTextColumn.ElementStyle>
-                                <Style
-                                    TargetType="TextBlock">
-                                    <Setter
-                                        Property="TextWrapping"
-                                        Value="Wrap" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-
-                            <DataGridTextColumn.EditingElementStyle>
-                                <Style
-                                    TargetType="TextBox">
-                                    <Setter
-                                        Property="TextWrapping"
-                                        Value="Wrap" />
-                                    <Setter
-                                        Property="AcceptsReturn"
-                                        Value="true" />
-                                </Style>
-                            </DataGridTextColumn.EditingElementStyle>
-
-                            <DataGridTextColumn.Binding>
-                                <Binding
-                                    Path="Code"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged">
-
-                                    <Binding.Converter>
-                                        <converters:ScriptConverter />
-                                    </Binding.Converter>
-
-                                </Binding>
-                            </DataGridTextColumn.Binding>
-
-                        </DataGridTextColumn>
-
-                        <DataGridTextColumn
-                            Header="Tooltip"
-                            Width="5*">
-
-                            <DataGridTextColumn.ElementStyle>
-                                <Style
-                                    TargetType="TextBlock">
-                                    <Setter
-                                        Property="TextWrapping"
-                                        Value="Wrap" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-
-                            <DataGridTextColumn.EditingElementStyle>
-                                <Style
-                                    TargetType="TextBox">
-                                    <Setter
-                                        Property="TextWrapping"
-                                        Value="Wrap" />
-                                </Style>
-                            </DataGridTextColumn.EditingElementStyle>
-
-                            <DataGridTextColumn.Binding>
-                                <Binding
-                                    Path="Tooltip"
-                                    Mode="TwoWay"
-                                    UpdateSourceTrigger="PropertyChanged">
-
-                                    <Binding.Converter>
-                                        <converters:ScriptConverter />
-                                    </Binding.Converter>
-
                                 </Binding>
                             </DataGridTextColumn.Binding>
 
