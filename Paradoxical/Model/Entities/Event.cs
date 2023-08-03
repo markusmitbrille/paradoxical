@@ -75,7 +75,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
 
     public string GetQualifiedName(IModService modService)
     {
-        return $"{modService.GetPrefix()}_evt_{Id}";
+        return $"{modService.GetPrefix()}.{Id}";
     }
 
     public string GetLocationKey(IModService modService)
