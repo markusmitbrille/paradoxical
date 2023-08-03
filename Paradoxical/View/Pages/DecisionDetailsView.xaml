@@ -105,6 +105,22 @@
                     Content="{materialDesign:PackIcon Kind=Reload}"
                     ToolTip="Reload" />
 
+                <Separator />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding EditPreviousCommand}"
+                    CommandParameter="{Binding Selected}"
+                    Content="{materialDesign:PackIcon Kind=ArrowLeft}"
+                    ToolTip="Go to previous Event" />
+
+                <Button
+                    Margin="4,0"
+                    Command="{Binding EditNextCommand}"
+                    CommandParameter="{Binding Selected}"
+                    Content="{materialDesign:PackIcon Kind=ArrowRight}"
+                    ToolTip="Go to next Event" />
+
             </ToolBar>
         </ToolBarTray>
 

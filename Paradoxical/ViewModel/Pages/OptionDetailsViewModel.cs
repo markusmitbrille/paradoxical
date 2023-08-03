@@ -318,10 +318,10 @@ public class OptionDetailsViewModel : PageViewModel
         OnPropertyChanged(nameof(Output));
     }
 
-    private RelayCommand<OptionViewModel>? editPreviousOptionCommand;
-    public RelayCommand<OptionViewModel> EditPreviousOptionCommand => editPreviousOptionCommand ??= new(EditPreviousOption, CanEditPreviousOption);
+    private RelayCommand<OptionViewModel>? editPreviousCommand;
+    public RelayCommand<OptionViewModel> EditPreviousCommand => editPreviousCommand ??= new(EditPrevious, CanEditPrevious);
 
-    private void EditPreviousOption(OptionViewModel? observable)
+    private void EditPrevious(OptionViewModel? observable)
     {
         if (observable == null)
         { return; }
@@ -342,7 +342,7 @@ public class OptionDetailsViewModel : PageViewModel
         var page = Shell.Navigate<OptionDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanEditPreviousOption(OptionViewModel? observable)
+    private bool CanEditPrevious(OptionViewModel? observable)
     {
         if (observable == null)
         { return false; }
@@ -357,10 +357,10 @@ public class OptionDetailsViewModel : PageViewModel
         return index >= 0;
     }
 
-    private RelayCommand<OptionViewModel>? editNextOptionCommand;
-    public RelayCommand<OptionViewModel> EditNextOptionCommand => editNextOptionCommand ??= new(EditNextOption, CanEditNextOption);
+    private RelayCommand<OptionViewModel>? editNextCommand;
+    public RelayCommand<OptionViewModel> EditNextCommand => editNextCommand ??= new(EditNext, CanEditNext);
 
-    private void EditNextOption(OptionViewModel? observable)
+    private void EditNext(OptionViewModel? observable)
     {
         if (observable == null)
         { return; }
@@ -381,7 +381,7 @@ public class OptionDetailsViewModel : PageViewModel
         var page = Shell.Navigate<OptionDetailsViewModel>();
         page.Load(model);
     }
-    private bool CanEditNextOption(OptionViewModel? observable)
+    private bool CanEditNext(OptionViewModel? observable)
     {
         if (observable == null)
         { return false; }

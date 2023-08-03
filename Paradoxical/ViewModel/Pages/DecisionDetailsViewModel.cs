@@ -356,6 +356,76 @@ public class DecisionDetailsViewModel : PageViewModel
         OnPropertyChanged(nameof(Output));
     }
 
+    private RelayCommand<DecisionViewModel>? editPreviousCommand;
+    public RelayCommand<DecisionViewModel> EditPreviousCommand => editPreviousCommand ??= new(EditPrevious, CanEditPrevious);
+
+    private void EditPrevious(DecisionViewModel? observable)
+    {
+        if (observable == null)
+        { return; }
+
+        var siblings = DecisionService.Get().ToList();
+        siblings.Sort();
+
+        int index = siblings.IndexOf(observable.Model) - 1;
+        if (index < 0)
+        {
+            return;
+        }
+
+        var model = siblings[index];
+
+        var page = Shell.Navigate<DecisionDetailsViewModel>();
+        page.Load(model);
+    }
+    private bool CanEditPrevious(DecisionViewModel? observable)
+    {
+        if (observable == null)
+        { return false; }
+
+        var siblings = DecisionService.Get().ToList();
+        siblings.Sort();
+
+        int index = siblings.IndexOf(observable.Model) - 1;
+
+        return index >= 0;
+    }
+
+    private RelayCommand<DecisionViewModel>? editNextCommand;
+    public RelayCommand<DecisionViewModel> EditNextCommand => editNextCommand ??= new(EditNext, CanEditNext);
+
+    private void EditNext(DecisionViewModel? observable)
+    {
+        if (observable == null)
+        { return; }
+
+        var siblings = DecisionService.Get().ToList();
+        siblings.Sort();
+
+        int index = siblings.IndexOf(observable.Model) + 1;
+        if (index >= siblings.Count)
+        {
+            return;
+        }
+
+        var model = siblings[index];
+
+        var page = Shell.Navigate<DecisionDetailsViewModel>();
+        page.Load(model);
+    }
+    private bool CanEditNext(DecisionViewModel? observable)
+    {
+        if (observable == null)
+        { return false; }
+
+        var siblings = DecisionService.Get().ToList();
+        siblings.Sort();
+
+        int index = siblings.IndexOf(observable.Model) + 1;
+
+        return index < siblings.Count;
+    }
+
     #region Flow Commands
 
     private RelayCommand? createTriggeredEventCommand;

@@ -11,7 +11,7 @@ using System.Linq;
 namespace Paradoxical.Model.Elements;
 
 [Table("decisions")]
-public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>
+public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, IComparable<Decision>
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
@@ -704,6 +704,11 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>
         return HashCode.Combine(id);
     }
 
+    public int CompareTo(Decision? other)
+    {
+        return Comparer<string?>.Default.Compare(name, other?.name);
+    }
+
     public static bool operator ==(Decision? left, Decision? right)
     {
         return EqualityComparer<Decision>.Default.Equals(left, right);
@@ -712,5 +717,25 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>
     public static bool operator !=(Decision? left, Decision? right)
     {
         return !(left == right);
+    }
+
+    public static bool operator <(Decision left, Decision right)
+    {
+        return left.CompareTo(right) < 0;
+    }
+
+    public static bool operator <=(Decision left, Decision right)
+    {
+        return left.CompareTo(right) <= 0;
+    }
+
+    public static bool operator >(Decision left, Decision right)
+    {
+        return left.CompareTo(right) > 0;
+    }
+
+    public static bool operator >=(Decision left, Decision right)
+    {
+        return left.CompareTo(right) >= 0;
     }
 }

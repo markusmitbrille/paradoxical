@@ -11,7 +11,7 @@ using System.Linq;
 namespace Paradoxical.Model.Elements;
 
 [Table("events")]
-public class Event : IEntity, IModel, IElement, IEquatable<Event?>
+public class Event : IEntity, IModel, IElement, IEquatable<Event?>, IComparable<Event>
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
@@ -330,6 +330,11 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
         return HashCode.Combine(id);
     }
 
+    public int CompareTo(Event? other)
+    {
+        return Comparer<string?>.Default.Compare(name, other?.name);
+    }
+
     public static bool operator ==(Event? left, Event? right)
     {
         return EqualityComparer<Event>.Default.Equals(left, right);
@@ -338,5 +343,25 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>
     public static bool operator !=(Event? left, Event? right)
     {
         return !(left == right);
+    }
+
+    public static bool operator <(Event left, Event right)
+    {
+        return left.CompareTo(right) < 0;
+    }
+
+    public static bool operator <=(Event left, Event right)
+    {
+        return left.CompareTo(right) <= 0;
+    }
+
+    public static bool operator >(Event left, Event right)
+    {
+        return left.CompareTo(right) > 0;
+    }
+
+    public static bool operator >=(Event left, Event right)
+    {
+        return left.CompareTo(right) >= 0;
     }
 }

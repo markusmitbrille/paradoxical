@@ -557,6 +557,76 @@ public class EventDetailsViewModel : PageViewModel
         OnPropertyChanged(nameof(Output));
     }
 
+    private RelayCommand<EventViewModel>? editPreviousCommand;
+    public RelayCommand<EventViewModel> EditPreviousCommand => editPreviousCommand ??= new(EditPrevious, CanEditPrevious);
+
+    private void EditPrevious(EventViewModel? observable)
+    {
+        if (observable == null)
+        { return; }
+
+        var siblings = EventService.Get().ToList();
+        siblings.Sort();
+
+        int index = siblings.IndexOf(observable.Model) - 1;
+        if (index < 0)
+        {
+            return;
+        }
+
+        var model = siblings[index];
+
+        var page = Shell.Navigate<EventDetailsViewModel>();
+        page.Load(model);
+    }
+    private bool CanEditPrevious(EventViewModel? observable)
+    {
+        if (observable == null)
+        { return false; }
+
+        var siblings = EventService.Get().ToList();
+        siblings.Sort();
+
+        int index = siblings.IndexOf(observable.Model) - 1;
+
+        return index >= 0;
+    }
+
+    private RelayCommand<EventViewModel>? editNextCommand;
+    public RelayCommand<EventViewModel> EditNextCommand => editNextCommand ??= new(EditNext, CanEditNext);
+
+    private void EditNext(EventViewModel? observable)
+    {
+        if (observable == null)
+        { return; }
+
+        var siblings = EventService.Get().ToList();
+        siblings.Sort();
+
+        int index = siblings.IndexOf(observable.Model) + 1;
+        if (index >= siblings.Count)
+        {
+            return;
+        }
+
+        var model = siblings[index];
+
+        var page = Shell.Navigate<EventDetailsViewModel>();
+        page.Load(model);
+    }
+    private bool CanEditNext(EventViewModel? observable)
+    {
+        if (observable == null)
+        { return false; }
+
+        var siblings = EventService.Get().ToList();
+        siblings.Sort();
+
+        int index = siblings.IndexOf(observable.Model) + 1;
+
+        return index < siblings.Count;
+    }
+
     #region Option Commands
 
     private RelayCommand? createOptionCommand;
