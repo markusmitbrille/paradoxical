@@ -107,9 +107,23 @@
                         <DataGridTemplateColumn
                             Header="ID"
                             IsReadOnly="True">
+
+                            <DataGridTemplateColumn.HeaderStyle>
+                                <Style
+                                    TargetType="DataGridColumnHeader"
+                                    BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+
+                                    <Setter
+                                        Property="HorizontalContentAlignment"
+                                        Value="Right" />
+
+                                </Style>
+                            </DataGridTemplateColumn.HeaderStyle>
+
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock>
+                                    <TextBlock
+                                        TextAlignment="Right">
                                         <Hyperlink
                                             Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                             CommandParameter="{Binding}">
@@ -119,6 +133,7 @@
                                     </TextBlock>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
+
                         </DataGridTemplateColumn>
 
                         <DataGridTextColumn
