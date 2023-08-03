@@ -244,6 +244,7 @@
 
                     <view:ScriptBox
                         Grid.Row="1"
+                        FontFamily="Consolas"
                         AcceptsReturn="False"
                         AcceptsTab="False"
                         AcceptsDot="True"
@@ -268,6 +269,7 @@
 
                     <view:ScriptBox
                         Grid.Row="2"
+                        FontFamily="Consolas"
                         AcceptsReturn="True"
                         AcceptsTab="False"
                         AcceptsDot="True"

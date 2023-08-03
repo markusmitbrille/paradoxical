@@ -134,6 +134,7 @@
 
                         <view:ScriptBox
                             Grid.Column="0"
+                            FontFamily="Consolas"
                             AcceptsReturn="False"
                             AcceptsTab="False"
                             AcceptsDot="True"
@@ -177,6 +178,7 @@
                     </Grid>
 
                     <view:ScriptBox
+                        FontFamily="Consolas"
                         AcceptsReturn="False"
                         AcceptsTab="False"
                         AcceptsDot="True"
