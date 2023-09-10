@@ -6,9 +6,9 @@ using System.Windows.Input;
 
 namespace Paradoxical.View;
 
-public partial class DecisionTableView : UserControl
+public partial class DecisionPageView : UserControl
 {
-    public DecisionTableView()
+    public DecisionPageView()
     {
         InitializeComponent();
     }

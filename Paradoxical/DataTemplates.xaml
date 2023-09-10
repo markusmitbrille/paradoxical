@@ -11,22 +11,22 @@
 
     <DataTemplate
         DataType="{x:Type viewmodel:AboutViewModel}">
-        <view:AboutView />
+        <view:AboutPageView />
     </DataTemplate>
 
     <DataTemplate
         DataType="{x:Type viewmodel:ModDetailsViewModel}">
-        <view:ModDetailsView />
+        <view:ModPageView />
     </DataTemplate>
 
     <DataTemplate
         DataType="{x:Type viewmodel:OutputViewModel}">
-        <view:OutputView />
+        <view:OutputPageView />
     </DataTemplate>
 
     <DataTemplate
         DataType="{x:Type viewmodel:ScriptTableViewModel}">
-        <view:ScriptTableView />
+        <view:ScriptPageView />
     </DataTemplate>
 
     <DataTemplate
@@ -36,7 +36,7 @@
 
     <DataTemplate
         DataType="{x:Type viewmodel:EventTableViewModel}">
-        <view:EventTableView />
+        <view:EventPageView />
     </DataTemplate>
 
     <DataTemplate
@@ -51,7 +51,7 @@
 
     <DataTemplate
         DataType="{x:Type viewmodel:DecisionTableViewModel}">
-        <view:DecisionTableView />
+        <view:DecisionPageView />
     </DataTemplate>
 
     <DataTemplate
@@ -61,7 +61,7 @@
 
     <DataTemplate
         DataType="{x:Type viewmodel:TriggerTableViewModel}">
-        <view:TriggerTableView />
+        <view:TriggerPageView />
     </DataTemplate>
 
     <DataTemplate
@@ -71,7 +71,7 @@
 
     <DataTemplate
         DataType="{x:Type viewmodel:EffectTableViewModel}">
-        <view:EffectTableView />
+        <view:EffectPageView />
     </DataTemplate>
 
     <DataTemplate

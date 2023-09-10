@@ -4,9 +4,9 @@ using System.Windows.Input;
 
 namespace Paradoxical.View;
 
-public partial class TriggerTableView : UserControl
+public partial class EffectPageView : UserControl
 {
-    public TriggerTableView()
+    public EffectPageView()
     {
         InitializeComponent();
     }

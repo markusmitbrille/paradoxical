@@ -62,10 +62,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="View\Pages\ScriptDetailsView.xaml.cs">
+    <Compile Update="View\Details\ScriptDetailsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\Pages\EffectDetailsView.xaml.cs">
+    <Compile Update="View\Details\EffectDetailsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

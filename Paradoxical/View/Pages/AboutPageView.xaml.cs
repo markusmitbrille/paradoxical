@@ -4,9 +4,9 @@ using System.Windows.Navigation;
 
 namespace Paradoxical.View;
 
-public partial class AboutView : UserControl
+public partial class AboutPageView : UserControl
 {
-    public AboutView()
+    public AboutPageView()
     {
         InitializeComponent();
     }

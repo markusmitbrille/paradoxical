@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="Paradoxical.View.TriggerTableView"
+    x:Class="Paradoxical.View.EffectPageView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,7 +10,7 @@
     xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance {x:Type viewmodel:TriggerTableViewModel}}"
+    d:DataContext="{d:DesignInstance {x:Type viewmodel:EffectTableViewModel}}"
     d:DesignWidth="800">
 
     <DockPanel>
@@ -27,21 +27,21 @@
                     Command="{Binding CreateCommand}"
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=Add}"
-                    ToolTip="Create Trigger" />
+                    ToolTip="Create Effect" />
 
                 <Button
                     Margin="4,0"
                     Command="{Binding DeleteCommand}"
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=Delete}"
-                    ToolTip="Delete Trigger" />
+                    ToolTip="Delete Effect" />
 
                 <Button
                     Margin="4,0"
                     Command="{Binding EditCommand}"
                     CommandParameter="{Binding Selected}"
                     Content="{materialDesign:PackIcon Kind=Edit}"
-                    ToolTip="Edit Trigger" />
+                    ToolTip="Edit Effect" />
 
                 <Separator />
 
@@ -64,7 +64,7 @@
                     Margin="4,0"
                     Style="{DynamicResource MaterialDesignFilledTextBox}"
                     Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    materialDesign:HintAssist.Hint="Filter Triggers …"
+                    materialDesign:HintAssist.Hint="Filter Effects …"
                     materialDesign:TextFieldAssist.HasClearButton="True" />
 
             </ToolBar>

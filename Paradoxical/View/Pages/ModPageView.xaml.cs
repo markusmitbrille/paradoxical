@@ -2,9 +2,9 @@
 
 namespace Paradoxical.View;
 
-public partial class ModDetailsView : UserControl
+public partial class ModPageView : UserControl
 {
-    public ModDetailsView()
+    public ModPageView()
     {
         InitializeComponent();
     }
