@@ -238,8 +238,6 @@ public class DecisionTableViewModel : PageViewModel
         DecisionService.Delete(model);
 
         Items.Remove(observable);
-
-        Shell.ValidatePages();
     }
     private bool CanDelete(object? param)
     {

@@ -240,8 +240,6 @@ public class ScriptTableViewModel : PageViewModel
         ScriptService.Delete(model);
 
         Items.Remove(observable);
-
-        Shell.ValidatePages();
     }
     private bool CanDelete(object? param)
     {

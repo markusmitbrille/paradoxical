@@ -342,7 +342,6 @@ public class DecisionDetailsViewModel : PageViewModel
         DecisionService.Delete(Selected.Model);
 
         Shell.Navigate<DecisionTableViewModel>();
-        Shell.InvalidatePage(this);
     }
 
     private RelayCommand? refreshOutputCommand;

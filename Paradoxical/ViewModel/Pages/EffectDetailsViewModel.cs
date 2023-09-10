@@ -205,7 +205,6 @@ public class EffectDetailsViewModel : PageViewModel
         EffectService.Delete(Selected.Model);
 
         Shell.Navigate<EffectTableViewModel>();
-        Shell.InvalidatePage(this);
     }
 
     private RelayCommand? refreshOutputCommand;

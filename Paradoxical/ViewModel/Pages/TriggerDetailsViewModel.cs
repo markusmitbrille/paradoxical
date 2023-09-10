@@ -205,7 +205,6 @@ public class TriggerDetailsViewModel : PageViewModel
         TriggerService.Delete(Selected.Model);
 
         Shell.Navigate<TriggerTableViewModel>();
-        Shell.InvalidatePage(this);
     }
 
     private RelayCommand? refreshOutputCommand;

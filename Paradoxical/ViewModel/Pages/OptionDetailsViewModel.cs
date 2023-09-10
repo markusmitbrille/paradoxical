@@ -303,8 +303,6 @@ public class OptionDetailsViewModel : PageViewModel
 
         var page = Shell.Navigate<EventDetailsViewModel>();
         page.Load(owner);
-
-        Shell.InvalidatePage(this);
     }
 
     private RelayCommand? refreshOutputCommand;

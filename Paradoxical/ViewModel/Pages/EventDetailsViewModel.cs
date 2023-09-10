@@ -543,7 +543,6 @@ public class EventDetailsViewModel : PageViewModel
         EventService.Delete(Selected.Model);
 
         Shell.Navigate<EventTableViewModel>();
-        Shell.InvalidatePage(this);
     }
 
     private RelayCommand? refreshOutputCommand;
@@ -660,8 +659,6 @@ public class EventDetailsViewModel : PageViewModel
         OptionService.Delete(model);
 
         Options.Remove(observable);
-
-        Shell.ValidatePages();
     }
     private bool CanDeleteOption(object? param)
     {
@@ -723,8 +720,6 @@ public class EventDetailsViewModel : PageViewModel
         OnionService.Delete(model);
 
         Onions.Remove(observable);
-
-        Shell.ValidatePages();
     }
     private bool CanDeleteOnion(object? param)
     {

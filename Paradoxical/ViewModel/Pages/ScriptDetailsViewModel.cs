@@ -188,7 +188,6 @@ public class ScriptDetailsViewModel : PageViewModel
         ScriptService.Delete(Selected.Model);
 
         Shell.Navigate<ScriptTableViewModel>();
-        Shell.InvalidatePage(this);
     }
 
     #region Equality

@@ -34,15 +34,9 @@ public interface IShell
     public PageViewModel? CurrentPage { get; }
 
     public T Navigate<T>() where T : PageViewModel;
-
     public void NavigatePage(PageViewModel? page);
-    public void InvalidatePage(PageViewModel? page);
-    public void ValidatePages();
 
     public void ClearPage();
-    public void GoHome();
-    public void GoBack();
-    public void GoForward();
 }
 
 public class Shell : ObservableObject, IShell
@@ -180,7 +174,7 @@ public class Shell : ObservableObject, IShell
 
         ClearPage();
         FileService.New();
-        GoHome();
+        GoToInfo();
     }
 
     private RelayCommand? openCommand;
@@ -192,7 +186,7 @@ public class Shell : ObservableObject, IShell
 
         ClearPage();
         FileService.Open();
-        GoHome();
+        GoToInfo();
     }
 
     private RelayCommand? saveCommand;
@@ -218,7 +212,7 @@ public class Shell : ObservableObject, IShell
 
         ClearPage();
         FileService.Backup();
-        GoHome();
+        GoToInfo();
     }
 
     private RelayCommand? exportCommand;
@@ -381,15 +375,9 @@ if you don't save them.",
             currentPage = value;
             currentPage?.OnNavigatedTo();
 
-            GoForwardCommand.NotifyCanExecuteChanged();
-            GoBackCommand.NotifyCanExecuteChanged();
-
             OnPropertyChanged();
         }
     }
-
-    private List<PageViewModel> History { get; } = new();
-    private List<PageViewModel> Future { get; } = new();
 
     public T Navigate<T>() where T : PageViewModel
     {
@@ -426,13 +414,6 @@ if you don't save them.",
         if (page == null)
         { return; }
 
-        Future.Clear();
-
-        if (CurrentPage != null && CurrentPage != History.PeekOrDefault())
-        {
-            History.Push(CurrentPage);
-        }
-
         CurrentPage = page;
     }
     public bool CanNavigatePage(PageViewModel? page)
@@ -446,119 +427,9 @@ if you don't save them.",
         return true;
     }
 
-    private RelayCommand<PageViewModel?>? invalidatePageCommand;
-    public RelayCommand<PageViewModel?> InvalidatePageCommand => invalidatePageCommand ??= new(InvalidatePage, CanInvalidatePage);
-
-    public void InvalidatePage(PageViewModel? page)
-    {
-        if (page == null)
-        { return; }
-
-        History.RemoveAll(page);
-        Future.RemoveAll(page);
-
-        RemoveDuplicatePages();
-
-        GoForwardCommand.NotifyCanExecuteChanged();
-        GoBackCommand.NotifyCanExecuteChanged();
-    }
-    public bool CanInvalidatePage(PageViewModel? page)
-    {
-        if (page == null)
-        { return false; }
-
-        if (CurrentPage == page)
-        { return false; }
-
-        return true;
-    }
-
-    private RelayCommand? validatePagesCommand;
-    public RelayCommand ValidatePagesCommand => validatePagesCommand ??= new(ValidatePages);
-
-    public void ValidatePages()
-    {
-        History.RemoveAll(page => page.IsValid == false);
-        Future.RemoveAll(page => page.IsValid == false);
-
-        RemoveDuplicatePages();
-
-        GoForwardCommand.NotifyCanExecuteChanged();
-        GoBackCommand.NotifyCanExecuteChanged();
-    }
-
-    private void RemoveDuplicatePages()
-    {
-        if (CurrentPage != null)
-        {
-            History.Push(CurrentPage);
-            Future.Push(CurrentPage);
-        }
-
-        History.RemoveConsecutiveDuplicates();
-        Future.RemoveConsecutiveDuplicates();
-
-        if (CurrentPage != null)
-        {
-            History.Pop();
-            Future.Pop();
-        }
-    }
-
     public void ClearPage()
     {
-        History.Clear();
-        Future.Clear();
-
         CurrentPage = null;
-    }
-
-    private RelayCommand? goHomeCommand;
-    public RelayCommand GoHomeCommand => goHomeCommand ??= new(GoHome);
-
-    public void GoHome()
-    {
-        GoToInfo();
-    }
-
-    private RelayCommand? goBackCommand;
-    public RelayCommand GoBackCommand => goBackCommand ??= new(GoBack, CanGoBack);
-
-    public void GoBack()
-    {
-        if (History.Any() == false)
-        { return; }
-
-        if (CurrentPage != null && CurrentPage != Future.PeekOrDefault())
-        {
-            Future.Push(CurrentPage);
-        }
-
-        CurrentPage = History.Pop();
-    }
-    public bool CanGoBack()
-    {
-        return History.Any() == true;
-    }
-
-    private RelayCommand? goForwardCommand;
-    public RelayCommand GoForwardCommand => goForwardCommand ??= new(GoForward, CanGoForward);
-
-    public void GoForward()
-    {
-        if (Future.Any() == false)
-        { return; }
-
-        if (CurrentPage != null && CurrentPage != History.PeekOrDefault())
-        {
-            History.Push(CurrentPage);
-        }
-
-        CurrentPage = Future.Pop();
-    }
-    public bool CanGoForward()
-    {
-        return Future.Any() == true;
     }
 
     #endregion

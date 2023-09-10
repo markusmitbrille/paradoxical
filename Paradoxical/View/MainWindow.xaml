@@ -52,12 +52,6 @@
             Command="{Binding ExitCommand}"
             Gesture="ALT+F4" />
         <KeyBinding
-            Command="{Binding GoForwardCommand}"
-            Gesture="ALT+Right" />
-        <KeyBinding
-            Command="{Binding GoBackCommand}"
-            Gesture="ALT+Left" />
-        <KeyBinding
             Command="{Binding GoToWikiCommand}"
             Gesture="F1" />
         <KeyBinding
@@ -309,30 +303,6 @@
                             Margin="8,0"
                             Orientation="Horizontal"
                             HorizontalAlignment="Left">
-
-                            <Button
-                                Margin="8,0"
-                                Style="{StaticResource MaterialDesignToolButton}"
-                                Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"
-                                Command="{Binding GoBackCommand}"
-                                Content="{materialDesign:PackIcon Kind=ArrowLeft, Size=24}"
-                                ToolTip="Navigate Back" />
-
-                            <Button
-                                Margin="8,0"
-                                Style="{StaticResource MaterialDesignToolButton}"
-                                Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"
-                                Command="{Binding GoHomeCommand}"
-                                Content="{materialDesign:PackIcon Kind=Home, Size=24}"
-                                ToolTip="Go Home" />
-
-                            <Button
-                                Margin="8,0"
-                                Style="{StaticResource MaterialDesignToolButton}"
-                                Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"
-                                Command="{Binding GoForwardCommand}"
-                                Content="{materialDesign:PackIcon Kind=ArrowRight, Size=24}"
-                                ToolTip="Navigate Forward" />
 
                         </StackPanel>
 
