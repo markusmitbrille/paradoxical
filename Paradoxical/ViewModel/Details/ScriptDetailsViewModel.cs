@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Core;
 using Paradoxical.Messages;
 using Paradoxical.Model.Elements;
@@ -12,31 +13,11 @@ using System.Linq;
 
 namespace Paradoxical.ViewModel;
 
-public class ScriptDetailsViewModel : PageViewModel
+public class ScriptDetailsViewModel : DetailsViewModel
     , IEquatable<ScriptDetailsViewModel?>
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
-    public override string PageName => $"Script {Selected?.Id.ToString() ?? "Details"}";
-
-    private void RefreshPageName() => OnPropertyChanged(nameof(PageName));
-
-    public override bool IsValid
-    {
-        get
-        {
-            if (Selected == null)
-            { return false; }
-
-            var model = ScriptService.Find(Selected.Model);
-
-            if (model == null)
-            { return false; }
-
-            return true;
-        }
-    }
-
     public IDataService DataService { get; }
     public IModService ModService { get; }
     public IScriptService ScriptService { get; }
@@ -68,32 +49,6 @@ public class ScriptDetailsViewModel : PageViewModel
         ScriptService = scriptService;
     }
 
-    public override void OnNavigatedTo()
-    {
-        if (DataService.IsInTransaction)
-        {
-            DataService.RollbackTransaction();
-        }
-
-        Reload();
-
-        Mediator.Register<SaveMessage>(this);
-        Mediator.Register<ShutdownMessage>(this);
-    }
-
-    public override void OnNavigatingFrom()
-    {
-        Save();
-
-        if (DataService.IsInTransaction)
-        {
-            DataService.RollbackTransaction();
-        }
-
-        Mediator.Unregister<SaveMessage>(this);
-        Mediator.Unregister<ShutdownMessage>(this);
-    }
-
     void IMessageHandler<SaveMessage>.Handle(SaveMessage message)
     {
         Save();
@@ -108,8 +63,6 @@ public class ScriptDetailsViewModel : PageViewModel
     {
         model = ScriptService.Get(model);
         Selected = new() { Model = model };
-
-        RefreshPageName();
 
         DataService.BeginTransaction();
     }
@@ -143,51 +96,8 @@ public class ScriptDetailsViewModel : PageViewModel
 
         ScriptService.Update(Selected.Model);
 
-        RefreshPageName();
-
         DataService.CommitTransaction();
         DataService.BeginTransaction();
-    }
-
-    private RelayCommand? createCommand;
-    public RelayCommand CreateCommand => createCommand ??= new(Create);
-
-    private void Create()
-    {
-        Script model = new();
-        ScriptService.Insert(model);
-
-        var page = Shell.Navigate<ScriptDetailsViewModel>();
-        page.Load(model);
-    }
-
-    private RelayCommand? duplicateCommand;
-    public RelayCommand DuplicateCommand => duplicateCommand ??= new(Duplicate);
-
-    private void Duplicate()
-    {
-        if (Selected == null)
-        { return; }
-
-        Script model = new(Selected.Model);
-
-        ScriptService.Insert(model);
-
-        var page = Shell.Navigate<ScriptDetailsViewModel>();
-        page.Load(model);
-    }
-
-    private RelayCommand? deleteCommand;
-    public RelayCommand DeleteCommand => deleteCommand ??= new(Delete);
-
-    private void Delete()
-    {
-        if (Selected == null)
-        { return; }
-
-        ScriptService.Delete(Selected.Model);
-
-        Shell.Navigate<ScriptTableViewModel>();
     }
 
     #region Equality

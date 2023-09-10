@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Core;
 using Paradoxical.Extensions;
 using Paradoxical.Messages;
@@ -15,33 +16,11 @@ using System.Threading.Tasks;
 
 namespace Paradoxical.ViewModel;
 
-public class OptionDetailsViewModel : PageViewModel
+public class OptionDetailsViewModel : DetailsViewModel
     , IEquatable<OptionDetailsViewModel?>
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
-    public override string PageName => $"Option {Selected?.Id.ToString() ?? "Details"}";
-
-    private void RefreshPageName() => OnPropertyChanged(nameof(PageName));
-
-    public override bool IsValid
-    {
-        get
-        {
-            if (Selected == null)
-            { return false; }
-
-            var model = OptionService.Find(Selected.Model);
-
-            if (model == null)
-            { return false; }
-
-            return true;
-        }
-    }
-
-    public IFinder Finder { get; }
-
     public IDataService DataService { get; }
     public IModService ModService { get; }
     public IOptionService OptionService { get; }
@@ -49,6 +28,8 @@ public class OptionDetailsViewModel : PageViewModel
     public IEffectService EffectService { get; }
     public IEventService EventService { get; }
     public IPortraitService PortraitService { get; }
+
+    public IFinder Finder { get; }
 
     private int selectedTab;
     public int SelectedTab
@@ -103,18 +84,16 @@ public class OptionDetailsViewModel : PageViewModel
     public OptionDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
-        IFinder finder,
         IDataService dataService,
         IModService modService,
         IOptionService optionService,
         ITriggerService triggerService,
         IEffectService effectService,
         IEventService eventService,
-        IPortraitService portraitService)
+        IPortraitService portraitService,
+        IFinder finder)
         : base(shell, mediator)
     {
-        Finder = finder;
-
         DataService = dataService;
         ModService = modService;
         OptionService = optionService;
@@ -122,32 +101,8 @@ public class OptionDetailsViewModel : PageViewModel
         EffectService = effectService;
         EventService = eventService;
         PortraitService = portraitService;
-    }
 
-    public override void OnNavigatedTo()
-    {
-        if (DataService.IsInTransaction)
-        {
-            DataService.RollbackTransaction();
-        }
-
-        Reload();
-
-        Mediator.Register<SaveMessage>(this);
-        Mediator.Register<ShutdownMessage>(this);
-    }
-
-    public override void OnNavigatingFrom()
-    {
-        Save();
-
-        if (DataService.IsInTransaction)
-        {
-            DataService.RollbackTransaction();
-        }
-
-        Mediator.Unregister<SaveMessage>(this);
-        Mediator.Unregister<ShutdownMessage>(this);
+        Finder = finder;
     }
 
     void IMessageHandler<SaveMessage>.Handle(SaveMessage message)
@@ -171,7 +126,6 @@ public class OptionDetailsViewModel : PageViewModel
         LoadEffects();
         LoadAllEvents();
 
-        RefreshPageName();
         RefreshOutput();
 
         DataService.BeginTransaction();
@@ -239,70 +193,10 @@ public class OptionDetailsViewModel : PageViewModel
 
         OptionService.Update(Selected.Model);
 
-        RefreshPageName();
         RefreshOutput();
 
         DataService.CommitTransaction();
         DataService.BeginTransaction();
-    }
-
-    private RelayCommand? createCommand;
-    public RelayCommand CreateCommand => createCommand ??= new(Create);
-
-    private void Create()
-    {
-        if (Selected == null)
-        { return; }
-
-        Option model = new() { EventId = Selected.EventId };
-
-        OptionService.Insert(model);
-
-        var page = Shell.Navigate<OptionDetailsViewModel>();
-        page.Load(model);
-    }
-
-    private RelayCommand? duplicateCommand;
-    public RelayCommand DuplicateCommand => duplicateCommand ??= new(Duplicate);
-
-    private void Duplicate()
-    {
-        if (Selected == null)
-        { return; }
-
-        Option model = new(Selected.Model);
-        OptionService.Insert(model);
-
-        var triggers = OptionService.GetTriggers(Selected.Model);
-        foreach (var trigger in triggers)
-        {
-            OptionService.AddTrigger(model, trigger);
-        }
-
-        var effects = OptionService.GetEffects(Selected.Model);
-        foreach (var effect in effects)
-        {
-            OptionService.AddEffect(model, effect);
-        }
-
-        var page = Shell.Navigate<OptionDetailsViewModel>();
-        page.Load(model);
-    }
-
-    private RelayCommand? deleteCommand;
-    public RelayCommand DeleteCommand => deleteCommand ??= new(Delete);
-
-    private void Delete()
-    {
-        if (Selected == null)
-        { return; }
-
-        Event owner = OptionService.GetEvent(Selected.Model);
-
-        OptionService.Delete(Selected.Model);
-
-        var page = Shell.Navigate<EventDetailsViewModel>();
-        page.Load(owner);
     }
 
     private RelayCommand? refreshOutputCommand;
@@ -314,84 +208,6 @@ public class OptionDetailsViewModel : PageViewModel
         { return; }
 
         OnPropertyChanged(nameof(Output));
-    }
-
-    private RelayCommand<OptionViewModel>? editPreviousCommand;
-    public RelayCommand<OptionViewModel> EditPreviousCommand => editPreviousCommand ??= new(EditPrevious, CanEditPrevious);
-
-    private void EditPrevious(OptionViewModel? observable)
-    {
-        if (observable == null)
-        { return; }
-
-        var owner = OptionService.GetEvent(observable.Model);
-
-        var siblings = EventService.GetOptions(owner).ToList();
-        siblings.Sort();
-
-        int index = siblings.IndexOf(observable.Model) - 1;
-        if (index < 0)
-        {
-            return;
-        }
-
-        var model = siblings[index];
-
-        var page = Shell.Navigate<OptionDetailsViewModel>();
-        page.Load(model);
-    }
-    private bool CanEditPrevious(OptionViewModel? observable)
-    {
-        if (observable == null)
-        { return false; }
-
-        var owner = OptionService.GetEvent(observable.Model);
-
-        var siblings = EventService.GetOptions(owner).ToList();
-        siblings.Sort();
-
-        int index = siblings.IndexOf(observable.Model) - 1;
-
-        return index >= 0;
-    }
-
-    private RelayCommand<OptionViewModel>? editNextCommand;
-    public RelayCommand<OptionViewModel> EditNextCommand => editNextCommand ??= new(EditNext, CanEditNext);
-
-    private void EditNext(OptionViewModel? observable)
-    {
-        if (observable == null)
-        { return; }
-
-        var owner = OptionService.GetEvent(observable.Model);
-
-        var siblings = EventService.GetOptions(owner).ToList();
-        siblings.Sort();
-
-        int index = siblings.IndexOf(observable.Model) + 1;
-        if (index >= siblings.Count)
-        {
-            return;
-        }
-
-        var model = siblings[index];
-
-        var page = Shell.Navigate<OptionDetailsViewModel>();
-        page.Load(model);
-    }
-    private bool CanEditNext(OptionViewModel? observable)
-    {
-        if (observable == null)
-        { return false; }
-
-        var owner = OptionService.GetEvent(observable.Model);
-
-        var siblings = EventService.GetOptions(owner).ToList();
-        siblings.Sort();
-
-        int index = siblings.IndexOf(observable.Model) + 1;
-
-        return index < siblings.Count;
     }
 
     #region Flow Commands
@@ -500,8 +316,8 @@ public class OptionDetailsViewModel : PageViewModel
 
         Event model = EventService.Get(Selected.TriggeredEventId.Value);
 
-        var page = Shell.Navigate<EventDetailsViewModel>();
-        page.Load(model);
+        var page = Shell.Navigate<EventPageViewModel>();
+        //page.Select(model);
     }
     private bool CanEditTriggeredEvent()
     {
@@ -598,8 +414,8 @@ public class OptionDetailsViewModel : PageViewModel
 
         Trigger model = observable.Model;
 
-        var page = Shell.Navigate<TriggerDetailsViewModel>();
-        page.Load(model);
+        var page = Shell.Navigate<TriggerPageViewModel>();
+        //page.Select(model);
     }
     private bool CanEditTrigger(TriggerViewModel? observable)
     {
@@ -687,8 +503,8 @@ public class OptionDetailsViewModel : PageViewModel
 
         Effect model = observable.Model;
 
-        var page = Shell.Navigate<EffectDetailsViewModel>();
-        page.Load(model);
+        var page = Shell.Navigate<EffectPageViewModel>();
+        //page.Select(model);
     }
     private bool CanEditEffect(EffectViewModel? observable)
     {

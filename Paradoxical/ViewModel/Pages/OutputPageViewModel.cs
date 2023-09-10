@@ -17,7 +17,7 @@ using System.Windows.Controls;
 
 namespace Paradoxical.ViewModel;
 
-public class OutputViewModel : PageViewModel
+public class OutputPageViewModel : PageViewModel
 {
     public override string PageName => "Output";
 
@@ -72,7 +72,7 @@ public class OutputViewModel : PageViewModel
         set => SetProperty(ref locFileOutput, value);
     }
 
-    public OutputViewModel(
+    public OutputPageViewModel(
         IShell shell,
         IMediatorService mediator,
         IBuildService buildService)

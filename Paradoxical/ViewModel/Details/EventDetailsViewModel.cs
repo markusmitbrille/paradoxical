@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Core;
 using Paradoxical.Extensions;
 using Paradoxical.Messages;
@@ -19,33 +20,11 @@ using System.Windows.Data;
 
 namespace Paradoxical.ViewModel;
 
-public class EventDetailsViewModel : PageViewModel
+public class EventDetailsViewModel : DetailsViewModel
     , IEquatable<EventDetailsViewModel?>
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
-    public override string PageName => $"Event {Selected?.Id.ToString() ?? "Details"}";
-
-    private void RefreshPageName() => OnPropertyChanged(nameof(PageName));
-
-    public override bool IsValid
-    {
-        get
-        {
-            if (Selected == null)
-            { return false; }
-
-            var model = EventService.Find(Selected.Model);
-
-            if (model == null)
-            { return false; }
-
-            return true;
-        }
-    }
-
-    public IFinder Finder { get; }
-
     public IDataService DataService { get; }
     public IModService ModService { get; }
     public IEventService EventService { get; }
@@ -54,6 +33,8 @@ public class EventDetailsViewModel : PageViewModel
     public IOnionService OnionService { get; }
     public ITriggerService TriggerService { get; }
     public IEffectService EffectService { get; }
+
+    public IFinder Finder { get; }
 
     private int selectedTab;
     public int SelectedTab
@@ -197,7 +178,6 @@ public class EventDetailsViewModel : PageViewModel
     public EventDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
-        IFinder finder,
         IDataService dataService,
         IModService modService,
         IEventService eventService,
@@ -205,11 +185,10 @@ public class EventDetailsViewModel : PageViewModel
         IOptionService optionService,
         IOnionService onionService,
         ITriggerService triggerService,
-        IEffectService effectService)
+        IEffectService effectService,
+        IFinder finder)
         : base(shell, mediator)
     {
-        Finder = finder;
-
         DataService = dataService;
         ModService = modService;
         EventService = eventService;
@@ -218,32 +197,8 @@ public class EventDetailsViewModel : PageViewModel
         OnionService = onionService;
         TriggerService = triggerService;
         EffectService = effectService;
-    }
 
-    public override void OnNavigatedTo()
-    {
-        if (DataService.IsInTransaction)
-        {
-            DataService.RollbackTransaction();
-        }
-
-        Reload();
-
-        Mediator.Register<SaveMessage>(this);
-        Mediator.Register<ShutdownMessage>(this);
-    }
-
-    public override void OnNavigatingFrom()
-    {
-        Save();
-
-        if (DataService.IsInTransaction)
-        {
-            DataService.RollbackTransaction();
-        }
-
-        Mediator.Unregister<SaveMessage>(this);
-        Mediator.Unregister<ShutdownMessage>(this);
+        Finder = finder;
     }
 
     void IMessageHandler<SaveMessage>.Handle(SaveMessage message)
@@ -268,7 +223,6 @@ public class EventDetailsViewModel : PageViewModel
         LoadImmediateEffects();
         LoadAfterEffects();
 
-        RefreshPageName();
         RefreshOutput();
 
         DataService.BeginTransaction();
@@ -392,7 +346,6 @@ public class EventDetailsViewModel : PageViewModel
 
         EventService.Update(Selected.Model);
 
-        RefreshPageName();
         RefreshOutput();
 
         DataService.CommitTransaction();
@@ -439,112 +392,6 @@ public class EventDetailsViewModel : PageViewModel
         }
     }
 
-    private RelayCommand? createCommand;
-    public RelayCommand CreateCommand => createCommand ??= new(Create);
-
-    private void Create()
-    {
-        Event model = new();
-        EventService.Insert(model);
-
-        Portrait leftPortrait = new()
-        {
-            EventId = model.Id,
-            Position = PortraitPosition.Left,
-        };
-        Portrait rightPortrait = new()
-        {
-            EventId = model.Id,
-            Position = PortraitPosition.Right,
-        };
-        Portrait lowerLeftPortrait = new()
-        {
-            EventId = model.Id,
-            Position = PortraitPosition.LowerLeft,
-        };
-        Portrait lowerCenterPortrait = new()
-        {
-            EventId = model.Id,
-            Position = PortraitPosition.LowerCenter,
-        };
-        Portrait lowerRightPortrait = new()
-        {
-            EventId = model.Id,
-            Position = PortraitPosition.LowerRight,
-        };
-
-        PortraitService.Insert(leftPortrait);
-        PortraitService.Insert(rightPortrait);
-        PortraitService.Insert(lowerLeftPortrait);
-        PortraitService.Insert(lowerCenterPortrait);
-        PortraitService.Insert(lowerRightPortrait);
-
-        var page = Shell.Navigate<EventDetailsViewModel>();
-        page.Load(model);
-    }
-
-    private RelayCommand? duplicateCommand;
-    public RelayCommand DuplicateCommand => duplicateCommand ??= new(Duplicate);
-
-    private void Duplicate()
-    {
-        if (Selected == null)
-        { return; }
-
-        Event model = new(Selected.Model);
-        EventService.Insert(model);
-
-        var options = EventService.GetOptions(Selected.Model);
-        foreach (var option in options)
-        {
-            Option duplicate = new(option);
-            duplicate.EventId = model.Id;
-            OptionService.Insert(duplicate);
-        }
-
-        var portraits = EventService.GetPortraits(Selected.Model);
-        foreach (var portrait in portraits)
-        {
-            Portrait duplicate = new(portrait);
-            duplicate.EventId = model.Id;
-            PortraitService.Insert(duplicate);
-        }
-
-        var triggers = EventService.GetTriggers(Selected.Model);
-        foreach (var trigger in triggers)
-        {
-            EventService.AddTrigger(model, trigger);
-        }
-
-        var immediates = EventService.GetImmediates(Selected.Model);
-        foreach (var immediate in immediates)
-        {
-            EventService.AddImmediate(model, immediate);
-        }
-
-        var afters = EventService.GetAfters(Selected.Model);
-        foreach (var after in afters)
-        {
-            EventService.AddAfter(model, after);
-        }
-
-        var page = Shell.Navigate<EventDetailsViewModel>();
-        page.Load(model);
-    }
-
-    private RelayCommand? deleteCommand;
-    public RelayCommand DeleteCommand => deleteCommand ??= new(Delete);
-
-    private void Delete()
-    {
-        if (Selected == null)
-        { return; }
-
-        EventService.Delete(Selected.Model);
-
-        Shell.Navigate<EventTableViewModel>();
-    }
-
     private RelayCommand? refreshOutputCommand;
     public RelayCommand RefreshOutputCommand => refreshOutputCommand ??= new(RefreshOutput);
 
@@ -554,76 +401,6 @@ public class EventDetailsViewModel : PageViewModel
         { return; }
 
         OnPropertyChanged(nameof(Output));
-    }
-
-    private RelayCommand<EventViewModel>? editPreviousCommand;
-    public RelayCommand<EventViewModel> EditPreviousCommand => editPreviousCommand ??= new(EditPrevious, CanEditPrevious);
-
-    private void EditPrevious(EventViewModel? observable)
-    {
-        if (observable == null)
-        { return; }
-
-        var siblings = EventService.Get().ToList();
-        siblings.Sort();
-
-        int index = siblings.IndexOf(observable.Model) - 1;
-        if (index < 0)
-        {
-            return;
-        }
-
-        var model = siblings[index];
-
-        var page = Shell.Navigate<EventDetailsViewModel>();
-        page.Load(model);
-    }
-    private bool CanEditPrevious(EventViewModel? observable)
-    {
-        if (observable == null)
-        { return false; }
-
-        var siblings = EventService.Get().ToList();
-        siblings.Sort();
-
-        int index = siblings.IndexOf(observable.Model) - 1;
-
-        return index >= 0;
-    }
-
-    private RelayCommand<EventViewModel>? editNextCommand;
-    public RelayCommand<EventViewModel> EditNextCommand => editNextCommand ??= new(EditNext, CanEditNext);
-
-    private void EditNext(EventViewModel? observable)
-    {
-        if (observable == null)
-        { return; }
-
-        var siblings = EventService.Get().ToList();
-        siblings.Sort();
-
-        int index = siblings.IndexOf(observable.Model) + 1;
-        if (index >= siblings.Count)
-        {
-            return;
-        }
-
-        var model = siblings[index];
-
-        var page = Shell.Navigate<EventDetailsViewModel>();
-        page.Load(model);
-    }
-    private bool CanEditNext(EventViewModel? observable)
-    {
-        if (observable == null)
-        { return false; }
-
-        var siblings = EventService.Get().ToList();
-        siblings.Sort();
-
-        int index = siblings.IndexOf(observable.Model) + 1;
-
-        return index < siblings.Count;
     }
 
     #region Option Commands
@@ -677,8 +454,8 @@ public class EventDetailsViewModel : PageViewModel
 
         Option model = observable.Model;
 
-        var page = Shell.Navigate<OptionDetailsViewModel>();
-        page.Load(model);
+        var page = Shell.Navigate<EventPageViewModel>();
+        //page.Select(model);
     }
     private bool EditToOption(object? param)
     {
@@ -807,8 +584,8 @@ public class EventDetailsViewModel : PageViewModel
 
         Trigger model = observable.Model;
 
-        var page = Shell.Navigate<TriggerDetailsViewModel>();
-        page.Load(model);
+        var page = Shell.Navigate<TriggerPageViewModel>();
+        //page.Select(model);
     }
     private bool CanEditTrigger(TriggerViewModel? observable)
     {
@@ -896,8 +673,8 @@ public class EventDetailsViewModel : PageViewModel
 
         Effect model = observable.Model;
 
-        var page = Shell.Navigate<EffectDetailsViewModel>();
-        page.Load(model);
+        var page = Shell.Navigate<EffectPageViewModel>();
+        //page.Select(model);
     }
     private bool CanEditImmediateEffect(EffectViewModel? observable)
     {
@@ -985,8 +762,8 @@ public class EventDetailsViewModel : PageViewModel
 
         Effect model = observable.Model;
 
-        var page = Shell.Navigate<EffectDetailsViewModel>();
-        page.Load(model);
+        var page = Shell.Navigate<EffectPageViewModel>();
+        //page.Select(model);
     }
     private bool CanEditAfterEffect(EffectViewModel? observable)
     {

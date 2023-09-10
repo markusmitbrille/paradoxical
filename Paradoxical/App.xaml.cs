@@ -49,24 +49,24 @@ public partial class App : Application
         services.AddTransient<IFinder, FinderViewModel>();
 
         // misc page view models
-        services.AddSingleton<AboutViewModel>();
+        services.AddSingleton<AboutPageViewModel>();
 
-        // details page view models
-        services.AddSingleton<ModDetailsViewModel>();
-        services.AddSingleton<OutputViewModel>();
-        services.AddTransient<ScriptDetailsViewModel>();
-        services.AddTransient<EventDetailsViewModel>();
-        services.AddTransient<OptionDetailsViewModel>();
-        services.AddTransient<DecisionDetailsViewModel>();
-        services.AddTransient<TriggerDetailsViewModel>();
-        services.AddTransient<EffectDetailsViewModel>();
+        // details view models
+        services.AddSingleton<ScriptDetailsViewModel>();
+        services.AddSingleton<EventDetailsViewModel>();
+        services.AddSingleton<OptionDetailsViewModel>();
+        services.AddSingleton<DecisionDetailsViewModel>();
+        services.AddSingleton<TriggerDetailsViewModel>();
+        services.AddSingleton<EffectDetailsViewModel>();
 
-        // table page view models
-        services.AddSingleton<ScriptTableViewModel>();
-        services.AddSingleton<EventTableViewModel>();
-        services.AddSingleton<DecisionTableViewModel>();
-        services.AddSingleton<TriggerTableViewModel>();
-        services.AddSingleton<EffectTableViewModel>();
+        // page view models
+        services.AddSingleton<ModPageViewModel>();
+        services.AddSingleton<OutputPageViewModel>();
+        services.AddSingleton<ScriptPageViewModel>();
+        services.AddSingleton<EventPageViewModel>();
+        services.AddSingleton<DecisionPageViewModel>();
+        services.AddSingleton<TriggerPageViewModel>();
+        services.AddSingleton<EffectPageViewModel>();
 
         ServiceProvider = services.BuildServiceProvider();
     }

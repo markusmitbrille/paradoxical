@@ -3,11 +3,11 @@ using Paradoxical.Services;
 
 namespace Paradoxical.ViewModel;
 
-public class AboutViewModel : PageViewModel
+public class AboutPageViewModel : PageViewModel
 {
     public override string PageName => "About";
 
-    public AboutViewModel(IShell shell, IMediatorService mediator)
+    public AboutPageViewModel(IShell shell, IMediatorService mediator)
         : base(shell, mediator)
     {
     }

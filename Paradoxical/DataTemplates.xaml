@@ -10,33 +10,48 @@
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:AboutViewModel}">
+        DataType="{x:Type viewmodel:AboutPageViewModel}">
         <view:AboutPageView />
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:ModDetailsViewModel}">
+        DataType="{x:Type viewmodel:ModPageViewModel}">
         <view:ModPageView />
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:OutputViewModel}">
+        DataType="{x:Type viewmodel:OutputPageViewModel}">
         <view:OutputPageView />
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:ScriptTableViewModel}">
+        DataType="{x:Type viewmodel:ScriptPageViewModel}">
         <view:ScriptPageView />
+    </DataTemplate>
+
+    <DataTemplate
+        DataType="{x:Type viewmodel:EventPageViewModel}">
+        <view:EventPageView />
+    </DataTemplate>
+
+    <DataTemplate
+        DataType="{x:Type viewmodel:DecisionPageViewModel}">
+        <view:DecisionPageView />
+    </DataTemplate>
+
+    <DataTemplate
+        DataType="{x:Type viewmodel:TriggerPageViewModel}">
+        <view:TriggerPageView />
+    </DataTemplate>
+
+    <DataTemplate
+        DataType="{x:Type viewmodel:EffectPageViewModel}">
+        <view:EffectPageView />
     </DataTemplate>
 
     <DataTemplate
         DataType="{x:Type viewmodel:ScriptDetailsViewModel}">
         <view:ScriptDetailsView />
-    </DataTemplate>
-
-    <DataTemplate
-        DataType="{x:Type viewmodel:EventTableViewModel}">
-        <view:EventPageView />
     </DataTemplate>
 
     <DataTemplate
@@ -50,28 +65,13 @@
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:DecisionTableViewModel}">
-        <view:DecisionPageView />
-    </DataTemplate>
-
-    <DataTemplate
         DataType="{x:Type viewmodel:DecisionDetailsViewModel}">
         <view:DecisionDetailsView />
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:TriggerTableViewModel}">
-        <view:TriggerPageView />
-    </DataTemplate>
-
-    <DataTemplate
         DataType="{x:Type viewmodel:TriggerDetailsViewModel}">
         <view:TriggerDetailsView />
-    </DataTemplate>
-
-    <DataTemplate
-        DataType="{x:Type viewmodel:EffectTableViewModel}">
-        <view:EffectPageView />
     </DataTemplate>
 
     <DataTemplate

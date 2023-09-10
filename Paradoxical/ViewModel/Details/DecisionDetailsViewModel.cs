@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Core;
 using Paradoxical.Messages;
 using Paradoxical.Model.Elements;
@@ -15,33 +16,11 @@ using System.Threading.Tasks;
 
 namespace Paradoxical.ViewModel;
 
-public class DecisionDetailsViewModel : PageViewModel
+public class DecisionDetailsViewModel : DetailsViewModel
     , IEquatable<DecisionDetailsViewModel?>
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
-    public override string PageName => $"Decision {Selected?.Id.ToString() ?? "Details"}";
-
-    private void RefreshPageName() => OnPropertyChanged(nameof(PageName));
-
-    public override bool IsValid
-    {
-        get
-        {
-            if (Selected == null)
-            { return false; }
-
-            var model = DecisionService.Find(Selected.Model);
-
-            if (model == null)
-            { return false; }
-
-            return true;
-        }
-    }
-
-    public IFinder Finder { get; }
-
     public IDataService DataService { get; }
     public IModService ModService { get; }
     public IDecisionService DecisionService { get; }
@@ -49,6 +28,8 @@ public class DecisionDetailsViewModel : PageViewModel
     public IEffectService EffectService { get; }
     public IEventService EventService { get; }
     public IPortraitService PortraitService { get; }
+
+    public IFinder Finder { get; }
 
     private int selectedTab;
     public int SelectedTab
@@ -124,18 +105,16 @@ public class DecisionDetailsViewModel : PageViewModel
     public DecisionDetailsViewModel(
         IShell shell,
         IMediatorService mediator,
-        IFinder finder,
         IDataService dataService,
         IModService modService,
         IDecisionService decisionService,
         ITriggerService triggerService,
         IEffectService effectService,
         IEventService eventService,
-        IPortraitService portraitService)
+        IPortraitService portraitService,
+        IFinder finder)
         : base(shell, mediator)
     {
-        Finder = finder;
-
         DataService = dataService;
         ModService = modService;
         DecisionService = decisionService;
@@ -143,32 +122,8 @@ public class DecisionDetailsViewModel : PageViewModel
         EffectService = effectService;
         EventService = eventService;
         PortraitService = portraitService;
-    }
 
-    public override void OnNavigatedTo()
-    {
-        if (DataService.IsInTransaction)
-        {
-            DataService.RollbackTransaction();
-        }
-
-        Reload();
-
-        Mediator.Register<SaveMessage>(this);
-        Mediator.Register<ShutdownMessage>(this);
-    }
-
-    public override void OnNavigatingFrom()
-    {
-        Save();
-
-        if (DataService.IsInTransaction)
-        {
-            DataService.RollbackTransaction();
-        }
-
-        Mediator.Unregister<SaveMessage>(this);
-        Mediator.Unregister<ShutdownMessage>(this);
+        Finder = finder;
     }
 
     void IMessageHandler<SaveMessage>.Handle(SaveMessage message)
@@ -195,7 +150,6 @@ public class DecisionDetailsViewModel : PageViewModel
         LoadAllEvents();
         LoadAiPotentialTriggers();
 
-        RefreshPageName();
         RefreshOutput();
 
         DataService.BeginTransaction();
@@ -296,52 +250,10 @@ public class DecisionDetailsViewModel : PageViewModel
 
         DecisionService.Update(Selected.Model);
 
-        RefreshPageName();
         RefreshOutput();
 
         DataService.CommitTransaction();
         DataService.BeginTransaction();
-    }
-
-    private RelayCommand? createCommand;
-    public RelayCommand CreateCommand => createCommand ??= new(Create);
-
-    private void Create()
-    {
-        Decision model = new();
-        DecisionService.Insert(model);
-
-        var page = Shell.Navigate<DecisionDetailsViewModel>();
-        page.Load(model);
-    }
-
-    private RelayCommand? duplicateCommand;
-    public RelayCommand DuplicateCommand => duplicateCommand ??= new(Duplicate);
-
-    private void Duplicate()
-    {
-        if (Selected == null)
-        { return; }
-
-        Decision model = new(Selected.Model);
-
-        DecisionService.Insert(model);
-
-        var page = Shell.Navigate<DecisionDetailsViewModel>();
-        page.Load(model);
-    }
-
-    private RelayCommand? deleteCommand;
-    public RelayCommand DeleteCommand => deleteCommand ??= new(Delete);
-
-    private void Delete()
-    {
-        if (Selected == null)
-        { return; }
-
-        DecisionService.Delete(Selected.Model);
-
-        Shell.Navigate<DecisionTableViewModel>();
     }
 
     private RelayCommand? refreshOutputCommand;
@@ -353,76 +265,6 @@ public class DecisionDetailsViewModel : PageViewModel
         { return; }
 
         OnPropertyChanged(nameof(Output));
-    }
-
-    private RelayCommand<DecisionViewModel>? editPreviousCommand;
-    public RelayCommand<DecisionViewModel> EditPreviousCommand => editPreviousCommand ??= new(EditPrevious, CanEditPrevious);
-
-    private void EditPrevious(DecisionViewModel? observable)
-    {
-        if (observable == null)
-        { return; }
-
-        var siblings = DecisionService.Get().ToList();
-        siblings.Sort();
-
-        int index = siblings.IndexOf(observable.Model) - 1;
-        if (index < 0)
-        {
-            return;
-        }
-
-        var model = siblings[index];
-
-        var page = Shell.Navigate<DecisionDetailsViewModel>();
-        page.Load(model);
-    }
-    private bool CanEditPrevious(DecisionViewModel? observable)
-    {
-        if (observable == null)
-        { return false; }
-
-        var siblings = DecisionService.Get().ToList();
-        siblings.Sort();
-
-        int index = siblings.IndexOf(observable.Model) - 1;
-
-        return index >= 0;
-    }
-
-    private RelayCommand<DecisionViewModel>? editNextCommand;
-    public RelayCommand<DecisionViewModel> EditNextCommand => editNextCommand ??= new(EditNext, CanEditNext);
-
-    private void EditNext(DecisionViewModel? observable)
-    {
-        if (observable == null)
-        { return; }
-
-        var siblings = DecisionService.Get().ToList();
-        siblings.Sort();
-
-        int index = siblings.IndexOf(observable.Model) + 1;
-        if (index >= siblings.Count)
-        {
-            return;
-        }
-
-        var model = siblings[index];
-
-        var page = Shell.Navigate<DecisionDetailsViewModel>();
-        page.Load(model);
-    }
-    private bool CanEditNext(DecisionViewModel? observable)
-    {
-        if (observable == null)
-        { return false; }
-
-        var siblings = DecisionService.Get().ToList();
-        siblings.Sort();
-
-        int index = siblings.IndexOf(observable.Model) + 1;
-
-        return index < siblings.Count;
     }
 
     #region Flow Commands
@@ -531,8 +373,8 @@ public class DecisionDetailsViewModel : PageViewModel
 
         Event model = EventService.Get(Selected.TriggeredEventId.Value);
 
-        var page = Shell.Navigate<EventDetailsViewModel>();
-        page.Load(model);
+        var page = Shell.Navigate<EventPageViewModel>();
+        //page.Select(model);
     }
     private bool CanEditTriggeredEvent()
     {
@@ -629,8 +471,8 @@ public class DecisionDetailsViewModel : PageViewModel
 
         Trigger model = observable.Model;
 
-        var page = Shell.Navigate<TriggerDetailsViewModel>();
-        page.Load(model);
+        var page = Shell.Navigate<TriggerPageViewModel>();
+        //page.Select(model);
     }
     private bool CanEditShownTrigger(TriggerViewModel? observable)
     {
@@ -718,8 +560,8 @@ public class DecisionDetailsViewModel : PageViewModel
 
         Trigger model = observable.Model;
 
-        var page = Shell.Navigate<TriggerDetailsViewModel>();
-        page.Load(model);
+        var page = Shell.Navigate<TriggerPageViewModel>();
+        //page.Select(model);
     }
     private bool CanEditFailureTrigger(TriggerViewModel? observable)
     {
@@ -807,8 +649,8 @@ public class DecisionDetailsViewModel : PageViewModel
 
         Trigger model = observable.Model;
 
-        var page = Shell.Navigate<TriggerDetailsViewModel>();
-        page.Load(model);
+        var page = Shell.Navigate<TriggerPageViewModel>();
+        //page.Select(model);
     }
     private bool CanEditValidTrigger(TriggerViewModel? observable)
     {
@@ -896,8 +738,8 @@ public class DecisionDetailsViewModel : PageViewModel
 
         Effect model = observable.Model;
 
-        var page = Shell.Navigate<EffectDetailsViewModel>();
-        page.Load(model);
+        var page = Shell.Navigate<EffectPageViewModel>();
+        //page.Select(model);
     }
     private bool CanEditEffect(EffectViewModel? observable)
     {
@@ -985,8 +827,8 @@ public class DecisionDetailsViewModel : PageViewModel
 
         Trigger model = observable.Model;
 
-        var page = Shell.Navigate<TriggerDetailsViewModel>();
-        page.Load(model);
+        var page = Shell.Navigate<TriggerPageViewModel>();
+        //page.Select(model);
     }
     private bool CanEditAiPotentialTrigger(TriggerViewModel? observable)
     {

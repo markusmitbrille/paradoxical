@@ -13,14 +13,16 @@ using System.Windows.Data;
 
 namespace Paradoxical.ViewModel;
 
-public class ScriptTableViewModel : PageViewModel
+public class EventPageViewModel : PageViewModel
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
-    public override string PageName => "Scripts";
+    public override string PageName => "Events";
 
     public IDataService DataService { get; }
-    public IScriptService ScriptService { get; }
+    public IEventService EventService { get; }
+    public IOptionService OptionService { get; }
+    public IPortraitService PortraitService { get; }
 
     private int selectedTab;
     public int SelectedTab
@@ -29,8 +31,8 @@ public class ScriptTableViewModel : PageViewModel
         set => SetProperty(ref selectedTab, value);
     }
 
-    private ObservableCollection<ScriptViewModel>? items;
-    public ObservableCollection<ScriptViewModel> Items
+    private ObservableCollection<EventViewModel>? items;
+    public ObservableCollection<EventViewModel> Items
     {
         get => items ??= new();
         set
@@ -76,22 +78,26 @@ public class ScriptTableViewModel : PageViewModel
         }
     }
 
-    private ScriptViewModel? selected;
-    public ScriptViewModel? Selected
+    private EventViewModel? selected;
+    public EventViewModel? Selected
     {
         get => selected;
         set => SetProperty(ref selected, value);
     }
 
-    public ScriptTableViewModel(
+    public EventPageViewModel(
         IShell shell,
         IMediatorService mediator,
         IDataService dataService,
-        IScriptService scriptService)
+        IEventService eventService,
+        IOptionService optionService,
+        IPortraitService portraitService)
         : base(shell, mediator)
     {
         DataService = dataService;
-        ScriptService = scriptService;
+        EventService = eventService;
+        OptionService = optionService;
+        PortraitService = portraitService;
     }
 
     public override void OnNavigatedTo()
@@ -137,7 +143,7 @@ public class ScriptTableViewModel : PageViewModel
     {
         Selected = null;
 
-        Items = new(ScriptService.Get().Select(model => new ScriptViewModel() { Model = model }));
+        Items = new(EventService.Get().Select(model => new EventViewModel() { Model = model }));
         ItemsView.Filter = Predicate;
 
         DataService.BeginTransaction();
@@ -163,7 +169,7 @@ public class ScriptTableViewModel : PageViewModel
     {
         CommitItems();
 
-        ScriptService.UpdateAll(Items.Select(vm => vm.Model));
+        EventService.UpdateAll(Items.Select(vm => vm.Model));
 
         DataService.CommitTransaction();
         DataService.BeginTransaction();
@@ -171,7 +177,7 @@ public class ScriptTableViewModel : PageViewModel
 
     private bool Predicate(object obj)
     {
-        if (obj is not ScriptViewModel wrapper)
+        if (obj is not EventViewModel wrapper)
         { return false; }
 
         if (string.IsNullOrEmpty(Filter) == true)
@@ -182,9 +188,9 @@ public class ScriptTableViewModel : PageViewModel
         bool?[] features = new[]
         {
             ParadoxPattern.IdFilterRegex.ExactMatch(wrapper.Id.ToString(), Filter),
-            ParadoxPattern.DirFilterRegex.FuzzyMatch(wrapper.Dir, Filter),
-            ParadoxPattern.FileFilterRegex.FuzzyMatch(wrapper.File, Filter),
-            ParadoxPattern.CodeFilterRegex.FuzzyMatch(wrapper.Code, Filter),
+            ParadoxPattern.NameFilterRegex.FuzzyMatch(wrapper.Name, Filter),
+            ParadoxPattern.TitleFilterRegex.FuzzyMatch(wrapper.Title, Filter),
+            ParadoxPattern.DescriptionFilterRegex.FuzzyMatch(wrapper.Description, Filter),
         };
 
         if (features.Any(res => res == true) && features.All(res => res != false))
@@ -192,7 +198,7 @@ public class ScriptTableViewModel : PageViewModel
 
         // general filter
 
-        if (ParadoxPattern.FilterRegex.FuzzyMatch(wrapper.Path, Filter) == true)
+        if (ParadoxPattern.FilterRegex.FuzzyMatch(wrapper.Name, Filter) == true)
         { return true; }
 
         return false;
@@ -209,7 +215,7 @@ public class ScriptTableViewModel : PageViewModel
         if (Selected != null && Predicate(Selected) == true)
         { return; }
 
-        Selected = ItemsView.OfType<ScriptViewModel>().FirstOrDefault();
+        Selected = ItemsView.OfType<EventViewModel>().FirstOrDefault();
     }
 
     private RelayCommand? createCommand;
@@ -217,52 +223,64 @@ public class ScriptTableViewModel : PageViewModel
 
     private void Create()
     {
-        Script model = new();
-        ScriptService.Insert(model);
+        Event model = new();
+        EventService.Insert(model);
 
-        ScriptViewModel observable = new() { Model = model };
+        EventViewModel observable = new() { Model = model };
+
+        Portrait leftPortrait = new()
+        {
+            EventId = observable.Model.Id,
+            Position = PortraitPosition.Left,
+        };
+        Portrait rightPortrait = new()
+        {
+            EventId = observable.Model.Id,
+            Position = PortraitPosition.Right,
+        };
+        Portrait lowerLeftPortrait = new()
+        {
+            EventId = observable.Model.Id,
+            Position = PortraitPosition.LowerLeft,
+        };
+        Portrait lowerCenterPortrait = new()
+        {
+            EventId = observable.Model.Id,
+            Position = PortraitPosition.LowerCenter,
+        };
+        Portrait lowerRightPortrait = new()
+        {
+            EventId = observable.Model.Id,
+            Position = PortraitPosition.LowerRight,
+        };
+
+        PortraitService.Insert(leftPortrait);
+        PortraitService.Insert(rightPortrait);
+        PortraitService.Insert(lowerLeftPortrait);
+        PortraitService.Insert(lowerCenterPortrait);
+        PortraitService.Insert(lowerRightPortrait);
 
         Items.Add(observable);
         Selected = observable;
     }
 
-    private RelayCommand<ScriptViewModel>? deleteCommand;
-    public RelayCommand<ScriptViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
+    private RelayCommand<EventViewModel>? deleteCommand;
+    public RelayCommand<EventViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
 
     private void Delete(object? param)
     {
-        if (param is not ScriptViewModel observable)
+        if (param is not EventViewModel observable)
         { return; }
 
         CommitItems();
 
-        Script model = observable.Model;
-        ScriptService.Delete(model);
+        Event model = observable.Model;
+        EventService.Delete(model);
 
         Items.Remove(observable);
     }
     private bool CanDelete(object? param)
     {
-        return param is ScriptViewModel;
-    }
-
-    private RelayCommand<object>? editCommand;
-    public RelayCommand<object> EditCommand => editCommand ??= new(Edit, CanEdit);
-
-    private void Edit(object? param)
-    {
-        if (param is not ScriptViewModel observable)
-        { return; }
-
-        CommitItems();
-
-        var model = observable.Model;
-
-        var page = Shell.Navigate<ScriptDetailsViewModel>();
-        page.Load(model);
-    }
-    private bool CanEdit(object? param)
-    {
-        return param is ScriptViewModel;
+        return param is EventViewModel;
     }
 }

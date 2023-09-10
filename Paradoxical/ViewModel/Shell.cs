@@ -297,22 +297,22 @@ if you don't save them.",
         {
             Event model = (Event)Finder.Selected.Model;
 
-            EventDetailsViewModel page = Navigate<EventDetailsViewModel>();
-            page.Load(model);
+            var page = Navigate<EventPageViewModel>();
+            //page.Select(model);
         }
         if (Finder.Selected is TriggerViewModel)
         {
             Trigger model = (Trigger)Finder.Selected.Model;
 
-            TriggerDetailsViewModel page = Navigate<TriggerDetailsViewModel>();
-            page.Load(model);
+            var page = Navigate<TriggerPageViewModel>();
+            //page.Select(model);
         }
         if (Finder.Selected is EffectViewModel)
         {
             Effect model = (Effect)Finder.Selected.Model;
 
-            EffectDetailsViewModel page = Navigate<EffectDetailsViewModel>();
-            page.Load(model);
+            var page = Navigate<EffectPageViewModel>();
+            //page.Select(model);
         }
     }
 
@@ -441,7 +441,7 @@ if you don't save them.",
 
     private void GoToInfo()
     {
-        Navigate<ModDetailsViewModel>();
+        Navigate<ModPageViewModel>();
     }
 
     private RelayCommand? goToOutputCommand;
@@ -449,7 +449,7 @@ if you don't save them.",
 
     private void GoToOutput()
     {
-        Navigate<OutputViewModel>();
+        Navigate<OutputPageViewModel>();
     }
 
     private RelayCommand? goToAboutCommand;
@@ -457,7 +457,7 @@ if you don't save them.",
 
     private void GoToAbout()
     {
-        Navigate<AboutViewModel>();
+        Navigate<AboutPageViewModel>();
     }
 
     private RelayCommand? goToWikiCommand;
@@ -505,7 +505,7 @@ if you don't save them.",
 
     private void GoToEventTable()
     {
-        Navigate<EventTableViewModel>();
+        Navigate<EventPageViewModel>();
     }
 
     private RelayCommand? goToDecisionTableCommand;
@@ -513,7 +513,7 @@ if you don't save them.",
 
     private void GoToDecisionTable()
     {
-        Navigate<DecisionTableViewModel>();
+        Navigate<DecisionPageViewModel>();
     }
 
     private RelayCommand? goToTriggerTableCommand;
@@ -521,7 +521,7 @@ if you don't save them.",
 
     private void GoToTriggerTable()
     {
-        Navigate<TriggerTableViewModel>();
+        Navigate<TriggerPageViewModel>();
     }
 
     private RelayCommand? goToEffectTableCommand;
@@ -529,7 +529,7 @@ if you don't save them.",
 
     private void GoToEffectTable()
     {
-        Navigate<EffectTableViewModel>();
+        Navigate<EffectPageViewModel>();
     }
 
     private RelayCommand? goToScriptTableCommand;
@@ -537,7 +537,7 @@ if you don't save them.",
 
     private void GoToScriptTable()
     {
-        Navigate<ScriptTableViewModel>();
+        Navigate<ScriptPageViewModel>();
     }
 
     #endregion

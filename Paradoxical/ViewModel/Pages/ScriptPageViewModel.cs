@@ -13,14 +13,14 @@ using System.Windows.Data;
 
 namespace Paradoxical.ViewModel;
 
-public class EffectTableViewModel : PageViewModel
+public class ScriptPageViewModel : PageViewModel
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
-    public override string PageName => "Effects";
+    public override string PageName => "Scripts";
 
     public IDataService DataService { get; }
-    public IEffectService EffectService { get; }
+    public IScriptService ScriptService { get; }
 
     private int selectedTab;
     public int SelectedTab
@@ -29,8 +29,8 @@ public class EffectTableViewModel : PageViewModel
         set => SetProperty(ref selectedTab, value);
     }
 
-    private ObservableCollection<EffectViewModel>? items;
-    public ObservableCollection<EffectViewModel> Items
+    private ObservableCollection<ScriptViewModel>? items;
+    public ObservableCollection<ScriptViewModel> Items
     {
         get => items ??= new();
         set
@@ -76,22 +76,22 @@ public class EffectTableViewModel : PageViewModel
         }
     }
 
-    private EffectViewModel? selected;
-    public EffectViewModel? Selected
+    private ScriptViewModel? selected;
+    public ScriptViewModel? Selected
     {
         get => selected;
         set => SetProperty(ref selected, value);
     }
 
-    public EffectTableViewModel(
+    public ScriptPageViewModel(
         IShell shell,
         IMediatorService mediator,
         IDataService dataService,
-        IEffectService effectService)
+        IScriptService scriptService)
         : base(shell, mediator)
     {
         DataService = dataService;
-        EffectService = effectService;
+        ScriptService = scriptService;
     }
 
     public override void OnNavigatedTo()
@@ -137,7 +137,7 @@ public class EffectTableViewModel : PageViewModel
     {
         Selected = null;
 
-        Items = new(EffectService.Get().Select(model => new EffectViewModel() { Model = model }));
+        Items = new(ScriptService.Get().Select(model => new ScriptViewModel() { Model = model }));
         ItemsView.Filter = Predicate;
 
         DataService.BeginTransaction();
@@ -163,7 +163,7 @@ public class EffectTableViewModel : PageViewModel
     {
         CommitItems();
 
-        EffectService.UpdateAll(Items.Select(vm => vm.Model));
+        ScriptService.UpdateAll(Items.Select(vm => vm.Model));
 
         DataService.CommitTransaction();
         DataService.BeginTransaction();
@@ -171,7 +171,7 @@ public class EffectTableViewModel : PageViewModel
 
     private bool Predicate(object obj)
     {
-        if (obj is not EffectViewModel wrapper)
+        if (obj is not ScriptViewModel wrapper)
         { return false; }
 
         if (string.IsNullOrEmpty(Filter) == true)
@@ -182,9 +182,9 @@ public class EffectTableViewModel : PageViewModel
         bool?[] features = new[]
         {
             ParadoxPattern.IdFilterRegex.ExactMatch(wrapper.Id.ToString(), Filter),
-            ParadoxPattern.NameFilterRegex.FuzzyMatch(wrapper.Name, Filter),
+            ParadoxPattern.DirFilterRegex.FuzzyMatch(wrapper.Dir, Filter),
+            ParadoxPattern.FileFilterRegex.FuzzyMatch(wrapper.File, Filter),
             ParadoxPattern.CodeFilterRegex.FuzzyMatch(wrapper.Code, Filter),
-            ParadoxPattern.TooltipFilterRegex.FuzzyMatch(wrapper.Tooltip, Filter),
         };
 
         if (features.Any(res => res == true) && features.All(res => res != false))
@@ -192,7 +192,7 @@ public class EffectTableViewModel : PageViewModel
 
         // general filter
 
-        if (ParadoxPattern.FilterRegex.FuzzyMatch(wrapper.Name, Filter) == true)
+        if (ParadoxPattern.FilterRegex.FuzzyMatch(wrapper.Path, Filter) == true)
         { return true; }
 
         return false;
@@ -209,7 +209,7 @@ public class EffectTableViewModel : PageViewModel
         if (Selected != null && Predicate(Selected) == true)
         { return; }
 
-        Selected = ItemsView.OfType<EffectViewModel>().FirstOrDefault();
+        Selected = ItemsView.OfType<ScriptViewModel>().FirstOrDefault();
     }
 
     private RelayCommand? createCommand;
@@ -217,52 +217,32 @@ public class EffectTableViewModel : PageViewModel
 
     private void Create()
     {
-        Effect model = new();
-        EffectService.Insert(model);
+        Script model = new();
+        ScriptService.Insert(model);
 
-        EffectViewModel observable = new() { Model = model };
+        ScriptViewModel observable = new() { Model = model };
 
         Items.Add(observable);
         Selected = observable;
     }
 
-    private RelayCommand<EffectViewModel>? deleteCommand;
-    public RelayCommand<EffectViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
+    private RelayCommand<ScriptViewModel>? deleteCommand;
+    public RelayCommand<ScriptViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
 
     private void Delete(object? param)
     {
-        if (param is not EffectViewModel observable)
+        if (param is not ScriptViewModel observable)
         { return; }
 
         CommitItems();
 
-        Effect model = observable.Model;
-        EffectService.Delete(model);
+        Script model = observable.Model;
+        ScriptService.Delete(model);
 
         Items.Remove(observable);
     }
     private bool CanDelete(object? param)
     {
-        return param is EffectViewModel;
-    }
-
-    private RelayCommand<object>? editCommand;
-    public RelayCommand<object> EditCommand => editCommand ??= new(Edit, CanEdit);
-
-    private void Edit(object? param)
-    {
-        if (param is not EffectViewModel observable)
-        { return; }
-
-        CommitItems();
-
-        var model = observable.Model;
-
-        var page = Shell.Navigate<EffectDetailsViewModel>();
-        page.Load(model);
-    }
-    private bool CanEdit(object? param)
-    {
-        return param is EffectViewModel;
+        return param is ScriptViewModel;
     }
 }

@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Core;
 using Paradoxical.Messages;
 using Paradoxical.Model.Elements;
@@ -12,31 +13,11 @@ using System.Linq;
 
 namespace Paradoxical.ViewModel;
 
-public class TriggerDetailsViewModel : PageViewModel
+public class TriggerDetailsViewModel : DetailsViewModel
     , IEquatable<TriggerDetailsViewModel?>
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
-    public override string PageName => $"Trigger {Selected?.Id.ToString() ?? "Details"}";
-
-    private void RefreshPageName() => OnPropertyChanged(nameof(PageName));
-
-    public override bool IsValid
-    {
-        get
-        {
-            if (Selected == null)
-            { return false; }
-
-            var model = TriggerService.Find(Selected.Model);
-
-            if (model == null)
-            { return false; }
-
-            return true;
-        }
-    }
-
     public IDataService DataService { get; }
     public IModService ModService { get; }
     public ITriggerService TriggerService { get; }
@@ -83,32 +64,6 @@ public class TriggerDetailsViewModel : PageViewModel
         TriggerService = triggerService;
     }
 
-    public override void OnNavigatedTo()
-    {
-        if (DataService.IsInTransaction)
-        {
-            DataService.RollbackTransaction();
-        }
-
-        Reload();
-
-        Mediator.Register<SaveMessage>(this);
-        Mediator.Register<ShutdownMessage>(this);
-    }
-
-    public override void OnNavigatingFrom()
-    {
-        Save();
-
-        if (DataService.IsInTransaction)
-        {
-            DataService.RollbackTransaction();
-        }
-
-        Mediator.Unregister<SaveMessage>(this);
-        Mediator.Unregister<ShutdownMessage>(this);
-    }
-
     void IMessageHandler<SaveMessage>.Handle(SaveMessage message)
     {
         Save();
@@ -124,7 +79,6 @@ public class TriggerDetailsViewModel : PageViewModel
         model = TriggerService.Get(model);
         Selected = new() { Model = model };
 
-        RefreshPageName();
         RefreshOutput();
 
         DataService.BeginTransaction();
@@ -159,52 +113,10 @@ public class TriggerDetailsViewModel : PageViewModel
 
         TriggerService.Update(Selected.Model);
 
-        RefreshPageName();
         RefreshOutput();
 
         DataService.CommitTransaction();
         DataService.BeginTransaction();
-    }
-
-    private RelayCommand? createCommand;
-    public RelayCommand CreateCommand => createCommand ??= new(Create);
-
-    private void Create()
-    {
-        Trigger model = new();
-        TriggerService.Insert(model);
-
-        var page = Shell.Navigate<TriggerDetailsViewModel>();
-        page.Load(model);
-    }
-
-    private RelayCommand? duplicateCommand;
-    public RelayCommand DuplicateCommand => duplicateCommand ??= new(Duplicate);
-
-    private void Duplicate()
-    {
-        if (Selected == null)
-        { return; }
-
-        Trigger model = new(Selected.Model);
-
-        TriggerService.Insert(model);
-
-        var page = Shell.Navigate<TriggerDetailsViewModel>();
-        page.Load(model);
-    }
-
-    private RelayCommand? deleteCommand;
-    public RelayCommand DeleteCommand => deleteCommand ??= new(Delete);
-
-    private void Delete()
-    {
-        if (Selected == null)
-        { return; }
-
-        TriggerService.Delete(Selected.Model);
-
-        Shell.Navigate<TriggerTableViewModel>();
     }
 
     private RelayCommand? refreshOutputCommand;

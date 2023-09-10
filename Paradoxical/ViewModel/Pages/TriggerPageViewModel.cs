@@ -13,16 +13,14 @@ using System.Windows.Data;
 
 namespace Paradoxical.ViewModel;
 
-public class EventTableViewModel : PageViewModel
+public class TriggerPageViewModel : PageViewModel
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
-    public override string PageName => "Events";
+    public override string PageName => "Triggers";
 
     public IDataService DataService { get; }
-    public IEventService EventService { get; }
-    public IOptionService OptionService { get; }
-    public IPortraitService PortraitService { get; }
+    public ITriggerService TriggerService { get; }
 
     private int selectedTab;
     public int SelectedTab
@@ -31,8 +29,8 @@ public class EventTableViewModel : PageViewModel
         set => SetProperty(ref selectedTab, value);
     }
 
-    private ObservableCollection<EventViewModel>? items;
-    public ObservableCollection<EventViewModel> Items
+    private ObservableCollection<TriggerViewModel>? items;
+    public ObservableCollection<TriggerViewModel> Items
     {
         get => items ??= new();
         set
@@ -78,26 +76,22 @@ public class EventTableViewModel : PageViewModel
         }
     }
 
-    private EventViewModel? selected;
-    public EventViewModel? Selected
+    private TriggerViewModel? selected;
+    public TriggerViewModel? Selected
     {
         get => selected;
         set => SetProperty(ref selected, value);
     }
 
-    public EventTableViewModel(
+    public TriggerPageViewModel(
         IShell shell,
         IMediatorService mediator,
         IDataService dataService,
-        IEventService eventService,
-        IOptionService optionService,
-        IPortraitService portraitService)
+        ITriggerService triggerService)
         : base(shell, mediator)
     {
         DataService = dataService;
-        EventService = eventService;
-        OptionService = optionService;
-        PortraitService = portraitService;
+        TriggerService = triggerService;
     }
 
     public override void OnNavigatedTo()
@@ -143,7 +137,7 @@ public class EventTableViewModel : PageViewModel
     {
         Selected = null;
 
-        Items = new(EventService.Get().Select(model => new EventViewModel() { Model = model }));
+        Items = new(TriggerService.Get().Select(model => new TriggerViewModel() { Model = model }));
         ItemsView.Filter = Predicate;
 
         DataService.BeginTransaction();
@@ -169,7 +163,7 @@ public class EventTableViewModel : PageViewModel
     {
         CommitItems();
 
-        EventService.UpdateAll(Items.Select(vm => vm.Model));
+        TriggerService.UpdateAll(Items.Select(vm => vm.Model));
 
         DataService.CommitTransaction();
         DataService.BeginTransaction();
@@ -177,7 +171,7 @@ public class EventTableViewModel : PageViewModel
 
     private bool Predicate(object obj)
     {
-        if (obj is not EventViewModel wrapper)
+        if (obj is not TriggerViewModel wrapper)
         { return false; }
 
         if (string.IsNullOrEmpty(Filter) == true)
@@ -189,8 +183,8 @@ public class EventTableViewModel : PageViewModel
         {
             ParadoxPattern.IdFilterRegex.ExactMatch(wrapper.Id.ToString(), Filter),
             ParadoxPattern.NameFilterRegex.FuzzyMatch(wrapper.Name, Filter),
-            ParadoxPattern.TitleFilterRegex.FuzzyMatch(wrapper.Title, Filter),
-            ParadoxPattern.DescriptionFilterRegex.FuzzyMatch(wrapper.Description, Filter),
+            ParadoxPattern.CodeFilterRegex.FuzzyMatch(wrapper.Code, Filter),
+            ParadoxPattern.TooltipFilterRegex.FuzzyMatch(wrapper.Tooltip, Filter),
         };
 
         if (features.Any(res => res == true) && features.All(res => res != false))
@@ -215,7 +209,7 @@ public class EventTableViewModel : PageViewModel
         if (Selected != null && Predicate(Selected) == true)
         { return; }
 
-        Selected = ItemsView.OfType<EventViewModel>().FirstOrDefault();
+        Selected = ItemsView.OfType<TriggerViewModel>().FirstOrDefault();
     }
 
     private RelayCommand? createCommand;
@@ -223,84 +217,32 @@ public class EventTableViewModel : PageViewModel
 
     private void Create()
     {
-        Event model = new();
-        EventService.Insert(model);
+        Trigger model = new();
+        TriggerService.Insert(model);
 
-        EventViewModel observable = new() { Model = model };
-
-        Portrait leftPortrait = new()
-        {
-            EventId = observable.Model.Id,
-            Position = PortraitPosition.Left,
-        };
-        Portrait rightPortrait = new()
-        {
-            EventId = observable.Model.Id,
-            Position = PortraitPosition.Right,
-        };
-        Portrait lowerLeftPortrait = new()
-        {
-            EventId = observable.Model.Id,
-            Position = PortraitPosition.LowerLeft,
-        };
-        Portrait lowerCenterPortrait = new()
-        {
-            EventId = observable.Model.Id,
-            Position = PortraitPosition.LowerCenter,
-        };
-        Portrait lowerRightPortrait = new()
-        {
-            EventId = observable.Model.Id,
-            Position = PortraitPosition.LowerRight,
-        };
-
-        PortraitService.Insert(leftPortrait);
-        PortraitService.Insert(rightPortrait);
-        PortraitService.Insert(lowerLeftPortrait);
-        PortraitService.Insert(lowerCenterPortrait);
-        PortraitService.Insert(lowerRightPortrait);
+        TriggerViewModel observable = new() { Model = model };
 
         Items.Add(observable);
         Selected = observable;
     }
 
-    private RelayCommand<EventViewModel>? deleteCommand;
-    public RelayCommand<EventViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
+    private RelayCommand<TriggerViewModel>? deleteCommand;
+    public RelayCommand<TriggerViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
 
     private void Delete(object? param)
     {
-        if (param is not EventViewModel observable)
+        if (param is not TriggerViewModel observable)
         { return; }
 
         CommitItems();
 
-        Event model = observable.Model;
-        EventService.Delete(model);
+        Trigger model = observable.Model;
+        TriggerService.Delete(model);
 
         Items.Remove(observable);
     }
     private bool CanDelete(object? param)
     {
-        return param is EventViewModel;
-    }
-
-    private RelayCommand<object>? editCommand;
-    public RelayCommand<object> EditCommand => editCommand ??= new(Edit, CanEdit);
-
-    private void Edit(object? param)
-    {
-        if (param is not EventViewModel observable)
-        { return; }
-
-        CommitItems();
-
-        var model = observable.Model;
-
-        var page = Shell.Navigate<EventDetailsViewModel>();
-        page.Load(model);
-    }
-    private bool CanEdit(object? param)
-    {
-        return param is EventViewModel;
+        return param is TriggerViewModel;
     }
 }

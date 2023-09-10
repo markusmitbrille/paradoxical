@@ -12,7 +12,7 @@ using System.Windows.Data;
 
 namespace Paradoxical.ViewModel;
 
-public class DecisionTableViewModel : PageViewModel
+public class DecisionPageViewModel : PageViewModel
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
@@ -82,7 +82,7 @@ public class DecisionTableViewModel : PageViewModel
         set => SetProperty(ref selected, value);
     }
 
-    public DecisionTableViewModel(
+    public DecisionPageViewModel(
         IShell shell,
         IMediatorService mediator,
         IDataService dataService,
@@ -240,26 +240,6 @@ public class DecisionTableViewModel : PageViewModel
         Items.Remove(observable);
     }
     private bool CanDelete(object? param)
-    {
-        return param is DecisionViewModel;
-    }
-
-    private RelayCommand<object>? editCommand;
-    public RelayCommand<object> EditCommand => editCommand ??= new(Edit, CanEdit);
-
-    private void Edit(object? param)
-    {
-        if (param is not DecisionViewModel observable)
-        { return; }
-
-        CommitItems();
-
-        var model = observable.Model;
-
-        var page = Shell.Navigate<DecisionDetailsViewModel>();
-        page.Load(model);
-    }
-    private bool CanEdit(object? param)
     {
         return param is DecisionViewModel;
     }

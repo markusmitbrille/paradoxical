@@ -13,14 +13,14 @@ using System.Windows.Data;
 
 namespace Paradoxical.ViewModel;
 
-public class TriggerTableViewModel : PageViewModel
+public class EffectPageViewModel : PageViewModel
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
-    public override string PageName => "Triggers";
+    public override string PageName => "Effects";
 
     public IDataService DataService { get; }
-    public ITriggerService TriggerService { get; }
+    public IEffectService EffectService { get; }
 
     private int selectedTab;
     public int SelectedTab
@@ -29,8 +29,8 @@ public class TriggerTableViewModel : PageViewModel
         set => SetProperty(ref selectedTab, value);
     }
 
-    private ObservableCollection<TriggerViewModel>? items;
-    public ObservableCollection<TriggerViewModel> Items
+    private ObservableCollection<EffectViewModel>? items;
+    public ObservableCollection<EffectViewModel> Items
     {
         get => items ??= new();
         set
@@ -76,22 +76,22 @@ public class TriggerTableViewModel : PageViewModel
         }
     }
 
-    private TriggerViewModel? selected;
-    public TriggerViewModel? Selected
+    private EffectViewModel? selected;
+    public EffectViewModel? Selected
     {
         get => selected;
         set => SetProperty(ref selected, value);
     }
 
-    public TriggerTableViewModel(
+    public EffectPageViewModel(
         IShell shell,
         IMediatorService mediator,
         IDataService dataService,
-        ITriggerService triggerService)
+        IEffectService effectService)
         : base(shell, mediator)
     {
         DataService = dataService;
-        TriggerService = triggerService;
+        EffectService = effectService;
     }
 
     public override void OnNavigatedTo()
@@ -137,7 +137,7 @@ public class TriggerTableViewModel : PageViewModel
     {
         Selected = null;
 
-        Items = new(TriggerService.Get().Select(model => new TriggerViewModel() { Model = model }));
+        Items = new(EffectService.Get().Select(model => new EffectViewModel() { Model = model }));
         ItemsView.Filter = Predicate;
 
         DataService.BeginTransaction();
@@ -163,7 +163,7 @@ public class TriggerTableViewModel : PageViewModel
     {
         CommitItems();
 
-        TriggerService.UpdateAll(Items.Select(vm => vm.Model));
+        EffectService.UpdateAll(Items.Select(vm => vm.Model));
 
         DataService.CommitTransaction();
         DataService.BeginTransaction();
@@ -171,7 +171,7 @@ public class TriggerTableViewModel : PageViewModel
 
     private bool Predicate(object obj)
     {
-        if (obj is not TriggerViewModel wrapper)
+        if (obj is not EffectViewModel wrapper)
         { return false; }
 
         if (string.IsNullOrEmpty(Filter) == true)
@@ -209,7 +209,7 @@ public class TriggerTableViewModel : PageViewModel
         if (Selected != null && Predicate(Selected) == true)
         { return; }
 
-        Selected = ItemsView.OfType<TriggerViewModel>().FirstOrDefault();
+        Selected = ItemsView.OfType<EffectViewModel>().FirstOrDefault();
     }
 
     private RelayCommand? createCommand;
@@ -217,52 +217,32 @@ public class TriggerTableViewModel : PageViewModel
 
     private void Create()
     {
-        Trigger model = new();
-        TriggerService.Insert(model);
+        Effect model = new();
+        EffectService.Insert(model);
 
-        TriggerViewModel observable = new() { Model = model };
+        EffectViewModel observable = new() { Model = model };
 
         Items.Add(observable);
         Selected = observable;
     }
 
-    private RelayCommand<TriggerViewModel>? deleteCommand;
-    public RelayCommand<TriggerViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
+    private RelayCommand<EffectViewModel>? deleteCommand;
+    public RelayCommand<EffectViewModel> DeleteCommand => deleteCommand ??= new(Delete, CanDelete);
 
     private void Delete(object? param)
     {
-        if (param is not TriggerViewModel observable)
+        if (param is not EffectViewModel observable)
         { return; }
 
         CommitItems();
 
-        Trigger model = observable.Model;
-        TriggerService.Delete(model);
+        Effect model = observable.Model;
+        EffectService.Delete(model);
 
         Items.Remove(observable);
     }
     private bool CanDelete(object? param)
     {
-        return param is TriggerViewModel;
-    }
-
-    private RelayCommand<object>? editCommand;
-    public RelayCommand<object> EditCommand => editCommand ??= new(Edit, CanEdit);
-
-    private void Edit(object? param)
-    {
-        if (param is not TriggerViewModel observable)
-        { return; }
-
-        CommitItems();
-
-        var model = observable.Model;
-
-        var page = Shell.Navigate<TriggerDetailsViewModel>();
-        page.Load(model);
-    }
-    private bool CanEdit(object? param)
-    {
-        return param is TriggerViewModel;
+        return param is EffectViewModel;
     }
 }

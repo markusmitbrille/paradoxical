@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Paradoxical.ViewModel;
 
-public class ModDetailsViewModel : PageViewModel
+public class ModPageViewModel : PageViewModel
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
 {
@@ -31,7 +31,7 @@ public class ModDetailsViewModel : PageViewModel
         set => SetProperty(ref selected, value);
     }
 
-    public ModDetailsViewModel(
+    public ModPageViewModel(
         IShell shell,
         IMediatorService mediator,
         IDataService dataService,
