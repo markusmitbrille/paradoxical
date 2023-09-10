@@ -1,2 +1,2 @@
 # Paradoxical
-An unofficial content creation toolkit for PDX games, specifically CK III.
+A modding tool that helps create Crusader Kings III mods.
