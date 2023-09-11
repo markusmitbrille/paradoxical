@@ -50,39 +50,46 @@ public class ModelMap<M, W> : Dictionary<M, W>
     }
 }
 
-public abstract class ObservableNode<T>
-    where T : ObservableObject, new()
+public interface INode : IEnumerable<INode>
 {
-    public T Observable { get; init; } = new();
+    public string Header { get; init; }
 }
 
-public abstract class ObservableContainerNode<T> : ObservableCollection<ObservableNode<T>>
+public abstract class ContainerNode<T> : ObservableCollection<ObservableNode<T>>, INode
     where T : ObservableObject, new()
 {
     public abstract string Header { get; init; }
+
+    IEnumerator<INode> IEnumerable<INode>.GetEnumerator() => GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
 
-public abstract class ObservableLeafNode<T> : ObservableNode<T>
+public abstract class ObservableNode<T> : INode
     where T : ObservableObject, new()
 {
+    public abstract string Header { get; init; }
+    public T Observable { get; init; } = new();
+
+    public virtual IEnumerator<INode> GetEnumerator()
+    {
+        yield break;
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
 
-public abstract class ObservableRootNode<T> : ObservableNode<T>, IEnumerable
-    where T : ObservableObject, new()
-{
-    public abstract IEnumerator GetEnumerator();
-}
 
-
-public class ModRootNode : ObservableRootNode<ModViewModel>
+public class ModRootNode : ObservableNode<ModViewModel>
 {
+    public override string Header { get; init; } = "Mod";
+
     public ScriptContainerNode ScriptNodes { get; } = new();
     public EventContainerNode EventNodes { get; } = new();
     public DecisionContainerNode DecisionNodes { get; } = new();
     public TriggerContainerNode TriggerNodes { get; } = new();
     public EffectContainerNode EffectNodes { get; } = new();
 
-    public override IEnumerator GetEnumerator()
+    public override IEnumerator<INode> GetEnumerator()
     {
         yield return ScriptNodes;
         yield return EventNodes;
@@ -93,43 +100,32 @@ public class ModRootNode : ObservableRootNode<ModViewModel>
 }
 
 
-public class ScriptContainerNode : ObservableContainerNode<ScriptViewModel>
+public class ScriptContainerNode : ContainerNode<ScriptViewModel>
 {
     public override string Header { get; init; } = "Scripts";
 
     public RelayCommand? CreateScriptCommand { get; set; }
 }
 
-public class ScriptLeafNode : ObservableLeafNode<ScriptViewModel>
+public class ScriptRootNode : ObservableNode<ScriptViewModel>
 {
-    public RelayCommand<object>? DeleteCommand { get; set; }
-}
+    public override string Header { get; init; } = "Script";
 
-public class ScriptRootNode : ObservableRootNode<ScriptViewModel>
-{
     public RelayCommand<object>? DeleteScriptCommand { get; set; }
-
-    public override IEnumerator GetEnumerator()
-    {
-        yield break;
-    }
 }
 
 
-public class EventContainerNode : ObservableContainerNode<EventViewModel>
+public class EventContainerNode : ContainerNode<EventViewModel>
 {
     public override string Header { get; init; } = "Events";
 
     public RelayCommand? CreateEventCommand { get; set; }
 }
 
-public class EventLeafNode : ObservableLeafNode<EventViewModel>
+public class EventRootNode : ObservableNode<EventViewModel>
 {
-    public RelayCommand<object>? DeleteCommand { get; set; }
-}
+    public override string Header { get; init; } = "Event";
 
-public class EventRootNode : ObservableRootNode<EventViewModel>
-{
     public PortraitContainerNode PortraitNodes { get; } = new();
     public OptionContainerNode OptionNodes { get; } = new();
     public OnionContainerNode OnionNodes { get; } = new();
@@ -140,7 +136,7 @@ public class EventRootNode : ObservableRootNode<EventViewModel>
 
     public RelayCommand<object>? DeleteEventCommand { get; set; }
 
-    public override IEnumerator GetEnumerator()
+    public override IEnumerator<INode> GetEnumerator()
     {
         yield return PortraitNodes;
         yield return OptionNodes;
@@ -153,39 +149,30 @@ public class EventRootNode : ObservableRootNode<EventViewModel>
 }
 
 
-public class PortraitContainerNode : ObservableContainerNode<PortraitViewModel>
+public class PortraitContainerNode : ContainerNode<PortraitViewModel>
 {
     public override string Header { get; init; } = "Portraits";
 }
 
-public class PortraitLeafNode : ObservableLeafNode<PortraitViewModel>
+public class PortraitRootNode : ObservableNode<PortraitViewModel>
 {
-}
-
-public class PortraitRootNode : ObservableRootNode<PortraitViewModel>
-{
-    public override IEnumerator GetEnumerator()
-    {
-        yield break;
-    }
+    public override string Header { get; init; } = "Portrait";
 }
 
 
-public class OptionContainerNode : ObservableContainerNode<OptionViewModel>
+public class OptionContainerNode : ContainerNode<OptionViewModel>
 {
     public override string Header { get; init; } = "Options";
 }
 
-public class OptionLeafNode : ObservableLeafNode<OptionViewModel>
+public class OptionRootNode : ObservableNode<OptionViewModel>
 {
-}
+    public override string Header { get; init; } = "Option";
 
-public class OptionRootNode : ObservableRootNode<OptionViewModel>
-{
     public TriggerContainerNode TriggerNodes { get; } = new();
     public EffectContainerNode EffectNodes { get; } = new();
 
-    public override IEnumerator GetEnumerator()
+    public override IEnumerator<INode> GetEnumerator()
     {
         yield return TriggerNodes;
         yield return EffectNodes;
@@ -193,23 +180,21 @@ public class OptionRootNode : ObservableRootNode<OptionViewModel>
 }
 
 
-public class DecisionContainerNode : ObservableContainerNode<DecisionViewModel>
+public class DecisionContainerNode : ContainerNode<DecisionViewModel>
 {
     public override string Header { get; init; } = "Decisions";
 }
 
-public class DecisionLeafNode : ObservableLeafNode<DecisionViewModel>
+public class DecisionRootNode : ObservableNode<DecisionViewModel>
 {
-}
+    public override string Header { get; init; } = "Decision";
 
-public class DecisionRootNode : ObservableRootNode<DecisionViewModel>
-{
     public TriggerContainerNode ShownTriggerNodes { get; } = new();
     public TriggerContainerNode FailureTriggerNodes { get; } = new();
     public TriggerContainerNode ValidTriggerNodes { get; } = new();
     public EffectContainerNode EffectNodes { get; } = new();
 
-    public override IEnumerator GetEnumerator()
+    public override IEnumerator<INode> GetEnumerator()
     {
         yield return ShownTriggerNodes;
         yield return FailureTriggerNodes;
@@ -219,58 +204,38 @@ public class DecisionRootNode : ObservableRootNode<DecisionViewModel>
 }
 
 
-public class OnionContainerNode : ObservableContainerNode<OnionViewModel>
+public class OnionContainerNode : ContainerNode<OnionViewModel>
 {
     public override string Header { get; init; } = "On-Actions";
 }
 
-public class OnionLeafNode : ObservableLeafNode<OnionViewModel>
+public class OnionRootNode : ObservableNode<OnionViewModel>
 {
-}
-
-public class OnionRootNode : ObservableRootNode<OnionViewModel>
-{
-    public override IEnumerator GetEnumerator()
-    {
-        yield break;
-    }
+    public override string Header { get; init; } = "On-Action";
 }
 
 
-public class TriggerContainerNode : ObservableContainerNode<TriggerViewModel>
+public class TriggerContainerNode : ContainerNode<TriggerViewModel>
 {
     public override string Header { get; init; } = "Triggers";
 }
 
-public class TriggerLeafNode : ObservableLeafNode<TriggerViewModel>
+public class TriggerRootNode : ObservableNode<TriggerViewModel>
 {
-}
-
-public class TriggerRootNode : ObservableRootNode<TriggerViewModel>
-{
-    public override IEnumerator GetEnumerator()
-    {
-        yield break;
-    }
+    public override string Header { get; init; } = "Trigger";
 }
 
 
-public class EffectContainerNode : ObservableContainerNode<EffectViewModel>
+public class EffectContainerNode : ContainerNode<EffectViewModel>
 {
     public override string Header { get; init; } = "Effects";
 }
 
-public class EffectLeafNode : ObservableLeafNode<EffectViewModel>
+public class EffectRootNode : ObservableNode<EffectViewModel>
 {
+    public override string Header { get; init; } = "Effect";
 }
 
-public class EffectRootNode : ObservableRootNode<EffectViewModel>
-{
-    public override IEnumerator GetEnumerator()
-    {
-        yield break;
-    }
-}
 
 public class ContentPageViewModel : PageViewModel
     , IMessageHandler<SaveMessage>
