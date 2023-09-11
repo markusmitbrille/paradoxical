@@ -49,7 +49,7 @@
 
                     <TreeView
                         DockPanel.Dock="Left"
-                        ItemsSource="{Binding RootNode}">
+                        ItemsSource="{Binding RootNode.Children}">
 
                         <TreeView.Resources>
 
@@ -82,25 +82,9 @@
                             </Style>
 
                             <HierarchicalDataTemplate
-                                DataType="{x:Type viewmodel:ModNode}"
-                                ItemsSource="{Binding}">
-                            </HierarchicalDataTemplate>
-
-                            <HierarchicalDataTemplate
-                                DataType="{x:Type viewmodel:ScriptCollectionNode}"
-                                ItemsSource="{Binding}">
+                                DataType="{x:Type viewmodel:CollectionNode}"
+                                ItemsSource="{Binding Children}">
                                 <Grid>
-
-                                    <Grid.ContextMenu>
-                                        <ContextMenu>
-
-                                            <MenuItem
-                                                Header="New"
-                                                Icon="{materialDesign:PackIcon Kind=Creation}"
-                                                Command="{Binding CreateCommand}" />
-
-                                        </ContextMenu>
-                                    </Grid.ContextMenu>
 
                                     <TextBlock
                                         Text="{Binding Header}" />
@@ -109,12 +93,39 @@
                             </HierarchicalDataTemplate>
 
                             <HierarchicalDataTemplate
-                                DataType="{x:Type viewmodel:ScriptNode}"
-                                ItemsSource="{Binding}">
+                                DataType="{x:Type viewmodel:ModNode}"
+                                ItemsSource="{Binding Children}">
                                 <Grid>
 
                                     <Grid.ContextMenu>
                                         <ContextMenu>
+
+                                            <MenuItem
+                                                Header="Create Script"
+                                                Command="{Binding CreateScriptCommand}" />
+
+                                        </ContextMenu>
+                                    </Grid.ContextMenu>
+
+                                    <TextBlock
+                                        Text="{Binding Observable.ModName}" />
+
+                                </Grid>
+                            </HierarchicalDataTemplate>
+
+                            <HierarchicalDataTemplate
+                                DataType="{x:Type viewmodel:ScriptNode}"
+                                ItemsSource="{Binding Children}">
+                                <Grid>
+
+                                    <Grid.ContextMenu>
+                                        <ContextMenu>
+
+                                            <MenuItem
+                                                Header="Edit"
+                                                Icon="{materialDesign:PackIcon Kind=Edit}"
+                                                Command="{Binding EditCommand}"
+                                                CommandParameter="{Binding Observable}" />
 
                                             <MenuItem
                                                 Header="Delete"

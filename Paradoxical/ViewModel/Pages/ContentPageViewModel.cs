@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MaterialDesignThemes.Wpf;
 using Paradoxical.Core;
 using Paradoxical.Extensions;
 using Paradoxical.Messages;
@@ -7,10 +8,12 @@ using Paradoxical.Model.Elements;
 using Paradoxical.Services;
 using Paradoxical.Services.Elements;
 using Paradoxical.Services.Entities;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Controls;
 
 namespace Paradoxical.ViewModel;
 
@@ -94,185 +97,167 @@ public class NodeMap<O, N>
     }
 }
 
-public interface INode : IEnumerable<INode>
+public abstract class Node : ObservableObject
 {
-    public string Header { get; init; }
-}
-
-public abstract class CollectionNode<T> : ObservableCollection<ObservableNode<T>>, INode
-    where T : ObservableObject, new()
-{
-    public abstract string Header { get; init; }
-
-    IEnumerator<INode> IEnumerable<INode>.GetEnumerator() => GetEnumerator();
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-}
-
-public abstract class ObservableNode<T> : INode
-    where T : ObservableObject, new()
-{
-    public abstract string Header { get; init; }
-    public T Observable { get; init; } = new();
-
-    public virtual IEnumerator<INode> GetEnumerator()
+    private string header = string.Empty;
+    public string Header
     {
-        yield break;
+        get => header;
+        set => SetProperty(ref header, value);
     }
 
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    public abstract IEnumerable<Node> Children { get; }
+}
+
+public abstract class ObservableNode<T> : Node
+    where T : ObservableObject, new()
+{
+    public T Observable { get; init; } = new();
+
+    public override IEnumerable<Node> Children => Enumerable.Empty<Node>();
+}
+
+public class CollectionNode : Node
+{
+    private readonly ObservableCollection<Node> children = new();
+    public sealed override IEnumerable<Node> Children => children;
+
+    public void Add(Node node) => children.Add(node);
+    public void Remove(Node node) => children.Remove(node);
+    public void Clear() => children.Clear();
 }
 
 
 public class ModNode : ObservableNode<ModViewModel>
 {
-    public override string Header { get; init; } = "Mod";
+    public CollectionNode ScriptNodes { get; } = new();
+    public CollectionNode EventNodes { get; } = new();
+    public CollectionNode DecisionNodes { get; } = new();
+    public CollectionNode TriggerNodes { get; } = new();
+    public CollectionNode EffectNodes { get; } = new();
 
-    public ScriptCollectionNode ScriptNodes { get; } = new();
-    public EventCollectionNode EventNodes { get; } = new();
-    public DecisionCollectionNode DecisionNodes { get; } = new();
-    public TriggerCollectionNode TriggerNodes { get; } = new();
-    public EffectCollectionNode EffectNodes { get; } = new();
+    public RelayCommand? CreateScriptCommand { get; set; }
+    public RelayCommand? CreateEventCommand { get; set; }
+    public RelayCommand? CreateDecisionCommand { get; set; }
+    public RelayCommand? CreateTriggerCommand { get; set; }
+    public RelayCommand? CreateEffectCommand { get; set; }
 
-    public override IEnumerator<INode> GetEnumerator()
+    public override IEnumerable<Node> Children
     {
-        yield return ScriptNodes;
-        yield return EventNodes;
-        yield return DecisionNodes;
-        yield return TriggerNodes;
-        yield return EffectNodes;
+        get
+        {
+            yield return ScriptNodes;
+            yield return EventNodes;
+            yield return DecisionNodes;
+            yield return TriggerNodes;
+            yield return EffectNodes;
+        }
     }
 }
 
-
-public class ScriptCollectionNode : CollectionNode<ScriptViewModel>
-{
-    public override string Header { get; init; } = "Scripts";
-}
 
 public class ScriptNode : ObservableNode<ScriptViewModel>
 {
-    public override string Header { get; init; } = "Script";
-}
-
-
-public class EventCollectionNode : CollectionNode<EventViewModel>
-{
-    public override string Header { get; init; } = "Events";
-}
-
-public class EventNode : ObservableNode<EventViewModel>
-{
-    public override string Header { get; init; } = "Event";
-
-    public PortraitCollectionNode PortraitNodes { get; } = new();
-    public OptionCollectionNode OptionNodes { get; } = new();
-    public OnionCollectionNode OnionNodes { get; } = new();
-
-    public TriggerCollectionNode TriggerNodes { get; } = new();
-    public EffectCollectionNode ImmediateEffectNodes { get; } = new() { Header = "Immediate Effects" };
-    public EffectCollectionNode AfterEffectNodes { get; } = new() { Header = "After Effects" };
-
-    public override IEnumerator<INode> GetEnumerator()
-    {
-        yield return PortraitNodes;
-        yield return OptionNodes;
-        yield return OnionNodes;
-
-        yield return TriggerNodes;
-        yield return ImmediateEffectNodes;
-        yield return AfterEffectNodes;
-    }
-}
-
-
-public class PortraitCollectionNode : CollectionNode<PortraitViewModel>
-{
-    public override string Header { get; init; } = "Portraits";
-}
-
-public class PortraitNode : ObservableNode<PortraitViewModel>
-{
-    public override string Header { get; init; } = "Portrait";
-
     public RelayCommand<object>? EditCommand { get; set; }
     public RelayCommand<object>? DeleteCommand { get; set; }
 }
 
 
-public class OptionCollectionNode : CollectionNode<OptionViewModel>
+public class EventNode : ObservableNode<EventViewModel>
 {
-    public override string Header { get; init; } = "Options";
+    public CollectionNode PortraitNodes { get; } = new();
+    public CollectionNode OptionNodes { get; } = new();
+    public CollectionNode OnionNodes { get; } = new();
+
+    public CollectionNode TriggerNodes { get; } = new();
+    public CollectionNode ImmediateEffectNodes { get; } = new();
+    public CollectionNode AfterEffectNodes { get; } = new();
+
+    public RelayCommand<object>? EditCommand { get; set; }
+    public RelayCommand<object>? DeleteCommand { get; set; }
+
+    public RelayCommand<object>? CreatePortraitCommand { get; set; }
+    public RelayCommand<object>? CreateOptionCommand { get; set; }
+    public RelayCommand<object>? CreateOnionCommand { get; set; }
+
+    public RelayCommand<object>? AddTriggerCommand { get; set; }
+    public RelayCommand<object>? RemoveTriggerCommand { get; set; }
+
+    public RelayCommand<object>? AddImmediateEffectCommand { get; set; }
+    public RelayCommand<object>? RemoveImmediateEffectCommand { get; set; }
+
+    public RelayCommand<object>? AddAfterEffectCommand { get; set; }
+    public RelayCommand<object>? RemoveAfterEffectCommand { get; set; }
+
+    public override IEnumerable<Node> Children
+    {
+        get
+        {
+            yield return PortraitNodes;
+            yield return OptionNodes;
+            yield return OnionNodes;
+
+            yield return TriggerNodes;
+            yield return ImmediateEffectNodes;
+            yield return AfterEffectNodes;
+        }
+    }
 }
+
+
+public class PortraitNode : ObservableNode<PortraitViewModel>
+{
+}
+
 
 public class OptionNode : ObservableNode<OptionViewModel>
 {
-    public override string Header { get; init; } = "Option";
+    public CollectionNode TriggerNodes { get; } = new();
+    public CollectionNode EffectNodes { get; } = new();
 
-    public TriggerCollectionNode TriggerNodes { get; } = new();
-    public EffectCollectionNode EffectNodes { get; } = new();
-
-    public override IEnumerator<INode> GetEnumerator()
+    public override IEnumerable<Node> Children
     {
-        yield return TriggerNodes;
-        yield return EffectNodes;
+        get
+        {
+            yield return TriggerNodes;
+            yield return EffectNodes;
+        }
     }
 }
 
-
-public class DecisionCollectionNode : CollectionNode<DecisionViewModel>
-{
-    public override string Header { get; init; } = "Decisions";
-}
 
 public class DecisionNode : ObservableNode<DecisionViewModel>
 {
-    public override string Header { get; init; } = "Decision";
+    public CollectionNode ShownTriggerNodes { get; } = new();
+    public CollectionNode FailureTriggerNodes { get; } = new();
+    public CollectionNode ValidTriggerNodes { get; } = new();
+    public CollectionNode EffectNodes { get; } = new();
 
-    public TriggerCollectionNode ShownTriggerNodes { get; } = new();
-    public TriggerCollectionNode FailureTriggerNodes { get; } = new();
-    public TriggerCollectionNode ValidTriggerNodes { get; } = new();
-    public EffectCollectionNode EffectNodes { get; } = new();
-
-    public override IEnumerator<INode> GetEnumerator()
+    public override IEnumerable<Node> Children
     {
-        yield return ShownTriggerNodes;
-        yield return FailureTriggerNodes;
-        yield return ValidTriggerNodes;
-        yield return EffectNodes;
+        get
+        {
+            yield return ShownTriggerNodes;
+            yield return FailureTriggerNodes;
+            yield return ValidTriggerNodes;
+            yield return EffectNodes;
+        }
     }
 }
 
 
-public class OnionCollectionNode : CollectionNode<OnionViewModel>
-{
-    public override string Header { get; init; } = "On-Actions";
-}
-
 public class OnionNode : ObservableNode<OnionViewModel>
 {
-    public override string Header { get; init; } = "On-Action";
 }
 
-
-public class TriggerCollectionNode : CollectionNode<TriggerViewModel>
-{
-    public override string Header { get; init; } = "Triggers";
-}
 
 public class TriggerNode : ObservableNode<TriggerViewModel>
 {
-    public override string Header { get; init; } = "Trigger";
 }
 
-
-public class EffectCollectionNode : CollectionNode<EffectViewModel>
-{
-    public override string Header { get; init; } = "Effects";
-}
 
 public class EffectNode : ObservableNode<EffectViewModel>
 {
-    public override string Header { get; init; } = "Effect";
 }
 
 
@@ -312,12 +297,14 @@ public class ContentPageViewModel : PageViewModel
     private ModelMap<Trigger, TriggerViewModel> TriggerModelMap { get; set; } = new();
     private ModelMap<Effect, EffectViewModel> EffectModelMap { get; set; } = new();
 
-    private ModNode rootNode = new();
-    public ModNode RootNode
+    private CollectionNode rootNode = new();
+    public CollectionNode RootNode
     {
         get => rootNode;
         set => SetProperty(ref rootNode, value);
     }
+
+    public ModNode ModNode { get; set; } = new();
 
     private NodeMap<ScriptViewModel, ScriptNode> ScriptNodeMap { get; set; } = new();
     private NodeMap<EventViewModel, EventNode> EventNodeMap { get; set; } = new();
@@ -417,7 +404,7 @@ public class ContentPageViewModel : PageViewModel
         TriggerModelMap = new(TriggerService.Get());
         EffectModelMap = new(EffectService.Get());
 
-        RootNode = new() { Observable = ModViewModel };
+        ModNode = new() { Observable = ModViewModel };
 
         ScriptNodeMap = new(ScriptModelMap.Wrappers);
         EventNodeMap = new(EventModelMap.Wrappers);
@@ -428,9 +415,26 @@ public class ContentPageViewModel : PageViewModel
         TriggerNodeMap = new(TriggerModelMap.Wrappers);
         EffectNodeMap = new(EffectModelMap.Wrappers);
 
-        // configure nodes, add subnodes
+        RootNode.Add(ModNode);
+
+        SetupModNode();
+
+        // setup other node collections
 
         DataService.BeginTransaction();
+    }
+
+    private void SetupModNode()
+    {
+        ModNode.CreateScriptCommand = CreateScriptCommand;
+        // setup other commands
+
+        ModNode.ScriptNodes.Header = "Scripts";
+        foreach (var observable in ScriptModelMap.Wrappers)
+        {
+            var node = ScriptNodeMap[observable];
+            ModNode.ScriptNodes.Add(node);
+        }
     }
 
     private RelayCommand? reloadCommand;
@@ -473,13 +477,13 @@ public class ContentPageViewModel : PageViewModel
 
     private void CreateScript()
     {
-        Script model = new();
+        var model = new Script();
         ScriptService.Insert(model);
 
-        ScriptViewModel observable = ScriptModelMap[model];
-        ScriptNode node = ScriptNodeMap[observable];
+        var observable = ScriptModelMap[model];
+        var node = ScriptNodeMap[observable];
 
-        RootNode.ScriptNodes.Add(node);
+        ModNode.ScriptNodes.Add(node);
     }
 
     private RelayCommand<object>? deleteScriptCommand;
@@ -490,13 +494,15 @@ public class ContentPageViewModel : PageViewModel
         if (param is not ScriptViewModel observable)
         { return; }
 
-        Script model = observable.Model;
+        var node = ScriptNodeMap[observable];
+
+        ModNode.ScriptNodes.Remove(node);
+
+        var model = observable.Model;
         ScriptService.Delete(model);
 
         ScriptModelMap.Remove(model);
         ScriptNodeMap.Remove(observable);
-
-        RootNode.ScriptNodes.RemoveAll(node => node.Observable == observable);
     }
     private bool CanDeleteScript(object? param)
     {
