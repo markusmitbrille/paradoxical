@@ -82,12 +82,12 @@
                             </Style>
 
                             <HierarchicalDataTemplate
-                                DataType="{x:Type viewmodel:ModRootNode}"
+                                DataType="{x:Type viewmodel:ModNode}"
                                 ItemsSource="{Binding}">
                             </HierarchicalDataTemplate>
 
                             <HierarchicalDataTemplate
-                                DataType="{x:Type viewmodel:ScriptContainerNode}"
+                                DataType="{x:Type viewmodel:ScriptCollectionNode}"
                                 ItemsSource="{Binding}">
                                 <Grid>
 
@@ -109,7 +109,7 @@
                             </HierarchicalDataTemplate>
 
                             <HierarchicalDataTemplate
-                                DataType="{x:Type viewmodel:ScriptRootNode}"
+                                DataType="{x:Type viewmodel:ScriptNode}"
                                 ItemsSource="{Binding}">
                                 <Grid>
 

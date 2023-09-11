@@ -7,46 +7,90 @@ using Paradoxical.Model.Elements;
 using Paradoxical.Services;
 using Paradoxical.Services.Elements;
 using Paradoxical.Services.Entities;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Input;
 
 namespace Paradoxical.ViewModel;
 
-public class ModelMap<M, W> : Dictionary<M, W>
+public class ModelMap<M, W>
     where M : IModel, new()
     where W : IModelWrapper<M>, new()
 {
-    public IEnumerable<M> Models => Keys;
-    public IEnumerable<W> Wrappers => Values;
+    private Dictionary<M, W> Map { get; } = new();
+
+    public W this[M model]
+    {
+        get
+        {
+            if (Map.ContainsKey(model) == true)
+            {
+                return Map[model];
+            }
+
+            var wrapper = new W() { Model = model };
+            Map[model] = wrapper;
+
+            return wrapper;
+        }
+    }
+
+    public IEnumerable<M> Models => Map.Keys;
+    public IEnumerable<W> Wrappers => Map.Values;
 
     public ModelMap()
     {
     }
 
     public ModelMap(IEnumerable<M> models)
-        : base(models.ToDictionary(model => model, model => new W() { Model = model }))
+    {
+        Map = models.ToDictionary(model => model, model => new W() { Model = model });
+    }
+
+    public void Remove(M model)
+    {
+        Map.Remove(model);
+    }
+}
+
+public class NodeMap<O, N>
+    where O : ObservableObject, new()
+    where N : ObservableNode<O>, new()
+{
+    private Dictionary<O, N> Map { get; } = new();
+
+    public N this[O observable]
+    {
+        get
+        {
+            if (Map.ContainsKey(observable) == true)
+            {
+                return Map[observable];
+            }
+
+            var node = new N() { Observable = observable };
+            Map[observable] = node;
+
+            return node;
+        }
+    }
+
+    public IEnumerable<O> Observables => Map.Keys;
+    public IEnumerable<N> Nodes => Map.Values;
+
+    public NodeMap()
     {
     }
 
-    public W Wrap(M model)
+    public NodeMap(IEnumerable<O> observables)
     {
-        if (ContainsKey(model) == true)
-        {
-            return this[model];
-        }
+        Map = observables.ToDictionary(observable => observable, observable => new N() { Observable = observable });
+    }
 
-        var wrapper = new W() { Model = model };
-        this[model] = wrapper;
-
-        return wrapper;
+    public void Remove(O observable)
+    {
+        Map.Remove(observable);
     }
 }
 
@@ -55,7 +99,7 @@ public interface INode : IEnumerable<INode>
     public string Header { get; init; }
 }
 
-public abstract class ContainerNode<T> : ObservableCollection<ObservableNode<T>>, INode
+public abstract class CollectionNode<T> : ObservableCollection<ObservableNode<T>>, INode
     where T : ObservableObject, new()
 {
     public abstract string Header { get; init; }
@@ -79,15 +123,15 @@ public abstract class ObservableNode<T> : INode
 }
 
 
-public class ModRootNode : ObservableNode<ModViewModel>
+public class ModNode : ObservableNode<ModViewModel>
 {
     public override string Header { get; init; } = "Mod";
 
-    public ScriptContainerNode ScriptNodes { get; } = new();
-    public EventContainerNode EventNodes { get; } = new();
-    public DecisionContainerNode DecisionNodes { get; } = new();
-    public TriggerContainerNode TriggerNodes { get; } = new();
-    public EffectContainerNode EffectNodes { get; } = new();
+    public ScriptCollectionNode ScriptNodes { get; } = new();
+    public EventCollectionNode EventNodes { get; } = new();
+    public DecisionCollectionNode DecisionNodes { get; } = new();
+    public TriggerCollectionNode TriggerNodes { get; } = new();
+    public EffectCollectionNode EffectNodes { get; } = new();
 
     public override IEnumerator<INode> GetEnumerator()
     {
@@ -100,41 +144,33 @@ public class ModRootNode : ObservableNode<ModViewModel>
 }
 
 
-public class ScriptContainerNode : ContainerNode<ScriptViewModel>
+public class ScriptCollectionNode : CollectionNode<ScriptViewModel>
 {
     public override string Header { get; init; } = "Scripts";
-
-    public RelayCommand? CreateScriptCommand { get; set; }
 }
 
-public class ScriptRootNode : ObservableNode<ScriptViewModel>
+public class ScriptNode : ObservableNode<ScriptViewModel>
 {
     public override string Header { get; init; } = "Script";
-
-    public RelayCommand<object>? DeleteScriptCommand { get; set; }
 }
 
 
-public class EventContainerNode : ContainerNode<EventViewModel>
+public class EventCollectionNode : CollectionNode<EventViewModel>
 {
     public override string Header { get; init; } = "Events";
-
-    public RelayCommand? CreateEventCommand { get; set; }
 }
 
-public class EventRootNode : ObservableNode<EventViewModel>
+public class EventNode : ObservableNode<EventViewModel>
 {
     public override string Header { get; init; } = "Event";
 
-    public PortraitContainerNode PortraitNodes { get; } = new();
-    public OptionContainerNode OptionNodes { get; } = new();
-    public OnionContainerNode OnionNodes { get; } = new();
+    public PortraitCollectionNode PortraitNodes { get; } = new();
+    public OptionCollectionNode OptionNodes { get; } = new();
+    public OnionCollectionNode OnionNodes { get; } = new();
 
-    public TriggerContainerNode TriggerNodes { get; } = new();
-    public EffectContainerNode ImmediateEffectNodes { get; } = new() { Header = "Immediate Effects" };
-    public EffectContainerNode AfterEffectNodes { get; } = new() { Header = "After Effects" };
-
-    public RelayCommand<object>? DeleteEventCommand { get; set; }
+    public TriggerCollectionNode TriggerNodes { get; } = new();
+    public EffectCollectionNode ImmediateEffectNodes { get; } = new() { Header = "Immediate Effects" };
+    public EffectCollectionNode AfterEffectNodes { get; } = new() { Header = "After Effects" };
 
     public override IEnumerator<INode> GetEnumerator()
     {
@@ -149,28 +185,31 @@ public class EventRootNode : ObservableNode<EventViewModel>
 }
 
 
-public class PortraitContainerNode : ContainerNode<PortraitViewModel>
+public class PortraitCollectionNode : CollectionNode<PortraitViewModel>
 {
     public override string Header { get; init; } = "Portraits";
 }
 
-public class PortraitRootNode : ObservableNode<PortraitViewModel>
+public class PortraitNode : ObservableNode<PortraitViewModel>
 {
     public override string Header { get; init; } = "Portrait";
+
+    public RelayCommand<object>? EditCommand { get; set; }
+    public RelayCommand<object>? DeleteCommand { get; set; }
 }
 
 
-public class OptionContainerNode : ContainerNode<OptionViewModel>
+public class OptionCollectionNode : CollectionNode<OptionViewModel>
 {
     public override string Header { get; init; } = "Options";
 }
 
-public class OptionRootNode : ObservableNode<OptionViewModel>
+public class OptionNode : ObservableNode<OptionViewModel>
 {
     public override string Header { get; init; } = "Option";
 
-    public TriggerContainerNode TriggerNodes { get; } = new();
-    public EffectContainerNode EffectNodes { get; } = new();
+    public TriggerCollectionNode TriggerNodes { get; } = new();
+    public EffectCollectionNode EffectNodes { get; } = new();
 
     public override IEnumerator<INode> GetEnumerator()
     {
@@ -180,19 +219,19 @@ public class OptionRootNode : ObservableNode<OptionViewModel>
 }
 
 
-public class DecisionContainerNode : ContainerNode<DecisionViewModel>
+public class DecisionCollectionNode : CollectionNode<DecisionViewModel>
 {
     public override string Header { get; init; } = "Decisions";
 }
 
-public class DecisionRootNode : ObservableNode<DecisionViewModel>
+public class DecisionNode : ObservableNode<DecisionViewModel>
 {
     public override string Header { get; init; } = "Decision";
 
-    public TriggerContainerNode ShownTriggerNodes { get; } = new();
-    public TriggerContainerNode FailureTriggerNodes { get; } = new();
-    public TriggerContainerNode ValidTriggerNodes { get; } = new();
-    public EffectContainerNode EffectNodes { get; } = new();
+    public TriggerCollectionNode ShownTriggerNodes { get; } = new();
+    public TriggerCollectionNode FailureTriggerNodes { get; } = new();
+    public TriggerCollectionNode ValidTriggerNodes { get; } = new();
+    public EffectCollectionNode EffectNodes { get; } = new();
 
     public override IEnumerator<INode> GetEnumerator()
     {
@@ -204,34 +243,34 @@ public class DecisionRootNode : ObservableNode<DecisionViewModel>
 }
 
 
-public class OnionContainerNode : ContainerNode<OnionViewModel>
+public class OnionCollectionNode : CollectionNode<OnionViewModel>
 {
     public override string Header { get; init; } = "On-Actions";
 }
 
-public class OnionRootNode : ObservableNode<OnionViewModel>
+public class OnionNode : ObservableNode<OnionViewModel>
 {
     public override string Header { get; init; } = "On-Action";
 }
 
 
-public class TriggerContainerNode : ContainerNode<TriggerViewModel>
+public class TriggerCollectionNode : CollectionNode<TriggerViewModel>
 {
     public override string Header { get; init; } = "Triggers";
 }
 
-public class TriggerRootNode : ObservableNode<TriggerViewModel>
+public class TriggerNode : ObservableNode<TriggerViewModel>
 {
     public override string Header { get; init; } = "Trigger";
 }
 
 
-public class EffectContainerNode : ContainerNode<EffectViewModel>
+public class EffectCollectionNode : CollectionNode<EffectViewModel>
 {
     public override string Header { get; init; } = "Effects";
 }
 
-public class EffectRootNode : ObservableNode<EffectViewModel>
+public class EffectNode : ObservableNode<EffectViewModel>
 {
     public override string Header { get; init; } = "Effect";
 }
@@ -264,23 +303,32 @@ public class ContentPageViewModel : PageViewModel
 
     private ModViewModel ModViewModel { get; set; } = new();
 
-    private ModelMap<Script, ScriptViewModel> ScriptMap { get; set; } = new();
-    private ModelMap<Event, EventViewModel> EventMap { get; set; } = new();
-    private ModelMap<Option, OptionViewModel> OptionMap { get; set; } = new();
-    private ModelMap<Onion, OnionViewModel> OnionMap { get; set; } = new();
-    private ModelMap<Portrait, PortraitViewModel> PortraitMap { get; set; } = new();
-    private ModelMap<Decision, DecisionViewModel> DecisionMap { get; set; } = new();
-    private ModelMap<Trigger, TriggerViewModel> TriggerMap { get; set; } = new();
-    private ModelMap<Effect, EffectViewModel> EffectMap { get; set; } = new();
+    private ModelMap<Script, ScriptViewModel> ScriptModelMap { get; set; } = new();
+    private ModelMap<Event, EventViewModel> EventModelMap { get; set; } = new();
+    private ModelMap<Option, OptionViewModel> OptionModelMap { get; set; } = new();
+    private ModelMap<Onion, OnionViewModel> OnionModelMap { get; set; } = new();
+    private ModelMap<Portrait, PortraitViewModel> PortraitModelMap { get; set; } = new();
+    private ModelMap<Decision, DecisionViewModel> DecisionModelMap { get; set; } = new();
+    private ModelMap<Trigger, TriggerViewModel> TriggerModelMap { get; set; } = new();
+    private ModelMap<Effect, EffectViewModel> EffectModelMap { get; set; } = new();
 
-    private ModRootNode rootNode = new();
-    public ModRootNode RootNode
+    private ModNode rootNode = new();
+    public ModNode RootNode
     {
         get => rootNode;
         set => SetProperty(ref rootNode, value);
     }
 
-    private Dictionary<Script, ScriptRootNode> ScriptNodes { get; set; } = new();
+    private NodeMap<ScriptViewModel, ScriptNode> ScriptNodeMap { get; set; } = new();
+    private NodeMap<EventViewModel, EventNode> EventNodeMap { get; set; } = new();
+    private NodeMap<OptionViewModel, OptionNode> OptionNodeMap { get; set; } = new();
+    private NodeMap<OnionViewModel, OnionNode> OnionNodeMap { get; set; } = new();
+    private NodeMap<PortraitViewModel, PortraitNode> PortraitNodeMap { get; set; } = new();
+    private NodeMap<DecisionViewModel, DecisionNode> DecisionNodeMap { get; set; } = new();
+    private NodeMap<TriggerViewModel, TriggerNode> TriggerNodeMap { get; set; } = new();
+    private NodeMap<EffectViewModel, EffectNode> EffectNodeMap { get; set; } = new();
+
+    private Dictionary<Script, ScriptNode> ScriptNodes { get; set; } = new();
 
     public ContentPageViewModel(
         IShell shell,
@@ -360,29 +408,29 @@ public class ContentPageViewModel : PageViewModel
 
         ModViewModel = new() { Model = mod };
 
-        ScriptMap = new(ScriptService.Get());
-        EventMap = new(EventService.Get());
-        OptionMap = new(OptionService.Get());
-        OnionMap = new(OnionService.Get());
-        PortraitMap = new(PortraitService.Get());
-        DecisionMap = new(DecisionService.Get());
-        TriggerMap = new(TriggerService.Get());
-        EffectMap = new(EffectService.Get());
+        ScriptModelMap = new(ScriptService.Get());
+        EventModelMap = new(EventService.Get());
+        OptionModelMap = new(OptionService.Get());
+        OnionModelMap = new(OnionService.Get());
+        PortraitModelMap = new(PortraitService.Get());
+        DecisionModelMap = new(DecisionService.Get());
+        TriggerModelMap = new(TriggerService.Get());
+        EffectModelMap = new(EffectService.Get());
 
         RootNode = new() { Observable = ModViewModel };
 
-        BuildScriptNodes();
+        ScriptNodeMap = new(ScriptModelMap.Wrappers);
+        EventNodeMap = new(EventModelMap.Wrappers);
+        OptionNodeMap = new(OptionModelMap.Wrappers);
+        OnionNodeMap = new(OnionModelMap.Wrappers);
+        PortraitNodeMap = new(PortraitModelMap.Wrappers);
+        DecisionNodeMap = new(DecisionModelMap.Wrappers);
+        TriggerNodeMap = new(TriggerModelMap.Wrappers);
+        EffectNodeMap = new(EffectModelMap.Wrappers);
+
+        // configure nodes, add subnodes
 
         DataService.BeginTransaction();
-    }
-
-    private void BuildScriptNodes()
-    {
-        foreach (var (_, observable) in ScriptMap)
-        {
-            var node = new ScriptRootNode() { Observable = observable, };
-            RootNode.ScriptNodes.Add(node);
-        }
     }
 
     private RelayCommand? reloadCommand;
@@ -405,14 +453,14 @@ public class ContentPageViewModel : PageViewModel
     {
         ModService.Update(ModViewModel.Model);
 
-        ScriptService.UpdateAll(ScriptMap.Models);
-        EventService.UpdateAll(EventMap.Models);
-        OptionService.UpdateAll(OptionMap.Models);
-        OnionService.UpdateAll(OnionMap.Models);
-        PortraitService.UpdateAll(PortraitMap.Models);
-        DecisionService.UpdateAll(DecisionMap.Models);
-        TriggerService.UpdateAll(TriggerMap.Models);
-        EffectService.UpdateAll(EffectMap.Models);
+        ScriptService.UpdateAll(ScriptModelMap.Models);
+        EventService.UpdateAll(EventModelMap.Models);
+        OptionService.UpdateAll(OptionModelMap.Models);
+        OnionService.UpdateAll(OnionModelMap.Models);
+        PortraitService.UpdateAll(PortraitModelMap.Models);
+        DecisionService.UpdateAll(DecisionModelMap.Models);
+        TriggerService.UpdateAll(TriggerModelMap.Models);
+        EffectService.UpdateAll(EffectModelMap.Models);
 
         DataService.CommitTransaction();
         DataService.BeginTransaction();
@@ -428,13 +476,8 @@ public class ContentPageViewModel : PageViewModel
         Script model = new();
         ScriptService.Insert(model);
 
-        ScriptViewModel observable = ScriptMap.Wrap(model);
-
-        ScriptRootNode node = new()
-        {
-            Observable = observable,
-            DeleteScriptCommand = DeleteScriptCommand,
-        };
+        ScriptViewModel observable = ScriptModelMap[model];
+        ScriptNode node = ScriptNodeMap[observable];
 
         RootNode.ScriptNodes.Add(node);
     }
@@ -449,6 +492,9 @@ public class ContentPageViewModel : PageViewModel
 
         Script model = observable.Model;
         ScriptService.Delete(model);
+
+        ScriptModelMap.Remove(model);
+        ScriptNodeMap.Remove(observable);
 
         RootNode.ScriptNodes.RemoveAll(node => node.Observable == observable);
     }
