@@ -48,25 +48,10 @@ public partial class App : Application
         // finder view model
         services.AddTransient<IFinder, FinderViewModel>();
 
-        // misc page view models
-        services.AddSingleton<AboutPageViewModel>();
-
-        // details view models
-        services.AddSingleton<ScriptDetailsViewModel>();
-        services.AddSingleton<EventDetailsViewModel>();
-        services.AddSingleton<OptionDetailsViewModel>();
-        services.AddSingleton<DecisionDetailsViewModel>();
-        services.AddSingleton<TriggerDetailsViewModel>();
-        services.AddSingleton<EffectDetailsViewModel>();
-
         // page view models
-        services.AddSingleton<ModPageViewModel>();
+        services.AddSingleton<AboutPageViewModel>();
         services.AddSingleton<OutputPageViewModel>();
-        services.AddSingleton<ScriptPageViewModel>();
-        services.AddSingleton<EventPageViewModel>();
-        services.AddSingleton<DecisionPageViewModel>();
-        services.AddSingleton<TriggerPageViewModel>();
-        services.AddSingleton<EffectPageViewModel>();
+        services.AddSingleton<ContentPageViewModel>();
 
         ServiceProvider = services.BuildServiceProvider();
     }

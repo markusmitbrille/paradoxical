@@ -67,23 +67,11 @@
             Command="{Binding GoToOnionDocCommand}"
             Gesture="F8" />
         <KeyBinding
-            Command="{Binding GoToScriptTableCommand}"
-            Gesture="ALT+0" />
-        <KeyBinding
-            Command="{Binding GoToInfoCommand}"
+            Command="{Binding GoToContentCommand}"
             Gesture="ALT+1" />
         <KeyBinding
-            Command="{Binding GoToEventTableCommand}"
+            Command="{Binding GoToOutputCommand}"
             Gesture="ALT+2" />
-        <KeyBinding
-            Command="{Binding GoToDecisionTableCommand}"
-            Gesture="ALT+3" />
-        <KeyBinding
-            Command="{Binding GoToTriggerTableCommand}"
-            Gesture="ALT+4" />
-        <KeyBinding
-            Command="{Binding GoToEffectTableCommand}"
-            Gesture="ALT+5" />
     </Window.InputBindings>
 
     <materialDesign:DialogHost
@@ -111,66 +99,11 @@
                             Margin="12,8"
                             HorizontalContentAlignment="Left"
                             Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToInfoCommand}"
+                            Command="{Binding GoToContentCommand}"
                             Click="MenuButtonClickHandler">
                             <TextBlock
                                 Margin="24,4,0,4"
-                                Text="Info" />
-                        </Button>
-
-                        <Button
-                            Margin="12,8"
-                            HorizontalContentAlignment="Left"
-                            Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToEventTableCommand}"
-                            Click="MenuButtonClickHandler">
-                            <TextBlock
-                                Margin="24,4,0,4"
-                                Text="Events" />
-                        </Button>
-
-                        <Button
-                            Margin="12,8"
-                            HorizontalContentAlignment="Left"
-                            Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToDecisionTableCommand}"
-                            Click="MenuButtonClickHandler">
-                            <TextBlock
-                                Margin="24,4,0,4"
-                                Text="Decisions" />
-                        </Button>
-
-                        <Button
-                            Margin="12,8"
-                            HorizontalContentAlignment="Left"
-                            Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToTriggerTableCommand}"
-                            Click="MenuButtonClickHandler">
-                            <TextBlock
-                                Margin="24,4,0,4"
-                                Text="Triggers" />
-                        </Button>
-
-                        <Button
-                            Margin="12,8"
-                            HorizontalContentAlignment="Left"
-                            Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToEffectTableCommand}"
-                            Click="MenuButtonClickHandler">
-                            <TextBlock
-                                Margin="24,4,0,4"
-                                Text="Effects" />
-                        </Button>
-
-                        <Button
-                            Margin="12,8"
-                            HorizontalContentAlignment="Left"
-                            Style="{DynamicResource MaterialDesignFlatButton}"
-                            Command="{Binding GoToScriptTableCommand}"
-                            Click="MenuButtonClickHandler">
-                            <TextBlock
-                                Margin="24,4,0,4"
-                                Text="Scripts" />
+                                Text="Content" />
                         </Button>
 
                         <Separator

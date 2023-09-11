@@ -174,7 +174,7 @@ public class Shell : ObservableObject, IShell
 
         ClearPage();
         FileService.New();
-        GoToInfo();
+        GoToContent();
     }
 
     private RelayCommand? openCommand;
@@ -186,7 +186,7 @@ public class Shell : ObservableObject, IShell
 
         ClearPage();
         FileService.Open();
-        GoToInfo();
+        GoToContent();
     }
 
     private RelayCommand? saveCommand;
@@ -212,7 +212,7 @@ public class Shell : ObservableObject, IShell
 
         ClearPage();
         FileService.Backup();
-        GoToInfo();
+        GoToContent();
     }
 
     private RelayCommand? exportCommand;
@@ -436,12 +436,12 @@ if you don't save them.",
 
     #region Page Commands
 
-    private RelayCommand? goToInfoCommand;
-    public RelayCommand GoToInfoCommand => goToInfoCommand ??= new(GoToInfo);
+    private RelayCommand? goToContentCommand;
+    public RelayCommand GoToContentCommand => goToContentCommand ??= new(GoToContent);
 
-    private void GoToInfo()
+    private void GoToContent()
     {
-        Navigate<ModPageViewModel>();
+        Navigate<ContentPageViewModel>();
     }
 
     private RelayCommand? goToOutputCommand;
@@ -498,46 +498,6 @@ if you don't save them.",
     private void GoToOnionDoc()
     {
         NavigateUrl(ONION_DOC_URL);
-    }
-
-    private RelayCommand? goToEventTableCommand;
-    public RelayCommand GoToEventTableCommand => goToEventTableCommand ??= new(GoToEventTable);
-
-    private void GoToEventTable()
-    {
-        Navigate<EventPageViewModel>();
-    }
-
-    private RelayCommand? goToDecisionTableCommand;
-    public RelayCommand GoToDecisionTableCommand => goToDecisionTableCommand ??= new(GoToDecisionTable);
-
-    private void GoToDecisionTable()
-    {
-        Navigate<DecisionPageViewModel>();
-    }
-
-    private RelayCommand? goToTriggerTableCommand;
-    public RelayCommand GoToTriggerTableCommand => goToTriggerTableCommand ??= new(GoToTriggerTable);
-
-    private void GoToTriggerTable()
-    {
-        Navigate<TriggerPageViewModel>();
-    }
-
-    private RelayCommand? goToEffectTableCommand;
-    public RelayCommand GoToEffectTableCommand => goToEffectTableCommand ??= new(GoToEffectTable);
-
-    private void GoToEffectTable()
-    {
-        Navigate<EffectPageViewModel>();
-    }
-
-    private RelayCommand? goToScriptTableCommand;
-    public RelayCommand GoToScriptTableCommand => goToScriptTableCommand ??= new(GoToScriptTable);
-
-    private void GoToScriptTable()
-    {
-        Navigate<ScriptPageViewModel>();
     }
 
     #endregion

@@ -15,68 +15,13 @@
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:ModPageViewModel}">
-        <view:ModPageView />
-    </DataTemplate>
-
-    <DataTemplate
         DataType="{x:Type viewmodel:OutputPageViewModel}">
         <view:OutputPageView />
     </DataTemplate>
 
     <DataTemplate
-        DataType="{x:Type viewmodel:ScriptPageViewModel}">
-        <view:ScriptPageView />
+        DataType="{x:Type viewmodel:ContentPageViewModel}">
+        <view:ContentPageView />
     </DataTemplate>
 
-    <DataTemplate
-        DataType="{x:Type viewmodel:EventPageViewModel}">
-        <view:EventPageView />
-    </DataTemplate>
-
-    <DataTemplate
-        DataType="{x:Type viewmodel:DecisionPageViewModel}">
-        <view:DecisionPageView />
-    </DataTemplate>
-
-    <DataTemplate
-        DataType="{x:Type viewmodel:TriggerPageViewModel}">
-        <view:TriggerPageView />
-    </DataTemplate>
-
-    <DataTemplate
-        DataType="{x:Type viewmodel:EffectPageViewModel}">
-        <view:EffectPageView />
-    </DataTemplate>
-
-    <DataTemplate
-        DataType="{x:Type viewmodel:ScriptDetailsViewModel}">
-        <view:ScriptDetailsView />
-    </DataTemplate>
-
-    <DataTemplate
-        DataType="{x:Type viewmodel:EventDetailsViewModel}">
-        <view:EventDetailsView />
-    </DataTemplate>
-
-    <DataTemplate
-        DataType="{x:Type viewmodel:OptionDetailsViewModel}">
-        <view:OptionDetailsView />
-    </DataTemplate>
-
-    <DataTemplate
-        DataType="{x:Type viewmodel:DecisionDetailsViewModel}">
-        <view:DecisionDetailsView />
-    </DataTemplate>
-
-    <DataTemplate
-        DataType="{x:Type viewmodel:TriggerDetailsViewModel}">
-        <view:TriggerDetailsView />
-    </DataTemplate>
-
-    <DataTemplate
-        DataType="{x:Type viewmodel:EffectDetailsViewModel}">
-        <view:EffectDetailsView />
-    </DataTemplate>
-    
 </ResourceDictionary>
