@@ -17,250 +17,6 @@ using System.Windows.Controls;
 
 namespace Paradoxical.ViewModel;
 
-public class ModelMap<M, W>
-    where M : IModel, new()
-    where W : IModelWrapper<M>, new()
-{
-    private Dictionary<M, W> Map { get; } = new();
-
-    public W this[M model]
-    {
-        get
-        {
-            if (Map.ContainsKey(model) == true)
-            {
-                return Map[model];
-            }
-
-            var wrapper = new W() { Model = model };
-            Map[model] = wrapper;
-
-            return wrapper;
-        }
-    }
-
-    public IEnumerable<M> Models => Map.Keys;
-    public IEnumerable<W> Wrappers => Map.Values;
-
-    public ModelMap()
-    {
-    }
-
-    public ModelMap(IEnumerable<M> models)
-    {
-        Map = models.ToDictionary(model => model, model => new W() { Model = model });
-    }
-
-    public void Remove(M model)
-    {
-        Map.Remove(model);
-    }
-}
-
-public class NodeMap<O, N>
-    where O : ObservableObject, new()
-    where N : ObservableNode<O>, new()
-{
-    private Dictionary<O, N> Map { get; } = new();
-
-    public N this[O observable]
-    {
-        get
-        {
-            if (Map.ContainsKey(observable) == true)
-            {
-                return Map[observable];
-            }
-
-            var node = new N() { Observable = observable };
-            Map[observable] = node;
-
-            return node;
-        }
-    }
-
-    public IEnumerable<O> Observables => Map.Keys;
-    public IEnumerable<N> Nodes => Map.Values;
-
-    public NodeMap()
-    {
-    }
-
-    public NodeMap(IEnumerable<O> observables)
-    {
-        Map = observables.ToDictionary(observable => observable, observable => new N() { Observable = observable });
-    }
-
-    public void Remove(O observable)
-    {
-        Map.Remove(observable);
-    }
-}
-
-public abstract class Node : ObservableObject
-{
-    private string header = string.Empty;
-    public string Header
-    {
-        get => header;
-        set => SetProperty(ref header, value);
-    }
-
-    public abstract IEnumerable<Node> Children { get; }
-}
-
-public abstract class ObservableNode<T> : Node
-    where T : ObservableObject, new()
-{
-    public T Observable { get; init; } = new();
-
-    public override IEnumerable<Node> Children => Enumerable.Empty<Node>();
-}
-
-public class CollectionNode : Node
-{
-    private readonly ObservableCollection<Node> children = new();
-    public sealed override IEnumerable<Node> Children => children;
-
-    public void Add(Node node) => children.Add(node);
-    public void Remove(Node node) => children.Remove(node);
-    public void Clear() => children.Clear();
-}
-
-
-public class ModNode : ObservableNode<ModViewModel>
-{
-    public CollectionNode ScriptNodes { get; } = new();
-    public CollectionNode EventNodes { get; } = new();
-    public CollectionNode DecisionNodes { get; } = new();
-    public CollectionNode TriggerNodes { get; } = new();
-    public CollectionNode EffectNodes { get; } = new();
-
-    public RelayCommand? CreateScriptCommand { get; set; }
-    public RelayCommand? CreateEventCommand { get; set; }
-    public RelayCommand? CreateDecisionCommand { get; set; }
-    public RelayCommand? CreateTriggerCommand { get; set; }
-    public RelayCommand? CreateEffectCommand { get; set; }
-
-    public override IEnumerable<Node> Children
-    {
-        get
-        {
-            yield return ScriptNodes;
-            yield return EventNodes;
-            yield return DecisionNodes;
-            yield return TriggerNodes;
-            yield return EffectNodes;
-        }
-    }
-}
-
-
-public class ScriptNode : ObservableNode<ScriptViewModel>
-{
-    public RelayCommand<object>? EditCommand { get; set; }
-    public RelayCommand<object>? DeleteCommand { get; set; }
-}
-
-
-public class EventNode : ObservableNode<EventViewModel>
-{
-    public CollectionNode PortraitNodes { get; } = new();
-    public CollectionNode OptionNodes { get; } = new();
-    public CollectionNode OnionNodes { get; } = new();
-
-    public CollectionNode TriggerNodes { get; } = new();
-    public CollectionNode ImmediateEffectNodes { get; } = new();
-    public CollectionNode AfterEffectNodes { get; } = new();
-
-    public RelayCommand<object>? EditCommand { get; set; }
-    public RelayCommand<object>? DeleteCommand { get; set; }
-
-    public RelayCommand<object>? CreatePortraitCommand { get; set; }
-    public RelayCommand<object>? CreateOptionCommand { get; set; }
-    public RelayCommand<object>? CreateOnionCommand { get; set; }
-
-    public RelayCommand<object>? AddTriggerCommand { get; set; }
-    public RelayCommand<object>? RemoveTriggerCommand { get; set; }
-
-    public RelayCommand<object>? AddImmediateEffectCommand { get; set; }
-    public RelayCommand<object>? RemoveImmediateEffectCommand { get; set; }
-
-    public RelayCommand<object>? AddAfterEffectCommand { get; set; }
-    public RelayCommand<object>? RemoveAfterEffectCommand { get; set; }
-
-    public override IEnumerable<Node> Children
-    {
-        get
-        {
-            yield return PortraitNodes;
-            yield return OptionNodes;
-            yield return OnionNodes;
-
-            yield return TriggerNodes;
-            yield return ImmediateEffectNodes;
-            yield return AfterEffectNodes;
-        }
-    }
-}
-
-
-public class PortraitNode : ObservableNode<PortraitViewModel>
-{
-}
-
-
-public class OptionNode : ObservableNode<OptionViewModel>
-{
-    public CollectionNode TriggerNodes { get; } = new();
-    public CollectionNode EffectNodes { get; } = new();
-
-    public override IEnumerable<Node> Children
-    {
-        get
-        {
-            yield return TriggerNodes;
-            yield return EffectNodes;
-        }
-    }
-}
-
-
-public class DecisionNode : ObservableNode<DecisionViewModel>
-{
-    public CollectionNode ShownTriggerNodes { get; } = new();
-    public CollectionNode FailureTriggerNodes { get; } = new();
-    public CollectionNode ValidTriggerNodes { get; } = new();
-    public CollectionNode EffectNodes { get; } = new();
-
-    public override IEnumerable<Node> Children
-    {
-        get
-        {
-            yield return ShownTriggerNodes;
-            yield return FailureTriggerNodes;
-            yield return ValidTriggerNodes;
-            yield return EffectNodes;
-        }
-    }
-}
-
-
-public class OnionNode : ObservableNode<OnionViewModel>
-{
-}
-
-
-public class TriggerNode : ObservableNode<TriggerViewModel>
-{
-}
-
-
-public class EffectNode : ObservableNode<EffectViewModel>
-{
-}
-
-
 public class ContentPageViewModel : PageViewModel
     , IMessageHandler<SaveMessage>
     , IMessageHandler<ShutdownMessage>
@@ -278,13 +34,6 @@ public class ContentPageViewModel : PageViewModel
     public IOnionService OnionService { get; }
     public ITriggerService TriggerService { get; }
     public IEffectService EffectService { get; }
-
-    private int selectedTab;
-    public int SelectedTab
-    {
-        get => selectedTab;
-        set => SetProperty(ref selectedTab, value);
-    }
 
     private ModViewModel ModViewModel { get; set; } = new();
 
@@ -316,6 +65,28 @@ public class ContentPageViewModel : PageViewModel
     private NodeMap<EffectViewModel, EffectNode> EffectNodeMap { get; set; } = new();
 
     private Dictionary<Script, ScriptNode> ScriptNodes { get; set; } = new();
+
+    private ObservableObject? selected;
+    public ObservableObject? Selected
+    {
+        get => selected;
+        set => SetProperty(ref selected, value);
+    }
+
+    private Node? selectedNode;
+    public Node? SelectedNode
+    {
+        get => selectedNode;
+        set
+        {
+            SetProperty(ref selectedNode, value);
+
+            if (value is IObservableWrapper wrapper)
+            {
+                Selected = wrapper.Observable;
+            }
+        }
+    }
 
     public ContentPageViewModel(
         IShell shell,
@@ -415,26 +186,43 @@ public class ContentPageViewModel : PageViewModel
         TriggerNodeMap = new(TriggerModelMap.Wrappers);
         EffectNodeMap = new(EffectModelMap.Wrappers);
 
+        RootNode = new CollectionNode();
         RootNode.Add(ModNode);
 
-        SetupModNode();
+        SetupModNode(ModNode);
+        SetupScriptNodes();
 
-        // setup other node collections
+        // setup other nodes
 
         DataService.BeginTransaction();
     }
 
-    private void SetupModNode()
+    private void SetupModNode(ModNode node)
     {
-        ModNode.CreateScriptCommand = CreateScriptCommand;
+        node.EditCommand = EditCommand;
+        node.CreateScriptCommand = CreateScriptCommand;
         // setup other commands
 
-        ModNode.ScriptNodes.Header = "Scripts";
+        node.ScriptNodes.Header = "Scripts";
         foreach (var observable in ScriptModelMap.Wrappers)
         {
-            var node = ScriptNodeMap[observable];
-            ModNode.ScriptNodes.Add(node);
+            var child = ScriptNodeMap[observable];
+            node.ScriptNodes.Add(child);
         }
+    }
+
+    private void SetupScriptNodes()
+    {
+        foreach (var node in ScriptNodeMap.Nodes)
+        {
+            SetupScriptNode(node);
+        }
+    }
+
+    private void SetupScriptNode(ScriptNode node)
+    {
+        node.DeleteCommand = DeleteScriptCommand;
+        node.EditCommand = EditCommand;
     }
 
     private RelayCommand? reloadCommand;
@@ -470,6 +258,40 @@ public class ContentPageViewModel : PageViewModel
         DataService.BeginTransaction();
     }
 
+    private RelayCommand<object>? editCommand;
+    public RelayCommand<object> EditCommand => editCommand ??= new(Edit, CanEdit);
+
+    private void Edit(object? param)
+    {
+        if (param is not ObservableObject observable)
+        { return; }
+
+        Selected = observable;
+    }
+    private bool CanEdit(object? param)
+    {
+        return param is ObservableObject;
+    }
+
+    private RelayCommand<object>? editNodeCommand;
+    public RelayCommand<object> EditNodeCommand => editNodeCommand ??= new(EditNode, CanEditNode);
+
+    private void EditNode(object? param)
+    {
+        if (param is not Node node)
+        { return; }
+
+        if (param is not IObservableWrapper wrapper)
+        { return; }
+
+        var observable = wrapper.Observable;
+        Selected = observable;
+    }
+    private bool CanEditNode(object? param)
+    {
+        return param is Node && param is IObservableWrapper;
+    }
+
     #region Script Commands
 
     private RelayCommand? createScriptCommand;
@@ -477,13 +299,18 @@ public class ContentPageViewModel : PageViewModel
 
     private void CreateScript()
     {
-        var model = new Script();
-        ScriptService.Insert(model);
+        for (int i = 0; i < 200; i++)
+        {
+            var model = new Script();
+            ScriptService.Insert(model);
 
-        var observable = ScriptModelMap[model];
-        var node = ScriptNodeMap[observable];
+            var observable = ScriptModelMap[model];
+            var node = ScriptNodeMap[observable];
 
-        ModNode.ScriptNodes.Add(node);
+            SetupScriptNode(node);
+
+            ModNode.ScriptNodes.Add(node);
+        }
     }
 
     private RelayCommand<object>? deleteScriptCommand;
@@ -508,6 +335,13 @@ public class ContentPageViewModel : PageViewModel
     {
         return param is ScriptViewModel;
     }
+
+    #endregion
+
+
+    #region Event Commands
+
+
 
     #endregion
 }

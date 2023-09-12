@@ -24,4 +24,9 @@
         <view:ContentPageView />
     </DataTemplate>
 
+    <DataTemplate
+        DataType="{x:Type viewmodel:ScriptViewModel}">
+        <view:ScriptView />
+    </DataTemplate>
+
 </ResourceDictionary>

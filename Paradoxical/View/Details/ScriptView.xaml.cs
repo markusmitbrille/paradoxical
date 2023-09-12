@@ -2,9 +2,9 @@
 
 namespace Paradoxical.View;
 
-public partial class ScriptDetailsView : UserControl
+public partial class ScriptView : UserControl
 {
-    public ScriptDetailsView()
+    public ScriptView()
     {
         InitializeComponent();
     }

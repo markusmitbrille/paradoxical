@@ -62,7 +62,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="View\Details\ScriptDetailsView.xaml.cs">
+    <Compile Update="View\Details\ScriptView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\Details\EffectDetailsView.xaml.cs">
