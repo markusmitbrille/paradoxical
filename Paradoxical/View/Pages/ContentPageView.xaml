@@ -174,6 +174,262 @@
                             </Grid>
                         </HierarchicalDataTemplate>
 
+                        <HierarchicalDataTemplate
+                            DataType="{x:Type viewmodel:EventNode}"
+                            ItemsSource="{Binding Children}">
+                            <Grid>
+
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+
+                                        <MenuItem
+                                            Header="Edit"
+                                            Icon="{materialDesign:PackIcon Kind=Edit}"
+                                            Command="{Binding EditCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Delete"
+                                            Icon="{materialDesign:PackIcon Kind=Delete}"
+                                            Command="{Binding DeleteCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <Separator />
+
+                                        <MenuItem
+                                            Header="Create Portrait"
+                                            Command="{Binding CreatePortraitCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Create Option"
+                                            Command="{Binding CreateOptionCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Create On-Action"
+                                            Command="{Binding CreateOnionCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <Separator />
+
+                                        <MenuItem
+                                            Header="Add Trigger"
+                                            Command="{Binding AddTriggerCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Remove Trigger"
+                                            Command="{Binding RemoveTriggerCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <Separator />
+
+                                        <MenuItem
+                                            Header="Add Immediate Effect"
+                                            Command="{Binding AddImmediateEffectCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Remove Immediate Effect"
+                                            Command="{Binding RemoveImmediateEffectCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <Separator />
+
+                                        <MenuItem
+                                            Header="Add After Effect"
+                                            Command="{Binding AddAfterEffectCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Remove After Effect"
+                                            Command="{Binding RemoveAfterEffectCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+
+                                <TextBlock
+                                    Text="{Binding Observable.Name}" />
+
+                            </Grid>
+                        </HierarchicalDataTemplate>
+
+                        <HierarchicalDataTemplate
+                            DataType="{x:Type viewmodel:PortraitNode}"
+                            ItemsSource="{Binding Children}">
+                            <Grid>
+
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+
+                                        <MenuItem
+                                            Header="Edit"
+                                            Icon="{materialDesign:PackIcon Kind=Edit}"
+                                            Command="{Binding EditCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Delete"
+                                            Icon="{materialDesign:PackIcon Kind=Delete}"
+                                            Command="{Binding DeleteCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+
+                                <TextBlock
+                                    Text="{Binding Observable.Position}" />
+
+                            </Grid>
+                        </HierarchicalDataTemplate>
+
+                        <HierarchicalDataTemplate
+                            DataType="{x:Type viewmodel:OptionNode}"
+                            ItemsSource="{Binding Children}">
+                            <Grid>
+
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+
+                                        <MenuItem
+                                            Header="Edit"
+                                            Icon="{materialDesign:PackIcon Kind=Edit}"
+                                            Command="{Binding EditCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Delete"
+                                            Icon="{materialDesign:PackIcon Kind=Delete}"
+                                            Command="{Binding DeleteCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+
+                                <TextBlock
+                                    Text="{Binding Observable.Title}" />
+
+                            </Grid>
+                        </HierarchicalDataTemplate>
+
+                        <HierarchicalDataTemplate
+                            DataType="{x:Type viewmodel:OnionNode}"
+                            ItemsSource="{Binding Children}">
+                            <Grid>
+
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+
+                                        <MenuItem
+                                            Header="Edit"
+                                            Icon="{materialDesign:PackIcon Kind=Edit}"
+                                            Command="{Binding EditCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Delete"
+                                            Icon="{materialDesign:PackIcon Kind=Delete}"
+                                            Command="{Binding DeleteCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+
+                                <TextBlock
+                                    Text="{Binding Observable.Name}" />
+
+                            </Grid>
+                        </HierarchicalDataTemplate>
+
+                        <HierarchicalDataTemplate
+                            DataType="{x:Type viewmodel:DecisionNode}"
+                            ItemsSource="{Binding Children}">
+                            <Grid>
+
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+
+                                        <MenuItem
+                                            Header="Edit"
+                                            Icon="{materialDesign:PackIcon Kind=Edit}"
+                                            Command="{Binding EditCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Delete"
+                                            Icon="{materialDesign:PackIcon Kind=Delete}"
+                                            Command="{Binding DeleteCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+
+                                <TextBlock
+                                    Text="{Binding Observable.Name}" />
+
+                            </Grid>
+                        </HierarchicalDataTemplate>
+
+                        <HierarchicalDataTemplate
+                            DataType="{x:Type viewmodel:TriggerNode}"
+                            ItemsSource="{Binding Children}">
+                            <Grid>
+
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+
+                                        <MenuItem
+                                            Header="Edit"
+                                            Icon="{materialDesign:PackIcon Kind=Edit}"
+                                            Command="{Binding EditCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Delete"
+                                            Icon="{materialDesign:PackIcon Kind=Delete}"
+                                            Command="{Binding DeleteCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+
+                                <TextBlock
+                                    Text="{Binding Observable.Name}" />
+
+                            </Grid>
+                        </HierarchicalDataTemplate>
+
+                        <HierarchicalDataTemplate
+                            DataType="{x:Type viewmodel:EffectNode}"
+                            ItemsSource="{Binding Children}">
+                            <Grid>
+
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+
+                                        <MenuItem
+                                            Header="Edit"
+                                            Icon="{materialDesign:PackIcon Kind=Edit}"
+                                            Command="{Binding EditCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Delete"
+                                            Icon="{materialDesign:PackIcon Kind=Delete}"
+                                            Command="{Binding DeleteCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+
+                                <TextBlock
+                                    Text="{Binding Observable.Name}" />
+
+                            </Grid>
+                        </HierarchicalDataTemplate>
+
                     </TreeView.Resources>
 
                 </TreeView>

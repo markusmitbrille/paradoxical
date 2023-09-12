@@ -11,6 +11,9 @@ public class DecisionNode : ObservableNode<DecisionViewModel>
     public CollectionNode ValidTriggerNodes { get; } = new();
     public CollectionNode EffectNodes { get; } = new();
 
+    public RelayCommand<object>? EditCommand { get; set; }
+    public RelayCommand<object>? DeleteCommand { get; set; }
+
     public RelayCommand<object>? AddShownTriggerCommand { get; set; }
     public RelayCommand<object>? RemoveShownTriggerCommand { get; set; }
 

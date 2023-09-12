@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Xml.Linq;
 
@@ -36,6 +38,8 @@ public class ContentPageViewModel : PageViewModel
     public IOnionService OnionService { get; }
     public ITriggerService TriggerService { get; }
     public IEffectService EffectService { get; }
+
+    public IFinder Finder { get; }
 
     private ModViewModel ModViewModel { get; set; } = new();
 
@@ -76,7 +80,8 @@ public class ContentPageViewModel : PageViewModel
         IPortraitService portraitService,
         IDecisionService decisionService,
         ITriggerService triggerService,
-        IEffectService effectService)
+        IEffectService effectService,
+        IFinder finder)
         : base(shell, mediator)
     {
         DataService = dataService;
@@ -90,6 +95,8 @@ public class ContentPageViewModel : PageViewModel
         DecisionService = decisionService;
         TriggerService = triggerService;
         EffectService = effectService;
+
+        Finder = finder;
     }
 
     public override void OnNavigatedTo()
@@ -232,7 +239,9 @@ public class ContentPageViewModel : PageViewModel
 
         SetupScriptNodes();
         SetupEventNodes();
-        // setup other nodes
+        SetupDecisionNodes();
+        SetupTriggerNodes();
+        SetupEffectNodes();
     }
 
     private void SetupModNode()
@@ -240,9 +249,12 @@ public class ContentPageViewModel : PageViewModel
         ModNode = new() { Observable = ModViewModel };
 
         ModNode.EditCommand = EditCommand;
+
         ModNode.CreateScriptCommand = CreateScriptCommand;
         ModNode.CreateEventCommand = CreateEventCommand;
-        // setup other commands
+        ModNode.CreateDecisionCommand = CreateDecisionCommand;
+        ModNode.CreateTriggerCommand = CreateTriggerCommand;
+        ModNode.CreateEffectCommand = CreateEffectCommand;
 
         RootNode = new CollectionNode();
         RootNode.Add(ModNode);
@@ -251,40 +263,153 @@ public class ContentPageViewModel : PageViewModel
     private void SetupScriptNodes()
     {
         ModNode.ScriptNodes.Header = "Scripts";
+
         foreach (var observable in ScriptModelMap.Wrappers)
         {
-            SetupScriptNode(observable);
+            ScriptNode node = new() { Observable = observable };
+
+            node.DeleteCommand = DeleteScriptCommand;
+            node.EditCommand = EditCommand;
+
+            ModNode.ScriptNodes.Add(node);
         }
-    }
-
-    private void SetupScriptNode(ScriptViewModel observable)
-    {
-        ScriptNode node = new() { Observable = observable };
-
-        node.DeleteCommand = DeleteScriptCommand;
-        node.EditCommand = EditCommand;
-
-        ModNode.ScriptNodes.Add(node);
     }
 
     private void SetupEventNodes()
     {
         ModNode.EventNodes.Header = "Events";
+
         foreach (var observable in EventModelMap.Wrappers)
         {
-            SetupEventNode(observable);
+            EventNode node = new() { Observable = observable };
+
+            node.DeleteCommand = DeleteEventCommand;
+            node.EditCommand = EditCommand;
+
+            node.CreatePortraitCommand = CreateEventPortraitCommand;
+            node.CreateOptionCommand = CreateEventOptionCommand;
+            node.CreateOnionCommand = CreateEventOnionCommand;
+
+            node.AddTriggerCommand = AddEventTriggerCommand;
+            node.RemoveTriggerCommand = RemoveEventTriggerCommand;
+            // setup other commands
+
+            SetupEventPortraitNodes(node);
+            SetupEventOptionNodes(node);
+            SetupEventOnionNodes(node);
+
+            SetupEventTriggerNodes(node);
+            // setup other nodes
+
+            ModNode.EventNodes.Add(node);
         }
     }
 
-    private void SetupEventNode(EventViewModel observable)
+    private void SetupEventPortraitNodes(EventNode parent)
     {
-        EventNode node = new() { Observable = observable };
+        parent.PortraitNodes.Header = "Portraits";
 
-        node.DeleteCommand = DeleteEventCommand;
-        node.EditCommand = EditCommand;
-        // setup other commands
+        var relations = EventService.GetPortraits(parent.Observable.Model);
+        foreach (var relation in relations)
+        {
+            var observable = PortraitModelMap[relation];
 
-        ModNode.EventNodes.Add(node);
+            PortraitNode child = new() { Observable = observable };
+            parent.PortraitNodes.Add(child);
+        }
+    }
+
+    private void SetupEventOptionNodes(EventNode parent)
+    {
+        parent.OptionNodes.Header = "Options";
+
+        var relations = EventService.GetOptions(parent.Observable.Model);
+        foreach (var relation in relations)
+        {
+            var observable = OptionModelMap[relation];
+
+            OptionNode child = new() { Observable = observable };
+            parent.OptionNodes.Add(child);
+        }
+    }
+
+    private void SetupEventOnionNodes(EventNode parent)
+    {
+        parent.OnionNodes.Header = "On-Actions";
+
+        var relations = EventService.GetOnions(parent.Observable.Model);
+        foreach (var relation in relations)
+        {
+            var observable = OnionModelMap[relation];
+
+            OnionNode child = new() { Observable = observable };
+            parent.OnionNodes.Add(child);
+        }
+    }
+
+    private void SetupEventTriggerNodes(EventNode parent)
+    {
+        parent.TriggerNodes.Header = "Triggers";
+
+        var relations = EventService.GetTriggers(parent.Observable.Model);
+        foreach (var relation in relations)
+        {
+            var observable = TriggerModelMap[relation];
+            TriggerNode child = new() { Observable = observable };
+
+            child.DeleteCommand = DeleteTriggerCommand;
+            child.EditCommand = EditCommand;
+
+            parent.TriggerNodes.Add(child);
+        }
+    }
+
+    private void SetupDecisionNodes()
+    {
+        ModNode.DecisionNodes.Header = "Decisions";
+
+        foreach (var observable in DecisionModelMap.Wrappers)
+        {
+            DecisionNode node = new() { Observable = observable };
+
+            node.DeleteCommand = DeleteDecisionCommand;
+            node.EditCommand = EditCommand;
+            // setup other commands
+
+            // setup other nodes
+
+            ModNode.DecisionNodes.Add(node);
+        }
+    }
+
+    private void SetupTriggerNodes()
+    {
+        ModNode.TriggerNodes.Header = "Triggers";
+
+        foreach (var observable in TriggerModelMap.Wrappers)
+        {
+            TriggerNode node = new() { Observable = observable };
+
+            node.DeleteCommand = DeleteTriggerCommand;
+            node.EditCommand = EditCommand;
+
+            ModNode.TriggerNodes.Add(node);
+        }
+    }
+
+    private void SetupEffectNodes()
+    {
+        ModNode.EffectNodes.Header = "Effects";
+
+        foreach (var observable in EffectModelMap.Wrappers)
+        {
+            EffectNode node = new() { Observable = observable };
+
+            node.DeleteCommand = DeleteEffectCommand;
+            node.EditCommand = EditCommand;
+
+            ModNode.EffectNodes.Add(node);
+        }
     }
 
     #endregion
@@ -363,6 +488,332 @@ public class ContentPageViewModel : PageViewModel
     private bool CanDeleteEvent(object? param)
     {
         return param is EventViewModel;
+    }
+
+    private RelayCommand<object>? createEventOptionCommand;
+    public RelayCommand<object> CreateEventOptionCommand => createEventOptionCommand ??= new(CreateEventOption, CanCreateEventOption);
+
+    private void CreateEventOption(object? param)
+    {
+        if (param is not EventViewModel evt)
+        { return; }
+
+        Option model = new() { EventId = evt.Id };
+        OptionService.Insert(model);
+
+        Setup();
+
+        var observable = OptionModelMap[model];
+        Selected = observable;
+    }
+    private bool CanCreateEventOption(object? param)
+    {
+        return param is EventViewModel;
+    }
+
+    private RelayCommand<object>? createEventOnionCommand;
+    public RelayCommand<object> CreateEventOnionCommand => createEventOnionCommand ??= new(CreateEventOnion, CanCreateEventOnion);
+
+    private void CreateEventOnion(object? param)
+    {
+        if (param is not EventViewModel evt)
+        { return; }
+
+        Onion model = new() { EventId = evt.Id };
+        OnionService.Insert(model);
+
+        Setup();
+
+        var observable = OnionModelMap[model];
+        Selected = observable;
+    }
+    private bool CanCreateEventOnion(object? param)
+    {
+        return param is EventViewModel;
+    }
+
+    private RelayCommand<object>? createEventPortraitCommand;
+    public RelayCommand<object> CreateEventPortraitCommand => createEventPortraitCommand ??= new(CreateEventPortrait, CanCreateEventPortrait);
+
+    private void CreateEventPortrait(object? param)
+    {
+        if (param is not EventViewModel evt)
+        { return; }
+
+        Portrait model = new() { EventId = evt.Id };
+        PortraitService.Insert(model);
+
+        Setup();
+
+        var observable = PortraitModelMap[model];
+        Selected = observable;
+    }
+    private bool CanCreateEventPortrait(object? param)
+    {
+        return param is EventViewModel;
+    }
+
+    private AsyncRelayCommand<object>? addEventTriggerCommand;
+    public AsyncRelayCommand<object> AddEventTriggerCommand => addEventTriggerCommand ??= new(AddEventTrigger, CanAddEventTrigger);
+
+    private async Task AddEventTrigger(object? param)
+    {
+        if (param is not EventViewModel evt)
+        { return; }
+
+        var all = TriggerService.Get();
+        var existing = EventService.GetTriggers(evt.Model);
+        var candidates = all.Except(existing);
+
+        Finder.Items = candidates.Select(candidate => TriggerModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Event owner = evt.Model;
+        Trigger relation = ((TriggerViewModel)Finder.Selected).Model;
+
+        EventService.AddTrigger(owner, relation);
+
+        Setup();
+
+        var observable = TriggerModelMap[relation];
+        Selected = observable;
+    }
+    private bool CanAddEventTrigger(object? param)
+    {
+        return param is EventViewModel;
+    }
+
+    private AsyncRelayCommand<object>? removeEventTriggerCommand;
+    public AsyncRelayCommand<object> RemoveEventTriggerCommand => removeEventTriggerCommand ??= new(RemoveEventTrigger, CanRemoveEventTrigger);
+
+    private async Task RemoveEventTrigger(object? param)
+    {
+        if (param is not EventViewModel evt)
+        { return; }
+
+        var existing = EventService.GetTriggers(evt.Model);
+
+        Finder.Items = existing.Select(candidate => TriggerModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Event owner = evt.Model;
+        Trigger relation = ((TriggerViewModel)Finder.Selected).Model;
+
+        EventService.RemoveTrigger(owner, relation);
+
+        Setup();
+
+        Selected = null;
+    }
+    private bool CanRemoveEventTrigger(object? param)
+    {
+        return param is EventViewModel;
+    }
+
+    #endregion
+
+
+    #region Portrait Commands
+
+    private RelayCommand<object>? deletePortraitCommand;
+    public RelayCommand<object> DeletePortraitCommand => deletePortraitCommand ??= new(DeletePortrait, CanDeletePortrait);
+
+    private void DeletePortrait(object? param)
+    {
+        if (param is not PortraitViewModel observable)
+        { return; }
+
+        var model = observable.Model;
+        PortraitService.Delete(model);
+
+        Setup();
+
+        Selected = null;
+    }
+    private bool CanDeletePortrait(object? param)
+    {
+        return param is PortraitViewModel;
+    }
+
+    #endregion
+
+
+    #region Option Commands
+
+    private RelayCommand<object>? deleteOptionCommand;
+    public RelayCommand<object> DeleteOptionCommand => deleteOptionCommand ??= new(DeleteOption, CanDeleteOption);
+
+    private void DeleteOption(object? param)
+    {
+        if (param is not OptionViewModel observable)
+        { return; }
+
+        var model = observable.Model;
+        OptionService.Delete(model);
+
+        Setup();
+
+        Selected = null;
+    }
+    private bool CanDeleteOption(object? param)
+    {
+        return param is OptionViewModel;
+    }
+
+    #endregion
+
+
+    #region Onion Commands
+
+    private RelayCommand<object>? deleteOnionCommand;
+    public RelayCommand<object> DeleteOnionCommand => deleteOnionCommand ??= new(DeleteOnion, CanDeleteOnion);
+
+    private void DeleteOnion(object? param)
+    {
+        if (param is not OnionViewModel observable)
+        { return; }
+
+        var model = observable.Model;
+        OnionService.Delete(model);
+
+        Setup();
+
+        Selected = null;
+    }
+    private bool CanDeleteOnion(object? param)
+    {
+        return param is OnionViewModel;
+    }
+
+    #endregion
+
+
+    #region Decision Commands
+
+    private RelayCommand? createDecisionCommand;
+    public RelayCommand CreateDecisionCommand => createDecisionCommand ??= new(CreateDecision);
+
+    private void CreateDecision()
+    {
+        var model = new Decision();
+        DecisionService.Insert(model);
+
+        Setup();
+
+        var observable = DecisionModelMap[model];
+        Selected = observable;
+    }
+
+    private RelayCommand<object>? deleteDecisionCommand;
+    public RelayCommand<object> DeleteDecisionCommand => deleteDecisionCommand ??= new(DeleteDecision, CanDeleteDecision);
+
+    private void DeleteDecision(object? param)
+    {
+        if (param is not DecisionViewModel observable)
+        { return; }
+
+        var model = observable.Model;
+        DecisionService.Delete(model);
+
+        Setup();
+
+        Selected = null;
+    }
+    private bool CanDeleteDecision(object? param)
+    {
+        return param is DecisionViewModel;
+    }
+
+    #endregion
+
+
+    #region Trigger Commands
+
+    private RelayCommand? createTriggerCommand;
+    public RelayCommand CreateTriggerCommand => createTriggerCommand ??= new(CreateTrigger);
+
+    private void CreateTrigger()
+    {
+        var model = new Trigger();
+        TriggerService.Insert(model);
+
+        Setup();
+
+        var observable = TriggerModelMap[model];
+        Selected = observable;
+    }
+
+    private RelayCommand<object>? deleteTriggerCommand;
+    public RelayCommand<object> DeleteTriggerCommand => deleteTriggerCommand ??= new(DeleteTrigger, CanDeleteTrigger);
+
+    private void DeleteTrigger(object? param)
+    {
+        if (param is not TriggerViewModel observable)
+        { return; }
+
+        var model = observable.Model;
+        TriggerService.Delete(model);
+
+        Setup();
+
+        Selected = null;
+    }
+    private bool CanDeleteTrigger(object? param)
+    {
+        return param is TriggerViewModel;
+    }
+
+    #endregion
+
+
+    #region Effect Commands
+
+    private RelayCommand? createEffectCommand;
+    public RelayCommand CreateEffectCommand => createEffectCommand ??= new(CreateEffect);
+
+    private void CreateEffect()
+    {
+        var model = new Effect();
+        EffectService.Insert(model);
+
+        Setup();
+
+        var observable = EffectModelMap[model];
+        Selected = observable;
+    }
+
+    private RelayCommand<object>? deleteEffectCommand;
+    public RelayCommand<object> DeleteEffectCommand => deleteEffectCommand ??= new(DeleteEffect, CanDeleteEffect);
+
+    private void DeleteEffect(object? param)
+    {
+        if (param is not EffectViewModel observable)
+        { return; }
+
+        var model = observable.Model;
+        EffectService.Delete(model);
+
+        Setup();
+
+        Selected = null;
+    }
+    private bool CanDeleteEffect(object? param)
+    {
+        return param is EffectViewModel;
     }
 
     #endregion

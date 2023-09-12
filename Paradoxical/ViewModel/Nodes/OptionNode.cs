@@ -9,6 +9,9 @@ public class OptionNode : ObservableNode<OptionViewModel>
     public CollectionNode TriggerNodes { get; } = new();
     public CollectionNode EffectNodes { get; } = new();
 
+    public RelayCommand<object>? EditCommand { get; set; }
+    public RelayCommand<object>? DeleteCommand { get; set; }
+
     public RelayCommand<object>? AddTriggerCommand { get; set; }
     public RelayCommand<object>? RemoveTriggerCommand { get; set; }
 

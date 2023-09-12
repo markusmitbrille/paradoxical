@@ -21,14 +21,14 @@ public class EventNode : ObservableNode<EventViewModel>
     public RelayCommand<object>? CreateOptionCommand { get; set; }
     public RelayCommand<object>? CreateOnionCommand { get; set; }
 
-    public RelayCommand<object>? AddTriggerCommand { get; set; }
-    public RelayCommand<object>? RemoveTriggerCommand { get; set; }
+    public AsyncRelayCommand<object>? AddTriggerCommand { get; set; }
+    public AsyncRelayCommand<object>? RemoveTriggerCommand { get; set; }
 
-    public RelayCommand<object>? AddImmediateEffectCommand { get; set; }
-    public RelayCommand<object>? RemoveImmediateEffectCommand { get; set; }
+    public AsyncRelayCommand<object>? AddImmediateEffectCommand { get; set; }
+    public AsyncRelayCommand<object>? RemoveImmediateEffectCommand { get; set; }
 
-    public RelayCommand<object>? AddAfterEffectCommand { get; set; }
-    public RelayCommand<object>? RemoveAfterEffectCommand { get; set; }
+    public AsyncRelayCommand<object>? AddAfterEffectCommand { get; set; }
+    public AsyncRelayCommand<object>? RemoveAfterEffectCommand { get; set; }
 
     public override IEnumerable<Node> Children
     {
