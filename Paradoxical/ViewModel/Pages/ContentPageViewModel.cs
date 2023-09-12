@@ -12,8 +12,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Controls;
+using System.Xml.Linq;
 
 namespace Paradoxical.ViewModel;
 
@@ -55,37 +57,11 @@ public class ContentPageViewModel : PageViewModel
 
     public ModNode ModNode { get; set; } = new();
 
-    private NodeMap<ScriptViewModel, ScriptNode> ScriptNodeMap { get; set; } = new();
-    private NodeMap<EventViewModel, EventNode> EventNodeMap { get; set; } = new();
-    private NodeMap<OptionViewModel, OptionNode> OptionNodeMap { get; set; } = new();
-    private NodeMap<OnionViewModel, OnionNode> OnionNodeMap { get; set; } = new();
-    private NodeMap<PortraitViewModel, PortraitNode> PortraitNodeMap { get; set; } = new();
-    private NodeMap<DecisionViewModel, DecisionNode> DecisionNodeMap { get; set; } = new();
-    private NodeMap<TriggerViewModel, TriggerNode> TriggerNodeMap { get; set; } = new();
-    private NodeMap<EffectViewModel, EffectNode> EffectNodeMap { get; set; } = new();
-
-    private Dictionary<Script, ScriptNode> ScriptNodes { get; set; } = new();
-
     private ObservableObject? selected;
     public ObservableObject? Selected
     {
         get => selected;
         set => SetProperty(ref selected, value);
-    }
-
-    private Node? selectedNode;
-    public Node? SelectedNode
-    {
-        get => selectedNode;
-        set
-        {
-            SetProperty(ref selectedNode, value);
-
-            if (value is IObservableWrapper wrapper)
-            {
-                Selected = wrapper.Observable;
-            }
-        }
     }
 
     public ContentPageViewModel(
@@ -157,72 +133,9 @@ public class ContentPageViewModel : PageViewModel
 
     private void Load()
     {
-        var mod = ModService.Get().SingleOrDefault();
-        if (mod == null)
-        {
-            mod = new();
-            ModService.Insert(mod);
-        }
-
-        ModViewModel = new() { Model = mod };
-
-        ScriptModelMap = new(ScriptService.Get());
-        EventModelMap = new(EventService.Get());
-        OptionModelMap = new(OptionService.Get());
-        OnionModelMap = new(OnionService.Get());
-        PortraitModelMap = new(PortraitService.Get());
-        DecisionModelMap = new(DecisionService.Get());
-        TriggerModelMap = new(TriggerService.Get());
-        EffectModelMap = new(EffectService.Get());
-
-        ModNode = new() { Observable = ModViewModel };
-
-        ScriptNodeMap = new(ScriptModelMap.Wrappers);
-        EventNodeMap = new(EventModelMap.Wrappers);
-        OptionNodeMap = new(OptionModelMap.Wrappers);
-        OnionNodeMap = new(OnionModelMap.Wrappers);
-        PortraitNodeMap = new(PortraitModelMap.Wrappers);
-        DecisionNodeMap = new(DecisionModelMap.Wrappers);
-        TriggerNodeMap = new(TriggerModelMap.Wrappers);
-        EffectNodeMap = new(EffectModelMap.Wrappers);
-
-        RootNode = new CollectionNode();
-        RootNode.Add(ModNode);
-
-        SetupModNode(ModNode);
-        SetupScriptNodes();
-
-        // setup other nodes
+        Setup();
 
         DataService.BeginTransaction();
-    }
-
-    private void SetupModNode(ModNode node)
-    {
-        node.EditCommand = EditCommand;
-        node.CreateScriptCommand = CreateScriptCommand;
-        // setup other commands
-
-        node.ScriptNodes.Header = "Scripts";
-        foreach (var observable in ScriptModelMap.Wrappers)
-        {
-            var child = ScriptNodeMap[observable];
-            node.ScriptNodes.Add(child);
-        }
-    }
-
-    private void SetupScriptNodes()
-    {
-        foreach (var node in ScriptNodeMap.Nodes)
-        {
-            SetupScriptNode(node);
-        }
-    }
-
-    private void SetupScriptNode(ScriptNode node)
-    {
-        node.DeleteCommand = DeleteScriptCommand;
-        node.EditCommand = EditCommand;
     }
 
     private RelayCommand? reloadCommand;
@@ -292,6 +205,91 @@ public class ContentPageViewModel : PageViewModel
         return param is Node && param is IObservableWrapper;
     }
 
+
+    #region Setup
+
+    private void Setup()
+    {
+        var mod = ModService.Get().SingleOrDefault();
+        if (mod == null)
+        {
+            mod = new();
+            ModService.Insert(mod);
+        }
+
+        ModViewModel = new() { Model = mod };
+
+        ScriptModelMap = new(ScriptService.Get());
+        EventModelMap = new(EventService.Get());
+        OptionModelMap = new(OptionService.Get());
+        OnionModelMap = new(OnionService.Get());
+        PortraitModelMap = new(PortraitService.Get());
+        DecisionModelMap = new(DecisionService.Get());
+        TriggerModelMap = new(TriggerService.Get());
+        EffectModelMap = new(EffectService.Get());
+
+        SetupModNode();
+
+        SetupScriptNodes();
+        SetupEventNodes();
+        // setup other nodes
+    }
+
+    private void SetupModNode()
+    {
+        ModNode = new() { Observable = ModViewModel };
+
+        ModNode.EditCommand = EditCommand;
+        ModNode.CreateScriptCommand = CreateScriptCommand;
+        ModNode.CreateEventCommand = CreateEventCommand;
+        // setup other commands
+
+        RootNode = new CollectionNode();
+        RootNode.Add(ModNode);
+    }
+
+    private void SetupScriptNodes()
+    {
+        ModNode.ScriptNodes.Header = "Scripts";
+        foreach (var observable in ScriptModelMap.Wrappers)
+        {
+            SetupScriptNode(observable);
+        }
+    }
+
+    private void SetupScriptNode(ScriptViewModel observable)
+    {
+        ScriptNode node = new() { Observable = observable };
+
+        node.DeleteCommand = DeleteScriptCommand;
+        node.EditCommand = EditCommand;
+
+        ModNode.ScriptNodes.Add(node);
+    }
+
+    private void SetupEventNodes()
+    {
+        ModNode.EventNodes.Header = "Events";
+        foreach (var observable in EventModelMap.Wrappers)
+        {
+            SetupEventNode(observable);
+        }
+    }
+
+    private void SetupEventNode(EventViewModel observable)
+    {
+        EventNode node = new() { Observable = observable };
+
+        node.DeleteCommand = DeleteEventCommand;
+        node.EditCommand = EditCommand;
+        // setup other commands
+
+        ModNode.EventNodes.Add(node);
+    }
+
+    #endregion
+
+
     #region Script Commands
 
     private RelayCommand? createScriptCommand;
@@ -299,18 +297,13 @@ public class ContentPageViewModel : PageViewModel
 
     private void CreateScript()
     {
-        for (int i = 0; i < 200; i++)
-        {
-            var model = new Script();
-            ScriptService.Insert(model);
+        var model = new Script();
+        ScriptService.Insert(model);
 
-            var observable = ScriptModelMap[model];
-            var node = ScriptNodeMap[observable];
+        Setup();
 
-            SetupScriptNode(node);
-
-            ModNode.ScriptNodes.Add(node);
-        }
+        var observable = ScriptModelMap[model];
+        Selected = observable;
     }
 
     private RelayCommand<object>? deleteScriptCommand;
@@ -321,15 +314,12 @@ public class ContentPageViewModel : PageViewModel
         if (param is not ScriptViewModel observable)
         { return; }
 
-        var node = ScriptNodeMap[observable];
-
-        ModNode.ScriptNodes.Remove(node);
-
         var model = observable.Model;
         ScriptService.Delete(model);
 
-        ScriptModelMap.Remove(model);
-        ScriptNodeMap.Remove(observable);
+        Setup();
+
+        Selected = null;
     }
     private bool CanDeleteScript(object? param)
     {
@@ -341,7 +331,39 @@ public class ContentPageViewModel : PageViewModel
 
     #region Event Commands
 
+    private RelayCommand? createEventCommand;
+    public RelayCommand CreateEventCommand => createEventCommand ??= new(CreateEvent);
 
+    private void CreateEvent()
+    {
+        var model = new Event();
+        EventService.Insert(model);
+
+        Setup();
+
+        var observable = EventModelMap[model];
+        Selected = observable;
+    }
+
+    private RelayCommand<object>? deleteEventCommand;
+    public RelayCommand<object> DeleteEventCommand => deleteEventCommand ??= new(DeleteEvent, CanDeleteEvent);
+
+    private void DeleteEvent(object? param)
+    {
+        if (param is not EventViewModel observable)
+        { return; }
+
+        var model = observable.Model;
+        EventService.Delete(model);
+
+        Setup();
+
+        Selected = null;
+    }
+    private bool CanDeleteEvent(object? param)
+    {
+        return param is EventViewModel;
+    }
 
     #endregion
 }

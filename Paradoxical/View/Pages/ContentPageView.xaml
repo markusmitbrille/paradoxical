@@ -50,7 +50,10 @@
                     x:Name="ContentTreeView"
                     Margin="6,12"
                     Width="350"
-                    ItemsSource="{Binding RootNode.Children}">
+                    ItemsSource="{Binding RootNode.Children}"
+                    VirtualizingStackPanel.IsVirtualizing="True"
+                    VirtualizingStackPanel.VirtualizationMode="Recycling"
+                    ScrollViewer.IsDeferredScrollingEnabled="True">
 
                     <behaviors:Interaction.Triggers>
                         <behaviors:EventTrigger
@@ -61,35 +64,30 @@
                         </behaviors:EventTrigger>
                     </behaviors:Interaction.Triggers>
 
+                    <TreeView.ItemContainerStyle>
+                        <Style
+                            TargetType="TreeViewItem">
+
+                            <Setter
+                                Property="Padding"
+                                Value="2" />
+
+                            <Setter
+                                Property="Margin"
+                                Value="0" />
+
+                            <Setter
+                                Property="IsSelected"
+                                Value="{Binding IsSelected, Mode=TwoWay}" />
+
+                            <Setter
+                                Property="IsExpanded"
+                                Value="{Binding IsExpanded, Mode=TwoWay}" />
+
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+
                     <TreeView.Resources>
-
-                        <Style
-                            TargetType="TreeViewItem"
-                            BasedOn="{StaticResource MaterialDesignTreeViewItem}">
-
-                            <Setter
-                                Property="Margin"
-                                Value="0,2" />
-
-                            <Setter
-                                Property="Padding"
-                                Value="0" />
-
-                        </Style>
-
-                        <Style
-                            TargetType="TextBlock"
-                            BasedOn="{StaticResource MaterialDesignButtonTextBlock}">
-
-                            <Setter
-                                Property="Margin"
-                                Value="0" />
-
-                            <Setter
-                                Property="Padding"
-                                Value="6,4" />
-
-                        </Style>
 
                         <HierarchicalDataTemplate
                             DataType="{x:Type core:CollectionNode}"

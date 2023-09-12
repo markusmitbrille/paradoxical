@@ -14,7 +14,26 @@ public abstract class Node : ObservableObject
         set => SetProperty(ref header, value);
     }
 
+    private bool isSelected = false;
+    public bool IsSelected
+    {
+        get => isSelected;
+        set => SetProperty(ref isSelected, value);
+    }
+
+    private bool isExpanded = false;
+    public bool IsExpanded
+    {
+        get => isExpanded;
+        set => SetProperty(ref isExpanded, value);
+    }
+
     public abstract IEnumerable<Node> Children { get; }
+
+    public void Select() => IsSelected = true;
+
+    public void Expand() => IsExpanded = true;
+    public void Collapse() => IsExpanded = false;
 }
 
 public abstract class ObservableNode<T> : Node, IObservableWrapper<T>, IObservableWrapper
@@ -34,5 +53,4 @@ public class CollectionNode : Node
 
     public void Add(Node node) => children.Add(node);
     public void Remove(Node node) => children.Remove(node);
-    public void Clear() => children.Clear();
 }
