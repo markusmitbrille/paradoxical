@@ -72,7 +72,7 @@
 
                     <TextBox
                         Grid.Column="0"
-                        materialDesign:HintAssist.Hint="Name">
+                        materialDesign:HintAssist.Hint="Directory">
 
                         <TextBox.Text>
                             <Binding
@@ -93,7 +93,7 @@
 
                     <TextBox
                         Grid.Column="1"
-                        materialDesign:HintAssist.Hint="Name">
+                        materialDesign:HintAssist.Hint="File">
 
                         <TextBox.Text>
                             <Binding
