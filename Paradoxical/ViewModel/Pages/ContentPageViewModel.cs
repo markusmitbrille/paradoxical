@@ -52,7 +52,7 @@ public class ContentPageViewModel : PageViewModel
     private ModelMap<Trigger, TriggerViewModel> TriggerModelMap { get; set; } = new();
     private ModelMap<Effect, EffectViewModel> EffectModelMap { get; set; } = new();
 
-    private Node rootNode = new();
+    private Node rootNode = new SimpleNode();
     public Node RootNode
     {
         get => rootNode;
@@ -233,9 +233,14 @@ public class ContentPageViewModel : PageViewModel
         TriggerModelMap = new(TriggerService.Get());
         EffectModelMap = new(EffectService.Get());
 
-        RootNode = new Node();
+        RootNode = new SimpleNode();
 
-        SetupModNode(RootNode);
+        SetupScriptNodes(RootNode);
+        SetupEventNodes(RootNode);
+        //SetupOptionNodes(RootNode);
+        SetupDecisionNodes(RootNode);
+        SetupTriggerNodes(RootNode);
+        SetupEffectNodes(RootNode);
     }
 
     private void SetupModNode(Node parent)
@@ -262,7 +267,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupScriptNodes(Node parent)
     {
-        Node collection = new() { Header = "Scripts" };
+        SimpleNode collection = new() { Name = "Scripts" };
 
         foreach (var observable in ScriptModelMap.Wrappers)
         {
@@ -279,7 +284,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupEventNodes(Node parent)
     {
-        Node collection = new() { Header = "Events" };
+        SimpleNode collection = new() { Name = "Events" };
 
         foreach (var observable in EventModelMap.Wrappers)
         {
@@ -317,7 +322,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupEventPortraitNodes(EventNode parent)
     {
-        Node collection = new() { Header = "Portraits" };
+        SimpleNode collection = new() { Name = "Portraits" };
 
         var relations = EventService.GetPortraits(parent.Observable.Model);
         foreach (var relation in relations)
@@ -336,7 +341,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupEventOptionNodes(EventNode parent)
     {
-        Node collection = new() { Header = "Options" };
+        SimpleNode collection = new() { Name = "Options" };
 
         var relations = EventService.GetOptions(parent.Observable.Model);
         foreach (var relation in relations)
@@ -368,7 +373,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupEventOnionNodes(EventNode parent)
     {
-        Node collection = new() { Header = "On-Actions" };
+        SimpleNode collection = new() { Name = "On-Actions" };
 
         var relations = EventService.GetOnions(parent.Observable.Model);
         foreach (var relation in relations)
@@ -387,7 +392,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupEventTriggerNodes(EventNode parent)
     {
-        Node collection = new() { Header = "Triggers" };
+        SimpleNode collection = new() { Name = "Triggers" };
 
         var relations = EventService.GetTriggers(parent.Observable.Model);
         foreach (var relation in relations)
@@ -406,7 +411,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupEventImmediateEffectNodes(EventNode parent)
     {
-        Node collection = new() { Header = "Immediate Effects" };
+        SimpleNode collection = new() { Name = "Immediate Effects" };
 
         var relations = EventService.GetImmediateEffects(parent.Observable.Model);
         foreach (var relation in relations)
@@ -425,7 +430,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupEventAfterEffectNodes(EventNode parent)
     {
-        Node collection = new() { Header = "After Effects" };
+        SimpleNode collection = new() { Name = "After Effects" };
 
         var relations = EventService.GetAfterEffects(parent.Observable.Model);
         foreach (var relation in relations)
@@ -444,7 +449,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupOptionNodes(Node parent)
     {
-        Node collection = new() { Header = "Options" };
+        SimpleNode collection = new() { Name = "Options" };
 
         foreach (var observable in OptionModelMap.Wrappers)
         {
@@ -472,7 +477,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupOptionTriggerNodes(OptionNode parent)
     {
-        Node collection = new() { Header = "Triggers" };
+        SimpleNode collection = new() { Name = "Triggers" };
 
         var relations = OptionService.GetTriggers(parent.Observable.Model);
         foreach (var relation in relations)
@@ -491,7 +496,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupOptionEffectNodes(OptionNode parent)
     {
-        Node collection = new() { Header = "Effects" };
+        SimpleNode collection = new() { Name = "Effects" };
 
         var relations = OptionService.GetEffects(parent.Observable.Model);
         foreach (var relation in relations)
@@ -510,7 +515,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupDecisionNodes(Node parent)
     {
-        Node collection = new() { Header = "Decisions" };
+        SimpleNode collection = new() { Name = "Decisions" };
 
         foreach (var observable in DecisionModelMap.Wrappers)
         {
@@ -544,7 +549,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupDecisionShownTriggerNodes(DecisionNode parent)
     {
-        Node collection = new() { Header = "Shown Triggers" };
+        SimpleNode collection = new() { Name = "Shown Triggers" };
 
         var relations = DecisionService.GetShownTriggers(parent.Observable.Model);
         foreach (var relation in relations)
@@ -563,7 +568,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupDecisionFailureTriggerNodes(DecisionNode parent)
     {
-        Node collection = new() { Header = "Failure Triggers" };
+        SimpleNode collection = new() { Name = "Failure Triggers" };
 
         var relations = DecisionService.GetFailureTriggers(parent.Observable.Model);
         foreach (var relation in relations)
@@ -582,7 +587,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupDecisionValidTriggerNodes(DecisionNode parent)
     {
-        Node collection = new() { Header = "Valid Triggers" };
+        SimpleNode collection = new() { Name = "Valid Triggers" };
 
         var relations = DecisionService.GetValidTriggers(parent.Observable.Model);
         foreach (var relation in relations)
@@ -601,7 +606,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupDecisionEffectNodes(DecisionNode parent)
     {
-        Node collection = new() { Header = "Effects" };
+        SimpleNode collection = new() { Name = "Effects" };
 
         var relations = DecisionService.GetEffects(parent.Observable.Model);
         foreach (var relation in relations)
@@ -620,7 +625,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupTriggerNodes(Node parent)
     {
-        Node collection = new() { Header = "Triggers" };
+        SimpleNode collection = new() { Name = "Triggers" };
 
         foreach (var observable in TriggerModelMap.Wrappers)
         {
@@ -637,7 +642,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void SetupEffectNodes(Node parent)
     {
-        Node collection = new() { Header = "Effects" };
+        SimpleNode collection = new() { Name = "Effects" };
 
         foreach (var observable in EffectModelMap.Wrappers)
         {
