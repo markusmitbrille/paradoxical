@@ -6,34 +6,18 @@ namespace Paradoxical.ViewModel;
 
 public class DecisionNode : ObservableNode<DecisionViewModel>
 {
-    public CollectionNode ShownTriggerNodes { get; } = new();
-    public CollectionNode FailureTriggerNodes { get; } = new();
-    public CollectionNode ValidTriggerNodes { get; } = new();
-    public CollectionNode EffectNodes { get; } = new();
-
     public RelayCommand<object>? EditCommand { get; set; }
     public RelayCommand<object>? DeleteCommand { get; set; }
 
-    public RelayCommand<object>? AddShownTriggerCommand { get; set; }
-    public RelayCommand<object>? RemoveShownTriggerCommand { get; set; }
+    public AsyncRelayCommand<object>? AddShownTriggerCommand { get; set; }
+    public AsyncRelayCommand<object>? RemoveShownTriggerCommand { get; set; }
 
-    public RelayCommand<object>? AddFailureTriggerCommand { get; set; }
-    public RelayCommand<object>? RemoveFailureTriggerCommand { get; set; }
+    public AsyncRelayCommand<object>? AddFailureTriggerCommand { get; set; }
+    public AsyncRelayCommand<object>? RemoveFailureTriggerCommand { get; set; }
 
-    public RelayCommand<object>? AddValidTriggerCommand { get; set; }
-    public RelayCommand<object>? RemoveValidTriggerCommand { get; set; }
+    public AsyncRelayCommand<object>? AddValidTriggerCommand { get; set; }
+    public AsyncRelayCommand<object>? RemoveValidTriggerCommand { get; set; }
 
-    public RelayCommand<object>? AddEffectCommand { get; set; }
-    public RelayCommand<object>? RemoveEffectCommand { get; set; }
-
-    public override IEnumerable<Node> Children
-    {
-        get
-        {
-            yield return ShownTriggerNodes;
-            yield return FailureTriggerNodes;
-            yield return ValidTriggerNodes;
-            yield return EffectNodes;
-        }
-    }
+    public AsyncRelayCommand<object>? AddEffectCommand { get; set; }
+    public AsyncRelayCommand<object>? RemoveEffectCommand { get; set; }
 }

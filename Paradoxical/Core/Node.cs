@@ -5,8 +5,10 @@ using System.Linq;
 
 namespace Paradoxical.Core;
 
-public abstract class Node : ObservableObject
+public class Node : ObservableObject
 {
+    public ObservableCollection<Node> Children { get; } = new();
+
     private string header = string.Empty;
     public string Header
     {
@@ -28,8 +30,6 @@ public abstract class Node : ObservableObject
         set => SetProperty(ref isExpanded, value);
     }
 
-    public abstract IEnumerable<Node> Children { get; }
-
     public void Select() => IsSelected = true;
 
     public void Expand() => IsExpanded = true;
@@ -40,17 +40,5 @@ public abstract class ObservableNode<T> : Node, IObservableWrapper<T>, IObservab
     where T : ObservableObject, new()
 {
     public T Observable { get; init; } = new();
-
     ObservableObject IObservableWrapper.Observable => Observable;
-
-    public override IEnumerable<Node> Children => Enumerable.Empty<Node>();
-}
-
-public class CollectionNode : Node
-{
-    private readonly ObservableCollection<Node> children = new();
-    public sealed override IEnumerable<Node> Children => children;
-
-    public void Add(Node node) => children.Add(node);
-    public void Remove(Node node) => children.Remove(node);
 }

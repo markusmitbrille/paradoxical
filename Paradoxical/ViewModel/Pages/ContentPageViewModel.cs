@@ -52,14 +52,12 @@ public class ContentPageViewModel : PageViewModel
     private ModelMap<Trigger, TriggerViewModel> TriggerModelMap { get; set; } = new();
     private ModelMap<Effect, EffectViewModel> EffectModelMap { get; set; } = new();
 
-    private CollectionNode rootNode = new();
-    public CollectionNode RootNode
+    private Node rootNode = new();
+    public Node RootNode
     {
         get => rootNode;
         set => SetProperty(ref rootNode, value);
     }
-
-    public ModNode ModNode { get; set; } = new();
 
     private ObservableObject? selected;
     public ObservableObject? Selected
@@ -235,121 +233,161 @@ public class ContentPageViewModel : PageViewModel
         TriggerModelMap = new(TriggerService.Get());
         EffectModelMap = new(EffectService.Get());
 
-        SetupModNode();
+        RootNode = new Node();
 
-        SetupScriptNodes();
-        SetupEventNodes();
-        SetupDecisionNodes();
-        SetupTriggerNodes();
-        SetupEffectNodes();
+        SetupModNode(RootNode);
     }
 
-    private void SetupModNode()
+    private void SetupModNode(Node parent)
     {
-        ModNode = new() { Observable = ModViewModel };
+        ModNode node = new() { Observable = ModViewModel };
 
-        ModNode.EditCommand = EditCommand;
+        node.EditCommand = EditCommand;
 
-        ModNode.CreateScriptCommand = CreateScriptCommand;
-        ModNode.CreateEventCommand = CreateEventCommand;
-        ModNode.CreateDecisionCommand = CreateDecisionCommand;
-        ModNode.CreateTriggerCommand = CreateTriggerCommand;
-        ModNode.CreateEffectCommand = CreateEffectCommand;
+        node.CreateScriptCommand = CreateScriptCommand;
+        node.CreateEventCommand = CreateEventCommand;
+        node.CreateDecisionCommand = CreateDecisionCommand;
+        node.CreateTriggerCommand = CreateTriggerCommand;
+        node.CreateEffectCommand = CreateEffectCommand;
 
-        RootNode = new CollectionNode();
-        RootNode.Add(ModNode);
+        SetupScriptNodes(node);
+        SetupEventNodes(node);
+        //SetupOptionNodes(node);
+        SetupDecisionNodes(node);
+        SetupTriggerNodes(node);
+        SetupEffectNodes(node);
+
+        parent.Children.Add(node);
     }
 
-    private void SetupScriptNodes()
+    private void SetupScriptNodes(Node parent)
     {
-        ModNode.ScriptNodes.Header = "Scripts";
+        Node collection = new() { Header = "Scripts" };
 
         foreach (var observable in ScriptModelMap.Wrappers)
         {
-            ScriptNode node = new() { Observable = observable };
+            ScriptNode child = new() { Observable = observable };
 
-            node.DeleteCommand = DeleteScriptCommand;
-            node.EditCommand = EditCommand;
+            child.DeleteCommand = DeleteScriptCommand;
+            child.EditCommand = EditCommand;
 
-            ModNode.ScriptNodes.Add(node);
+            collection.Children.Add(child);
         }
+
+        parent.Children.Add(collection);
     }
 
-    private void SetupEventNodes()
+    private void SetupEventNodes(Node parent)
     {
-        ModNode.EventNodes.Header = "Events";
+        Node collection = new() { Header = "Events" };
 
         foreach (var observable in EventModelMap.Wrappers)
         {
-            EventNode node = new() { Observable = observable };
+            EventNode child = new() { Observable = observable };
 
-            node.DeleteCommand = DeleteEventCommand;
-            node.EditCommand = EditCommand;
+            child.DeleteCommand = DeleteEventCommand;
+            child.EditCommand = EditCommand;
 
-            node.CreatePortraitCommand = CreateEventPortraitCommand;
-            node.CreateOptionCommand = CreateEventOptionCommand;
-            node.CreateOnionCommand = CreateEventOnionCommand;
+            child.CreatePortraitCommand = CreateEventPortraitCommand;
+            child.CreateOptionCommand = CreateEventOptionCommand;
+            child.CreateOnionCommand = CreateEventOnionCommand;
 
-            node.AddTriggerCommand = AddEventTriggerCommand;
-            node.RemoveTriggerCommand = RemoveEventTriggerCommand;
-            // setup other commands
+            child.AddTriggerCommand = AddEventTriggerCommand;
+            child.RemoveTriggerCommand = RemoveEventTriggerCommand;
 
-            SetupEventPortraitNodes(node);
-            SetupEventOptionNodes(node);
-            SetupEventOnionNodes(node);
+            child.AddImmediateEffectCommand = AddEventImmediateEffectCommand;
+            child.RemoveImmediateEffectCommand = RemoveEventImmediateEffectCommand;
 
-            SetupEventTriggerNodes(node);
-            // setup other nodes
+            child.AddAfterEffectCommand = AddEventAfterEffectCommand;
+            child.RemoveAfterEffectCommand = RemoveEventAfterEffectCommand;
 
-            ModNode.EventNodes.Add(node);
+            SetupEventPortraitNodes(child);
+            SetupEventOptionNodes(child);
+            SetupEventOnionNodes(child);
+
+            SetupEventTriggerNodes(child);
+            SetupEventImmediateEffectNodes(child);
+            SetupEventAfterEffectNodes(child);
+
+            collection.Children.Add(child);
         }
+
+        parent.Children.Add(collection);
     }
 
     private void SetupEventPortraitNodes(EventNode parent)
     {
-        parent.PortraitNodes.Header = "Portraits";
+        Node collection = new() { Header = "Portraits" };
 
         var relations = EventService.GetPortraits(parent.Observable.Model);
         foreach (var relation in relations)
         {
             var observable = PortraitModelMap[relation];
-
             PortraitNode child = new() { Observable = observable };
-            parent.PortraitNodes.Add(child);
+
+            child.DeleteCommand = DeletePortraitCommand;
+            child.EditCommand = EditCommand;
+
+            collection.Children.Add(child);
         }
+
+        parent.Children.Add(collection);
     }
 
     private void SetupEventOptionNodes(EventNode parent)
     {
-        parent.OptionNodes.Header = "Options";
+        Node collection = new() { Header = "Options" };
 
         var relations = EventService.GetOptions(parent.Observable.Model);
         foreach (var relation in relations)
         {
             var observable = OptionModelMap[relation];
-
             OptionNode child = new() { Observable = observable };
-            parent.OptionNodes.Add(child);
+
+            child.DeleteCommand = DeleteOptionCommand;
+            child.EditCommand = EditCommand;
+
+            // TODO: Add/Remove TriggeredEvent Commands
+
+            child.AddTriggerCommand = AddOptionTriggerCommand;
+            child.RemoveTriggerCommand = RemoveOptionTriggerCommand;
+
+            child.AddEffectCommand = AddOptionEffectCommand;
+            child.RemoveEffectCommand = RemoveOptionEffectCommand;
+
+            SetupOptionTriggerNodes(child);
+            SetupOptionEffectNodes(child);
+
+            // TODO: SetupOptionTriggeredEvents
+
+            collection.Children.Add(child);
         }
+
+        parent.Children.Add(collection);
     }
 
     private void SetupEventOnionNodes(EventNode parent)
     {
-        parent.OnionNodes.Header = "On-Actions";
+        Node collection = new() { Header = "On-Actions" };
 
         var relations = EventService.GetOnions(parent.Observable.Model);
         foreach (var relation in relations)
         {
             var observable = OnionModelMap[relation];
-
             OnionNode child = new() { Observable = observable };
-            parent.OnionNodes.Add(child);
+
+            child.DeleteCommand = DeleteOnionCommand;
+            child.EditCommand = EditCommand;
+
+            collection.Children.Add(child);
         }
+
+        parent.Children.Add(collection);
     }
 
     private void SetupEventTriggerNodes(EventNode parent)
     {
-        parent.TriggerNodes.Header = "Triggers";
+        Node collection = new() { Header = "Triggers" };
 
         var relations = EventService.GetTriggers(parent.Observable.Model);
         foreach (var relation in relations)
@@ -360,56 +398,258 @@ public class ContentPageViewModel : PageViewModel
             child.DeleteCommand = DeleteTriggerCommand;
             child.EditCommand = EditCommand;
 
-            parent.TriggerNodes.Add(child);
+            collection.Children.Add(child);
         }
+
+        parent.Children.Add(collection);
     }
 
-    private void SetupDecisionNodes()
+    private void SetupEventImmediateEffectNodes(EventNode parent)
     {
-        ModNode.DecisionNodes.Header = "Decisions";
+        Node collection = new() { Header = "Immediate Effects" };
+
+        var relations = EventService.GetImmediateEffects(parent.Observable.Model);
+        foreach (var relation in relations)
+        {
+            var observable = EffectModelMap[relation];
+            EffectNode child = new() { Observable = observable };
+
+            child.DeleteCommand = DeleteEffectCommand;
+            child.EditCommand = EditCommand;
+
+            collection.Children.Add(child);
+        }
+
+        parent.Children.Add(collection);
+    }
+
+    private void SetupEventAfterEffectNodes(EventNode parent)
+    {
+        Node collection = new() { Header = "After Effects" };
+
+        var relations = EventService.GetAfterEffects(parent.Observable.Model);
+        foreach (var relation in relations)
+        {
+            var observable = EffectModelMap[relation];
+            EffectNode child = new() { Observable = observable };
+
+            child.DeleteCommand = DeleteEffectCommand;
+            child.EditCommand = EditCommand;
+
+            collection.Children.Add(child);
+        }
+
+        parent.Children.Add(collection);
+    }
+
+    private void SetupOptionNodes(Node parent)
+    {
+        Node collection = new() { Header = "Options" };
+
+        foreach (var observable in OptionModelMap.Wrappers)
+        {
+            OptionNode child = new() { Observable = observable };
+
+            child.DeleteCommand = DeleteOptionCommand;
+            child.EditCommand = EditCommand;
+
+            child.AddTriggerCommand = AddOptionTriggerCommand;
+            child.RemoveTriggerCommand = RemoveOptionTriggerCommand;
+
+            child.AddEffectCommand = AddOptionEffectCommand;
+            child.RemoveEffectCommand = RemoveOptionEffectCommand;
+
+            SetupOptionTriggerNodes(child);
+            SetupOptionEffectNodes(child);
+
+            collection.Children.Add(child);
+        }
+
+        parent.Children.Add(collection);
+    }
+
+    // TODO: SetupOptionTriggeredEvents
+
+    private void SetupOptionTriggerNodes(OptionNode parent)
+    {
+        Node collection = new() { Header = "Triggers" };
+
+        var relations = OptionService.GetTriggers(parent.Observable.Model);
+        foreach (var relation in relations)
+        {
+            var observable = TriggerModelMap[relation];
+            TriggerNode child = new() { Observable = observable };
+
+            child.DeleteCommand = DeleteTriggerCommand;
+            child.EditCommand = EditCommand;
+
+            collection.Children.Add(child);
+        }
+
+        parent.Children.Add(collection);
+    }
+
+    private void SetupOptionEffectNodes(OptionNode parent)
+    {
+        Node collection = new() { Header = "Effects" };
+
+        var relations = OptionService.GetEffects(parent.Observable.Model);
+        foreach (var relation in relations)
+        {
+            var observable = EffectModelMap[relation];
+            EffectNode child = new() { Observable = observable };
+
+            child.DeleteCommand = DeleteEffectCommand;
+            child.EditCommand = EditCommand;
+
+            collection.Children.Add(child);
+        }
+
+        parent.Children.Add(collection);
+    }
+
+    private void SetupDecisionNodes(Node parent)
+    {
+        Node collection = new() { Header = "Decisions" };
 
         foreach (var observable in DecisionModelMap.Wrappers)
         {
-            DecisionNode node = new() { Observable = observable };
+            DecisionNode child = new() { Observable = observable };
 
-            node.DeleteCommand = DeleteDecisionCommand;
-            node.EditCommand = EditCommand;
-            // setup other commands
+            child.DeleteCommand = DeleteDecisionCommand;
+            child.EditCommand = EditCommand;
 
-            // setup other nodes
+            child.AddShownTriggerCommand = AddDecisionShownTriggerCommand;
+            child.RemoveShownTriggerCommand = RemoveDecisionShownTriggerCommand;
 
-            ModNode.DecisionNodes.Add(node);
+            child.AddFailureTriggerCommand = AddDecisionFailureTriggerCommand;
+            child.RemoveFailureTriggerCommand = RemoveDecisionFailureTriggerCommand;
+
+            child.AddValidTriggerCommand = AddDecisionValidTriggerCommand;
+            child.RemoveValidTriggerCommand = RemoveDecisionValidTriggerCommand;
+
+            child.AddEffectCommand = AddDecisionEffectCommand;
+            child.RemoveEffectCommand = RemoveDecisionEffectCommand;
+
+            SetupDecisionShownTriggerNodes(child);
+            SetupDecisionFailureTriggerNodes(child);
+            SetupDecisionValidTriggerNodes(child);
+            SetupDecisionEffectNodes(child);
+
+            collection.Children.Add(child);
         }
+
+        parent.Children.Add(collection);
     }
 
-    private void SetupTriggerNodes()
+    private void SetupDecisionShownTriggerNodes(DecisionNode parent)
     {
-        ModNode.TriggerNodes.Header = "Triggers";
+        Node collection = new() { Header = "Shown Triggers" };
+
+        var relations = DecisionService.GetShownTriggers(parent.Observable.Model);
+        foreach (var relation in relations)
+        {
+            var observable = TriggerModelMap[relation];
+            TriggerNode child = new() { Observable = observable };
+
+            child.DeleteCommand = DeleteTriggerCommand;
+            child.EditCommand = EditCommand;
+
+            collection.Children.Add(child);
+        }
+
+        parent.Children.Add(collection);
+    }
+
+    private void SetupDecisionFailureTriggerNodes(DecisionNode parent)
+    {
+        Node collection = new() { Header = "Failure Triggers" };
+
+        var relations = DecisionService.GetFailureTriggers(parent.Observable.Model);
+        foreach (var relation in relations)
+        {
+            var observable = TriggerModelMap[relation];
+            TriggerNode child = new() { Observable = observable };
+
+            child.DeleteCommand = DeleteTriggerCommand;
+            child.EditCommand = EditCommand;
+
+            collection.Children.Add(child);
+        }
+
+        parent.Children.Add(collection);
+    }
+
+    private void SetupDecisionValidTriggerNodes(DecisionNode parent)
+    {
+        Node collection = new() { Header = "Valid Triggers" };
+
+        var relations = DecisionService.GetValidTriggers(parent.Observable.Model);
+        foreach (var relation in relations)
+        {
+            var observable = TriggerModelMap[relation];
+            TriggerNode child = new() { Observable = observable };
+
+            child.DeleteCommand = DeleteTriggerCommand;
+            child.EditCommand = EditCommand;
+
+            collection.Children.Add(child);
+        }
+
+        parent.Children.Add(collection);
+    }
+
+    private void SetupDecisionEffectNodes(DecisionNode parent)
+    {
+        Node collection = new() { Header = "Effects" };
+
+        var relations = DecisionService.GetEffects(parent.Observable.Model);
+        foreach (var relation in relations)
+        {
+            var observable = EffectModelMap[relation];
+            EffectNode child = new() { Observable = observable };
+
+            child.DeleteCommand = DeleteEffectCommand;
+            child.EditCommand = EditCommand;
+
+            collection.Children.Add(child);
+        }
+
+        parent.Children.Add(collection);
+    }
+
+    private void SetupTriggerNodes(Node parent)
+    {
+        Node collection = new() { Header = "Triggers" };
 
         foreach (var observable in TriggerModelMap.Wrappers)
         {
-            TriggerNode node = new() { Observable = observable };
+            TriggerNode child = new() { Observable = observable };
 
-            node.DeleteCommand = DeleteTriggerCommand;
-            node.EditCommand = EditCommand;
+            child.DeleteCommand = DeleteTriggerCommand;
+            child.EditCommand = EditCommand;
 
-            ModNode.TriggerNodes.Add(node);
+            collection.Children.Add(child);
         }
+
+        parent.Children.Add(collection);
     }
 
-    private void SetupEffectNodes()
+    private void SetupEffectNodes(Node parent)
     {
-        ModNode.EffectNodes.Header = "Effects";
+        Node collection = new() { Header = "Effects" };
 
         foreach (var observable in EffectModelMap.Wrappers)
         {
-            EffectNode node = new() { Observable = observable };
+            EffectNode child = new() { Observable = observable };
 
-            node.DeleteCommand = DeleteEffectCommand;
-            node.EditCommand = EditCommand;
+            child.DeleteCommand = DeleteEffectCommand;
+            child.EditCommand = EditCommand;
 
-            ModNode.EffectNodes.Add(node);
+            collection.Children.Add(child);
         }
+
+        parent.Children.Add(collection);
     }
 
     #endregion
@@ -558,11 +798,11 @@ public class ContentPageViewModel : PageViewModel
 
     private async Task AddEventTrigger(object? param)
     {
-        if (param is not EventViewModel evt)
+        if (param is not EventViewModel observable)
         { return; }
 
         var all = TriggerService.Get();
-        var existing = EventService.GetTriggers(evt.Model);
+        var existing = EventService.GetTriggers(observable.Model);
         var candidates = all.Except(existing);
 
         Finder.Items = candidates.Select(candidate => TriggerModelMap[candidate]);
@@ -575,15 +815,14 @@ public class ContentPageViewModel : PageViewModel
         if (Finder.Selected == null)
         { return; }
 
-        Event owner = evt.Model;
+        Event owner = observable.Model;
         Trigger relation = ((TriggerViewModel)Finder.Selected).Model;
 
         EventService.AddTrigger(owner, relation);
 
         Setup();
 
-        var observable = TriggerModelMap[relation];
-        Selected = observable;
+        Selected = TriggerModelMap[relation];
     }
     private bool CanAddEventTrigger(object? param)
     {
@@ -595,10 +834,10 @@ public class ContentPageViewModel : PageViewModel
 
     private async Task RemoveEventTrigger(object? param)
     {
-        if (param is not EventViewModel evt)
+        if (param is not EventViewModel observable)
         { return; }
 
-        var existing = EventService.GetTriggers(evt.Model);
+        var existing = EventService.GetTriggers(observable.Model);
 
         Finder.Items = existing.Select(candidate => TriggerModelMap[candidate]);
 
@@ -610,7 +849,7 @@ public class ContentPageViewModel : PageViewModel
         if (Finder.Selected == null)
         { return; }
 
-        Event owner = evt.Model;
+        Event owner = observable.Model;
         Trigger relation = ((TriggerViewModel)Finder.Selected).Model;
 
         EventService.RemoveTrigger(owner, relation);
@@ -620,6 +859,146 @@ public class ContentPageViewModel : PageViewModel
         Selected = null;
     }
     private bool CanRemoveEventTrigger(object? param)
+    {
+        return param is EventViewModel;
+    }
+
+    private AsyncRelayCommand<object>? addEventImmediateEffectCommand;
+    public AsyncRelayCommand<object> AddEventImmediateEffectCommand => addEventImmediateEffectCommand ??= new(AddEventImmediateEffect, CanAddEventImmediateEffect);
+
+    private async Task AddEventImmediateEffect(object? param)
+    {
+        if (param is not EventViewModel observable)
+        { return; }
+
+        var all = EffectService.Get();
+        var existing = EventService.GetImmediateEffects(observable.Model);
+        var candidates = all.Except(existing);
+
+        Finder.Items = candidates.Select(candidate => EffectModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Event owner = observable.Model;
+        Effect relation = ((EffectViewModel)Finder.Selected).Model;
+
+        EventService.AddImmediateEffect(owner, relation);
+
+        Setup();
+
+        Selected = EffectModelMap[relation];
+    }
+    private bool CanAddEventImmediateEffect(object? param)
+    {
+        return param is EventViewModel;
+    }
+
+    private AsyncRelayCommand<object>? removeEventImmediateEffectCommand;
+    public AsyncRelayCommand<object> RemoveEventImmediateEffectCommand => removeEventImmediateEffectCommand ??= new(RemoveEventImmediateEffect, CanRemoveEventImmediateEffect);
+
+    private async Task RemoveEventImmediateEffect(object? param)
+    {
+        if (param is not EventViewModel observable)
+        { return; }
+
+        var existing = EventService.GetImmediateEffects(observable.Model);
+
+        Finder.Items = existing.Select(candidate => EffectModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Event owner = observable.Model;
+        Effect relation = ((EffectViewModel)Finder.Selected).Model;
+
+        EventService.RemoveImmediateEffect(owner, relation);
+
+        Setup();
+
+        Selected = null;
+    }
+    private bool CanRemoveEventImmediateEffect(object? param)
+    {
+        return param is EventViewModel;
+    }
+
+    private AsyncRelayCommand<object>? addEventAfterEffectCommand;
+    public AsyncRelayCommand<object> AddEventAfterEffectCommand => addEventAfterEffectCommand ??= new(AddEventAfterEffect, CanAddEventAfterEffect);
+
+    private async Task AddEventAfterEffect(object? param)
+    {
+        if (param is not EventViewModel observable)
+        { return; }
+
+        var all = EffectService.Get();
+        var existing = EventService.GetAfterEffects(observable.Model);
+        var candidates = all.Except(existing);
+
+        Finder.Items = candidates.Select(candidate => EffectModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Event owner = observable.Model;
+        Effect relation = ((EffectViewModel)Finder.Selected).Model;
+
+        EventService.AddAfterEffect(owner, relation);
+
+        Setup();
+
+        Selected = EffectModelMap[relation];
+    }
+    private bool CanAddEventAfterEffect(object? param)
+    {
+        return param is EventViewModel;
+    }
+
+    private AsyncRelayCommand<object>? removeEventAfterEffectCommand;
+    public AsyncRelayCommand<object> RemoveEventAfterEffectCommand => removeEventAfterEffectCommand ??= new(RemoveEventAfterEffect, CanRemoveEventAfterEffect);
+
+    private async Task RemoveEventAfterEffect(object? param)
+    {
+        if (param is not EventViewModel observable)
+        { return; }
+
+        var existing = EventService.GetAfterEffects(observable.Model);
+
+        Finder.Items = existing.Select(candidate => EffectModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Event owner = observable.Model;
+        Effect relation = ((EffectViewModel)Finder.Selected).Model;
+
+        EventService.RemoveAfterEffect(owner, relation);
+
+        Setup();
+
+        Selected = null;
+    }
+    private bool CanRemoveEventAfterEffect(object? param)
     {
         return param is EventViewModel;
     }
@@ -670,6 +1049,146 @@ public class ContentPageViewModel : PageViewModel
         Selected = null;
     }
     private bool CanDeleteOption(object? param)
+    {
+        return param is OptionViewModel;
+    }
+
+    private AsyncRelayCommand<object>? addOptionTriggerCommand;
+    public AsyncRelayCommand<object> AddOptionTriggerCommand => addOptionTriggerCommand ??= new(AddOptionTrigger, CanAddOptionTrigger);
+
+    private async Task AddOptionTrigger(object? param)
+    {
+        if (param is not OptionViewModel observable)
+        { return; }
+
+        var all = TriggerService.Get();
+        var existing = OptionService.GetTriggers(observable.Model);
+        var candidates = all.Except(existing);
+
+        Finder.Items = candidates.Select(candidate => TriggerModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Option owner = observable.Model;
+        Trigger relation = ((TriggerViewModel)Finder.Selected).Model;
+
+        OptionService.AddTrigger(owner, relation);
+
+        Setup();
+
+        Selected = TriggerModelMap[relation];
+    }
+    private bool CanAddOptionTrigger(object? param)
+    {
+        return param is OptionViewModel;
+    }
+
+    private AsyncRelayCommand<object>? removeOptionTriggerCommand;
+    public AsyncRelayCommand<object> RemoveOptionTriggerCommand => removeOptionTriggerCommand ??= new(RemoveOptionTrigger, CanRemoveOptionTrigger);
+
+    private async Task RemoveOptionTrigger(object? param)
+    {
+        if (param is not OptionViewModel observable)
+        { return; }
+
+        var existing = OptionService.GetTriggers(observable.Model);
+
+        Finder.Items = existing.Select(candidate => TriggerModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Option owner = observable.Model;
+        Trigger relation = ((TriggerViewModel)Finder.Selected).Model;
+
+        OptionService.RemoveTrigger(owner, relation);
+
+        Setup();
+
+        Selected = null;
+    }
+    private bool CanRemoveOptionTrigger(object? param)
+    {
+        return param is OptionViewModel;
+    }
+
+    private AsyncRelayCommand<object>? addOptionEffectCommand;
+    public AsyncRelayCommand<object> AddOptionEffectCommand => addOptionEffectCommand ??= new(AddOptionEffect, CanAddOptionEffect);
+
+    private async Task AddOptionEffect(object? param)
+    {
+        if (param is not OptionViewModel observable)
+        { return; }
+
+        var all = EffectService.Get();
+        var existing = OptionService.GetEffects(observable.Model);
+        var candidates = all.Except(existing);
+
+        Finder.Items = candidates.Select(candidate => EffectModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Option owner = observable.Model;
+        Effect relation = ((EffectViewModel)Finder.Selected).Model;
+
+        OptionService.AddEffect(owner, relation);
+
+        Setup();
+
+        Selected = EffectModelMap[relation];
+    }
+    private bool CanAddOptionEffect(object? param)
+    {
+        return param is OptionViewModel;
+    }
+
+    private AsyncRelayCommand<object>? removeOptionEffectCommand;
+    public AsyncRelayCommand<object> RemoveOptionEffectCommand => removeOptionEffectCommand ??= new(RemoveOptionEffect, CanRemoveOptionEffect);
+
+    private async Task RemoveOptionEffect(object? param)
+    {
+        if (param is not OptionViewModel observable)
+        { return; }
+
+        var existing = OptionService.GetEffects(observable.Model);
+
+        Finder.Items = existing.Select(candidate => EffectModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Option owner = observable.Model;
+        Effect relation = ((EffectViewModel)Finder.Selected).Model;
+
+        OptionService.RemoveEffect(owner, relation);
+
+        Setup();
+
+        Selected = null;
+    }
+    private bool CanRemoveOptionEffect(object? param)
     {
         return param is OptionViewModel;
     }
@@ -734,6 +1253,286 @@ public class ContentPageViewModel : PageViewModel
         Selected = null;
     }
     private bool CanDeleteDecision(object? param)
+    {
+        return param is DecisionViewModel;
+    }
+
+    private AsyncRelayCommand<object>? addDecisionShownTriggerCommand;
+    public AsyncRelayCommand<object> AddDecisionShownTriggerCommand => addDecisionShownTriggerCommand ??= new(AddDecisionShownTrigger, CanAddDecisionShownTrigger);
+
+    private async Task AddDecisionShownTrigger(object? param)
+    {
+        if (param is not DecisionViewModel observable)
+        { return; }
+
+        var all = TriggerService.Get();
+        var existing = DecisionService.GetShownTriggers(observable.Model);
+        var candidates = all.Except(existing);
+
+        Finder.Items = candidates.Select(candidate => TriggerModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Decision owner = observable.Model;
+        Trigger relation = ((TriggerViewModel)Finder.Selected).Model;
+
+        DecisionService.AddShownTrigger(owner, relation);
+
+        Setup();
+
+        Selected = TriggerModelMap[relation];
+    }
+    private bool CanAddDecisionShownTrigger(object? param)
+    {
+        return param is DecisionViewModel;
+    }
+
+    private AsyncRelayCommand<object>? removeDecisionShownTriggerCommand;
+    public AsyncRelayCommand<object> RemoveDecisionShownTriggerCommand => removeDecisionShownTriggerCommand ??= new(RemoveDecisionShownTrigger, CanRemoveDecisionShownTrigger);
+
+    private async Task RemoveDecisionShownTrigger(object? param)
+    {
+        if (param is not DecisionViewModel observable)
+        { return; }
+
+        var existing = DecisionService.GetShownTriggers(observable.Model);
+
+        Finder.Items = existing.Select(candidate => TriggerModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Decision owner = observable.Model;
+        Trigger relation = ((TriggerViewModel)Finder.Selected).Model;
+
+        DecisionService.RemoveShownTrigger(owner, relation);
+
+        Setup();
+
+        Selected = null;
+    }
+    private bool CanRemoveDecisionShownTrigger(object? param)
+    {
+        return param is DecisionViewModel;
+    }
+
+    private AsyncRelayCommand<object>? addDecisionFailureTriggerCommand;
+    public AsyncRelayCommand<object> AddDecisionFailureTriggerCommand => addDecisionFailureTriggerCommand ??= new(AddDecisionFailureTrigger, CanAddDecisionFailureTrigger);
+
+    private async Task AddDecisionFailureTrigger(object? param)
+    {
+        if (param is not DecisionViewModel observable)
+        { return; }
+
+        var all = TriggerService.Get();
+        var existing = DecisionService.GetFailureTriggers(observable.Model);
+        var candidates = all.Except(existing);
+
+        Finder.Items = candidates.Select(candidate => TriggerModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Decision owner = observable.Model;
+        Trigger relation = ((TriggerViewModel)Finder.Selected).Model;
+
+        DecisionService.AddFailureTrigger(owner, relation);
+
+        Setup();
+
+        Selected = TriggerModelMap[relation];
+    }
+    private bool CanAddDecisionFailureTrigger(object? param)
+    {
+        return param is DecisionViewModel;
+    }
+
+    private AsyncRelayCommand<object>? removeDecisionFailureTriggerCommand;
+    public AsyncRelayCommand<object> RemoveDecisionFailureTriggerCommand => removeDecisionFailureTriggerCommand ??= new(RemoveDecisionFailureTrigger, CanRemoveDecisionFailureTrigger);
+
+    private async Task RemoveDecisionFailureTrigger(object? param)
+    {
+        if (param is not DecisionViewModel observable)
+        { return; }
+
+        var existing = DecisionService.GetFailureTriggers(observable.Model);
+
+        Finder.Items = existing.Select(candidate => TriggerModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Decision owner = observable.Model;
+        Trigger relation = ((TriggerViewModel)Finder.Selected).Model;
+
+        DecisionService.RemoveFailureTrigger(owner, relation);
+
+        Setup();
+
+        Selected = null;
+    }
+    private bool CanRemoveDecisionFailureTrigger(object? param)
+    {
+        return param is DecisionViewModel;
+    }
+
+    private AsyncRelayCommand<object>? addDecisionValidTriggerCommand;
+    public AsyncRelayCommand<object> AddDecisionValidTriggerCommand => addDecisionValidTriggerCommand ??= new(AddDecisionValidTrigger, CanAddDecisionValidTrigger);
+
+    private async Task AddDecisionValidTrigger(object? param)
+    {
+        if (param is not DecisionViewModel observable)
+        { return; }
+
+        var all = TriggerService.Get();
+        var existing = DecisionService.GetValidTriggers(observable.Model);
+        var candidates = all.Except(existing);
+
+        Finder.Items = candidates.Select(candidate => TriggerModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Decision owner = observable.Model;
+        Trigger relation = ((TriggerViewModel)Finder.Selected).Model;
+
+        DecisionService.AddValidTrigger(owner, relation);
+
+        Setup();
+
+        Selected = TriggerModelMap[relation];
+    }
+    private bool CanAddDecisionValidTrigger(object? param)
+    {
+        return param is DecisionViewModel;
+    }
+
+    private AsyncRelayCommand<object>? removeDecisionValidTriggerCommand;
+    public AsyncRelayCommand<object> RemoveDecisionValidTriggerCommand => removeDecisionValidTriggerCommand ??= new(RemoveDecisionValidTrigger, CanRemoveDecisionValidTrigger);
+
+    private async Task RemoveDecisionValidTrigger(object? param)
+    {
+        if (param is not DecisionViewModel observable)
+        { return; }
+
+        var existing = DecisionService.GetValidTriggers(observable.Model);
+
+        Finder.Items = existing.Select(candidate => TriggerModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Decision owner = observable.Model;
+        Trigger relation = ((TriggerViewModel)Finder.Selected).Model;
+
+        DecisionService.RemoveValidTrigger(owner, relation);
+
+        Setup();
+
+        Selected = null;
+    }
+    private bool CanRemoveDecisionValidTrigger(object? param)
+    {
+        return param is DecisionViewModel;
+    }
+
+    private AsyncRelayCommand<object>? addDecisionEffectCommand;
+    public AsyncRelayCommand<object> AddDecisionEffectCommand => addDecisionEffectCommand ??= new(AddDecisionEffect, CanAddDecisionEffect);
+
+    private async Task AddDecisionEffect(object? param)
+    {
+        if (param is not DecisionViewModel observable)
+        { return; }
+
+        var all = EffectService.Get();
+        var existing = DecisionService.GetEffects(observable.Model);
+        var candidates = all.Except(existing);
+
+        Finder.Items = candidates.Select(candidate => EffectModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Decision owner = observable.Model;
+        Effect relation = ((EffectViewModel)Finder.Selected).Model;
+
+        DecisionService.AddEffect(owner, relation);
+
+        Setup();
+
+        Selected = EffectModelMap[relation];
+    }
+    private bool CanAddDecisionEffect(object? param)
+    {
+        return param is DecisionViewModel;
+    }
+
+    private AsyncRelayCommand<object>? removeDecisionEffectCommand;
+    public AsyncRelayCommand<object> RemoveDecisionEffectCommand => removeDecisionEffectCommand ??= new(RemoveDecisionEffect, CanRemoveDecisionEffect);
+
+    private async Task RemoveDecisionEffect(object? param)
+    {
+        if (param is not DecisionViewModel observable)
+        { return; }
+
+        var existing = DecisionService.GetEffects(observable.Model);
+
+        Finder.Items = existing.Select(candidate => EffectModelMap[candidate]);
+
+        await Finder.Show();
+
+        if (Finder.DialogResult != true)
+        { return; }
+
+        if (Finder.Selected == null)
+        { return; }
+
+        Decision owner = observable.Model;
+        Effect relation = ((EffectViewModel)Finder.Selected).Model;
+
+        DecisionService.RemoveEffect(owner, relation);
+
+        Setup();
+
+        Selected = null;
+    }
+    private bool CanRemoveDecisionEffect(object? param)
     {
         return param is DecisionViewModel;
     }

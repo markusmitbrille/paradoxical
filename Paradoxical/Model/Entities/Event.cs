@@ -213,7 +213,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>, IComparable<
         IModService modService,
         IEventService eventService)
     {
-        var effects = eventService.GetImmediates(this);
+        var effects = eventService.GetImmediateEffects(this);
         if (effects.Any() == false && CustomImmediateEffect.IsEmpty() == true)
         {
             writer.Indent().WriteLine("# no immediate");
@@ -252,7 +252,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>, IComparable<
         IModService modService,
         IEventService eventService)
     {
-        var effects = eventService.GetAfters(this);
+        var effects = eventService.GetAfterEffects(this);
         if (effects.Any() == false && CustomAfterEffect.IsEmpty() == true)
         {
             writer.Indent().WriteLine("# no after");

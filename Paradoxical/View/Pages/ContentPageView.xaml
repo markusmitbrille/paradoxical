@@ -90,7 +90,7 @@
                     <TreeView.Resources>
 
                         <HierarchicalDataTemplate
-                            DataType="{x:Type core:CollectionNode}"
+                            DataType="{x:Type core:Node}"
                             ItemsSource="{Binding Children}">
                             <Grid>
 

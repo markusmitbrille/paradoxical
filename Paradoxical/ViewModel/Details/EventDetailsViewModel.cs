@@ -294,7 +294,7 @@ public class EventDetailsViewModel : DetailsViewModel
         if (Selected == null)
         { return; }
 
-        var effects = EventService.GetImmediates(Selected.Model)
+        var effects = EventService.GetImmediateEffects(Selected.Model)
             .Select(model => new EffectViewModel() { Model = model });
 
         ImmediateEffects = new(effects);
@@ -305,7 +305,7 @@ public class EventDetailsViewModel : DetailsViewModel
         if (Selected == null)
         { return; }
 
-        var effects = EventService.GetAfters(Selected.Model)
+        var effects = EventService.GetAfterEffects(Selected.Model)
             .Select(model => new EffectViewModel() { Model = model });
 
         AfterEffects = new(effects);
@@ -608,7 +608,7 @@ public class EventDetailsViewModel : DetailsViewModel
         Effect relation = new();
 
         EffectService.Insert(relation);
-        EventService.AddImmediate(owner, relation);
+        EventService.AddImmediateEffect(owner, relation);
 
         EffectViewModel observable = new() { Model = relation };
         ImmediateEffects.Add(observable);
@@ -638,7 +638,7 @@ public class EventDetailsViewModel : DetailsViewModel
         Event owner = Selected.Model;
         Effect relation = ((EffectViewModel)Finder.Selected).Model;
 
-        EventService.AddImmediate(owner, relation);
+        EventService.AddImmediateEffect(owner, relation);
 
         EffectViewModel observable = new() { Model = relation };
         ImmediateEffects.Add(observable);
@@ -655,7 +655,7 @@ public class EventDetailsViewModel : DetailsViewModel
         if (observable == null)
         { return; }
 
-        EventService.RemoveImmediate(Selected.Model, observable.Model);
+        EventService.RemoveImmediateEffect(Selected.Model, observable.Model);
         ImmediateEffects.Remove(observable);
     }
     private bool CanRemoveImmediateEffect(EffectViewModel? observable)
@@ -697,7 +697,7 @@ public class EventDetailsViewModel : DetailsViewModel
         Effect relation = new();
 
         EffectService.Insert(relation);
-        EventService.AddAfter(owner, relation);
+        EventService.AddAfterEffect(owner, relation);
 
         EffectViewModel observable = new() { Model = relation };
         AfterEffects.Add(observable);
@@ -727,7 +727,7 @@ public class EventDetailsViewModel : DetailsViewModel
         Event owner = Selected.Model;
         Effect relation = ((EffectViewModel)Finder.Selected).Model;
 
-        EventService.AddAfter(owner, relation);
+        EventService.AddAfterEffect(owner, relation);
 
         EffectViewModel observable = new() { Model = relation };
         AfterEffects.Add(observable);
@@ -744,7 +744,7 @@ public class EventDetailsViewModel : DetailsViewModel
         if (observable == null)
         { return; }
 
-        EventService.RemoveAfter(Selected.Model, observable.Model);
+        EventService.RemoveAfterEffect(Selected.Model, observable.Model);
         AfterEffects.Remove(observable);
     }
     private bool CanRemoveAfterEffect(EffectViewModel? observable)

@@ -25,13 +25,13 @@ public interface IEventService : IEntityService<Event>
     void AddTrigger(Event model, Trigger relation);
     void RemoveTrigger(Event model, Trigger relation);
 
-    IEnumerable<Effect> GetImmediates(Event model);
-    void AddImmediate(Event model, Effect relation);
-    void RemoveImmediate(Event model, Effect relation);
+    IEnumerable<Effect> GetImmediateEffects(Event model);
+    void AddImmediateEffect(Event model, Effect relation);
+    void RemoveImmediateEffect(Event model, Effect relation);
 
-    IEnumerable<Effect> GetAfters(Event model);
-    void AddAfter(Event model, Effect relation);
-    void RemoveAfter(Event model, Effect relation);
+    IEnumerable<Effect> GetAfterEffects(Event model);
+    void AddAfterEffect(Event model, Effect relation);
+    void RemoveAfterEffect(Event model, Effect relation);
 }
 
 public class EventService : EntityService<Event>, IEventService
@@ -162,7 +162,7 @@ public class EventService : EntityService<Event>, IEventService
         Data.Connection.Execute(query, model.Id, relation.Id);
     }
 
-    public IEnumerable<Effect> GetImmediates(Event model)
+    public IEnumerable<Effect> GetImmediateEffects(Event model)
     {
         string query = ParadoxQuery.Collection(
             m: "effects",
@@ -175,7 +175,7 @@ public class EventService : EntityService<Event>, IEventService
 
         return Data.Connection.Query<Effect>(query, model.Id);
     }
-    public void AddImmediate(Event model, Effect relation)
+    public void AddImmediateEffect(Event model, Effect relation)
     {
         string query = ParadoxQuery.CollectionAdd(
             mn: "event_immediate_effects",
@@ -184,7 +184,7 @@ public class EventService : EntityService<Event>, IEventService
 
         Data.Connection.Execute(query, model.Id, relation.Id);
     }
-    public void RemoveImmediate(Event model, Effect relation)
+    public void RemoveImmediateEffect(Event model, Effect relation)
     {
         string query = ParadoxQuery.CollectionRemove(
             mn: "event_immediate_effects",
@@ -194,7 +194,7 @@ public class EventService : EntityService<Event>, IEventService
         Data.Connection.Execute(query, model.Id, relation.Id);
     }
 
-    public IEnumerable<Effect> GetAfters(Event model)
+    public IEnumerable<Effect> GetAfterEffects(Event model)
     {
         string query = ParadoxQuery.Collection(
             m: "triggers",
@@ -207,7 +207,7 @@ public class EventService : EntityService<Event>, IEventService
 
         return Data.Connection.Query<Effect>(query, model.Id);
     }
-    public void AddAfter(Event model, Effect relation)
+    public void AddAfterEffect(Event model, Effect relation)
     {
         string query = ParadoxQuery.CollectionAdd(
             mn: "event_after_effects",
@@ -216,7 +216,7 @@ public class EventService : EntityService<Event>, IEventService
 
         Data.Connection.Execute(query, model.Id, relation.Id);
     }
-    public void RemoveAfter(Event model, Effect relation)
+    public void RemoveAfterEffect(Event model, Effect relation)
     {
         string query = ParadoxQuery.CollectionRemove(
             mn: "event_after_effects",
