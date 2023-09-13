@@ -15,11 +15,11 @@ public interface IEventService : IEntityService<Event>
 
     IEnumerable<Portrait> GetPortraits(Event model);
 
-    Portrait GetLeftPortrait(Event model);
-    Portrait GetRightPortrait(Event model);
-    Portrait GetLowerLeftPortrait(Event model);
-    Portrait GetLowerCenterPortrait(Event model);
-    Portrait GetLowerRightPortrait(Event model);
+    Portrait? GetLeftPortrait(Event model);
+    Portrait? GetRightPortrait(Event model);
+    Portrait? GetLowerLeftPortrait(Event model);
+    Portrait? GetLowerCenterPortrait(Event model);
+    Portrait? GetLowerRightPortrait(Event model);
 
     IEnumerable<Trigger> GetTriggers(Event model);
     void AddTrigger(Event model, Trigger relation);
@@ -105,29 +105,29 @@ public class EventService : EntityService<Event>, IEventService
         return Data.Connection.Query<Portrait>(query, model.Id);
     }
 
-    public Portrait GetLeftPortrait(Event model)
+    public Portrait? GetLeftPortrait(Event model)
     {
-        return GetPortraits(model).Single(portrait => portrait.Position == PortraitPosition.Left);
+        return GetPortraits(model).FirstOrDefault(portrait => portrait.Position == PortraitPosition.Left);
     }
 
-    public Portrait GetRightPortrait(Event model)
+    public Portrait? GetRightPortrait(Event model)
     {
-        return GetPortraits(model).Single(portrait => portrait.Position == PortraitPosition.Right);
+        return GetPortraits(model).FirstOrDefault(portrait => portrait.Position == PortraitPosition.Right);
     }
 
-    public Portrait GetLowerLeftPortrait(Event model)
+    public Portrait? GetLowerLeftPortrait(Event model)
     {
-        return GetPortraits(model).Single(portrait => portrait.Position == PortraitPosition.LowerLeft);
+        return GetPortraits(model).FirstOrDefault(portrait => portrait.Position == PortraitPosition.LowerLeft);
     }
 
-    public Portrait GetLowerCenterPortrait(Event model)
+    public Portrait? GetLowerCenterPortrait(Event model)
     {
-        return GetPortraits(model).Single(portrait => portrait.Position == PortraitPosition.LowerCenter);
+        return GetPortraits(model).FirstOrDefault(portrait => portrait.Position == PortraitPosition.LowerCenter);
     }
 
-    public Portrait GetLowerRightPortrait(Event model)
+    public Portrait? GetLowerRightPortrait(Event model)
     {
-        return GetPortraits(model).Single(portrait => portrait.Position == PortraitPosition.LowerRight);
+        return GetPortraits(model).FirstOrDefault(portrait => portrait.Position == PortraitPosition.LowerRight);
     }
 
     public IEnumerable<Trigger> GetTriggers(Event model)

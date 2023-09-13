@@ -162,11 +162,11 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>, IComparable<
         var lowerCenterPortrait = eventService.GetLowerCenterPortrait(this);
         var lowerRightPortrait = eventService.GetLowerRightPortrait(this);
 
-        leftPortrait.Write(writer, portraitService);
-        rightPortrait.Write(writer, portraitService);
-        lowerLeftPortrait.Write(writer, portraitService);
-        lowerCenterPortrait.Write(writer, portraitService);
-        lowerRightPortrait.Write(writer, portraitService);
+        leftPortrait?.Write(writer, portraitService);
+        rightPortrait?.Write(writer, portraitService);
+        lowerLeftPortrait?.Write(writer, portraitService);
+        lowerCenterPortrait?.Write(writer, portraitService);
+        lowerRightPortrait?.Write(writer, portraitService);
     }
 
     private void WriteTrigger(
