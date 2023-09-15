@@ -8,7 +8,55 @@ namespace Paradoxical.Core;
 
 public abstract partial class Node : ObservableObject
 {
-    public ObservableCollection<Node> Children { get; } = new();
+    private Node? parent;
+    public Node? Parent
+    {
+        get => parent;
+        private set => SetProperty(ref parent, value);
+    }
+
+    private readonly ObservableCollection<Node> children = new();
+    public IEnumerable<Node> Children => children;
+
+    public IEnumerable<Node> Descendants
+    {
+        get
+        {
+            var descendants = new List<Node>(children);
+            for (int i = 0; i < descendants.Count; i++)
+            {
+                var descendant = descendants[i];
+                descendants.AddRange(descendant.children);
+            }
+
+            return descendants;
+        }
+    }
+
+    public void Add(Node child)
+    {
+        if (children.Contains(child) == true)
+        { return; }
+
+        child.Parent?.Remove(child);
+
+        children.Add(child);
+        child.Parent = this;
+    }
+
+    public void Remove(Node child)
+    {
+        if (children.Contains(child) == false)
+        { return; }
+
+        children.Remove(child);
+        child.Parent = null;
+    }
+
+    public void Orphan()
+    {
+        Parent?.Remove(this);
+    }
 
     [GeneratedRegex(@"(?<path>\w+)(?>/(?<subpath>\w+(?>/\w+)?))?")]
     private static partial Regex GetPathRegex();
@@ -50,14 +98,15 @@ public abstract partial class Node : ObservableObject
         set => SetProperty(ref isSelected, value);
     }
 
+    public void Select() => IsSelected = true;
+    public void Unselect() => IsSelected = true;
+
     private bool isExpanded = false;
     public bool IsExpanded
     {
         get => isExpanded;
         set => SetProperty(ref isExpanded, value);
     }
-
-    public void Select() => IsSelected = true;
 
     public void Expand() => IsExpanded = true;
     public void Collapse() => IsExpanded = false;
