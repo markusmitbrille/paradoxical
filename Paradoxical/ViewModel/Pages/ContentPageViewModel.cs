@@ -320,7 +320,6 @@ public class ContentPageViewModel : PageViewModel
         node.DeleteCommand = DeleteEventCommand;
         node.EditCommand = EditCommand;
 
-        node.CreatePortraitCommand = CreateEventPortraitCommand;
         node.CreateOptionCommand = CreateEventOptionCommand;
         node.CreateOnionCommand = CreateEventOnionCommand;
 
@@ -404,7 +403,6 @@ public class ContentPageViewModel : PageViewModel
 
     private void InitPortraitNode(PortraitNode node)
     {
-        node.DeleteCommand = DeletePortraitCommand;
         node.EditCommand = EditCommand;
     }
 
@@ -555,10 +553,20 @@ public class ContentPageViewModel : PageViewModel
         var model = new Script();
         ScriptService.Insert(model);
 
-        //Setup();
-
         var observable = ScriptModelMap[model];
         Selected = observable;
+
+        var node = new ScriptBranch() { Observable = observable };
+        ModNode.ScriptNodes.Add(node);
+
+        InitScriptNode(node);
+        InitScriptBranch(node);
+
+        ModNode.Expand();
+        ModNode.ScriptNodes.Expand();
+
+        node.Select();
+        node.Expand();
     }
 
     private RelayCommand<object>? deleteScriptCommand;
@@ -569,12 +577,27 @@ public class ContentPageViewModel : PageViewModel
         if (param is not ScriptViewModel observable)
         { return; }
 
+        if (Selected is ScriptViewModel selected && selected == observable)
+        {
+            Selected = null;
+        }
+
         var model = observable.Model;
+
+        ScriptModelMap.Remove(model);
         ScriptService.Delete(model);
 
-        //Setup();
+        var nodes = RootNode.Descendants
+            .OfType<ScriptNode>()
+            .Where(node => node.Observable == observable)
+            .ToArray();
 
-        Selected = null;
+        var collections = RootNode.Descendants.OfType<CollectionNode>().ToArray();
+
+        foreach (var collection in collections)
+        {
+            collection.RemoveAll(node => nodes.Contains(node));
+        }
     }
     private bool CanDeleteScript(object? param)
     {
@@ -594,10 +617,32 @@ public class ContentPageViewModel : PageViewModel
         var model = new Event();
         EventService.Insert(model);
 
-        //Setup();
+        CreateEventPortrait(model, PortraitPosition.Left);
+        CreateEventPortrait(model, PortraitPosition.Right);
+        CreateEventPortrait(model, PortraitPosition.LowerLeft);
+        CreateEventPortrait(model, PortraitPosition.LowerCenter);
+        CreateEventPortrait(model, PortraitPosition.LowerRight);
 
         var observable = EventModelMap[model];
         Selected = observable;
+
+        var node = new EventBranch() { Observable = observable };
+        ModNode.EventNodes.Add(node);
+
+        InitEventNode(node);
+        InitEventBranch(node);
+
+        ModNode.Expand();
+        ModNode.EventNodes.Expand();
+
+        node.Select();
+        node.Expand();
+    }
+
+    private void CreateEventPortrait(Event parent, PortraitPosition position)
+    {
+        var model = new Portrait() { EventId = parent.Id, Position = position };
+        PortraitService.Insert(model);
     }
 
     private RelayCommand<object>? deleteEventCommand;
@@ -608,12 +653,27 @@ public class ContentPageViewModel : PageViewModel
         if (param is not EventViewModel observable)
         { return; }
 
+        if (Selected is EventViewModel selected && selected == observable)
+        {
+            Selected = null;
+        }
+
         var model = observable.Model;
+
+        EventModelMap.Remove(model);
         EventService.Delete(model);
 
-        //Setup();
+        var nodes = RootNode.Descendants
+            .OfType<EventNode>()
+            .Where(node => node.Observable == observable)
+            .ToArray();
 
-        Selected = null;
+        var collections = RootNode.Descendants.OfType<CollectionNode>().ToArray();
+
+        foreach (var collection in collections)
+        {
+            collection.RemoveAll(node => nodes.Contains(node));
+        }
     }
     private bool CanDeleteEvent(object? param)
     {
@@ -625,16 +685,29 @@ public class ContentPageViewModel : PageViewModel
 
     private void CreateEventOption(object? param)
     {
-        if (param is not EventViewModel evt)
+        if (param is not EventViewModel observable)
         { return; }
 
-        Option model = new() { EventId = evt.Id };
-        OptionService.Insert(model);
+        Option relation = new() { EventId = observable.Id };
+        OptionService.Insert(relation);
 
-        //Setup();
+        var relationViewModel = OptionModelMap[relation];
+        Selected = relationViewModel;
 
-        var observable = OptionModelMap[model];
-        Selected = observable;
+        var parents = RootNode.Descendants
+            .OfType<EventBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            var child = new OptionBranch() { Observable = relationViewModel };
+
+            InitOptionNode(child);
+            InitOptionBranch(child);
+
+            parent.OptionNodes.Add(child);
+        }
     }
     private bool CanCreateEventOption(object? param)
     {
@@ -646,39 +719,31 @@ public class ContentPageViewModel : PageViewModel
 
     private void CreateEventOnion(object? param)
     {
-        if (param is not EventViewModel evt)
+        if (param is not EventViewModel observable)
         { return; }
 
-        Onion model = new() { EventId = evt.Id };
-        OnionService.Insert(model);
+        Onion relation = new() { EventId = observable.Id };
+        OnionService.Insert(relation);
 
-        //Setup();
+        var relationViewModel = OnionModelMap[relation];
+        Selected = relationViewModel;
 
-        var observable = OnionModelMap[model];
-        Selected = observable;
+        var parents = RootNode.Descendants
+            .OfType<EventBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            var child = new OnionBranch() { Observable = relationViewModel };
+
+            InitOnionNode(child);
+            InitOnionBranch(child);
+
+            parent.OnionNodes.Add(child);
+        }
     }
     private bool CanCreateEventOnion(object? param)
-    {
-        return param is EventViewModel;
-    }
-
-    private RelayCommand<object>? createEventPortraitCommand;
-    public RelayCommand<object> CreateEventPortraitCommand => createEventPortraitCommand ??= new(CreateEventPortrait, CanCreateEventPortrait);
-
-    private void CreateEventPortrait(object? param)
-    {
-        if (param is not EventViewModel evt)
-        { return; }
-
-        Portrait model = new() { EventId = evt.Id };
-        PortraitService.Insert(model);
-
-        //Setup();
-
-        var observable = PortraitModelMap[model];
-        Selected = observable;
-    }
-    private bool CanCreateEventPortrait(object? param)
     {
         return param is EventViewModel;
     }
@@ -710,9 +775,22 @@ public class ContentPageViewModel : PageViewModel
 
         EventService.AddTrigger(owner, relation);
 
-        //Setup();
+        var relationViewModel = TriggerModelMap[relation];
+        Selected = relationViewModel;
 
-        Selected = TriggerModelMap[relation];
+        var parents = RootNode.Descendants
+            .OfType<EventBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            var child = new TriggerLeaf() { Observable = relationViewModel };
+
+            InitTriggerNode(child);
+
+            parent.TriggerNodes.Add(child);
+        }
     }
     private bool CanAddEventTrigger(object? param)
     {
@@ -744,9 +822,22 @@ public class ContentPageViewModel : PageViewModel
 
         EventService.RemoveTrigger(owner, relation);
 
-        //Setup();
+        var relationViewModel = TriggerModelMap[relation];
 
-        Selected = null;
+        var parents = RootNode.Descendants
+            .OfType<EventBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        var nodes = RootNode.Descendants
+            .OfType<TriggerNode>()
+            .Where(node => node.Observable == relationViewModel)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            parent.TriggerNodes.RemoveAll(child => nodes.Contains(child));
+        }
     }
     private bool CanRemoveEventTrigger(object? param)
     {
@@ -780,9 +871,22 @@ public class ContentPageViewModel : PageViewModel
 
         EventService.AddImmediateEffect(owner, relation);
 
-        //Setup();
+        var relationViewModel = EffectModelMap[relation];
+        Selected = relationViewModel;
 
-        Selected = EffectModelMap[relation];
+        var parents = RootNode.Descendants
+            .OfType<EventBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            var child = new EffectLeaf() { Observable = relationViewModel };
+
+            InitEffectNode(child);
+
+            parent.ImmediateEffectNodes.Add(child);
+        }
     }
     private bool CanAddEventImmediateEffect(object? param)
     {
@@ -814,9 +918,22 @@ public class ContentPageViewModel : PageViewModel
 
         EventService.RemoveImmediateEffect(owner, relation);
 
-        //Setup();
+        var relationViewModel = EffectModelMap[relation];
 
-        Selected = null;
+        var parents = RootNode.Descendants
+            .OfType<EventBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        var nodes = RootNode.Descendants
+            .OfType<EffectNode>()
+            .Where(node => node.Observable == relationViewModel)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            parent.ImmediateEffectNodes.RemoveAll(child => nodes.Contains(child));
+        }
     }
     private bool CanRemoveEventImmediateEffect(object? param)
     {
@@ -850,9 +967,22 @@ public class ContentPageViewModel : PageViewModel
 
         EventService.AddAfterEffect(owner, relation);
 
-        //Setup();
+        var relationViewModel = EffectModelMap[relation];
+        Selected = relationViewModel;
 
-        Selected = EffectModelMap[relation];
+        var parents = RootNode.Descendants
+            .OfType<EventBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            var child = new EffectLeaf() { Observable = relationViewModel };
+
+            InitEffectNode(child);
+
+            parent.AfterEffectNodes.Add(child);
+        }
     }
     private bool CanAddEventAfterEffect(object? param)
     {
@@ -884,9 +1014,22 @@ public class ContentPageViewModel : PageViewModel
 
         EventService.RemoveAfterEffect(owner, relation);
 
-        //Setup();
+        var relationViewModel = EffectModelMap[relation];
 
-        Selected = null;
+        var parents = RootNode.Descendants
+            .OfType<EventBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        var nodes = RootNode.Descendants
+            .OfType<EffectNode>()
+            .Where(node => node.Observable == relationViewModel)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            parent.AfterEffectNodes.RemoveAll(child => nodes.Contains(child));
+        }
     }
     private bool CanRemoveEventAfterEffect(object? param)
     {
@@ -897,27 +1040,6 @@ public class ContentPageViewModel : PageViewModel
 
 
     #region Portrait Commands
-
-    private RelayCommand<object>? deletePortraitCommand;
-    public RelayCommand<object> DeletePortraitCommand => deletePortraitCommand ??= new(DeletePortrait, CanDeletePortrait);
-
-    private void DeletePortrait(object? param)
-    {
-        if (param is not PortraitViewModel observable)
-        { return; }
-
-        var model = observable.Model;
-        PortraitService.Delete(model);
-
-        //Setup();
-
-        Selected = null;
-    }
-    private bool CanDeletePortrait(object? param)
-    {
-        return param is PortraitViewModel;
-    }
-
     #endregion
 
 
@@ -931,12 +1053,27 @@ public class ContentPageViewModel : PageViewModel
         if (param is not OptionViewModel observable)
         { return; }
 
+        if (Selected is OptionViewModel selected && selected == observable)
+        {
+            Selected = null;
+        }
+
         var model = observable.Model;
+
+        OptionModelMap.Remove(model);
         OptionService.Delete(model);
 
-        //Setup();
+        var nodes = RootNode.Descendants
+            .OfType<OptionNode>()
+            .Where(node => node.Observable == observable)
+            .ToArray();
 
-        Selected = null;
+        var collections = RootNode.Descendants.OfType<CollectionNode>().ToArray();
+
+        foreach (var collection in collections)
+        {
+            collection.RemoveAll(node => nodes.Contains(node));
+        }
     }
     private bool CanDeleteOption(object? param)
     {
@@ -970,9 +1107,22 @@ public class ContentPageViewModel : PageViewModel
 
         OptionService.AddTrigger(owner, relation);
 
-        //Setup();
+        var relationViewModel = TriggerModelMap[relation];
+        Selected = relationViewModel;
 
-        Selected = TriggerModelMap[relation];
+        var parents = RootNode.Descendants
+            .OfType<OptionBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            var child = new TriggerLeaf() { Observable = relationViewModel };
+
+            InitTriggerNode(child);
+
+            parent.TriggerNodes.Add(child);
+        }
     }
     private bool CanAddOptionTrigger(object? param)
     {
@@ -1004,9 +1154,22 @@ public class ContentPageViewModel : PageViewModel
 
         OptionService.RemoveTrigger(owner, relation);
 
-        //Setup();
+        var relationViewModel = TriggerModelMap[relation];
 
-        Selected = null;
+        var parents = RootNode.Descendants
+            .OfType<OptionBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        var nodes = RootNode.Descendants
+            .OfType<TriggerNode>()
+            .Where(node => node.Observable == relationViewModel)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            parent.TriggerNodes.RemoveAll(child => nodes.Contains(child));
+        }
     }
     private bool CanRemoveOptionTrigger(object? param)
     {
@@ -1040,9 +1203,22 @@ public class ContentPageViewModel : PageViewModel
 
         OptionService.AddEffect(owner, relation);
 
-        //Setup();
+        var relationViewModel = EffectModelMap[relation];
+        Selected = relationViewModel;
 
-        Selected = EffectModelMap[relation];
+        var parents = RootNode.Descendants
+            .OfType<OptionBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            var child = new EffectLeaf() { Observable = relationViewModel };
+
+            InitEffectNode(child);
+
+            parent.EffectNodes.Add(child);
+        }
     }
     private bool CanAddOptionEffect(object? param)
     {
@@ -1074,9 +1250,22 @@ public class ContentPageViewModel : PageViewModel
 
         OptionService.RemoveEffect(owner, relation);
 
-        //Setup();
+        var relationViewModel = EffectModelMap[relation];
 
-        Selected = null;
+        var parents = RootNode.Descendants
+            .OfType<OptionBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        var nodes = RootNode.Descendants
+            .OfType<EffectNode>()
+            .Where(node => node.Observable == relationViewModel)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            parent.EffectNodes.RemoveAll(child => nodes.Contains(child));
+        }
     }
     private bool CanRemoveOptionEffect(object? param)
     {
@@ -1096,12 +1285,27 @@ public class ContentPageViewModel : PageViewModel
         if (param is not OnionViewModel observable)
         { return; }
 
+        if (Selected is OnionViewModel selected && selected == observable)
+        {
+            Selected = null;
+        }
+
         var model = observable.Model;
+
+        OnionModelMap.Remove(model);
         OnionService.Delete(model);
 
-        //Setup();
+        var nodes = RootNode.Descendants
+            .OfType<OnionNode>()
+            .Where(node => node.Observable == observable)
+            .ToArray();
 
-        Selected = null;
+        var collections = RootNode.Descendants.OfType<CollectionNode>().ToArray();
+
+        foreach (var collection in collections)
+        {
+            collection.RemoveAll(node => nodes.Contains(node));
+        }
     }
     private bool CanDeleteOnion(object? param)
     {
@@ -1121,10 +1325,20 @@ public class ContentPageViewModel : PageViewModel
         var model = new Decision();
         DecisionService.Insert(model);
 
-        //Setup();
-
         var observable = DecisionModelMap[model];
         Selected = observable;
+
+        var node = new DecisionBranch() { Observable = observable };
+        ModNode.DecisionNodes.Add(node);
+
+        InitDecisionNode(node);
+        InitDecisionBranch(node);
+
+        ModNode.Expand();
+        ModNode.DecisionNodes.Expand();
+
+        node.Select();
+        node.Expand();
     }
 
     private RelayCommand<object>? deleteDecisionCommand;
@@ -1135,12 +1349,27 @@ public class ContentPageViewModel : PageViewModel
         if (param is not DecisionViewModel observable)
         { return; }
 
+        if (Selected is DecisionViewModel selected && selected == observable)
+        {
+            Selected = null;
+        }
+
         var model = observable.Model;
+
+        DecisionModelMap.Remove(model);
         DecisionService.Delete(model);
 
-        //Setup();
+        var nodes = RootNode.Descendants
+            .OfType<DecisionNode>()
+            .Where(node => node.Observable == observable)
+            .ToArray();
 
-        Selected = null;
+        var collections = RootNode.Descendants.OfType<CollectionNode>().ToArray();
+
+        foreach (var collection in collections)
+        {
+            collection.RemoveAll(node => nodes.Contains(node));
+        }
     }
     private bool CanDeleteDecision(object? param)
     {
@@ -1174,9 +1403,22 @@ public class ContentPageViewModel : PageViewModel
 
         DecisionService.AddShownTrigger(owner, relation);
 
-        //Setup();
+        var relationViewModel = TriggerModelMap[relation];
+        Selected = relationViewModel;
 
-        Selected = TriggerModelMap[relation];
+        var parents = RootNode.Descendants
+            .OfType<DecisionBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            var child = new TriggerLeaf() { Observable = relationViewModel };
+
+            InitTriggerNode(child);
+
+            parent.ShownTriggerNodes.Add(child);
+        }
     }
     private bool CanAddDecisionShownTrigger(object? param)
     {
@@ -1208,9 +1450,22 @@ public class ContentPageViewModel : PageViewModel
 
         DecisionService.RemoveShownTrigger(owner, relation);
 
-        //Setup();
+        var relationViewModel = TriggerModelMap[relation];
 
-        Selected = null;
+        var parents = RootNode.Descendants
+            .OfType<DecisionBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        var nodes = RootNode.Descendants
+            .OfType<TriggerNode>()
+            .Where(node => node.Observable == relationViewModel)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            parent.ShownTriggerNodes.RemoveAll(child => nodes.Contains(child));
+        }
     }
     private bool CanRemoveDecisionShownTrigger(object? param)
     {
@@ -1244,9 +1499,22 @@ public class ContentPageViewModel : PageViewModel
 
         DecisionService.AddFailureTrigger(owner, relation);
 
-        //Setup();
+        var relationViewModel = TriggerModelMap[relation];
+        Selected = relationViewModel;
 
-        Selected = TriggerModelMap[relation];
+        var parents = RootNode.Descendants
+            .OfType<DecisionBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            var child = new TriggerLeaf() { Observable = relationViewModel };
+
+            InitTriggerNode(child);
+
+            parent.FailureTriggerNodes.Add(child);
+        }
     }
     private bool CanAddDecisionFailureTrigger(object? param)
     {
@@ -1278,9 +1546,22 @@ public class ContentPageViewModel : PageViewModel
 
         DecisionService.RemoveFailureTrigger(owner, relation);
 
-        //Setup();
+        var relationViewModel = TriggerModelMap[relation];
 
-        Selected = null;
+        var parents = RootNode.Descendants
+            .OfType<DecisionBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        var nodes = RootNode.Descendants
+            .OfType<TriggerNode>()
+            .Where(node => node.Observable == relationViewModel)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            parent.FailureTriggerNodes.RemoveAll(child => nodes.Contains(child));
+        }
     }
     private bool CanRemoveDecisionFailureTrigger(object? param)
     {
@@ -1314,9 +1595,22 @@ public class ContentPageViewModel : PageViewModel
 
         DecisionService.AddValidTrigger(owner, relation);
 
-        //Setup();
+        var relationViewModel = TriggerModelMap[relation];
+        Selected = relationViewModel;
 
-        Selected = TriggerModelMap[relation];
+        var parents = RootNode.Descendants
+            .OfType<DecisionBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            var child = new TriggerLeaf() { Observable = relationViewModel };
+
+            InitTriggerNode(child);
+
+            parent.ValidTriggerNodes.Add(child);
+        }
     }
     private bool CanAddDecisionValidTrigger(object? param)
     {
@@ -1348,9 +1642,22 @@ public class ContentPageViewModel : PageViewModel
 
         DecisionService.RemoveValidTrigger(owner, relation);
 
-        //Setup();
+        var relationViewModel = TriggerModelMap[relation];
 
-        Selected = null;
+        var parents = RootNode.Descendants
+            .OfType<DecisionBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        var nodes = RootNode.Descendants
+            .OfType<TriggerNode>()
+            .Where(node => node.Observable == relationViewModel)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            parent.ValidTriggerNodes.RemoveAll(child => nodes.Contains(child));
+        }
     }
     private bool CanRemoveDecisionValidTrigger(object? param)
     {
@@ -1384,9 +1691,22 @@ public class ContentPageViewModel : PageViewModel
 
         DecisionService.AddEffect(owner, relation);
 
-        //Setup();
+        var relationViewModel = EffectModelMap[relation];
+        Selected = relationViewModel;
 
-        Selected = EffectModelMap[relation];
+        var parents = RootNode.Descendants
+            .OfType<DecisionBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            var child = new EffectLeaf() { Observable = relationViewModel };
+
+            InitEffectNode(child);
+
+            parent.EffectNodes.Add(child);
+        }
     }
     private bool CanAddDecisionEffect(object? param)
     {
@@ -1418,9 +1738,22 @@ public class ContentPageViewModel : PageViewModel
 
         DecisionService.RemoveEffect(owner, relation);
 
-        //Setup();
+        var relationViewModel = EffectModelMap[relation];
 
-        Selected = null;
+        var parents = RootNode.Descendants
+            .OfType<DecisionBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        var nodes = RootNode.Descendants
+            .OfType<EffectNode>()
+            .Where(node => node.Observable == relationViewModel)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            parent.EffectNodes.RemoveAll(child => nodes.Contains(child));
+        }
     }
     private bool CanRemoveDecisionEffect(object? param)
     {
@@ -1440,10 +1773,20 @@ public class ContentPageViewModel : PageViewModel
         var model = new Trigger();
         TriggerService.Insert(model);
 
-        //Setup();
-
         var observable = TriggerModelMap[model];
         Selected = observable;
+
+        var node = new TriggerBranch() { Observable = observable };
+        ModNode.TriggerNodes.Add(node);
+
+        InitTriggerNode(node);
+        InitTriggerBranch(node);
+
+        ModNode.Expand();
+        ModNode.TriggerNodes.Expand();
+
+        node.Select();
+        node.Expand();
     }
 
     private RelayCommand<object>? deleteTriggerCommand;
@@ -1454,12 +1797,27 @@ public class ContentPageViewModel : PageViewModel
         if (param is not TriggerViewModel observable)
         { return; }
 
+        if (Selected is TriggerViewModel selected && selected == observable)
+        {
+            Selected = null;
+        }
+
         var model = observable.Model;
+
+        TriggerModelMap.Remove(model);
         TriggerService.Delete(model);
 
-        //Setup();
+        var nodes = RootNode.Descendants
+            .OfType<TriggerNode>()
+            .Where(node => node.Observable == observable)
+            .ToArray();
 
-        Selected = null;
+        var collections = RootNode.Descendants.OfType<CollectionNode>().ToArray();
+
+        foreach (var collection in collections)
+        {
+            collection.RemoveAll(node => nodes.Contains(node));
+        }
     }
     private bool CanDeleteTrigger(object? param)
     {
@@ -1479,10 +1837,20 @@ public class ContentPageViewModel : PageViewModel
         var model = new Effect();
         EffectService.Insert(model);
 
-        //Setup();
-
         var observable = EffectModelMap[model];
         Selected = observable;
+
+        var node = new EffectBranch() { Observable = observable };
+        ModNode.EffectNodes.Add(node);
+
+        InitEffectNode(node);
+        InitEffectBranch(node);
+
+        ModNode.Expand();
+        ModNode.EffectNodes.Expand();
+
+        node.Select();
+        node.Expand();
     }
 
     private RelayCommand<object>? deleteEffectCommand;
@@ -1493,12 +1861,27 @@ public class ContentPageViewModel : PageViewModel
         if (param is not EffectViewModel observable)
         { return; }
 
+        if (Selected is EffectViewModel selected && selected == observable)
+        {
+            Selected = null;
+        }
+
         var model = observable.Model;
+
+        EffectModelMap.Remove(model);
         EffectService.Delete(model);
 
-        //Setup();
+        var nodes = RootNode.Descendants
+            .OfType<EffectNode>()
+            .Where(node => node.Observable == observable)
+            .ToArray();
 
-        Selected = null;
+        var collections = RootNode.Descendants.OfType<CollectionNode>().ToArray();
+
+        foreach (var collection in collections)
+        {
+            collection.RemoveAll(node => nodes.Contains(node));
+        }
     }
     private bool CanDeleteEffect(object? param)
     {

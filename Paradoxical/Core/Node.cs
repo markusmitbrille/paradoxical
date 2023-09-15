@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using MaterialDesignThemes.Wpf;
+using Paradoxical.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -88,6 +90,8 @@ public sealed class CollectionNode : Node
 
     public void Add(Node child) => children.Add(child);
     public void Remove(Node child) => children.Remove(child);
+
+    public void RemoveAll(Predicate<Node> match) => children.RemoveAll(match);
 
     public string Name { get; init; } = string.Empty;
 

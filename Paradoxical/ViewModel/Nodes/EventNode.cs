@@ -12,7 +12,6 @@ public abstract class EventNode : ObservableNode<EventViewModel>
     public RelayCommand<object>? EditCommand { get; set; }
     public RelayCommand<object>? DeleteCommand { get; set; }
 
-    public RelayCommand<object>? CreatePortraitCommand { get; set; }
     public RelayCommand<object>? CreateOptionCommand { get; set; }
     public RelayCommand<object>? CreateOnionCommand { get; set; }
 

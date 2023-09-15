@@ -10,4 +10,12 @@ public partial class ContentPageView : UserControl
     {
         InitializeComponent();
     }
+
+    private void TreeViewItemSelectedHandler(object sender, RoutedEventArgs e)
+    {
+        if (sender is not TreeViewItem item)
+        { return; }
+
+        item.BringIntoView();
+    }
 }

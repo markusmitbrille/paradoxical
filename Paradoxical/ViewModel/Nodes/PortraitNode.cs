@@ -9,7 +9,6 @@ public abstract class PortraitNode : ObservableNode<PortraitViewModel>
     public override string Header => Observable.Position.ToString();
 
     public RelayCommand<object>? EditCommand { get; set; }
-    public RelayCommand<object>? DeleteCommand { get; set; }
 }
 
 public sealed class PortraitBranch : PortraitNode

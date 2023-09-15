@@ -130,6 +130,10 @@
                                 Property="IsExpanded"
                                 Value="{Binding IsExpanded, Mode=TwoWay}" />
 
+                            <EventSetter
+                                Event="Selected"
+                                Handler="TreeViewItemSelectedHandler" />
+
                         </Style>
                     </TreeView.ItemContainerStyle>
 
@@ -355,7 +359,7 @@
                                 </Grid.ContextMenu>
 
                                 <TextBlock
-                                    Text="{Binding Observable.Title}" />
+                                    Text="{Binding Observable.Id}" />
 
                             </Grid>
                         </HierarchicalDataTemplate>
