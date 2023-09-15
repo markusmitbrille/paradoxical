@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class OptionNode : ObservableNode<OptionViewModel>
+public abstract class OptionNode : ObservableNode<OptionViewModel>
 {
     public override string Path => Observable.Id.ToString();
     public override string Header => Observable.Title.ToString();
@@ -17,4 +17,23 @@ public class OptionNode : ObservableNode<OptionViewModel>
 
     public AsyncRelayCommand<object>? AddEffectCommand { get; set; }
     public AsyncRelayCommand<object>? RemoveEffectCommand { get; set; }
+}
+
+public sealed class OptionBranch : OptionNode
+{
+    public CollectionNode TriggerNodes { get; } = new() { Name = "Option Triggers" };
+    public CollectionNode EffectNodes { get; } = new() { Name = "Option Effects" };
+
+    public override IEnumerable<Node> Children
+    {
+        get
+        {
+            yield return TriggerNodes;
+            yield return EffectNodes;
+        }
+    }
+}
+
+public sealed class OptionLeaf : OptionNode
+{
 }

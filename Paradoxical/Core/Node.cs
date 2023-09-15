@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using MaterialDesignThemes.Wpf;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -8,54 +10,21 @@ namespace Paradoxical.Core;
 
 public abstract partial class Node : ObservableObject
 {
-    private Node? parent;
-    public Node? Parent
-    {
-        get => parent;
-        private set => SetProperty(ref parent, value);
-    }
-
-    private readonly ObservableCollection<Node> children = new();
-    public IEnumerable<Node> Children => children;
+    public abstract IEnumerable<Node> Children { get; }
 
     public IEnumerable<Node> Descendants
     {
         get
         {
-            var descendants = new List<Node>(children);
+            var descendants = new List<Node>(Children);
             for (int i = 0; i < descendants.Count; i++)
             {
                 var descendant = descendants[i];
-                descendants.AddRange(descendant.children);
+                descendants.AddRange(descendant.Children);
             }
 
             return descendants;
         }
-    }
-
-    public void Add(Node child)
-    {
-        if (children.Contains(child) == true)
-        { return; }
-
-        child.Parent?.Remove(child);
-
-        children.Add(child);
-        child.Parent = this;
-    }
-
-    public void Remove(Node child)
-    {
-        if (children.Contains(child) == false)
-        { return; }
-
-        children.Remove(child);
-        child.Parent = null;
-    }
-
-    public void Orphan()
-    {
-        Parent?.Remove(this);
     }
 
     [GeneratedRegex(@"(?<path>\w+)(?>/(?<subpath>\w+(?>/\w+)?))?")]
@@ -112,8 +81,14 @@ public abstract partial class Node : ObservableObject
     public void Collapse() => IsExpanded = false;
 }
 
-public sealed class SimpleNode : Node
+public sealed class CollectionNode : Node
 {
+    private readonly ObservableCollection<Node> children = new();
+    public override IEnumerable<Node> Children => children;
+
+    public void Add(Node child) => children.Add(child);
+    public void Remove(Node child) => children.Remove(child);
+
     public string Name { get; init; } = string.Empty;
 
     public override string Path => Name;
@@ -125,4 +100,6 @@ public abstract class ObservableNode<T> : Node, IObservableWrapper<T>, IObservab
 {
     public T Observable { get; init; } = new();
     ObservableObject IObservableWrapper.Observable => Observable;
+
+    public override IEnumerable<Node> Children => Enumerable.Empty<Node>();
 }

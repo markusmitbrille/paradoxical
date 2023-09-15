@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
+using Microsoft.VisualBasic;
 using Paradoxical.Core;
 using Paradoxical.Extensions;
 using Paradoxical.Messages;
@@ -14,6 +15,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Printing;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -52,12 +54,14 @@ public class ContentPageViewModel : PageViewModel
     private ModelMap<Trigger, TriggerViewModel> TriggerModelMap { get; set; } = new();
     private ModelMap<Effect, EffectViewModel> EffectModelMap { get; set; } = new();
 
-    private Node rootNode = new SimpleNode();
-    public Node RootNode
+    private CollectionNode rootNode = new();
+    public CollectionNode RootNode
     {
         get => rootNode;
         set => SetProperty(ref rootNode, value);
     }
+
+    private ModBranch ModNode { get; set; } = new();
 
     private ObservableObject? selected;
     public ObservableObject? Selected
@@ -138,7 +142,31 @@ public class ContentPageViewModel : PageViewModel
 
     private void Load()
     {
-        Setup();
+        var mod = ModService.Get().SingleOrDefault();
+        if (mod == null)
+        {
+            mod = new();
+            ModService.Insert(mod);
+        }
+
+        ModViewModel = new() { Model = mod };
+
+        ScriptModelMap = new(ScriptService.Get());
+        EventModelMap = new(EventService.Get());
+        OptionModelMap = new(OptionService.Get());
+        OnionModelMap = new(OnionService.Get());
+        PortraitModelMap = new(PortraitService.Get());
+        DecisionModelMap = new(DecisionService.Get());
+        TriggerModelMap = new(TriggerService.Get());
+        EffectModelMap = new(EffectService.Get());
+
+        ModNode = new() { Observable = ModViewModel };
+
+        InitModNode(ModNode);
+        InitModBranch(ModNode);
+
+        RootNode = new();
+        RootNode.Add(ModNode);
 
         DataService.BeginTransaction();
     }
@@ -211,42 +239,10 @@ public class ContentPageViewModel : PageViewModel
     }
 
 
-    #region Setup
+    #region Node Init
 
-    private void Setup()
+    private void InitModNode(ModNode node)
     {
-        var mod = ModService.Get().SingleOrDefault();
-        if (mod == null)
-        {
-            mod = new();
-            ModService.Insert(mod);
-        }
-
-        ModViewModel = new() { Model = mod };
-
-        ScriptModelMap = new(ScriptService.Get());
-        EventModelMap = new(EventService.Get());
-        OptionModelMap = new(OptionService.Get());
-        OnionModelMap = new(OnionService.Get());
-        PortraitModelMap = new(PortraitService.Get());
-        DecisionModelMap = new(DecisionService.Get());
-        TriggerModelMap = new(TriggerService.Get());
-        EffectModelMap = new(EffectService.Get());
-
-        RootNode = new SimpleNode();
-
-        SetupScriptNodes(RootNode);
-        SetupEventNodes(RootNode);
-        //SetupOptionNodes(RootNode);
-        SetupDecisionNodes(RootNode);
-        SetupTriggerNodes(RootNode);
-        SetupEffectNodes(RootNode);
-    }
-
-    private void SetupModNode(Node parent)
-    {
-        ModNode node = new() { Observable = ModViewModel };
-
         node.EditCommand = EditCommand;
 
         node.CreateScriptCommand = CreateScriptCommand;
@@ -254,407 +250,296 @@ public class ContentPageViewModel : PageViewModel
         node.CreateDecisionCommand = CreateDecisionCommand;
         node.CreateTriggerCommand = CreateTriggerCommand;
         node.CreateEffectCommand = CreateEffectCommand;
-
-        SetupScriptNodes(node);
-        SetupEventNodes(node);
-        //SetupOptionNodes(node);
-        SetupDecisionNodes(node);
-        SetupTriggerNodes(node);
-        SetupEffectNodes(node);
-
-        parent.Children.Add(node);
     }
 
-    private void SetupScriptNodes(Node parent)
+    private void InitModBranch(ModBranch node)
     {
-        SimpleNode collection = new() { Name = "Scripts" };
-
         foreach (var observable in ScriptModelMap.Wrappers)
         {
-            ScriptNode child = new() { Observable = observable };
+            ScriptBranch child = new() { Observable = observable };
 
-            child.DeleteCommand = DeleteScriptCommand;
-            child.EditCommand = EditCommand;
+            InitScriptNode(child);
+            InitScriptBranch(child);
 
-            collection.Children.Add(child);
+            node.ScriptNodes.Add(child);
         }
-
-        parent.Children.Add(collection);
-    }
-
-    private void SetupEventNodes(Node parent)
-    {
-        SimpleNode collection = new() { Name = "Events" };
 
         foreach (var observable in EventModelMap.Wrappers)
         {
-            EventNode child = new() { Observable = observable };
+            EventBranch child = new() { Observable = observable };
 
-            child.DeleteCommand = DeleteEventCommand;
-            child.EditCommand = EditCommand;
+            InitEventNode(child);
+            InitEventBranch(child);
 
-            child.CreatePortraitCommand = CreateEventPortraitCommand;
-            child.CreateOptionCommand = CreateEventOptionCommand;
-            child.CreateOnionCommand = CreateEventOnionCommand;
-
-            child.AddTriggerCommand = AddEventTriggerCommand;
-            child.RemoveTriggerCommand = RemoveEventTriggerCommand;
-
-            child.AddImmediateEffectCommand = AddEventImmediateEffectCommand;
-            child.RemoveImmediateEffectCommand = RemoveEventImmediateEffectCommand;
-
-            child.AddAfterEffectCommand = AddEventAfterEffectCommand;
-            child.RemoveAfterEffectCommand = RemoveEventAfterEffectCommand;
-
-            SetupEventPortraitNodes(child);
-            SetupEventOptionNodes(child);
-            SetupEventOnionNodes(child);
-
-            SetupEventTriggerNodes(child);
-            SetupEventImmediateEffectNodes(child);
-            SetupEventAfterEffectNodes(child);
-
-            collection.Children.Add(child);
+            node.EventNodes.Add(child);
         }
-
-        parent.Children.Add(collection);
-    }
-
-    private void SetupEventPortraitNodes(EventNode parent)
-    {
-        SimpleNode collection = new() { Name = "Portraits" };
-
-        var relations = EventService.GetPortraits(parent.Observable.Model);
-        foreach (var relation in relations)
-        {
-            var observable = PortraitModelMap[relation];
-            PortraitNode child = new() { Observable = observable };
-
-            child.DeleteCommand = DeletePortraitCommand;
-            child.EditCommand = EditCommand;
-
-            collection.Children.Add(child);
-        }
-
-        parent.Children.Add(collection);
-    }
-
-    private void SetupEventOptionNodes(EventNode parent)
-    {
-        SimpleNode collection = new() { Name = "Options" };
-
-        var relations = EventService.GetOptions(parent.Observable.Model);
-        foreach (var relation in relations)
-        {
-            var observable = OptionModelMap[relation];
-            OptionNode child = new() { Observable = observable };
-
-            child.DeleteCommand = DeleteOptionCommand;
-            child.EditCommand = EditCommand;
-
-            // TODO: Add/Remove TriggeredEvent Commands
-
-            child.AddTriggerCommand = AddOptionTriggerCommand;
-            child.RemoveTriggerCommand = RemoveOptionTriggerCommand;
-
-            child.AddEffectCommand = AddOptionEffectCommand;
-            child.RemoveEffectCommand = RemoveOptionEffectCommand;
-
-            SetupOptionTriggerNodes(child);
-            SetupOptionEffectNodes(child);
-
-            // TODO: SetupOptionTriggeredEvents
-
-            collection.Children.Add(child);
-        }
-
-        parent.Children.Add(collection);
-    }
-
-    private void SetupEventOnionNodes(EventNode parent)
-    {
-        SimpleNode collection = new() { Name = "On-Actions" };
-
-        var relations = EventService.GetOnions(parent.Observable.Model);
-        foreach (var relation in relations)
-        {
-            var observable = OnionModelMap[relation];
-            OnionNode child = new() { Observable = observable };
-
-            child.DeleteCommand = DeleteOnionCommand;
-            child.EditCommand = EditCommand;
-
-            collection.Children.Add(child);
-        }
-
-        parent.Children.Add(collection);
-    }
-
-    private void SetupEventTriggerNodes(EventNode parent)
-    {
-        SimpleNode collection = new() { Name = "Triggers" };
-
-        var relations = EventService.GetTriggers(parent.Observable.Model);
-        foreach (var relation in relations)
-        {
-            var observable = TriggerModelMap[relation];
-            TriggerNode child = new() { Observable = observable };
-
-            child.DeleteCommand = DeleteTriggerCommand;
-            child.EditCommand = EditCommand;
-
-            collection.Children.Add(child);
-        }
-
-        parent.Children.Add(collection);
-    }
-
-    private void SetupEventImmediateEffectNodes(EventNode parent)
-    {
-        SimpleNode collection = new() { Name = "Immediate Effects" };
-
-        var relations = EventService.GetImmediateEffects(parent.Observable.Model);
-        foreach (var relation in relations)
-        {
-            var observable = EffectModelMap[relation];
-            EffectNode child = new() { Observable = observable };
-
-            child.DeleteCommand = DeleteEffectCommand;
-            child.EditCommand = EditCommand;
-
-            collection.Children.Add(child);
-        }
-
-        parent.Children.Add(collection);
-    }
-
-    private void SetupEventAfterEffectNodes(EventNode parent)
-    {
-        SimpleNode collection = new() { Name = "After Effects" };
-
-        var relations = EventService.GetAfterEffects(parent.Observable.Model);
-        foreach (var relation in relations)
-        {
-            var observable = EffectModelMap[relation];
-            EffectNode child = new() { Observable = observable };
-
-            child.DeleteCommand = DeleteEffectCommand;
-            child.EditCommand = EditCommand;
-
-            collection.Children.Add(child);
-        }
-
-        parent.Children.Add(collection);
-    }
-
-    private void SetupOptionNodes(Node parent)
-    {
-        SimpleNode collection = new() { Name = "Options" };
-
-        foreach (var observable in OptionModelMap.Wrappers)
-        {
-            OptionNode child = new() { Observable = observable };
-
-            child.DeleteCommand = DeleteOptionCommand;
-            child.EditCommand = EditCommand;
-
-            child.AddTriggerCommand = AddOptionTriggerCommand;
-            child.RemoveTriggerCommand = RemoveOptionTriggerCommand;
-
-            child.AddEffectCommand = AddOptionEffectCommand;
-            child.RemoveEffectCommand = RemoveOptionEffectCommand;
-
-            SetupOptionTriggerNodes(child);
-            SetupOptionEffectNodes(child);
-
-            collection.Children.Add(child);
-        }
-
-        parent.Children.Add(collection);
-    }
-
-    // TODO: SetupOptionTriggeredEvents
-
-    private void SetupOptionTriggerNodes(OptionNode parent)
-    {
-        SimpleNode collection = new() { Name = "Triggers" };
-
-        var relations = OptionService.GetTriggers(parent.Observable.Model);
-        foreach (var relation in relations)
-        {
-            var observable = TriggerModelMap[relation];
-            TriggerNode child = new() { Observable = observable };
-
-            child.DeleteCommand = DeleteTriggerCommand;
-            child.EditCommand = EditCommand;
-
-            collection.Children.Add(child);
-        }
-
-        parent.Children.Add(collection);
-    }
-
-    private void SetupOptionEffectNodes(OptionNode parent)
-    {
-        SimpleNode collection = new() { Name = "Effects" };
-
-        var relations = OptionService.GetEffects(parent.Observable.Model);
-        foreach (var relation in relations)
-        {
-            var observable = EffectModelMap[relation];
-            EffectNode child = new() { Observable = observable };
-
-            child.DeleteCommand = DeleteEffectCommand;
-            child.EditCommand = EditCommand;
-
-            collection.Children.Add(child);
-        }
-
-        parent.Children.Add(collection);
-    }
-
-    private void SetupDecisionNodes(Node parent)
-    {
-        SimpleNode collection = new() { Name = "Decisions" };
 
         foreach (var observable in DecisionModelMap.Wrappers)
         {
-            DecisionNode child = new() { Observable = observable };
+            DecisionBranch child = new() { Observable = observable };
 
-            child.DeleteCommand = DeleteDecisionCommand;
-            child.EditCommand = EditCommand;
+            InitDecisionNode(child);
+            InitDecisionBranch(child);
 
-            child.AddShownTriggerCommand = AddDecisionShownTriggerCommand;
-            child.RemoveShownTriggerCommand = RemoveDecisionShownTriggerCommand;
-
-            child.AddFailureTriggerCommand = AddDecisionFailureTriggerCommand;
-            child.RemoveFailureTriggerCommand = RemoveDecisionFailureTriggerCommand;
-
-            child.AddValidTriggerCommand = AddDecisionValidTriggerCommand;
-            child.RemoveValidTriggerCommand = RemoveDecisionValidTriggerCommand;
-
-            child.AddEffectCommand = AddDecisionEffectCommand;
-            child.RemoveEffectCommand = RemoveDecisionEffectCommand;
-
-            SetupDecisionShownTriggerNodes(child);
-            SetupDecisionFailureTriggerNodes(child);
-            SetupDecisionValidTriggerNodes(child);
-            SetupDecisionEffectNodes(child);
-
-            collection.Children.Add(child);
+            node.DecisionNodes.Add(child);
         }
-
-        parent.Children.Add(collection);
-    }
-
-    private void SetupDecisionShownTriggerNodes(DecisionNode parent)
-    {
-        SimpleNode collection = new() { Name = "Shown Triggers" };
-
-        var relations = DecisionService.GetShownTriggers(parent.Observable.Model);
-        foreach (var relation in relations)
-        {
-            var observable = TriggerModelMap[relation];
-            TriggerNode child = new() { Observable = observable };
-
-            child.DeleteCommand = DeleteTriggerCommand;
-            child.EditCommand = EditCommand;
-
-            collection.Children.Add(child);
-        }
-
-        parent.Children.Add(collection);
-    }
-
-    private void SetupDecisionFailureTriggerNodes(DecisionNode parent)
-    {
-        SimpleNode collection = new() { Name = "Failure Triggers" };
-
-        var relations = DecisionService.GetFailureTriggers(parent.Observable.Model);
-        foreach (var relation in relations)
-        {
-            var observable = TriggerModelMap[relation];
-            TriggerNode child = new() { Observable = observable };
-
-            child.DeleteCommand = DeleteTriggerCommand;
-            child.EditCommand = EditCommand;
-
-            collection.Children.Add(child);
-        }
-
-        parent.Children.Add(collection);
-    }
-
-    private void SetupDecisionValidTriggerNodes(DecisionNode parent)
-    {
-        SimpleNode collection = new() { Name = "Valid Triggers" };
-
-        var relations = DecisionService.GetValidTriggers(parent.Observable.Model);
-        foreach (var relation in relations)
-        {
-            var observable = TriggerModelMap[relation];
-            TriggerNode child = new() { Observable = observable };
-
-            child.DeleteCommand = DeleteTriggerCommand;
-            child.EditCommand = EditCommand;
-
-            collection.Children.Add(child);
-        }
-
-        parent.Children.Add(collection);
-    }
-
-    private void SetupDecisionEffectNodes(DecisionNode parent)
-    {
-        SimpleNode collection = new() { Name = "Effects" };
-
-        var relations = DecisionService.GetEffects(parent.Observable.Model);
-        foreach (var relation in relations)
-        {
-            var observable = EffectModelMap[relation];
-            EffectNode child = new() { Observable = observable };
-
-            child.DeleteCommand = DeleteEffectCommand;
-            child.EditCommand = EditCommand;
-
-            collection.Children.Add(child);
-        }
-
-        parent.Children.Add(collection);
-    }
-
-    private void SetupTriggerNodes(Node parent)
-    {
-        SimpleNode collection = new() { Name = "Triggers" };
 
         foreach (var observable in TriggerModelMap.Wrappers)
         {
-            TriggerNode child = new() { Observable = observable };
+            TriggerBranch child = new() { Observable = observable };
 
-            child.DeleteCommand = DeleteTriggerCommand;
-            child.EditCommand = EditCommand;
+            InitTriggerNode(child);
+            InitTriggerBranch(child);
 
-            collection.Children.Add(child);
+            node.TriggerNodes.Add(child);
         }
-
-        parent.Children.Add(collection);
-    }
-
-    private void SetupEffectNodes(Node parent)
-    {
-        SimpleNode collection = new() { Name = "Effects" };
 
         foreach (var observable in EffectModelMap.Wrappers)
         {
-            EffectNode child = new() { Observable = observable };
+            EffectBranch child = new() { Observable = observable };
 
-            child.DeleteCommand = DeleteEffectCommand;
-            child.EditCommand = EditCommand;
+            InitEffectNode(child);
+            InitEffectBranch(child);
 
-            collection.Children.Add(child);
+            node.EffectNodes.Add(child);
+        }
+    }
+
+    private void InitScriptNode(ScriptNode node)
+    {
+        node.DeleteCommand = DeleteScriptCommand;
+        node.EditCommand = EditCommand;
+    }
+
+    private void InitScriptBranch(ScriptBranch node)
+    {
+    }
+
+    private void InitEventNode(EventNode node)
+    {
+        node.DeleteCommand = DeleteEventCommand;
+        node.EditCommand = EditCommand;
+
+        node.CreatePortraitCommand = CreateEventPortraitCommand;
+        node.CreateOptionCommand = CreateEventOptionCommand;
+        node.CreateOnionCommand = CreateEventOnionCommand;
+
+        node.AddTriggerCommand = AddEventTriggerCommand;
+        node.RemoveTriggerCommand = RemoveEventTriggerCommand;
+
+        node.AddImmediateEffectCommand = AddEventImmediateEffectCommand;
+        node.RemoveImmediateEffectCommand = RemoveEventImmediateEffectCommand;
+
+        node.AddAfterEffectCommand = AddEventAfterEffectCommand;
+        node.RemoveAfterEffectCommand = RemoveEventAfterEffectCommand;
+    }
+
+    private void InitEventBranch(EventBranch node)
+    {
+        Event model = node.Observable.Model;
+
+        foreach (var relation in EventService.GetPortraits(model))
+        {
+            var observable = PortraitModelMap[relation];
+            PortraitBranch child = new() { Observable = observable };
+
+            InitPortraitNode(child);
+            InitPortraitBranch(child);
+
+            node.PortraitNodes.Add(child);
         }
 
-        parent.Children.Add(collection);
+        foreach (var relation in EventService.GetOptions(model))
+        {
+            var observable = OptionModelMap[relation];
+            OptionBranch child = new() { Observable = observable };
+
+            InitOptionNode(child);
+            InitOptionBranch(child);
+
+            node.OptionNodes.Add(child);
+        }
+
+        foreach (var relation in EventService.GetOnions(model))
+        {
+            var observable = OnionModelMap[relation];
+            OnionBranch child = new() { Observable = observable };
+
+            InitOnionNode(child);
+            InitOnionBranch(child);
+
+            node.OnionNodes.Add(child);
+        }
+
+        foreach (var relation in EventService.GetTriggers(model))
+        {
+            var observable = TriggerModelMap[relation];
+            TriggerLeaf child = new() { Observable = observable };
+
+            InitTriggerNode(child);
+
+            node.TriggerNodes.Add(child);
+        }
+
+        foreach (var relation in EventService.GetImmediateEffects(model))
+        {
+            var observable = EffectModelMap[relation];
+            EffectLeaf child = new() { Observable = observable };
+
+            InitEffectNode(child);
+
+            node.ImmediateEffectNodes.Add(child);
+        }
+
+        foreach (var relation in EventService.GetAfterEffects(model))
+        {
+            var observable = EffectModelMap[relation];
+            EffectLeaf child = new() { Observable = observable };
+
+            InitEffectNode(child);
+
+            node.AfterEffectNodes.Add(child);
+        }
+    }
+
+    private void InitPortraitNode(PortraitNode node)
+    {
+        node.DeleteCommand = DeletePortraitCommand;
+        node.EditCommand = EditCommand;
+    }
+
+    private void InitPortraitBranch(PortraitBranch node)
+    {
+    }
+
+    private void InitOptionNode(OptionNode node)
+    {
+        node.DeleteCommand = DeleteOptionCommand;
+        node.EditCommand = EditCommand;
+
+        node.AddTriggerCommand = AddOptionTriggerCommand;
+        node.RemoveTriggerCommand = RemoveOptionTriggerCommand;
+
+        node.AddEffectCommand = AddOptionEffectCommand;
+        node.RemoveEffectCommand = RemoveOptionEffectCommand;
+    }
+
+    private void InitOptionBranch(OptionBranch node)
+    {
+        Option model = node.Observable.Model;
+
+        foreach (var relation in OptionService.GetTriggers(model))
+        {
+            var observable = TriggerModelMap[relation];
+            TriggerLeaf child = new() { Observable = observable };
+
+            InitTriggerNode(child);
+
+            node.TriggerNodes.Add(child);
+        }
+
+        foreach (var relation in OptionService.GetEffects(model))
+        {
+            var observable = EffectModelMap[relation];
+            EffectLeaf child = new() { Observable = observable };
+
+            InitEffectNode(child);
+
+            node.EffectNodes.Add(child);
+        }
+    }
+
+    private void InitOnionNode(OnionNode node)
+    {
+        node.DeleteCommand = DeleteOnionCommand;
+        node.EditCommand = EditCommand;
+    }
+
+    private void InitOnionBranch(OnionBranch node)
+    {
+    }
+
+    private void InitDecisionNode(DecisionNode node)
+    {
+        node.DeleteCommand = DeleteDecisionCommand;
+        node.EditCommand = EditCommand;
+
+        node.AddShownTriggerCommand = AddDecisionShownTriggerCommand;
+        node.RemoveShownTriggerCommand = RemoveDecisionShownTriggerCommand;
+
+        node.AddFailureTriggerCommand = AddDecisionFailureTriggerCommand;
+        node.RemoveFailureTriggerCommand = RemoveDecisionFailureTriggerCommand;
+
+        node.AddValidTriggerCommand = AddDecisionValidTriggerCommand;
+        node.RemoveValidTriggerCommand = RemoveDecisionValidTriggerCommand;
+
+        node.AddEffectCommand = AddDecisionEffectCommand;
+        node.RemoveEffectCommand = RemoveDecisionEffectCommand;
+    }
+
+    private void InitDecisionBranch(DecisionBranch node)
+    {
+        Decision model = node.Observable.Model;
+
+        foreach (var relation in DecisionService.GetShownTriggers(model))
+        {
+            var observable = TriggerModelMap[relation];
+            TriggerLeaf child = new() { Observable = observable };
+
+            InitTriggerNode(child);
+
+            node.ShownTriggerNodes.Add(child);
+        }
+
+        foreach (var relation in DecisionService.GetFailureTriggers(model))
+        {
+            var observable = TriggerModelMap[relation];
+            TriggerLeaf child = new() { Observable = observable };
+
+            InitTriggerNode(child);
+
+            node.FailureTriggerNodes.Add(child);
+        }
+
+        foreach (var relation in DecisionService.GetValidTriggers(model))
+        {
+            var observable = TriggerModelMap[relation];
+            TriggerLeaf child = new() { Observable = observable };
+
+            InitTriggerNode(child);
+
+            node.ValidTriggerNodes.Add(child);
+        }
+
+        foreach (var relation in DecisionService.GetEffects(model))
+        {
+            var observable = EffectModelMap[relation];
+            EffectLeaf child = new() { Observable = observable };
+
+            InitEffectNode(child);
+
+            node.ValidTriggerNodes.Add(child);
+        }
+    }
+
+    private void InitTriggerNode(TriggerNode node)
+    {
+        node.DeleteCommand = DeleteTriggerCommand;
+        node.EditCommand = EditCommand;
+    }
+
+    private void InitTriggerBranch(TriggerBranch node)
+    {
+    }
+
+    private void InitEffectNode(EffectNode node)
+    {
+        node.DeleteCommand = DeleteEffectCommand;
+        node.EditCommand = EditCommand;
+    }
+
+    private void InitEffectBranch(EffectBranch node)
+    {
     }
 
     #endregion
@@ -670,7 +555,7 @@ public class ContentPageViewModel : PageViewModel
         var model = new Script();
         ScriptService.Insert(model);
 
-        Setup();
+        //Setup();
 
         var observable = ScriptModelMap[model];
         Selected = observable;
@@ -687,7 +572,7 @@ public class ContentPageViewModel : PageViewModel
         var model = observable.Model;
         ScriptService.Delete(model);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
@@ -709,7 +594,7 @@ public class ContentPageViewModel : PageViewModel
         var model = new Event();
         EventService.Insert(model);
 
-        Setup();
+        //Setup();
 
         var observable = EventModelMap[model];
         Selected = observable;
@@ -726,7 +611,7 @@ public class ContentPageViewModel : PageViewModel
         var model = observable.Model;
         EventService.Delete(model);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
@@ -746,7 +631,7 @@ public class ContentPageViewModel : PageViewModel
         Option model = new() { EventId = evt.Id };
         OptionService.Insert(model);
 
-        Setup();
+        //Setup();
 
         var observable = OptionModelMap[model];
         Selected = observable;
@@ -767,7 +652,7 @@ public class ContentPageViewModel : PageViewModel
         Onion model = new() { EventId = evt.Id };
         OnionService.Insert(model);
 
-        Setup();
+        //Setup();
 
         var observable = OnionModelMap[model];
         Selected = observable;
@@ -788,7 +673,7 @@ public class ContentPageViewModel : PageViewModel
         Portrait model = new() { EventId = evt.Id };
         PortraitService.Insert(model);
 
-        Setup();
+        //Setup();
 
         var observable = PortraitModelMap[model];
         Selected = observable;
@@ -825,7 +710,7 @@ public class ContentPageViewModel : PageViewModel
 
         EventService.AddTrigger(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = TriggerModelMap[relation];
     }
@@ -859,7 +744,7 @@ public class ContentPageViewModel : PageViewModel
 
         EventService.RemoveTrigger(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
@@ -895,7 +780,7 @@ public class ContentPageViewModel : PageViewModel
 
         EventService.AddImmediateEffect(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = EffectModelMap[relation];
     }
@@ -929,7 +814,7 @@ public class ContentPageViewModel : PageViewModel
 
         EventService.RemoveImmediateEffect(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
@@ -965,7 +850,7 @@ public class ContentPageViewModel : PageViewModel
 
         EventService.AddAfterEffect(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = EffectModelMap[relation];
     }
@@ -999,7 +884,7 @@ public class ContentPageViewModel : PageViewModel
 
         EventService.RemoveAfterEffect(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
@@ -1024,7 +909,7 @@ public class ContentPageViewModel : PageViewModel
         var model = observable.Model;
         PortraitService.Delete(model);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
@@ -1049,7 +934,7 @@ public class ContentPageViewModel : PageViewModel
         var model = observable.Model;
         OptionService.Delete(model);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
@@ -1085,7 +970,7 @@ public class ContentPageViewModel : PageViewModel
 
         OptionService.AddTrigger(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = TriggerModelMap[relation];
     }
@@ -1119,7 +1004,7 @@ public class ContentPageViewModel : PageViewModel
 
         OptionService.RemoveTrigger(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
@@ -1155,7 +1040,7 @@ public class ContentPageViewModel : PageViewModel
 
         OptionService.AddEffect(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = EffectModelMap[relation];
     }
@@ -1189,7 +1074,7 @@ public class ContentPageViewModel : PageViewModel
 
         OptionService.RemoveEffect(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
@@ -1214,7 +1099,7 @@ public class ContentPageViewModel : PageViewModel
         var model = observable.Model;
         OnionService.Delete(model);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
@@ -1236,7 +1121,7 @@ public class ContentPageViewModel : PageViewModel
         var model = new Decision();
         DecisionService.Insert(model);
 
-        Setup();
+        //Setup();
 
         var observable = DecisionModelMap[model];
         Selected = observable;
@@ -1253,7 +1138,7 @@ public class ContentPageViewModel : PageViewModel
         var model = observable.Model;
         DecisionService.Delete(model);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
@@ -1289,7 +1174,7 @@ public class ContentPageViewModel : PageViewModel
 
         DecisionService.AddShownTrigger(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = TriggerModelMap[relation];
     }
@@ -1323,7 +1208,7 @@ public class ContentPageViewModel : PageViewModel
 
         DecisionService.RemoveShownTrigger(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
@@ -1359,7 +1244,7 @@ public class ContentPageViewModel : PageViewModel
 
         DecisionService.AddFailureTrigger(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = TriggerModelMap[relation];
     }
@@ -1393,7 +1278,7 @@ public class ContentPageViewModel : PageViewModel
 
         DecisionService.RemoveFailureTrigger(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
@@ -1429,7 +1314,7 @@ public class ContentPageViewModel : PageViewModel
 
         DecisionService.AddValidTrigger(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = TriggerModelMap[relation];
     }
@@ -1463,7 +1348,7 @@ public class ContentPageViewModel : PageViewModel
 
         DecisionService.RemoveValidTrigger(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
@@ -1499,7 +1384,7 @@ public class ContentPageViewModel : PageViewModel
 
         DecisionService.AddEffect(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = EffectModelMap[relation];
     }
@@ -1533,7 +1418,7 @@ public class ContentPageViewModel : PageViewModel
 
         DecisionService.RemoveEffect(owner, relation);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
@@ -1555,7 +1440,7 @@ public class ContentPageViewModel : PageViewModel
         var model = new Trigger();
         TriggerService.Insert(model);
 
-        Setup();
+        //Setup();
 
         var observable = TriggerModelMap[model];
         Selected = observable;
@@ -1572,7 +1457,7 @@ public class ContentPageViewModel : PageViewModel
         var model = observable.Model;
         TriggerService.Delete(model);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
@@ -1594,7 +1479,7 @@ public class ContentPageViewModel : PageViewModel
         var model = new Effect();
         EffectService.Insert(model);
 
-        Setup();
+        //Setup();
 
         var observable = EffectModelMap[model];
         Selected = observable;
@@ -1611,7 +1496,7 @@ public class ContentPageViewModel : PageViewModel
         var model = observable.Model;
         EffectService.Delete(model);
 
-        Setup();
+        //Setup();
 
         Selected = null;
     }
