@@ -11,27 +11,10 @@ public abstract class OptionNode : ObservableNode<OptionViewModel>
 
     public RelayCommand<object>? EditCommand { get; set; }
     public RelayCommand<object>? DeleteCommand { get; set; }
-
-    public AsyncRelayCommand<object>? AddTriggerCommand { get; set; }
-    public AsyncRelayCommand<object>? RemoveTriggerCommand { get; set; }
-
-    public AsyncRelayCommand<object>? AddEffectCommand { get; set; }
-    public AsyncRelayCommand<object>? RemoveEffectCommand { get; set; }
 }
 
 public sealed class OptionBranch : OptionNode
 {
-    public CollectionNode TriggerNodes { get; } = new() { Name = "Triggers", IsExpanded = true };
-    public CollectionNode EffectNodes { get; } = new() { Name = "Effects", IsExpanded = true };
-
-    public override IEnumerable<Node> Children
-    {
-        get
-        {
-            yield return TriggerNodes;
-            yield return EffectNodes;
-        }
-    }
 }
 
 public sealed class OptionLeaf : OptionNode
