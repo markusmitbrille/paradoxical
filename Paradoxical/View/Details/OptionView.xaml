@@ -10,7 +10,7 @@
     xmlns:converters="clr-namespace:Paradoxical.Converters"
     xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    d:DataContext="{d:DesignInstance {x:Type viewmodel:OptionDetailsViewModel}}"
+    d:DataContext="{d:DesignInstance {x:Type viewmodel:OptionViewModel}}"
     mc:Ignorable="d"
     d:DesignWidth="800">
 
