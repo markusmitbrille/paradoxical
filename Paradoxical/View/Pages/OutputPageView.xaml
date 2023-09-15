@@ -118,32 +118,6 @@
             </TabItem>
 
             <TabItem
-                x:Name="TriggersTab"
-                Header="Triggers">
-                <Grid>
-
-                    <view:ScriptBox
-                        IsReadOnly="True"
-                        FontFamily="Consolas"
-                        AcceptsReturn="True"
-                        AcceptsTab="True"
-                        AcceptsDot="True"
-                        AllowFormatting="True"
-                        AllowedCompleteItems="All">
-
-                        <view:ScriptBox.Text>
-                            <Binding
-                                Path="TriggersFileOutput"
-                                Mode="OneWay">
-                            </Binding>
-                        </view:ScriptBox.Text>
-
-                    </view:ScriptBox>
-
-                </Grid>
-            </TabItem>
-
-            <TabItem
                 x:Name="OnionsTab"
                 Header="On-Actions">
                 <Grid>
@@ -160,32 +134,6 @@
                         <view:ScriptBox.Text>
                             <Binding
                                 Path="OnionsFileOutput"
-                                Mode="OneWay">
-                            </Binding>
-                        </view:ScriptBox.Text>
-
-                    </view:ScriptBox>
-
-                </Grid>
-            </TabItem>
-
-            <TabItem
-                x:Name="EffectsTab"
-                Header="Effects">
-                <Grid>
-
-                    <view:ScriptBox
-                        IsReadOnly="True"
-                        FontFamily="Consolas"
-                        AcceptsReturn="True"
-                        AcceptsTab="True"
-                        AcceptsDot="True"
-                        AllowFormatting="True"
-                        AllowedCompleteItems="All">
-
-                        <view:ScriptBox.Text>
-                            <Binding
-                                Path="EffectsFileOutput"
                                 Mode="OneWay">
                             </Binding>
                         </view:ScriptBox.Text>

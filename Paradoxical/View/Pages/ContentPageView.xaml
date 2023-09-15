@@ -71,14 +71,6 @@
                             Header="Create Decision"
                             Command="{Binding CreateDecisionCommand}" />
 
-                        <MenuItem
-                            Header="Create Trigger"
-                            Command="{Binding CreateTriggerCommand}" />
-
-                        <MenuItem
-                            Header="Create Effect"
-                            Command="{Binding CreateEffectCommand}" />
-
                     </MenuItem>
                 </Menu>
 
@@ -177,14 +169,6 @@
                                         <MenuItem
                                             Header="Create Decision"
                                             Command="{Binding CreateDecisionCommand}" />
-
-                                        <MenuItem
-                                            Header="Create Trigger"
-                                            Command="{Binding CreateTriggerCommand}" />
-
-                                        <MenuItem
-                                            Header="Create Effect"
-                                            Command="{Binding CreateEffectCommand}" />
 
                                     </ContextMenu>
                                 </Grid.ContextMenu>
@@ -384,64 +368,6 @@
 
                         <HierarchicalDataTemplate
                             DataType="{x:Type viewmodel:DecisionNode}"
-                            ItemsSource="{Binding Children}">
-                            <Grid>
-
-                                <Grid.ContextMenu>
-                                    <ContextMenu>
-
-                                        <MenuItem
-                                            Header="Edit"
-                                            Icon="{materialDesign:PackIcon Kind=Edit}"
-                                            Command="{Binding EditCommand}"
-                                            CommandParameter="{Binding Observable}" />
-
-                                        <MenuItem
-                                            Header="Delete"
-                                            Icon="{materialDesign:PackIcon Kind=Delete}"
-                                            Command="{Binding DeleteCommand}"
-                                            CommandParameter="{Binding Observable}" />
-
-                                    </ContextMenu>
-                                </Grid.ContextMenu>
-
-                                <TextBlock
-                                    Text="{Binding Observable.Name}" />
-
-                            </Grid>
-                        </HierarchicalDataTemplate>
-
-                        <HierarchicalDataTemplate
-                            DataType="{x:Type viewmodel:TriggerNode}"
-                            ItemsSource="{Binding Children}">
-                            <Grid>
-
-                                <Grid.ContextMenu>
-                                    <ContextMenu>
-
-                                        <MenuItem
-                                            Header="Edit"
-                                            Icon="{materialDesign:PackIcon Kind=Edit}"
-                                            Command="{Binding EditCommand}"
-                                            CommandParameter="{Binding Observable}" />
-
-                                        <MenuItem
-                                            Header="Delete"
-                                            Icon="{materialDesign:PackIcon Kind=Delete}"
-                                            Command="{Binding DeleteCommand}"
-                                            CommandParameter="{Binding Observable}" />
-
-                                    </ContextMenu>
-                                </Grid.ContextMenu>
-
-                                <TextBlock
-                                    Text="{Binding Observable.Name}" />
-
-                            </Grid>
-                        </HierarchicalDataTemplate>
-
-                        <HierarchicalDataTemplate
-                            DataType="{x:Type viewmodel:EffectNode}"
                             ItemsSource="{Binding Children}">
                             <Grid>
 

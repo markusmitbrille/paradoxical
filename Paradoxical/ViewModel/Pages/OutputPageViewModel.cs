@@ -100,16 +100,6 @@ public class OutputPageViewModel : PageViewModel
         }
         using (StringWriter writer = new())
         {
-            BuildService.WriteTriggersFile(writer);
-            TriggersFileOutput = writer.ToString();
-        }
-        using (StringWriter writer = new())
-        {
-            BuildService.WriteEffectsFile(writer);
-            EffectsFileOutput = writer.ToString();
-        }
-        using (StringWriter writer = new())
-        {
             BuildService.WriteOnionsFile(writer);
             OnionsFileOutput = writer.ToString();
         }

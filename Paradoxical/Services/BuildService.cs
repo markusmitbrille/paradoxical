@@ -15,8 +15,6 @@ public interface IBuildService
 
     void WriteEventsFile(TextWriter writer);
     void WriteDecisionsFile(TextWriter writer);
-    void WriteTriggersFile(TextWriter writer);
-    void WriteEffectsFile(TextWriter writer);
     void WriteOnionsFile(TextWriter writer);
     void WriteLocFile(TextWriter writer);
 }
@@ -117,16 +115,6 @@ public class BuildService : IBuildService
         using (StreamWriter writer = new(GetDecisionsFilePath(dir, file), encoding, options))
         {
             WriteDecisionsFile(writer);
-        }
-
-        using (StreamWriter writer = new(GetTriggersFilePath(dir, file), encoding, options))
-        {
-            WriteTriggersFile(writer);
-        }
-
-        using (StreamWriter writer = new(GetEffectsFilePath(dir, file), encoding, options))
-        {
-            WriteEffectsFile(writer);
         }
 
         using (StreamWriter writer = new(GetOnionFilePath(dir, file), encoding, options))
@@ -378,22 +366,6 @@ public class BuildService : IBuildService
     {
         writer.WriteLine("l_english:");
         writer.WriteLine();
-
-        writer.WriteLine("# triggers");
-
-        foreach (Trigger element in triggerService.Get())
-        {
-            element.WriteLoc(writer, modService);
-            writer.WriteLine();
-        }
-
-        writer.WriteLine("# effects");
-
-        foreach (Effect element in effectService.Get())
-        {
-            element.WriteLoc(writer, modService);
-            writer.WriteLine();
-        }
 
         writer.WriteLine("# events");
 
