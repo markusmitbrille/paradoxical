@@ -636,7 +636,6 @@ public class ContentPageViewModel : PageViewModel
         ModNode.EventNodes.Expand();
 
         node.Select();
-        node.Expand();
     }
 
     private void CreateEventPortrait(Event parent, PortraitPosition position)
@@ -1338,7 +1337,6 @@ public class ContentPageViewModel : PageViewModel
         ModNode.DecisionNodes.Expand();
 
         node.Select();
-        node.Expand();
     }
 
     private RelayCommand<object>? deleteDecisionCommand;
@@ -1786,7 +1784,6 @@ public class ContentPageViewModel : PageViewModel
         ModNode.TriggerNodes.Expand();
 
         node.Select();
-        node.Expand();
     }
 
     private RelayCommand<object>? deleteTriggerCommand;
@@ -1850,7 +1847,6 @@ public class ContentPageViewModel : PageViewModel
         ModNode.EffectNodes.Expand();
 
         node.Select();
-        node.Expand();
     }
 
     private RelayCommand<object>? deleteEffectCommand;

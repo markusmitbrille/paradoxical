@@ -27,10 +27,10 @@ public abstract class DecisionNode : ObservableNode<DecisionViewModel>
 
 public sealed class DecisionBranch : DecisionNode
 {
-    public CollectionNode ShownTriggerNodes { get; } = new() { Name = "Shown Triggers" };
-    public CollectionNode FailureTriggerNodes { get; } = new() { Name = "Failure Triggers" };
-    public CollectionNode ValidTriggerNodes { get; } = new() { Name = "Valid Triggers" };
-    public CollectionNode EffectNodes { get; } = new() { Name = "Decision Effects" };
+    public CollectionNode ShownTriggerNodes { get; } = new() { Name = "Shown", IsExpanded = true };
+    public CollectionNode FailureTriggerNodes { get; } = new() { Name = "Failure", IsExpanded = true };
+    public CollectionNode ValidTriggerNodes { get; } = new() { Name = "Valid", IsExpanded = true };
+    public CollectionNode EffectNodes { get; } = new() { Name = "Effects", IsExpanded = true };
 
     public override IEnumerable<Node> Children
     {

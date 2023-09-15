@@ -21,8 +21,8 @@ public abstract class OptionNode : ObservableNode<OptionViewModel>
 
 public sealed class OptionBranch : OptionNode
 {
-    public CollectionNode TriggerNodes { get; } = new() { Name = "Option Triggers" };
-    public CollectionNode EffectNodes { get; } = new() { Name = "Option Effects" };
+    public CollectionNode TriggerNodes { get; } = new() { Name = "Triggers", IsExpanded = true };
+    public CollectionNode EffectNodes { get; } = new() { Name = "Effects", IsExpanded = true };
 
     public override IEnumerable<Node> Children
     {

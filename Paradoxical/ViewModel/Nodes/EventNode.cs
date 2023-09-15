@@ -27,13 +27,13 @@ public abstract class EventNode : ObservableNode<EventViewModel>
 
 public sealed class EventBranch : EventNode
 {
-    public CollectionNode PortraitNodes { get; } = new() { Name = "Portraits" };
-    public CollectionNode OptionNodes { get; } = new() { Name = "Options" };
-    public CollectionNode OnionNodes { get; } = new() { Name = "On-Actions" };
+    public CollectionNode PortraitNodes { get; } = new() { Name = "Portraits", IsExpanded = true };
+    public CollectionNode OptionNodes { get; } = new() { Name = "Options", IsExpanded = true };
+    public CollectionNode OnionNodes { get; } = new() { Name = "On-Actions", IsExpanded = true };
 
-    public CollectionNode TriggerNodes { get; } = new() { Name = "Event Triggers" };
-    public CollectionNode ImmediateEffectNodes { get; } = new() { Name = "Immediate Effects" };
-    public CollectionNode AfterEffectNodes { get; } = new() { Name = "After Effects" };
+    public CollectionNode TriggerNodes { get; } = new() { Name = "Trigger", IsExpanded = true };
+    public CollectionNode ImmediateEffectNodes { get; } = new() { Name = "Immediate", IsExpanded = true };
+    public CollectionNode AfterEffectNodes { get; } = new() { Name = "After", IsExpanded = true };
 
     public override IEnumerable<Node> Children
     {
