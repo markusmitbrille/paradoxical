@@ -8,6 +8,16 @@ using System.Windows.Media.Animation;
 
 namespace Paradoxical.Model.Elements;
 
+public enum PortraitPosition
+{
+    None,
+    Left,
+    Right,
+    LowerLeft,
+    LowerCenter,
+    LowerRight,
+}
+
 [Table("portraits")]
 public class Portrait : IEntity, IModel, IEquatable<Portrait?>
 {
