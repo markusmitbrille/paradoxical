@@ -49,14 +49,4 @@
         <view:DecisionView />
     </DataTemplate>
 
-    <DataTemplate
-        DataType="{x:Type viewmodel:TriggerViewModel}">
-        <view:TriggerView />
-    </DataTemplate>
-
-    <DataTemplate
-        DataType="{x:Type viewmodel:EffectViewModel}">
-        <view:EffectView />
-    </DataTemplate>
-
 </ResourceDictionary>

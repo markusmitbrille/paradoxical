@@ -49,37 +49,21 @@ public class Shell : ObservableObject, IShell
 
     public IServiceProvider ServiceProvider { get; }
 
-    public IFinder Finder { get; }
-
     public IMediatorService Mediator { get; }
     public IDataService DataService { get; }
     public IFileService FileService { get; }
 
-    public IEventService EventService { get; }
-    public ITriggerService TriggerService { get; }
-    public IEffectService EffectService { get; }
-
     public Shell(
         IServiceProvider serviceProvider,
-        IFinder finder,
         IMediatorService mediator,
         IDataService dataService,
-        IFileService fileService,
-        IEventService eventService,
-        ITriggerService triggerService,
-        IEffectService effectService)
+        IFileService fileService)
     {
         ServiceProvider = serviceProvider;
-
-        Finder = finder;
 
         Mediator = mediator;
         DataService = dataService;
         FileService = fileService;
-
-        EventService = eventService;
-        TriggerService = triggerService;
-        EffectService = effectService;
     }
 
     #region Config
@@ -269,51 +253,6 @@ if you don't save them.",
 
         Mediator.Send<ShutdownMessage>(new());
         Application.Current.Shutdown();
-    }
-
-    private AsyncRelayCommand? findCommand;
-    public AsyncRelayCommand FindCommand => findCommand ??= new(Find);
-
-    private async Task Find()
-    {
-        Mediator.Send<SaveMessage>(new());
-
-        Finder.Items = Enumerable.Empty<IElementWrapper>()
-            .Union(EventService.Get().Select(model => new EventViewModel() { Model = model }))
-            .Union(TriggerService.Get().Select(model => new TriggerViewModel() { Model = model }))
-            .Union(EffectService.Get().Select(model => new EffectViewModel() { Model = model }));
-
-        Finder.Selected = null;
-
-        await Finder.Show();
-
-        if (Finder.DialogResult != true)
-        { return; }
-
-        if (Finder.Selected == null)
-        { return; }
-
-        if (Finder.Selected is EventViewModel)
-        {
-            Event model = (Event)Finder.Selected.Model;
-
-            var page = Navigate<EventPageViewModel>();
-            //page.Select(model);
-        }
-        if (Finder.Selected is TriggerViewModel)
-        {
-            Trigger model = (Trigger)Finder.Selected.Model;
-
-            var page = Navigate<TriggerPageViewModel>();
-            //page.Select(model);
-        }
-        if (Finder.Selected is EffectViewModel)
-        {
-            Effect model = (Effect)Finder.Selected.Model;
-
-            var page = Navigate<EffectPageViewModel>();
-            //page.Select(model);
-        }
     }
 
     #region Theme

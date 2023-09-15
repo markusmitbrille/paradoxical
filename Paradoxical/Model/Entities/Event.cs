@@ -174,8 +174,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>, IComparable<
         IModService modService,
         IEventService eventService)
     {
-        var triggers = eventService.GetTriggers(this);
-        if (triggers.Any() == false && CustomTrigger.IsEmpty() == true)
+        if (CustomTrigger.IsEmpty() == true)
         {
             writer.Indent().WriteLine("# no trigger");
             return;
@@ -183,16 +182,6 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>, IComparable<
 
         writer.Indent().WriteLine("trigger = {");
         ParadoxText.IndentLevel++;
-
-        if (triggers.Any() == true)
-        {
-            writer.Indent().WriteLine("# scripted triggers");
-
-            foreach (Trigger trg in triggers)
-            {
-                writer.Indent().WriteLine($"{trg.GetQualifiedName(modService)} = yes");
-            }
-        }
 
         if (CustomTrigger.IsEmpty() == false)
         {
@@ -213,8 +202,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>, IComparable<
         IModService modService,
         IEventService eventService)
     {
-        var effects = eventService.GetImmediateEffects(this);
-        if (effects.Any() == false && CustomImmediateEffect.IsEmpty() == true)
+        if (CustomImmediateEffect.IsEmpty() == true)
         {
             writer.Indent().WriteLine("# no immediate");
             return;
@@ -222,16 +210,6 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>, IComparable<
 
         writer.Indent().WriteLine("immediate = {");
         ParadoxText.IndentLevel++;
-
-        if (effects.Any() == true)
-        {
-            writer.Indent().WriteLine("# scripted effects");
-
-            foreach (Effect eff in effects)
-            {
-                writer.Indent().WriteLine($"{eff.GetQualifiedName(modService)} = yes");
-            }
-        }
 
         if (CustomImmediateEffect.IsEmpty() == false)
         {
@@ -252,8 +230,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>, IComparable<
         IModService modService,
         IEventService eventService)
     {
-        var effects = eventService.GetAfterEffects(this);
-        if (effects.Any() == false && CustomAfterEffect.IsEmpty() == true)
+        if (CustomAfterEffect.IsEmpty() == true)
         {
             writer.Indent().WriteLine("# no after");
             return;
@@ -261,16 +238,6 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>, IComparable<
 
         writer.Indent().WriteLine("after = {");
         ParadoxText.IndentLevel++;
-
-        if (effects.Any() == true)
-        {
-            writer.Indent().WriteLine("# scripted effects");
-
-            foreach (Effect eff in effects)
-            {
-                writer.Indent().WriteLine($"{eff.GetQualifiedName(modService)} = yes");
-            }
-        }
 
         if (CustomAfterEffect.IsEmpty() == false)
         {

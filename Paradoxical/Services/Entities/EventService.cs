@@ -20,18 +20,6 @@ public interface IEventService : IEntityService<Event>
     Portrait? GetLowerLeftPortrait(Event model);
     Portrait? GetLowerCenterPortrait(Event model);
     Portrait? GetLowerRightPortrait(Event model);
-
-    IEnumerable<Trigger> GetTriggers(Event model);
-    void AddTrigger(Event model, Trigger relation);
-    void RemoveTrigger(Event model, Trigger relation);
-
-    IEnumerable<Effect> GetImmediateEffects(Event model);
-    void AddImmediateEffect(Event model, Effect relation);
-    void RemoveImmediateEffect(Event model, Effect relation);
-
-    IEnumerable<Effect> GetAfterEffects(Event model);
-    void AddAfterEffect(Event model, Effect relation);
-    void RemoveAfterEffect(Event model, Effect relation);
 }
 
 public class EventService : EntityService<Event>, IEventService
@@ -128,101 +116,5 @@ public class EventService : EntityService<Event>, IEventService
     public Portrait? GetLowerRightPortrait(Event model)
     {
         return GetPortraits(model).FirstOrDefault(portrait => portrait.Position == PortraitPosition.LowerRight);
-    }
-
-    public IEnumerable<Trigger> GetTriggers(Event model)
-    {
-        string query = ParadoxQuery.Collection(
-            m: "triggers",
-            n: "events",
-            mn: "event_triggers",
-            mfk: "trigger_id",
-            nfk: "event_id",
-            mpk: "id",
-            npk: "id");
-
-        return Data.Connection.Query<Trigger>(query, model.Id);
-    }
-    public void AddTrigger(Event model, Trigger relation)
-    {
-        string query = ParadoxQuery.CollectionAdd(
-            mn: "event_triggers",
-            mfk: "event_id",
-            nfk: "trigger_id");
-
-        Data.Connection.Execute(query, model.Id, relation.Id);
-    }
-    public void RemoveTrigger(Event model, Trigger relation)
-    {
-        string query = ParadoxQuery.CollectionRemove(
-            mn: "event_triggers",
-            mfk: "event_id",
-            nfk: "trigger_id");
-
-        Data.Connection.Execute(query, model.Id, relation.Id);
-    }
-
-    public IEnumerable<Effect> GetImmediateEffects(Event model)
-    {
-        string query = ParadoxQuery.Collection(
-            m: "effects",
-            n: "events",
-            mn: "event_immediate_effects",
-            mfk: "effect_id",
-            nfk: "event_id",
-            mpk: "id",
-            npk: "id");
-
-        return Data.Connection.Query<Effect>(query, model.Id);
-    }
-    public void AddImmediateEffect(Event model, Effect relation)
-    {
-        string query = ParadoxQuery.CollectionAdd(
-            mn: "event_immediate_effects",
-            mfk: "event_id",
-            nfk: "effect_id");
-
-        Data.Connection.Execute(query, model.Id, relation.Id);
-    }
-    public void RemoveImmediateEffect(Event model, Effect relation)
-    {
-        string query = ParadoxQuery.CollectionRemove(
-            mn: "event_immediate_effects",
-            mfk: "event_id",
-            nfk: "effect_id");
-
-        Data.Connection.Execute(query, model.Id, relation.Id);
-    }
-
-    public IEnumerable<Effect> GetAfterEffects(Event model)
-    {
-        string query = ParadoxQuery.Collection(
-            m: "triggers",
-            n: "events",
-            mn: "event_after_effects",
-            mfk: "effect_id",
-            nfk: "event_id",
-            mpk: "id",
-            npk: "id");
-
-        return Data.Connection.Query<Effect>(query, model.Id);
-    }
-    public void AddAfterEffect(Event model, Effect relation)
-    {
-        string query = ParadoxQuery.CollectionAdd(
-            mn: "event_after_effects",
-            mfk: "event_id",
-            nfk: "effect_id");
-
-        Data.Connection.Execute(query, model.Id, relation.Id);
-    }
-    public void RemoveAfterEffect(Event model, Effect relation)
-    {
-        string query = ParadoxQuery.CollectionRemove(
-            mn: "event_after_effects",
-            mfk: "event_id",
-            nfk: "effect_id");
-
-        Data.Connection.Execute(query, model.Id, relation.Id);
     }
 }

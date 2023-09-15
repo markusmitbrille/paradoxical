@@ -46,8 +46,6 @@ public class BuildService : IBuildService
     private readonly IOnionService onionService;
     private readonly IDecisionService decisionService;
     private readonly IPortraitService portraitService;
-    private readonly ITriggerService triggerService;
-    private readonly IEffectService effectService;
 
     public BuildService(
         IModService modService,
@@ -56,9 +54,7 @@ public class BuildService : IBuildService
         IOptionService optionService,
         IOnionService onionService,
         IDecisionService decisionService,
-        IPortraitService portraitService,
-        ITriggerService triggerService,
-        IEffectService effectService)
+        IPortraitService portraitService)
     {
         this.modService = modService;
 
@@ -69,8 +65,6 @@ public class BuildService : IBuildService
         this.onionService = onionService;
         this.decisionService = decisionService;
         this.portraitService = portraitService;
-        this.triggerService = triggerService;
-        this.effectService = effectService;
     }
 
     public void Export(string dir, string file)
@@ -282,34 +276,6 @@ public class BuildService : IBuildService
                 modService,
                 decisionService);
 
-            writer.WriteLine();
-        }
-    }
-
-    public void WriteTriggersFile(TextWriter writer)
-    {
-        writer.WriteLine($"# {modService.GetModName()} Triggers");
-        writer.WriteLine();
-
-        foreach (Trigger element in triggerService.Get())
-        {
-            ParadoxText.IndentLevel = 0;
-
-            element.Write(writer, modService);
-            writer.WriteLine();
-        }
-    }
-
-    public void WriteEffectsFile(TextWriter writer)
-    {
-        writer.WriteLine($"# {modService.GetModName()} Effects");
-        writer.WriteLine();
-
-        foreach (Effect element in effectService.Get())
-        {
-            ParadoxText.IndentLevel = 0;
-
-            element.Write(writer, modService);
             writer.WriteLine();
         }
     }

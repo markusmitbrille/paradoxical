@@ -193,8 +193,7 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
         IModService modService,
         IOptionService optionService)
     {
-        var triggers = optionService.GetTriggers(this);
-        if (triggers.Any() == false && CustomTrigger.IsEmpty() == true)
+        if (CustomTrigger.IsEmpty() == true)
         {
             writer.Indent().WriteLine("# no trigger");
             return;
@@ -202,16 +201,6 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
 
         writer.Indent().WriteLine("trigger = {");
         ParadoxText.IndentLevel++;
-
-        if (triggers.Any() == true)
-        {
-            writer.Indent().WriteLine("# scripted triggers");
-
-            foreach (Trigger trg in triggers)
-            {
-                writer.Indent().WriteLine($"{trg.GetQualifiedName(modService)} = yes");
-            }
-        }
 
         if (CustomTrigger.IsEmpty() == false)
         {
@@ -345,21 +334,10 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
         IModService modService,
         IOptionService optionService)
     {
-        var effects = optionService.GetEffects(this);
-        if (effects.Any() == false && CustomEffect.IsEmpty() == true)
+        if (CustomEffect.IsEmpty() == true)
         {
             writer.Indent().WriteLine("# no special effect");
             return;
-        }
-
-        if (effects.Any() == true)
-        {
-            writer.Indent().WriteLine("# scripted effects");
-
-            foreach (Effect eff in effects)
-            {
-                writer.Indent().WriteLine($"{eff.GetQualifiedName(modService)} = yes");
-            }
         }
 
         if (CustomEffect.IsEmpty() == false)

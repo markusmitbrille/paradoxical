@@ -373,8 +373,7 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
         IModService modService,
         IDecisionService decisionService)
     {
-        var triggers = decisionService.GetShownTriggers(this);
-        if (triggers.Any() == false && CustomShownTrigger.IsEmpty() == true)
+        if (CustomShownTrigger.IsEmpty() == true)
         {
             writer.Indent().WriteLine("# no is-shown trigger");
             return;
@@ -382,16 +381,6 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
 
         writer.Indent().WriteLine("is_shown = {");
         ParadoxText.IndentLevel++;
-
-        if (triggers.Any() == true)
-        {
-            writer.Indent().WriteLine("# scripted triggers");
-
-            foreach (Trigger trg in triggers)
-            {
-                writer.Indent().WriteLine($"{trg.GetQualifiedName(modService)} = yes");
-            }
-        }
 
         if (CustomShownTrigger.IsEmpty() == false)
         {
@@ -412,8 +401,7 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
         IModService modService,
         IDecisionService decisionService)
     {
-        var triggers = decisionService.GetFailureTriggers(this);
-        if (triggers.Any() == false && CustomFailureTrigger.IsEmpty() == true)
+        if (CustomFailureTrigger.IsEmpty() == true)
         {
             writer.Indent().WriteLine("# no is-valid trigger (showing failures only)");
             return;
@@ -421,16 +409,6 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
 
         writer.Indent().WriteLine("is_valid_showing_failures_only = {");
         ParadoxText.IndentLevel++;
-
-        if (triggers.Any() == true)
-        {
-            writer.Indent().WriteLine("# scripted triggers");
-
-            foreach (Trigger trg in triggers)
-            {
-                writer.Indent().WriteLine($"{trg.GetQualifiedName(modService)} = yes");
-            }
-        }
 
         if (CustomFailureTrigger.IsEmpty() == false)
         {
@@ -451,8 +429,7 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
         IModService modService,
         IDecisionService decisionService)
     {
-        var triggers = decisionService.GetValidTriggers(this);
-        if (triggers.Any() == false && CustomValidTrigger.IsEmpty() == true)
+        if (CustomValidTrigger.IsEmpty() == true)
         {
             writer.Indent().WriteLine("# no is-valid trigger");
             return;
@@ -460,16 +437,6 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
 
         writer.Indent().WriteLine("is_valid = {");
         ParadoxText.IndentLevel++;
-
-        if (triggers.Any() == true)
-        {
-            writer.Indent().WriteLine("# scripted triggers");
-
-            foreach (Trigger trg in triggers)
-            {
-                writer.Indent().WriteLine($"{trg.GetQualifiedName(modService)} = yes");
-            }
-        }
 
         if (CustomValidTrigger.IsEmpty() == false)
         {
@@ -490,10 +457,9 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
         IModService modService,
         IDecisionService decisionService)
     {
-        var effects = decisionService.GetEffects(this);
         var triggeredEvent = decisionService.GetTriggeredEvent(this);
 
-        if (effects.Any() == false && CustomEffect.IsEmpty() == true && triggeredEvent == null)
+        if (CustomEffect.IsEmpty() == true && triggeredEvent == null)
         {
             writer.Indent().WriteLine("# no effect");
             return;
@@ -503,16 +469,6 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
         ParadoxText.IndentLevel++;
 
         WriteTriggeredEvent(writer, modService, decisionService);
-
-        if (effects.Any() == true)
-        {
-            writer.Indent().WriteLine("# scripted effects");
-
-            foreach (Effect eff in effects)
-            {
-                writer.Indent().WriteLine($"{eff.GetQualifiedName(modService)} = yes");
-            }
-        }
 
         if (CustomEffect.IsEmpty() == false)
         {
@@ -568,8 +524,7 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
         IModService modService,
         IDecisionService decisionService)
     {
-        var triggers = decisionService.GetAiPotentialTriggers(this);
-        if (triggers.Any() == false && AiPotential.IsEmpty() == true)
+        if (AiPotential.IsEmpty() == true)
         {
             writer.Indent().WriteLine("# no ai potential");
             return;
@@ -577,16 +532,6 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
 
         writer.Indent().WriteLine("ai_potential = {");
         ParadoxText.IndentLevel++;
-
-        if (triggers.Any() == true)
-        {
-            writer.Indent().WriteLine("# scripted triggers");
-
-            foreach (Trigger trg in triggers)
-            {
-                writer.Indent().WriteLine($"{trg.GetQualifiedName(modService)} = yes");
-            }
-        }
 
         if (AiPotential.IsEmpty() == false)
         {
