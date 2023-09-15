@@ -247,11 +247,6 @@
                                         <Separator />
 
                                         <MenuItem
-                                            Header="Create Portrait"
-                                            Command="{Binding CreatePortraitCommand}"
-                                            CommandParameter="{Binding Observable}" />
-
-                                        <MenuItem
                                             Header="Create Option"
                                             Command="{Binding CreateOptionCommand}"
                                             CommandParameter="{Binding Observable}" />
@@ -318,12 +313,6 @@
                                             Header="Edit"
                                             Icon="{materialDesign:PackIcon Kind=Edit}"
                                             Command="{Binding EditCommand}"
-                                            CommandParameter="{Binding Observable}" />
-
-                                        <MenuItem
-                                            Header="Delete"
-                                            Icon="{materialDesign:PackIcon Kind=Delete}"
-                                            Command="{Binding DeleteCommand}"
                                             CommandParameter="{Binding Observable}" />
 
                                     </ContextMenu>
