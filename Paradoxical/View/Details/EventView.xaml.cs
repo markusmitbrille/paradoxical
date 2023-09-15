@@ -6,9 +6,9 @@ using System.Windows.Data;
 
 namespace Paradoxical.View;
 
-public partial class EventDetailsView : UserControl
+public partial class EventView : UserControl
 {
-    public EventDetailsView()
+    public EventView()
     {
         InitializeComponent();
     }

@@ -2,9 +2,9 @@
 
 namespace Paradoxical.View;
 
-public partial class EffectDetailsView : UserControl
+public partial class DecisionView : UserControl
 {
-    public EffectDetailsView()
+    public DecisionView()
     {
         InitializeComponent();
     }
