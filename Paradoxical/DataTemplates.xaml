@@ -35,6 +35,11 @@
     </DataTemplate>
 
     <DataTemplate
+        DataType="{x:Type viewmodel:PortraitViewModel}">
+        <view:PortraitView />
+    </DataTemplate>
+
+    <DataTemplate
         DataType="{x:Type viewmodel:OptionViewModel}">
         <view:OptionView />
     </DataTemplate>
