@@ -238,7 +238,8 @@
 
                     <TreeView.ItemContainerStyle>
                         <Style
-                            TargetType="TreeViewItem">
+                            TargetType="TreeViewItem"
+                            BasedOn="{StaticResource MaterialDesignTreeViewItem}">
 
                             <Setter
                                 Property="Padding"
