@@ -5,14 +5,16 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class OnionViewModel : ModelWrapper<Onion>, IEquatable<OnionViewModel?>
+public class OnionViewModel : ElementWrapper<Onion>, IEquatable<OnionViewModel?>
 {
+    public override string Kind => "action";
+
     public int EventId
     {
         get => model.eventId;
     }
 
-    public string Name
+    public override string Name
     {
         get => model.name;
         set => SetProperty(ref model.name, value);

@@ -11,7 +11,7 @@ using System.Linq;
 namespace Paradoxical.Model.Elements;
 
 [Table("options")]
-public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
+public class Option : IEntity, IModel, IElement, IEquatable<Option?>, IComparable<Option>
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
@@ -20,6 +20,10 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
     [Column("event_id"), Indexed, NotNull]
     public int EventId { get => eventId; set => eventId = value; }
     public int eventId;
+
+    [Column("name"), Indexed, NotNull]
+    public string Name { get => name; set => name = value; }
+    public string name = $"opt_{Guid.NewGuid().ToString("N").Substring(0, 4)}";
 
     [Column("title"), NotNull]
     public string Title { get => title; set => title = value; }
@@ -111,6 +115,7 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
 
         eventId = other.eventId;
 
+        name = other.name;
         title = other.title;
         tooltip = other.tooltip;
         priority = other.priority;

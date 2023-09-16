@@ -52,6 +52,26 @@
             Header="Display">
             <StackPanel>
 
+                <TextBox
+                    materialDesign:HintAssist.Hint="Name">
+
+                    <TextBox.Text>
+                        <Binding
+                            Path="Name"
+                            Mode="TwoWay"
+                            UpdateSourceTrigger="PropertyChanged"
+                            FallbackValue="element_name">
+                            <Binding.ValidationRules>
+                                <rules:RequiredRule
+                                    ValidatesOnTargetUpdated="True" />
+                                <rules:NameRule
+                                    ValidatesOnTargetUpdated="True" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+
+                </TextBox>
+
                 <Grid>
 
                     <Grid.ColumnDefinitions>

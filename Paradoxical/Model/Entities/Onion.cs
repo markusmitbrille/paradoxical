@@ -11,7 +11,7 @@ using System.Linq;
 namespace Paradoxical.Model.Elements;
 
 [Table("on_actions")]
-public class Onion : IEntity, IModel, IEquatable<Onion?>
+public class Onion : IEntity, IModel, IElement, IEquatable<Onion?>
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
@@ -23,7 +23,7 @@ public class Onion : IEntity, IModel, IEquatable<Onion?>
 
     [Column("name"), Indexed, NotNull]
     public string Name { get => name; set => name = value; }
-    public string name = "";
+    public string name = $"act_{Guid.NewGuid().ToString("N").Substring(0, 4)}";
 
     [Column("random"), NotNull]
     public bool Random { get => random; set => random = value; }

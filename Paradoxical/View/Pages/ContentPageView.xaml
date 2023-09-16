@@ -432,7 +432,7 @@
                                 </Grid.ContextMenu>
 
                                 <TextBlock
-                                    Text="{Binding Observable.Id}" />
+                                    Text="{Binding Observable.Name}" />
 
                             </Grid>
                         </HierarchicalDataTemplate>
