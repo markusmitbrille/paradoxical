@@ -48,8 +48,8 @@
         Padding="20">
 
         <TabItem
-            x:Name="TriggerTab"
-            Header="Trigger">
+            x:Name="PortraitTab"
+            Header="Portrait">
             <Grid>
 
                 <Grid.RowDefinitions>
