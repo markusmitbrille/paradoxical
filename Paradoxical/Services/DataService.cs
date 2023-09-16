@@ -1,5 +1,6 @@
 ﻿using Paradoxical.Model;
 using Paradoxical.Model.Elements;
+using Paradoxical.Model.Relationships;
 using SQLite;
 using System;
 
@@ -81,10 +82,14 @@ public class DataService : IDataService
         Connection.CreateTable<Portrait>();
 
         Connection.CreateTable<Option>();
+        Connection.CreateTable<OptionLink>();
 
         Connection.CreateTable<Onion>();
 
         Connection.CreateTable<Decision>();
+        Connection.CreateTable<DecisionLink>();
+
+        Connection.CreateTable<Link>();
     }
 
     public void DropTables()
@@ -98,10 +103,14 @@ public class DataService : IDataService
         Connection.DropTable<Portrait>();
 
         Connection.DropTable<Option>();
+        Connection.DropTable<OptionLink>();
 
         Connection.DropTable<Onion>();
 
         Connection.DropTable<Decision>();
+        Connection.DropTable<DecisionLink>();
+
+        Connection.DropTable<Link>();
     }
 
     public void TruncateTables()
@@ -115,10 +124,14 @@ public class DataService : IDataService
         Connection.DeleteAll<Portrait>();
 
         Connection.DeleteAll<Option>();
+        Connection.DeleteAll<OptionLink>();
 
         Connection.DeleteAll<Onion>();
 
         Connection.DeleteAll<Decision>();
+        Connection.DeleteAll<DecisionLink>();
+
+        Connection.DeleteAll<Link>();
     }
 
     public bool IsInTransaction => Connection.IsInTransaction;

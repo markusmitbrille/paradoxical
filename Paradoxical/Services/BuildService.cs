@@ -46,15 +46,17 @@ public class BuildService : IBuildService
     private readonly IOnionService onionService;
     private readonly IDecisionService decisionService;
     private readonly IPortraitService portraitService;
+    private readonly ILinkService linkService;
 
     public BuildService(
         IModService modService,
         IScriptService scriptService,
         IEventService eventService,
+        IPortraitService portraitService,
         IOptionService optionService,
         IOnionService onionService,
         IDecisionService decisionService,
-        IPortraitService portraitService)
+        ILinkService linkService)
     {
         this.modService = modService;
 
@@ -65,6 +67,7 @@ public class BuildService : IBuildService
         this.onionService = onionService;
         this.decisionService = decisionService;
         this.portraitService = portraitService;
+        this.linkService = linkService;
     }
 
     public void Export(string dir, string file)
@@ -256,7 +259,8 @@ public class BuildService : IBuildService
                 modService,
                 eventService,
                 optionService,
-                portraitService);
+                portraitService,
+                linkService);
 
             writer.WriteLine();
         }
@@ -274,7 +278,8 @@ public class BuildService : IBuildService
             element.Write(
                 writer,
                 modService,
-                decisionService);
+                decisionService,
+                linkService);
 
             writer.WriteLine();
         }

@@ -50,30 +50,6 @@ public class OptionViewModel : ElementWrapper<Option>, IEquatable<OptionViewMode
         set => SetProperty(ref model.customEffect, value);
     }
 
-    public int? TriggeredEventId
-    {
-        get => model.triggeredEventId;
-        set => SetProperty(ref model.triggeredEventId, value);
-    }
-
-    public string TriggeredEventScope
-    {
-        get => model.triggeredEventScope;
-        set => SetProperty(ref model.triggeredEventScope, value);
-    }
-
-    public int TriggeredEventMinDays
-    {
-        get => model.triggeredEventMinDays;
-        set => SetProperty(ref model.triggeredEventMinDays, value);
-    }
-
-    public int TriggeredEventMaxDays
-    {
-        get => model.triggeredEventMaxDays;
-        set => SetProperty(ref model.triggeredEventMaxDays, value);
-    }
-
     public int AiBaseChance
     {
         get => model.aiBaseChance;

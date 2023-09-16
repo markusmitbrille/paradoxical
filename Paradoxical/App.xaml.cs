@@ -42,6 +42,7 @@ public partial class App : Application
         services.AddSingleton<IOnionService, OnionService>();
         services.AddSingleton<IPortraitService, PortraitService>();
         services.AddSingleton<IDecisionService, DecisionService>();
+        services.AddSingleton<ILinkService, LinkService>();
 
         // finder view model
         services.AddTransient<IFinder, FinderViewModel>();

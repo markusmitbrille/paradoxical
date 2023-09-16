@@ -93,22 +93,6 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
     public string CustomEffect { get => customEffect; set => customEffect = value; }
     public string customEffect = "";
 
-    [Column("triggered_event_id"), Indexed]
-    public int? TriggeredEventId { get => triggeredEventId; set => triggeredEventId = value; }
-    public int? triggeredEventId;
-
-    [Column("triggered_event_scope"), NotNull]
-    public string TriggeredEventScope { get => triggeredEventScope; set => triggeredEventScope = value; }
-    public string triggeredEventScope = "";
-
-    [Column("triggered_event_min_days")]
-    public int TriggeredEventMinDays { get => triggeredEventMinDays; set => triggeredEventMinDays = value; }
-    public int triggeredEventMinDays;
-
-    [Column("triggered_event_max_days")]
-    public int TriggeredEventMaxDays { get => triggeredEventMaxDays; set => triggeredEventMaxDays = value; }
-    public int triggeredEventMaxDays;
-
     [Column("ai_goal"), NotNull]
     public bool AiGoal { get => aiGoal; set => aiGoal = value; }
     public bool aiGoal;
@@ -196,11 +180,6 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
         customValidTrigger = other.customValidTrigger;
         customEffect = other.customEffect;
 
-        triggeredEventId = other.triggeredEventId;
-        triggeredEventScope = other.triggeredEventScope;
-        triggeredEventMinDays = other.triggeredEventMinDays;
-        triggeredEventMaxDays = other.triggeredEventMaxDays;
-
         aiGoal = other.aiGoal;
         aiCheckFrequency = other.aiCheckFrequency;
 
@@ -233,7 +212,8 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
     public void Write(
         TextWriter writer,
         IModService modService,
-        IDecisionService decisionService)
+        IDecisionService decisionService,
+        ILinkService linkService)
     {
         writer.Indent().WriteLine($"{GetQualifiedName(modService)} = {{");
         ParadoxText.IndentLevel++;
@@ -272,7 +252,7 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
         WriteValid(writer, modService, decisionService);
 
         writer.WriteLine();
-        WriteEffect(writer, modService, decisionService);
+        WriteEffect(writer, modService, decisionService, linkService);
 
         writer.WriteLine();
         writer.Indent().WriteLine($"ai_goal = {(AiGoal ? "yes" : "no")}");
@@ -455,11 +435,12 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
     private void WriteEffect(
         TextWriter writer,
         IModService modService,
-        IDecisionService decisionService)
+        IDecisionService decisionService,
+        ILinkService linkService)
     {
-        var triggeredEvent = decisionService.GetTriggeredEvent(this);
+        var links = decisionService.GetLinks(this);
 
-        if (CustomEffect.IsEmpty() == true && triggeredEvent == null)
+        if (CustomEffect.IsEmpty() == true && links.Any() == false)
         {
             writer.Indent().WriteLine("# no effect");
             return;
@@ -468,7 +449,7 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
         writer.Indent().WriteLine("effect = {");
         ParadoxText.IndentLevel++;
 
-        WriteTriggeredEvent(writer, modService, decisionService);
+        WriteLinks(writer, modService, decisionService, linkService);
 
         if (CustomEffect.IsEmpty() == false)
         {
@@ -484,38 +465,24 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
         writer.Indent().WriteLine("}");
     }
 
-    private void WriteTriggeredEvent(
+    private void WriteLinks(
         TextWriter writer,
         IModService modService,
-        IDecisionService decisionService)
+        IDecisionService decisionService,
+        ILinkService linkService)
     {
-        var triggeredEvent = decisionService.GetTriggeredEvent(this);
-        if (triggeredEvent == null)
+        var links = decisionService.GetLinks(this);
+        if (links.Any() == false)
         {
+            writer.Indent().WriteLine("# no follow-up events");
             return;
         }
 
-        writer.Indent().WriteLine("# follow-up event");
+        writer.Indent().WriteLine("# follow-up events");
 
-        if (TriggeredEventScope != string.Empty)
+        foreach (var link in links)
         {
-            writer.Indent().WriteLine($"{TriggeredEventScope} = {{");
-            ParadoxText.IndentLevel++;
-        }
-
-        writer.Indent().WriteLine("trigger_event = {");
-        ParadoxText.IndentLevel++;
-
-        writer.Indent().WriteLine($"id = {triggeredEvent.GetQualifiedName(modService)}");
-        writer.Indent().WriteLine($"days = {{ {TriggeredEventMinDays} {TriggeredEventMaxDays} }}");
-
-        ParadoxText.IndentLevel--;
-        writer.Indent().WriteLine("}");
-
-        if (TriggeredEventScope != string.Empty)
-        {
-            ParadoxText.IndentLevel--;
-            writer.Indent().WriteLine("}");
+            link.Write(writer, modService, linkService);
         }
     }
 

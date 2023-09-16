@@ -90,7 +90,8 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>, IComparable<
         IModService modService,
         IEventService eventService,
         IOptionService optionService,
-        IPortraitService portraitService)
+        IPortraitService portraitService,
+        ILinkService linkService)
     {
         writer.Indent().WriteLine($"{GetQualifiedName(modService)} = {{");
         ParadoxText.IndentLevel++;
@@ -132,7 +133,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>, IComparable<
         if (Hidden == false)
         {
             writer.WriteLine();
-            WriteOptions(writer, modService, eventService, optionService);
+            WriteOptions(writer, modService, eventService, optionService, linkService);
         }
 
         ParadoxText.IndentLevel--;
@@ -257,7 +258,8 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>, IComparable<
         TextWriter writer,
         IModService modService,
         IEventService eventService,
-        IOptionService optionService)
+        IOptionService optionService,
+        ILinkService linkService)
     {
         var options = eventService.GetOptions(this).ToList();
         if (options.Any() == false)
@@ -269,7 +271,7 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>, IComparable<
         options.Sort();
         foreach (Option opt in options)
         {
-            opt.Write(writer, modService, optionService);
+            opt.Write(writer, modService, optionService, linkService);
         }
     }
 

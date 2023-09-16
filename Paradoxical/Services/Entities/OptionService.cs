@@ -9,7 +9,7 @@ public interface IOptionService : IEntityService<Option>
 {
     Event GetEvent(Option model);
 
-    Event? GetTriggeredEvent(Option model);
+    IEnumerable<Link> GetLinks(Option model);
 }
 
 public class OptionService : EntityService<Option>, IOptionService
@@ -30,15 +30,17 @@ public class OptionService : EntityService<Option>, IOptionService
         return Data.Connection.Query<Event>(query, model.Id).Single();
     }
 
-    public Event? GetTriggeredEvent(Option model)
+    public IEnumerable<Link> GetLinks(Option model)
     {
-        string query = ParadoxQuery.Composite(
-            c: "options",
-            o: "events",
-            fk: "triggered_event_id",
-            cpk: "id",
-            opk: "id");
+        string query = ParadoxQuery.Collection(
+            m: "links",
+            n: "options",
+            mn: "option_links",
+            mfk: "link_id",
+            nfk: "option_id",
+            mpk: "id",
+            npk: "id");
 
-        return Data.Connection.Query<Event>(query, model.Id).SingleOrDefault();
+        return Data.Connection.Query<Link>(query, model.Id);
     }
 }

@@ -9,7 +9,7 @@ namespace Paradoxical.Services.Elements;
 
 public interface IDecisionService : IEntityService<Decision>
 {
-    Event? GetTriggeredEvent(Decision model);
+    IEnumerable<Link> GetLinks(Decision model);
 }
 
 public class DecisionService : EntityService<Decision>, IDecisionService
@@ -18,15 +18,17 @@ public class DecisionService : EntityService<Decision>, IDecisionService
     {
     }
 
-    public Event? GetTriggeredEvent(Decision model)
+    public IEnumerable<Link> GetLinks(Decision model)
     {
-        string query = ParadoxQuery.Composite(
-            c: "decisions",
-            o: "events",
-            fk: "triggered_event_id",
-            cpk: "id",
-            opk: "id");
+        string query = ParadoxQuery.Collection(
+            m: "links",
+            n: "decisions",
+            mn: "decision_links",
+            mfk: "link_id",
+            nfk: "decision_id",
+            mpk: "id",
+            npk: "id");
 
-        return Data.Connection.Query<Event>(query, model.Id).SingleOrDefault();
+        return Data.Connection.Query<Link>(query, model.Id);
     }
 }

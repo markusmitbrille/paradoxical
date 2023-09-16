@@ -45,22 +45,6 @@ public class Option : IEntity, IModel, IElement, IEquatable<Option?>, IComparabl
     public string CustomEffect { get => customEffect; set => customEffect = value; }
     public string customEffect = "";
 
-    [Column("triggered_event_id"), Indexed]
-    public int? TriggeredEventId { get => triggeredEventId; set => triggeredEventId = value; }
-    public int? triggeredEventId;
-
-    [Column("triggered_event_scope"), NotNull]
-    public string TriggeredEventScope { get => triggeredEventScope; set => triggeredEventScope = value; }
-    public string triggeredEventScope = "";
-
-    [Column("triggered_event_min_days")]
-    public int TriggeredEventMinDays { get => triggeredEventMinDays; set => triggeredEventMinDays = value; }
-    public int triggeredEventMinDays;
-
-    [Column("triggered_event_max_days")]
-    public int TriggeredEventMaxDays { get => triggeredEventMaxDays; set => triggeredEventMaxDays = value; }
-    public int triggeredEventMaxDays;
-
     [Column("ai_base_chance"), NotNull]
     public int AiBaseChance { get => aiBaseChance; set => aiBaseChance = value; }
     public int aiBaseChance;
@@ -123,11 +107,6 @@ public class Option : IEntity, IModel, IElement, IEquatable<Option?>, IComparabl
         customTrigger = other.customTrigger;
         customEffect = other.customEffect;
 
-        triggeredEventId = other.triggeredEventId;
-        triggeredEventScope = other.triggeredEventScope;
-        triggeredEventMinDays = other.triggeredEventMinDays;
-        triggeredEventMaxDays = other.triggeredEventMaxDays;
-
         aiBaseChance = other.aiBaseChance;
         aiCustomChance = other.aiCustomChance;
 
@@ -155,7 +134,8 @@ public class Option : IEntity, IModel, IElement, IEquatable<Option?>, IComparabl
     public void Write(
         TextWriter writer,
         IModService modService,
-        IOptionService optionService)
+        IOptionService optionService,
+        ILinkService linkService)
     {
         writer.Indent().WriteLine("option = {");
         ParadoxText.IndentLevel++;
@@ -171,7 +151,7 @@ public class Option : IEntity, IModel, IElement, IEquatable<Option?>, IComparabl
         WriteAiChance(writer);
 
         writer.WriteLine();
-        WriteTriggeredEvent(writer, modService, optionService);
+        WriteLinks(writer, modService, optionService, linkService);
 
         writer.WriteLine();
         WriteEffect(writer, modService, optionService);
@@ -298,39 +278,24 @@ public class Option : IEntity, IModel, IElement, IEquatable<Option?>, IComparabl
         writer.Indent().WriteLine("}");
     }
 
-    private void WriteTriggeredEvent(
+    private void WriteLinks(
         TextWriter writer,
         IModService modService,
-        IOptionService optionService)
+        IOptionService optionService,
+        ILinkService linkService)
     {
-        var triggeredEvent = optionService.GetTriggeredEvent(this);
-        if (triggeredEvent == null)
+        var links = optionService.GetLinks(this);
+        if (links.Any() == false)
         {
-            writer.Indent().WriteLine("# no follow-up event");
+            writer.Indent().WriteLine("# no follow-up events");
             return;
         }
 
-        writer.Indent().WriteLine("# follow-up event");
+        writer.Indent().WriteLine("# follow-up events");
 
-        if (TriggeredEventScope != string.Empty)
+        foreach (var link in links)
         {
-            writer.Indent().WriteLine($"{TriggeredEventScope} = {{");
-            ParadoxText.IndentLevel++;
-        }
-
-        writer.Indent().WriteLine("trigger_event = {");
-        ParadoxText.IndentLevel++;
-
-        writer.Indent().WriteLine($"id = {triggeredEvent.GetQualifiedName(modService)}");
-        writer.Indent().WriteLine($"days = {{ {TriggeredEventMinDays} {TriggeredEventMaxDays} }}");
-
-        ParadoxText.IndentLevel--;
-        writer.Indent().WriteLine("}");
-
-        if (TriggeredEventScope != string.Empty)
-        {
-            ParadoxText.IndentLevel--;
-            writer.Indent().WriteLine("}");
+            link.Write(writer, modService, linkService);
         }
     }
 
