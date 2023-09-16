@@ -169,5 +169,8 @@ public abstract class ObservableNode<T> : Node, IObservableWrapper<T>, IObservab
     public T Observable { get; init; } = new();
     ObservableObject IObservableWrapper.Observable => Observable;
 
+    public override string Path => Observable.ToString() ?? string.Empty;
+    public override string Header => Observable.ToString() ?? string.Empty;
+
     public override IEnumerable<Node> Children => Enumerable.Empty<Node>();
 }

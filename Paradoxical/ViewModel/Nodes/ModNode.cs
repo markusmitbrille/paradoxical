@@ -6,9 +6,6 @@ namespace Paradoxical.ViewModel;
 
 public abstract class ModNode : ObservableNode<ModViewModel>
 {
-    public override string Path => Observable.Id.ToString();
-    public override string Header => Observable.ModName.ToString();
-
     public RelayCommand<object>? EditCommand { get; set; }
 
     public RelayCommand? CreateScriptCommand { get; set; }

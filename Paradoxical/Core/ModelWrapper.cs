@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Xml.Linq;
+using static Paradoxical.View.CompleteBox;
 
 namespace Paradoxical.Core;
 
@@ -32,4 +34,6 @@ public abstract class ModelWrapper<T> : ObservableObject
     {
         get => Model.Id;
     }
+
+    public override string ToString() => $"{GetType()} ({Id})";
 }
