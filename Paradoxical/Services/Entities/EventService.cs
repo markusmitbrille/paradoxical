@@ -42,22 +42,6 @@ public class EventService : EntityService<Event>, IEventService
 
         Data.Connection.Execute(deleteOptions, model.Id);
         Data.Connection.Execute(deletePortraits, model.Id);
-
-        string deleteEventTriggers = ParadoxQuery.CollectionDelete(
-            mn: "event_triggers",
-            fk: "event_id");
-
-        string deleteEventImmediateEffects = ParadoxQuery.CollectionDelete(
-            mn: "event_immediate_effects",
-            fk: "event_id");
-
-        string deleteEventAfterEffects = ParadoxQuery.CollectionDelete(
-            mn: "event_after_effects",
-            fk: "event_id");
-
-        Data.Connection.Execute(deleteEventTriggers, model.Id);
-        Data.Connection.Execute(deleteEventImmediateEffects, model.Id);
-        Data.Connection.Execute(deleteEventAfterEffects, model.Id);
     }
 
     public IEnumerable<Option> GetOptions(Event model)
