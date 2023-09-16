@@ -536,10 +536,11 @@
                                 <StackPanel
                                     Orientation="Horizontal">
 
-                                    <TextBlock>Link → </TextBlock>
-
-                                    <TextBlock
-                                        Text="{Binding EventNode.Observable.Name}" />
+                                    <TextBlock>
+                                        <Run>Link → </Run>
+                                        <Run
+                                            Text="{Binding EventNode.Observable.Name}" />
+                                    </TextBlock>
 
                                 </StackPanel>
 
