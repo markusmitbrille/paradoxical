@@ -52,11 +52,12 @@
                 ClipToBounds="False"
                 Style="{StaticResource MaterialDesignToolBar}">
 
-                <Button
-                    Margin="4,0"
-                    Command="{Binding ReloadCommand}"
-                    Content="{materialDesign:PackIcon Kind=Reload}"
-                    ToolTip="Reload" />
+                <Menu>
+                    <MenuItem
+                        Header="Reload"
+                        Icon="{materialDesign:PackIcon Kind=Reload}"
+                        Command="{Binding ReloadCommand}" />
+                </Menu>
 
             </ToolBar>
         </ToolBarTray>
