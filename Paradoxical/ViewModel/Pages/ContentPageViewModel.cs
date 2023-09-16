@@ -48,6 +48,7 @@ public class ContentPageViewModel : PageViewModel
     private ModelMap<Onion, OnionViewModel> OnionModelMap { get; set; } = new();
     private ModelMap<Portrait, PortraitViewModel> PortraitModelMap { get; set; } = new();
     private ModelMap<Decision, DecisionViewModel> DecisionModelMap { get; set; } = new();
+    private ModelMap<Link, LinkViewModel> LinkModelMap { get; set; } = new();
 
     private CollectionNode rootNode = new();
     public CollectionNode RootNode
@@ -150,6 +151,7 @@ public class ContentPageViewModel : PageViewModel
         OnionModelMap = new(OnionService.Get());
         PortraitModelMap = new(PortraitService.Get());
         DecisionModelMap = new(DecisionService.Get());
+        LinkModelMap = new(LinkService.Get());
 
         ModNode = new() { Observable = ModViewModel };
 
@@ -342,10 +344,23 @@ public class ContentPageViewModel : PageViewModel
     {
         node.DeleteCommand = DeleteOptionCommand;
         node.EditCommand = EditCommand;
+
+        node.LinkCommand = CreateOptionLinkCommand;
     }
 
     private void InitOptionBranch(OptionBranch node)
     {
+        Option model = node.Observable.Model;
+
+        foreach (var relation in OptionService.GetLinks(model))
+        {
+            var observable = LinkModelMap[relation];
+            LinkNode child = new() { Observable = observable };
+
+            InitLinkNode(child);
+
+            node.LinkNodes.Add(child);
+        }
     }
 
     private void InitOnionNode(OnionNode node)
@@ -368,6 +383,22 @@ public class ContentPageViewModel : PageViewModel
     {
     }
 
+    private void InitLinkNode(LinkNode node)
+    {
+        node.DeleteCommand = DeleteLinkCommand;
+        node.EditCommand = EditCommand;
+
+        Link model = node.Observable.Model;
+        Event relation = LinkService.GetEvent(model);
+
+        var observable = EventModelMap[relation];
+        EventLeaf child = new() { Observable = observable };
+
+        InitEventNode(child);
+
+        node.EventNode = child;
+    }
+
     #endregion
 
 
@@ -385,10 +416,11 @@ public class ContentPageViewModel : PageViewModel
         Selected = observable;
 
         var node = new ScriptBranch() { Observable = observable };
-        ModNode.ScriptNodes.Add(node);
 
         InitScriptNode(node);
         InitScriptBranch(node);
+
+        ModNode.ScriptNodes.Add(node);
 
         node.Select();
         node.Expand();
@@ -453,10 +485,11 @@ public class ContentPageViewModel : PageViewModel
         Selected = observable;
 
         var node = new EventBranch() { Observable = observable };
-        ModNode.EventNodes.Add(node);
 
         InitEventNode(node);
         InitEventBranch(node);
+
+        ModNode.EventNodes.Add(node);
 
         node.Select();
         node.Expand();
@@ -526,10 +559,11 @@ public class ContentPageViewModel : PageViewModel
         foreach (var parent in parents)
         {
             var node = new OptionBranch() { Observable = relationViewModel };
-            parent.OptionNodes.Add(node);
 
             InitOptionNode(node);
             InitOptionBranch(node);
+
+            parent.OptionNodes.Add(node);
 
             node.Select();
             node.Expand();
@@ -563,10 +597,11 @@ public class ContentPageViewModel : PageViewModel
         foreach (var parent in parents)
         {
             var node = new OnionBranch() { Observable = relationViewModel };
-            parent.OnionNodes.Add(node);
 
             InitOnionNode(node);
             InitOnionBranch(node);
+
+            parent.OnionNodes.Add(node);
 
             node.Select();
             node.Expand();
@@ -618,6 +653,43 @@ public class ContentPageViewModel : PageViewModel
         }
     }
     private bool CanDeleteOption(object? param)
+    {
+        return param is OptionViewModel;
+    }
+
+    private RelayCommand<object>? createOptionLinkCommand;
+    public RelayCommand<object> CreateOptionLinkCommand => createOptionLinkCommand ??= new(CreateOptionLink, CanCreateOptionLink);
+
+    private void CreateOptionLink(object? param)
+    {
+        if (param is not OptionViewModel observable)
+        { return; }
+
+        Link relation = new() { EventId = 1 }; // temporarily hardcoded
+        LinkService.Insert(relation);
+
+        var relationViewModel = LinkModelMap[relation];
+        Selected = relationViewModel;
+
+        var parents = RootNode.Descendants
+            .OfType<OptionBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            var node = new LinkNode() { Observable = relationViewModel };
+
+            InitLinkNode(node);
+
+            parent.LinkNodes.Add(node);
+
+            node.Select();
+            node.Expand();
+            node.CollapseSiblings();
+        }
+    }
+    private bool CanCreateOptionLink(object? param)
     {
         return param is OptionViewModel;
     }
@@ -679,10 +751,11 @@ public class ContentPageViewModel : PageViewModel
         Selected = observable;
 
         var node = new DecisionBranch() { Observable = observable };
-        ModNode.DecisionNodes.Add(node);
 
         InitDecisionNode(node);
         InitDecisionBranch(node);
+
+        ModNode.DecisionNodes.Add(node);
 
         node.Select();
         node.Expand();
@@ -722,6 +795,46 @@ public class ContentPageViewModel : PageViewModel
     private bool CanDeleteDecision(object? param)
     {
         return param is DecisionViewModel;
+    }
+
+    #endregion
+
+
+    #region Link Commands
+
+    private RelayCommand<object>? deleteLinkCommand;
+    public RelayCommand<object> DeleteLinkCommand => deleteLinkCommand ??= new(DeleteLink, CanDeleteLink);
+
+    private void DeleteLink(object? param)
+    {
+        if (param is not LinkViewModel observable)
+        { return; }
+
+        if (Selected is LinkViewModel selected && selected == observable)
+        {
+            Selected = null;
+        }
+
+        var model = observable.Model;
+
+        LinkModelMap.Remove(model);
+        LinkService.Delete(model);
+
+        var nodes = RootNode.Descendants
+            .OfType<LinkNode>()
+            .Where(node => node.Observable == observable)
+            .ToArray();
+
+        var collections = RootNode.Descendants.OfType<CollectionNode>().ToArray();
+
+        foreach (var collection in collections)
+        {
+            collection.RemoveAll(node => nodes.Contains(node));
+        }
+    }
+    private bool CanDeleteLink(object? param)
+    {
+        return param is LinkViewModel;
     }
 
     #endregion

@@ -158,6 +158,12 @@
                         Command="{Binding DeleteOptionCommand}"
                         CommandParameter="{Binding Selected}" />
 
+                    <MenuItem
+                        Header="Link"
+                        Icon="{materialDesign:PackIcon Kind=Add}"
+                        Command="{Binding CreateOptionLinkCommand}"
+                        CommandParameter="{Binding Selected}" />
+
                 </Menu>
 
                 <Menu>
@@ -429,6 +435,14 @@
                                             Command="{Binding DeleteCommand}"
                                             CommandParameter="{Binding Observable}" />
 
+                                        <Separator />
+
+                                        <MenuItem
+                                            Header="Link"
+                                            Icon="{materialDesign:PackIcon Kind=Add}"
+                                            Command="{Binding LinkCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
                                     </ContextMenu>
                                 </Grid.ContextMenu>
 
@@ -492,6 +506,42 @@
 
                                 <TextBlock
                                     Text="{Binding Observable.Name}" />
+
+                            </Grid>
+                        </HierarchicalDataTemplate>
+
+                        <HierarchicalDataTemplate
+                            DataType="{x:Type viewmodel:LinkNode}"
+                            ItemsSource="{Binding Children}">
+                            <Grid>
+
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+
+                                        <MenuItem
+                                            Header="Edit"
+                                            Icon="{materialDesign:PackIcon Kind=Edit}"
+                                            Command="{Binding EditCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Delete"
+                                            Icon="{materialDesign:PackIcon Kind=Delete}"
+                                            Command="{Binding DeleteCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+
+                                <StackPanel
+                                    Orientation="Horizontal">
+
+                                    <TextBlock>Link → </TextBlock>
+
+                                    <TextBlock
+                                        Text="{Binding EventNode.Observable.Name}" />
+
+                                </StackPanel>
 
                             </Grid>
                         </HierarchicalDataTemplate>
