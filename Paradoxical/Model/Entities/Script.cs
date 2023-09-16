@@ -1,11 +1,11 @@
 ﻿using Paradoxical.Core;
-using Paradoxical.Services.Elements;
+using Paradoxical.Services.Entities;
 using SQLite;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Paradoxical.Model.Elements;
+namespace Paradoxical.Model.Entities;
 
 [Table("scripts")]
 public class Script : IEntity, IModel, IEquatable<Script?>

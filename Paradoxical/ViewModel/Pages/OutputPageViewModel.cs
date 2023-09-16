@@ -2,9 +2,9 @@
 using Paradoxical.Core;
 using Paradoxical.Extensions;
 using Paradoxical.Messages;
-using Paradoxical.Model.Elements;
+using Paradoxical.Model.Entities;
 using Paradoxical.Services;
-using Paradoxical.Services.Elements;
+using Paradoxical.Services.Entities;
 using Paradoxical.Services.Entities;
 using System;
 using System.Collections.Generic;

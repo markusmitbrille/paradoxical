@@ -1,7 +1,7 @@
 ﻿using Paradoxical.Core;
-using Paradoxical.Model.Elements;
+using Paradoxical.Model.Entities;
 
-namespace Paradoxical.Services.Elements;
+namespace Paradoxical.Services.Entities;
 
 public interface IScriptService : IEntityService<Script>
 {

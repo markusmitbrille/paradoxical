@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Paradoxical.Core;
 using Paradoxical.Services;
-using Paradoxical.Services.Elements;
+using Paradoxical.Services.Entities;
 using Paradoxical.Services.Entities;
 using Paradoxical.View;
 using Paradoxical.ViewModel;

@@ -1,6 +1,6 @@
 ﻿using Paradoxical.Core;
-using Paradoxical.Model.Elements;
-using Paradoxical.Services.Elements;
+using Paradoxical.Model.Entities;
+using Paradoxical.Services.Entities;
 using Paradoxical.Services.Entities;
 using System.Collections.Generic;
 using System.IO;

@@ -1,8 +1,8 @@
 ﻿using Paradoxical.Core;
-using Paradoxical.Model.Elements;
+using Paradoxical.Model.Entities;
 using System.Linq;
 
-namespace Paradoxical.Services.Elements;
+namespace Paradoxical.Services.Entities;
 
 public interface IPortraitService : IEntityService<Portrait>
 {

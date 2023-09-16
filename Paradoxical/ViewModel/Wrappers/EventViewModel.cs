@@ -1,5 +1,5 @@
 ﻿using Paradoxical.Core;
-using Paradoxical.Model.Elements;
+using Paradoxical.Model.Entities;
 using System;
 using System.Collections.Generic;
 
