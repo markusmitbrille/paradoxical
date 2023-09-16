@@ -16,8 +16,8 @@ public class Link : IEntity, IModel, IEquatable<Link?>
     public int id;
 
     [Column("triggered_event_id"), Indexed]
-    public int? EventId { get => eventId; set => eventId = value; }
-    public int? eventId;
+    public int EventId { get => eventId; set => eventId = value; }
+    public int eventId;
 
     [Column("triggered_event_scope"), NotNull]
     public string Scope { get => scope; set => scope = value; }

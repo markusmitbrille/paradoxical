@@ -34,10 +34,11 @@ public class ContentPageViewModel : PageViewModel
     public IModService ModService { get; }
     public IScriptService ScriptService { get; }
     public IEventService EventService { get; }
-    public IOptionService OptionService { get; }
     public IPortraitService PortraitService { get; }
-    public IDecisionService DecisionService { get; }
+    public IOptionService OptionService { get; }
     public IOnionService OnionService { get; }
+    public IDecisionService DecisionService { get; }
+    public ILinkService LinkService { get; }
 
     private ModViewModel ModViewModel { get; set; } = new();
 
@@ -71,21 +72,24 @@ public class ContentPageViewModel : PageViewModel
         IModService modService,
         IScriptService scriptService,
         IEventService eventService,
+        IPortraitService portraitService,
         IOptionService optionService,
         IOnionService onionService,
-        IPortraitService portraitService,
-        IDecisionService decisionService)
+        IDecisionService decisionService,
+        ILinkService linkService)
         : base(shell, mediator)
     {
         DataService = dataService;
 
         ModService = modService;
+
         ScriptService = scriptService;
         EventService = eventService;
+        PortraitService = portraitService;
         OptionService = optionService;
         OnionService = onionService;
-        PortraitService = portraitService;
         DecisionService = decisionService;
+        LinkService = linkService;
     }
 
     public override void OnNavigatedTo()
