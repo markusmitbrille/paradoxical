@@ -39,8 +39,6 @@ public class ContentPageViewModel : PageViewModel
     public IDecisionService DecisionService { get; }
     public IOnionService OnionService { get; }
 
-    public IFinder Finder { get; }
-
     private ModViewModel ModViewModel { get; set; } = new();
 
     private ModelMap<Script, ScriptViewModel> ScriptModelMap { get; set; } = new();
@@ -76,8 +74,7 @@ public class ContentPageViewModel : PageViewModel
         IOptionService optionService,
         IOnionService onionService,
         IPortraitService portraitService,
-        IDecisionService decisionService,
-        IFinder finder)
+        IDecisionService decisionService)
         : base(shell, mediator)
     {
         DataService = dataService;
@@ -89,8 +86,6 @@ public class ContentPageViewModel : PageViewModel
         OnionService = onionService;
         PortraitService = portraitService;
         DecisionService = decisionService;
-
-        Finder = finder;
     }
 
     public override void OnNavigatedTo()
