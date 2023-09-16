@@ -25,6 +25,11 @@
     </DataTemplate>
 
     <DataTemplate
+        DataType="{x:Type viewmodel:ModViewModel}">
+        <view:ModView />
+    </DataTemplate>
+
+    <DataTemplate
         DataType="{x:Type viewmodel:ScriptViewModel}">
         <view:ScriptView />
     </DataTemplate>
