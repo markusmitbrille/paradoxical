@@ -45,6 +45,11 @@
     </DataTemplate>
 
     <DataTemplate
+        DataType="{x:Type viewmodel:OnionViewModel}">
+        <view:OnionView />
+    </DataTemplate>
+
+    <DataTemplate
         DataType="{x:Type viewmodel:DecisionViewModel}">
         <view:DecisionView />
     </DataTemplate>
