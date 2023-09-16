@@ -15,19 +15,19 @@ public class Link : IEntity, IModel, IEquatable<Link?>
     public int Id { get => id; set => id = value; }
     public int id;
 
-    [Column("triggered_event_id"), Indexed]
+    [Column("event_id"), Indexed]
     public int EventId { get => eventId; set => eventId = value; }
     public int eventId;
 
-    [Column("triggered_event_scope"), NotNull]
+    [Column("scope"), NotNull]
     public string Scope { get => scope; set => scope = value; }
     public string scope = "";
 
-    [Column("triggered_event_min_days")]
+    [Column("min_days")]
     public int MinDays { get => minDays; set => minDays = value; }
     public int minDays;
 
-    [Column("triggered_event_max_days")]
+    [Column("max_days")]
     public int MaxDays { get => maxDays; set => maxDays = value; }
     public int maxDays;
 
