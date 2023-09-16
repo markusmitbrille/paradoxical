@@ -129,6 +129,8 @@ public class ContentPageViewModel : PageViewModel
 
     private void Load()
     {
+        Selected = null;
+
         var mod = ModService.Get().SingleOrDefault();
         if (mod == null)
         {
