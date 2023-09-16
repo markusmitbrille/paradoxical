@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using MaterialDesignThemes.Wpf;
+using Microsoft.VisualBasic;
 using Paradoxical.Extensions;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,13 @@ namespace Paradoxical.Core;
 
 public abstract partial class Node : ObservableObject
 {
+    private Node? parent;
+    public Node? Parent
+    {
+        get => parent;
+        set => SetProperty(ref parent, value);
+    }
+
     public abstract IEnumerable<Node> Children { get; }
 
     public IEnumerable<Node> Descendants
@@ -69,7 +77,18 @@ public abstract partial class Node : ObservableObject
         set => SetProperty(ref isSelected, value);
     }
 
-    public void Select() => IsSelected = true;
+    public void Select()
+    {
+        var parent = this.parent;
+        while (parent != null)
+        {
+            parent.Expand();
+            parent = parent.parent;
+        }
+
+        IsSelected = true;
+    }
+
     public void Unselect() => IsSelected = true;
 
     private bool isExpanded = false;
@@ -81,6 +100,34 @@ public abstract partial class Node : ObservableObject
 
     public void Expand() => IsExpanded = true;
     public void Collapse() => IsExpanded = false;
+
+    public void CollapseChildren()
+    {
+        foreach (var node in Children)
+        {
+            node.Collapse();
+        }
+    }
+
+    public void CollapseDescendants()
+    {
+        foreach (var node in Descendants)
+        {
+            node.Collapse();
+        }
+    }
+
+    public void CollapseSiblings()
+    {
+        if (Parent == null)
+        { return; }
+
+        var siblings = Parent.Children.Except(new Node[] { this });
+        foreach (var node in siblings)
+        {
+            node.Collapse();
+        }
+    }
 }
 
 public sealed class CollectionNode : Node
@@ -88,10 +135,27 @@ public sealed class CollectionNode : Node
     private readonly ObservableCollection<Node> children = new();
     public override IEnumerable<Node> Children => children;
 
-    public void Add(Node child) => children.Add(child);
-    public void Remove(Node child) => children.Remove(child);
+    public void Add(Node node)
+    {
+        node.Parent = this;
+        children.Add(node);
+    }
 
-    public void RemoveAll(Predicate<Node> match) => children.RemoveAll(match);
+    public void Remove(Node node)
+    {
+        node.Parent = null;
+        children.Remove(node);
+    }
+
+    public void RemoveAll(Predicate<Node> match)
+    {
+        var nodes = children.Where(item => match(item)).ToList();
+        foreach (var node in nodes)
+        {
+            node.Parent = null;
+            children.Remove(node);
+        }
+    }
 
     public string Name { get; init; } = string.Empty;
 

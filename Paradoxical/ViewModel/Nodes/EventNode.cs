@@ -22,6 +22,13 @@ public sealed class EventBranch : EventNode
     public CollectionNode OptionNodes { get; } = new() { Name = "Options", IsExpanded = true };
     public CollectionNode OnionNodes { get; } = new() { Name = "On-Actions", IsExpanded = true };
 
+    public EventBranch()
+    {
+        PortraitNodes.Parent = this;
+        OptionNodes.Parent = this;
+        OnionNodes.Parent = this;
+    }
+
     public override IEnumerable<Node> Children
     {
         get

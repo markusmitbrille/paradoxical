@@ -22,6 +22,13 @@ public sealed class ModBranch : ModNode
     public CollectionNode EventNodes { get; } = new() { Name = "Events", IsExpanded = true };
     public CollectionNode DecisionNodes { get; } = new() { Name = "Decisions", IsExpanded = true };
 
+    public ModBranch()
+    {
+        ScriptNodes.Parent = this;
+        EventNodes.Parent = this;
+        DecisionNodes.Parent = this;
+    }
+
     public override IEnumerable<Node> Children
     {
         get

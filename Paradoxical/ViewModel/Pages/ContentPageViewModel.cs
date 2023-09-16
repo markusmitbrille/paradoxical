@@ -386,11 +386,9 @@ public class ContentPageViewModel : PageViewModel
         InitScriptNode(node);
         InitScriptBranch(node);
 
-        ModNode.Expand();
-        ModNode.ScriptNodes.Expand();
-
         node.Select();
         node.Expand();
+        node.CollapseSiblings();
     }
 
     private RelayCommand<object>? deleteScriptCommand;
@@ -456,10 +454,9 @@ public class ContentPageViewModel : PageViewModel
         InitEventNode(node);
         InitEventBranch(node);
 
-        ModNode.Expand();
-        ModNode.EventNodes.Expand();
-
         node.Select();
+        node.Expand();
+        node.CollapseSiblings();
     }
 
     private void CreateEventPortrait(Event parent, PortraitPosition position)
@@ -524,12 +521,15 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var parent in parents)
         {
-            var child = new OptionBranch() { Observable = relationViewModel };
+            var node = new OptionBranch() { Observable = relationViewModel };
+            parent.OptionNodes.Add(node);
 
-            InitOptionNode(child);
-            InitOptionBranch(child);
+            InitOptionNode(node);
+            InitOptionBranch(node);
 
-            parent.OptionNodes.Add(child);
+            node.Select();
+            node.Expand();
+            node.CollapseSiblings();
         }
     }
     private bool CanCreateEventOption(object? param)
@@ -558,12 +558,15 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var parent in parents)
         {
-            var child = new OnionBranch() { Observable = relationViewModel };
+            var node = new OnionBranch() { Observable = relationViewModel };
+            parent.OnionNodes.Add(node);
 
-            InitOnionNode(child);
-            InitOnionBranch(child);
+            InitOnionNode(node);
+            InitOnionBranch(node);
 
-            parent.OnionNodes.Add(child);
+            node.Select();
+            node.Expand();
+            node.CollapseSiblings();
         }
     }
     private bool CanCreateEventOnion(object? param)
@@ -677,10 +680,9 @@ public class ContentPageViewModel : PageViewModel
         InitDecisionNode(node);
         InitDecisionBranch(node);
 
-        ModNode.Expand();
-        ModNode.DecisionNodes.Expand();
-
         node.Select();
+        node.Expand();
+        node.CollapseSiblings();
     }
 
     private RelayCommand<object>? deleteDecisionCommand;
