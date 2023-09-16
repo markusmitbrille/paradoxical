@@ -57,7 +57,7 @@
                 <Menu>
                     <MenuItem
                         Header="Create"
-                        Icon="{materialDesign:PackIcon Kind=Creation}">
+                        Icon="{materialDesign:PackIcon Kind=Add}">
 
                         <MenuItem
                             Header="Create Script"
@@ -72,6 +72,140 @@
                             Command="{Binding CreateDecisionCommand}" />
 
                     </MenuItem>
+                </Menu>
+
+                <Separator />
+
+                <Menu>
+
+                    <Menu.Visibility>
+                        <Binding
+                            Path="Selected"
+                            Mode="TwoWay"
+                            UpdateSourceTrigger="PropertyChanged">
+
+                            <Binding.Converter>
+                                <converters:TypeVisibilityConverter
+                                    Type="{x:Type viewmodel:ScriptViewModel}" />
+                            </Binding.Converter>
+
+                        </Binding>
+                    </Menu.Visibility>
+
+                    <MenuItem
+                        Header="Delete"
+                        Icon="{materialDesign:PackIcon Kind=Delete}"
+                        Command="{Binding DeleteScriptCommand}"
+                        CommandParameter="{Binding Selected}" />
+
+                </Menu>
+
+                <Menu>
+
+                    <Menu.Visibility>
+                        <Binding
+                            Path="Selected"
+                            Mode="TwoWay"
+                            UpdateSourceTrigger="PropertyChanged">
+
+                            <Binding.Converter>
+                                <converters:TypeVisibilityConverter
+                                    Type="{x:Type viewmodel:EventViewModel}" />
+                            </Binding.Converter>
+
+                        </Binding>
+                    </Menu.Visibility>
+
+                    <MenuItem
+                        Header="Delete"
+                        Icon="{materialDesign:PackIcon Kind=Delete}"
+                        Command="{Binding DeleteEventCommand}"
+                        CommandParameter="{Binding Selected}" />
+
+                    <MenuItem
+                        Header="Create Option"
+                        Icon="{materialDesign:PackIcon Kind=Add}"
+                        Command="{Binding CreateEventOptionCommand}"
+                        CommandParameter="{Binding Selected}" />
+
+                    <MenuItem
+                        Header="Create On-Action"
+                        Icon="{materialDesign:PackIcon Kind=Add}"
+                        Command="{Binding CreateEventOnionCommand}"
+                        CommandParameter="{Binding Selected}" />
+
+                </Menu>
+
+                <Menu>
+
+                    <Menu.Visibility>
+                        <Binding
+                            Path="Selected"
+                            Mode="TwoWay"
+                            UpdateSourceTrigger="PropertyChanged">
+
+                            <Binding.Converter>
+                                <converters:TypeVisibilityConverter
+                                    Type="{x:Type viewmodel:OptionViewModel}" />
+                            </Binding.Converter>
+
+                        </Binding>
+                    </Menu.Visibility>
+
+                    <MenuItem
+                        Header="Delete"
+                        Icon="{materialDesign:PackIcon Kind=Delete}"
+                        Command="{Binding DeleteOptionCommand}"
+                        CommandParameter="{Binding Selected}" />
+
+                </Menu>
+
+                <Menu>
+
+                    <Menu.Visibility>
+                        <Binding
+                            Path="Selected"
+                            Mode="TwoWay"
+                            UpdateSourceTrigger="PropertyChanged">
+
+                            <Binding.Converter>
+                                <converters:TypeVisibilityConverter
+                                    Type="{x:Type viewmodel:OnionViewModel}" />
+                            </Binding.Converter>
+
+                        </Binding>
+                    </Menu.Visibility>
+
+                    <MenuItem
+                        Header="Delete"
+                        Icon="{materialDesign:PackIcon Kind=Delete}"
+                        Command="{Binding DeleteOnionCommand}"
+                        CommandParameter="{Binding Selected}" />
+
+                </Menu>
+
+                <Menu>
+
+                    <Menu.Visibility>
+                        <Binding
+                            Path="Selected"
+                            Mode="TwoWay"
+                            UpdateSourceTrigger="PropertyChanged">
+
+                            <Binding.Converter>
+                                <converters:TypeVisibilityConverter
+                                    Type="{x:Type viewmodel:DecisionViewModel}" />
+                            </Binding.Converter>
+
+                        </Binding>
+                    </Menu.Visibility>
+
+                    <MenuItem
+                        Header="Delete"
+                        Icon="{materialDesign:PackIcon Kind=Delete}"
+                        Command="{Binding DeleteDecisionCommand}"
+                        CommandParameter="{Binding Selected}" />
+
                 </Menu>
 
             </ToolBar>
@@ -232,48 +366,14 @@
 
                                         <MenuItem
                                             Header="Create Option"
+                                            Icon="{materialDesign:PackIcon Kind=Add}"
                                             Command="{Binding CreateOptionCommand}"
                                             CommandParameter="{Binding Observable}" />
 
                                         <MenuItem
                                             Header="Create On-Action"
+                                            Icon="{materialDesign:PackIcon Kind=Add}"
                                             Command="{Binding CreateOnionCommand}"
-                                            CommandParameter="{Binding Observable}" />
-
-                                        <Separator />
-
-                                        <MenuItem
-                                            Header="Add Trigger"
-                                            Command="{Binding AddTriggerCommand}"
-                                            CommandParameter="{Binding Observable}" />
-
-                                        <MenuItem
-                                            Header="Remove Trigger"
-                                            Command="{Binding RemoveTriggerCommand}"
-                                            CommandParameter="{Binding Observable}" />
-
-                                        <Separator />
-
-                                        <MenuItem
-                                            Header="Add Immediate Effect"
-                                            Command="{Binding AddImmediateEffectCommand}"
-                                            CommandParameter="{Binding Observable}" />
-
-                                        <MenuItem
-                                            Header="Remove Immediate Effect"
-                                            Command="{Binding RemoveImmediateEffectCommand}"
-                                            CommandParameter="{Binding Observable}" />
-
-                                        <Separator />
-
-                                        <MenuItem
-                                            Header="Add After Effect"
-                                            Command="{Binding AddAfterEffectCommand}"
-                                            CommandParameter="{Binding Observable}" />
-
-                                        <MenuItem
-                                            Header="Remove After Effect"
-                                            Command="{Binding RemoveAfterEffectCommand}"
                                             CommandParameter="{Binding Observable}" />
 
                                     </ContextMenu>
