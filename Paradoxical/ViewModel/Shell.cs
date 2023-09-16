@@ -36,6 +36,7 @@ public interface IShell
     public T Navigate<T>() where T : PageViewModel;
     public void NavigatePage(PageViewModel? page);
 
+    public void GoHome();
     public void ClearPage();
 }
 
@@ -158,7 +159,7 @@ public class Shell : ObservableObject, IShell
 
         ClearPage();
         FileService.New();
-        GoToContent();
+        GoHome();
     }
 
     private RelayCommand? openCommand;
@@ -170,7 +171,7 @@ public class Shell : ObservableObject, IShell
 
         ClearPage();
         FileService.Open();
-        GoToContent();
+        GoHome();
     }
 
     private RelayCommand? saveCommand;
@@ -196,7 +197,7 @@ public class Shell : ObservableObject, IShell
 
         ClearPage();
         FileService.Backup();
-        GoToContent();
+        GoHome();
     }
 
     private RelayCommand? exportCommand;
@@ -364,6 +365,11 @@ if you don't save them.",
         { return false; }
 
         return true;
+    }
+
+    public void GoHome()
+    {
+        GoToContent();
     }
 
     public void ClearPage()

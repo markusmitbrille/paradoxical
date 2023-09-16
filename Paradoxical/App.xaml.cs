@@ -64,6 +64,8 @@ public partial class App : Application
 
         MainWindow main = ServiceProvider.GetRequiredService<MainWindow>();
         main.Show();
+
+        shell.GoHome();
     }
 
     protected override void OnExit(ExitEventArgs e)
