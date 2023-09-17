@@ -725,9 +725,9 @@ public class ContentPageViewModel : PageViewModel
 
             parent.LinkNodes.Add(node);
 
-            node.Select();
-            node.Expand();
-            node.CollapseSiblings();
+            //node.Select();
+            //node.Expand();
+            //node.CollapseSiblings();
         }
     }
     private bool CanCreateOptionLink(object? param)
@@ -886,9 +886,9 @@ public class ContentPageViewModel : PageViewModel
 
             parent.LinkNodes.Add(node);
 
-            node.Select();
-            node.Expand();
-            node.CollapseSiblings();
+            //node.Select();
+            //node.Expand();
+            //node.CollapseSiblings();
         }
     }
     private bool CanCreateDecisionLink(object? param)
