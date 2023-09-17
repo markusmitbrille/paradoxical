@@ -214,10 +214,10 @@ public class ContentPageViewModel : PageViewModel
         return param is IObservableNode;
     }
 
-    private AsyncRelayCommand? findCommand;
-    public AsyncRelayCommand FindCommand => findCommand ??= new(Find);
+    private RelayCommand? findCommand;
+    public RelayCommand FindCommand => findCommand ??= new(Find);
 
-    private async Task Find()
+    private void Find()
     {
         FinderViewModel finder = new();
 
@@ -227,9 +227,9 @@ public class ContentPageViewModel : PageViewModel
             .Union(OptionModelMap.Wrappers)
             .Union(DecisionModelMap.Wrappers);
 
-        await finder.Show();
+        var res = finder.Show();
 
-        if (finder.DialogResult != true)
+        if (res != true)
         { return; }
 
         if (finder.Selected == null)
@@ -677,10 +677,10 @@ public class ContentPageViewModel : PageViewModel
         return param is OptionViewModel;
     }
 
-    private AsyncRelayCommand<object>? createOptionLinkCommand;
-    public AsyncRelayCommand<object> CreateOptionLinkCommand => createOptionLinkCommand ??= new(CreateOptionLink, CanCreateOptionLink);
+    private RelayCommand<object>? createOptionLinkCommand;
+    public RelayCommand<object> CreateOptionLinkCommand => createOptionLinkCommand ??= new(CreateOptionLink, CanCreateOptionLink);
 
-    private async Task CreateOptionLink(object? param)
+    private void CreateOptionLink(object? param)
     {
         if (param is not OptionViewModel observable)
         { return; }
@@ -693,9 +693,9 @@ public class ContentPageViewModel : PageViewModel
         FinderViewModel finder = new();
         finder.Items = events.Where(evt => links.Any(link => link.EventId == evt.Id) == false).Select(evt => EventModelMap[evt]);
 
-        await finder.Show();
+        var res = finder.Show();
 
-        if (finder.DialogResult != true)
+        if (res != true)
         { return; }
 
         if (finder.Selected == null)
@@ -724,9 +724,9 @@ public class ContentPageViewModel : PageViewModel
 
             parent.LinkNodes.Add(node);
 
-            //node.Select();
-            //node.Expand();
-            //node.CollapseSiblings();
+            node.Select();
+            node.Expand();
+            node.CollapseSiblings();
         }
     }
     private bool CanCreateOptionLink(object? param)
@@ -837,10 +837,10 @@ public class ContentPageViewModel : PageViewModel
         return param is DecisionViewModel;
     }
 
-    private AsyncRelayCommand<object>? createDecisionLinkCommand;
-    public AsyncRelayCommand<object> CreateDecisionLinkCommand => createDecisionLinkCommand ??= new(CreateDecisionLink, CanCreateDecisionLink);
+    private RelayCommand<object>? createDecisionLinkCommand;
+    public RelayCommand<object> CreateDecisionLinkCommand => createDecisionLinkCommand ??= new(CreateDecisionLink, CanCreateDecisionLink);
 
-    private async Task CreateDecisionLink(object? param)
+    private void CreateDecisionLink(object? param)
     {
         if (param is not DecisionViewModel observable)
         { return; }
@@ -853,9 +853,9 @@ public class ContentPageViewModel : PageViewModel
         FinderViewModel finder = new();
         finder.Items = events.Where(evt => links.Any(link => link.EventId == evt.Id) == false).Select(evt => EventModelMap[evt]);
 
-        await finder.Show();
+        var res = finder.Show();
 
-        if (finder.DialogResult != true)
+        if (res != true)
         { return; }
 
         if (finder.Selected == null)
@@ -884,9 +884,9 @@ public class ContentPageViewModel : PageViewModel
 
             parent.LinkNodes.Add(node);
 
-            //node.Select();
-            //node.Expand();
-            //node.CollapseSiblings();
+            node.Select();
+            node.Expand();
+            node.CollapseSiblings();
         }
     }
     private bool CanCreateDecisionLink(object? param)

@@ -9,7 +9,7 @@ public abstract class OptionNode : ObservableNode<OptionViewModel>
     public RelayCommand<object>? EditCommand { get; set; }
     public RelayCommand<object>? DeleteCommand { get; set; }
 
-    public AsyncRelayCommand<object>? LinkCommand { get; set; }
+    public RelayCommand<object>? LinkCommand { get; set; }
 }
 
 public sealed class OptionBranch : OptionNode

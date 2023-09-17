@@ -43,9 +43,6 @@ public partial class App : Application
         services.AddSingleton<IDecisionService, DecisionService>();
         services.AddSingleton<ILinkService, LinkService>();
 
-        // finder view model
-        services.AddTransient<IFinder, FinderViewModel>();
-
         // page view models
         services.AddSingleton<AboutPageViewModel>();
         services.AddSingleton<OutputPageViewModel>();

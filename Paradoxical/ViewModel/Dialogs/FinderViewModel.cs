@@ -1,42 +1,26 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using MaterialDesignThemes.Wpf;
+﻿using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Core;
 using Paradoxical.View;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace Paradoxical.ViewModel;
 
-public interface IFinder
+public class FinderViewModel : DialogViewModel<FinderView>
 {
-    public bool? DialogResult { get; }
-
-    public IEnumerable<IElementWrapper> Items { get; set; }
-    public IElementWrapper? Selected { get; set; }
-
-    public string? Filter { get; set; }
-
-    public Task<object?> Show();
-}
-
-public class FinderViewModel : ObservableObject, IFinder
-{
-    private bool? dialogResult;
-    public bool? DialogResult
-    {
-        get => dialogResult;
-        set => SetProperty(ref dialogResult, value);
-    }
-
     private IEnumerable<IElementWrapper>? items;
     public IEnumerable<IElementWrapper> Items
     {
         get => items ??= Enumerable.Empty<IElementWrapper>();
-        set => SetProperty(ref items, value);
+        set
+        {
+            SetProperty(ref items, value);
+
+            UpdateView();
+            UpdateSelection();
+        }
     }
 
     private ICollectionView View => CollectionViewSource.GetDefaultView(Items);
@@ -57,28 +41,10 @@ public class FinderViewModel : ObservableObject, IFinder
     public string? Filter
     {
         get => filter;
-        set => SetProperty(ref filter, value);
-    }
-
-    public async Task<object?> Show()
-    {
-        return await DialogHost.Show(this, MainWindow.ROOT_DIALOG_IDENTIFIER);
-    }
-
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
-
-        if (e.PropertyName == nameof(Items))
+        set
         {
-            View.Filter = Predicate;
+            SetProperty(ref filter, value);
 
-            UpdateView();
-            UpdateSelection();
-        }
-
-        if (e.PropertyName == nameof(Filter))
-        {
             UpdateView();
             UpdateSelection();
         }
@@ -110,39 +76,6 @@ public class FinderViewModel : ObservableObject, IFinder
         { return true; }
 
         return false;
-    }
-
-    private RelayCommand? submitCommand;
-    public RelayCommand SubmitCommand => submitCommand ??= new(Submit, CanSubmit);
-
-    private void Submit()
-    {
-        DialogResult = true;
-
-        Close();
-    }
-    private bool CanSubmit()
-    {
-        return true;
-    }
-
-    private RelayCommand? cancelCommand;
-    public RelayCommand CancelCommand => cancelCommand ??= new(Cancel);
-
-    private void Cancel()
-    {
-        DialogResult = false;
-
-        Close();
-    }
-
-    private RelayCommand? closeCommand;
-    public RelayCommand CloseCommand => closeCommand ??= new(Close);
-
-    private void Close()
-    {
-        if (DialogHost.IsDialogOpen(MainWindow.ROOT_DIALOG_IDENTIFIER))
-        { DialogHost.Close(MainWindow.ROOT_DIALOG_IDENTIFIER); }
     }
 
     private RelayCommand? updateViewCommand;
