@@ -710,7 +710,6 @@ public class ContentPageViewModel : PageViewModel
         OptionService.AddLink(model, relation);
 
         var relationViewModel = LinkModelMap[relation];
-        Selected = relationViewModel;
 
         var parents = RootNode.Descendants
             .OfType<OptionBranch>()
@@ -871,7 +870,6 @@ public class ContentPageViewModel : PageViewModel
         DecisionService.AddLink(model, relation);
 
         var relationViewModel = LinkModelMap[relation];
-        Selected = relationViewModel;
 
         var parents = RootNode.Descendants
             .OfType<DecisionBranch>()
