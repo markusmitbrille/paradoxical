@@ -159,7 +159,7 @@
                         CommandParameter="{Binding Selected}" />
 
                     <MenuItem
-                        Header="Link"
+                        Header="Link…"
                         Icon="{materialDesign:PackIcon Kind=Add}"
                         Command="{Binding CreateOptionLinkCommand}"
                         CommandParameter="{Binding Selected}" />
@@ -438,7 +438,7 @@
                                         <Separator />
 
                                         <MenuItem
-                                            Header="Link"
+                                            Header="Link…"
                                             Icon="{materialDesign:PackIcon Kind=Add}"
                                             Command="{Binding LinkCommand}"
                                             CommandParameter="{Binding Observable}" />
