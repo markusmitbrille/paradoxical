@@ -166,7 +166,7 @@ public abstract partial class Node : ObservableObject, INode
     {
         INode root = this;
 
-        var parent = this.parent;
+        var parent = Parent;
         while (parent != null)
         {
             root = parent;
