@@ -15,6 +15,12 @@
     d:DataContext="{d:DesignInstance {x:Type viewmodel:ContentPageViewModel}}"
     d:DesignWidth="800">
 
+    <UserControl.InputBindings>
+        <KeyBinding
+            Command="{Binding FindCommand}"
+            Gesture="CTRL+F" />
+    </UserControl.InputBindings>
+
     <DockPanel>
 
         <ToolBarTray
@@ -50,6 +56,13 @@
                         Header="Reload"
                         Icon="{materialDesign:PackIcon Kind=Reload}"
                         Command="{Binding ReloadCommand}" />
+                </Menu>
+
+                <Menu>
+                    <MenuItem
+                        Header="Find…"
+                        Icon="{materialDesign:PackIcon Kind=Search}"
+                        Command="{Binding FindCommand}" />
                 </Menu>
 
                 <Separator />

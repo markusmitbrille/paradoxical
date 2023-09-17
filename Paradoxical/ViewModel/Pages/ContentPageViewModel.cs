@@ -18,7 +18,9 @@ using System.Linq;
 using System.Printing;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Effects;
 using System.Xml.Linq;
 
 namespace Paradoxical.ViewModel;
@@ -225,6 +227,38 @@ public class ContentPageViewModel : PageViewModel
     {
         return param is IObservableNode;
     }
+
+    private AsyncRelayCommand? findCommand;
+    public AsyncRelayCommand FindCommand => findCommand ??= new(Find);
+
+    private async Task Find()
+    {
+        FinderViewModel finder = new();
+
+        finder.Items = Enumerable.Empty<IElementWrapper>()
+            .Union(ScriptModelMap.Wrappers)
+            .Union(EventModelMap.Wrappers)
+            .Union(OptionModelMap.Wrappers)
+            .Union(DecisionModelMap.Wrappers);
+
+        await finder.Show();
+
+        if (finder.DialogResult != true)
+        { return; }
+
+        if (finder.Selected == null)
+        { return; }
+
+        if (finder.Selected is not ObservableObject observable)
+        { return; }
+
+        Selected = observable;
+
+        var node = ModNode.Descendants
+            .OfType<IObservableNode>()
+            .First(node => node.Observable == observable);
+
+        node.Focus();
     }
 
 
