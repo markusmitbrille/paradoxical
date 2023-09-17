@@ -409,6 +409,8 @@ public class ContentPageViewModel : PageViewModel
     {
         node.DeleteCommand = DeleteDecisionCommand;
         node.EditCommand = EditCommand;
+
+        node.LinkCommand = CreateDecisionLinkCommand;
     }
 
     private void InitDecisionBranch(DecisionBranch node)
@@ -689,16 +691,37 @@ public class ContentPageViewModel : PageViewModel
         return param is OptionViewModel;
     }
 
-    private RelayCommand<object>? createOptionLinkCommand;
-    public RelayCommand<object> CreateOptionLinkCommand => createOptionLinkCommand ??= new(CreateOptionLink, CanCreateOptionLink);
+    private AsyncRelayCommand<object>? createOptionLinkCommand;
+    public AsyncRelayCommand<object> CreateOptionLinkCommand => createOptionLinkCommand ??= new(CreateOptionLink, CanCreateOptionLink);
 
-    private void CreateOptionLink(object? param)
+    private async Task CreateOptionLink(object? param)
     {
         if (param is not OptionViewModel observable)
         { return; }
 
-        Link relation = new() { EventId = 1 }; // temporarily hardcoded
+        Option model = observable.Model;
+
+        var events = EventService.Get();
+        var links = OptionService.GetLinks(model);
+
+        FinderViewModel finder = new();
+        finder.Items = events.Where(evt => links.Any(link => link.EventId == evt.Id) == false).Select(evt => EventModelMap[evt]);
+
+        await finder.Show();
+
+        if (finder.DialogResult != true)
+        { return; }
+
+        if (finder.Selected == null)
+        { return; }
+
+        if (finder.Selected is not EventViewModel selected)
+        { return; }
+
+        Link relation = new() { EventId = selected.Id };
+
         LinkService.Insert(relation);
+        OptionService.AddLink(model, relation);
 
         var relationViewModel = LinkModelMap[relation];
         Selected = relationViewModel;
@@ -825,6 +848,64 @@ public class ContentPageViewModel : PageViewModel
         }
     }
     private bool CanDeleteDecision(object? param)
+    {
+        return param is DecisionViewModel;
+    }
+
+    private AsyncRelayCommand<object>? createDecisionLinkCommand;
+    public AsyncRelayCommand<object> CreateDecisionLinkCommand => createDecisionLinkCommand ??= new(CreateDecisionLink, CanCreateDecisionLink);
+
+    private async Task CreateDecisionLink(object? param)
+    {
+        if (param is not DecisionViewModel observable)
+        { return; }
+
+        Decision model = observable.Model;
+
+        var events = EventService.Get();
+        var links = DecisionService.GetLinks(model);
+
+        FinderViewModel finder = new();
+        finder.Items = events.Where(evt => links.Any(link => link.EventId == evt.Id) == false).Select(evt => EventModelMap[evt]);
+
+        await finder.Show();
+
+        if (finder.DialogResult != true)
+        { return; }
+
+        if (finder.Selected == null)
+        { return; }
+
+        if (finder.Selected is not EventViewModel selected)
+        { return; }
+
+        Link relation = new() { EventId = selected.Id };
+
+        LinkService.Insert(relation);
+        DecisionService.AddLink(model, relation);
+
+        var relationViewModel = LinkModelMap[relation];
+        Selected = relationViewModel;
+
+        var parents = RootNode.Descendants
+            .OfType<DecisionBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            var node = new LinkNode() { Observable = relationViewModel };
+
+            InitLinkNode(node);
+
+            parent.LinkNodes.Add(node);
+
+            node.Select();
+            node.Expand();
+            node.CollapseSiblings();
+        }
+    }
+    private bool CanCreateDecisionLink(object? param)
     {
         return param is DecisionViewModel;
     }

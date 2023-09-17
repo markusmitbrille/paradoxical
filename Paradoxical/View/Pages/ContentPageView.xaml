@@ -225,6 +225,12 @@
                         Command="{Binding DeleteDecisionCommand}"
                         CommandParameter="{Binding Selected}" />
 
+                    <MenuItem
+                        Header="Link…"
+                        Icon="{materialDesign:PackIcon Kind=Add}"
+                        Command="{Binding CreateDecisionLinkCommand}"
+                        CommandParameter="{Binding Selected}" />
+
                 </Menu>
 
             </ToolBar>
@@ -512,6 +518,14 @@
                                             Header="Delete"
                                             Icon="{materialDesign:PackIcon Kind=Delete}"
                                             Command="{Binding DeleteCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <Separator />
+
+                                        <MenuItem
+                                            Header="Link…"
+                                            Icon="{materialDesign:PackIcon Kind=Add}"
+                                            Command="{Binding LinkCommand}"
                                             CommandParameter="{Binding Observable}" />
 
                                     </ContextMenu>
