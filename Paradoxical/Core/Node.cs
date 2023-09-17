@@ -120,11 +120,19 @@ public abstract partial class Node : ObservableObject, INode
         IsSelected = true;
     }
 
-    public void Unselect() => IsSelected = true;
+    public void Unselect() => IsSelected = false;
 
     public void Expand() => IsExpanded = true;
 
     public void Collapse() => IsExpanded = false;
+
+    public void UnselectDescendants()
+    {
+        foreach (var node in Descendants)
+        {
+            node.Unselect();
+        }
+    }
 
     public void CollapseChildren()
     {
