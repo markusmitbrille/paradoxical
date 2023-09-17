@@ -442,9 +442,7 @@ public class ContentPageViewModel : PageViewModel
 
         ModNode.ScriptNodes.Add(node);
 
-        node.Select();
-        node.Expand();
-        node.CollapseSiblings();
+        node.Highlight();
     }
 
     private RelayCommand<object>? deleteScriptCommand;
@@ -511,9 +509,7 @@ public class ContentPageViewModel : PageViewModel
 
         ModNode.EventNodes.Add(node);
 
-        node.Select();
-        node.Expand();
-        node.CollapseSiblings();
+        node.Highlight();
     }
 
     private void CreateEventPortrait(Event parent, PortraitPosition position)
@@ -585,9 +581,7 @@ public class ContentPageViewModel : PageViewModel
 
             parent.OptionNodes.Add(node);
 
-            node.Select();
-            node.Expand();
-            node.CollapseSiblings();
+            node.Highlight();
         }
     }
     private bool CanCreateEventOption(object? param)
@@ -623,9 +617,7 @@ public class ContentPageViewModel : PageViewModel
 
             parent.OnionNodes.Add(node);
 
-            node.Select();
-            node.Expand();
-            node.CollapseSiblings();
+            node.Highlight();
         }
     }
     private bool CanCreateEventOnion(object? param)
@@ -724,9 +716,7 @@ public class ContentPageViewModel : PageViewModel
 
             parent.LinkNodes.Add(node);
 
-            node.Select();
-            node.Expand();
-            node.CollapseSiblings();
+            node.Highlight();
         }
     }
     private bool CanCreateOptionLink(object? param)
@@ -797,9 +787,7 @@ public class ContentPageViewModel : PageViewModel
 
         ModNode.DecisionNodes.Add(node);
 
-        node.Select();
-        node.Expand();
-        node.CollapseSiblings();
+        node.Highlight();
     }
 
     private RelayCommand<object>? deleteDecisionCommand;
@@ -884,9 +872,7 @@ public class ContentPageViewModel : PageViewModel
 
             parent.LinkNodes.Add(node);
 
-            node.Select();
-            node.Expand();
-            node.CollapseSiblings();
+            node.Highlight();
         }
     }
     private bool CanCreateDecisionLink(object? param)

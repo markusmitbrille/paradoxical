@@ -27,6 +27,7 @@ public interface INode
     bool IsSelected { get; set; }
 
     void Select();
+    void Highlight();
     void Focus();
     void Unselect();
     void UnselectDescendants();
@@ -146,6 +147,16 @@ public abstract partial class Node : ObservableObject, INode
         ExpandAncestors();
 
         IsSelected = true;
+    }
+
+    public void Highlight()
+    {
+        CollapseSiblings();
+
+        ExpandAncestors();
+
+        IsSelected = true;
+        IsExpanded = true;
     }
 
     public void Focus()
