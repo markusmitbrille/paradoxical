@@ -1,27 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using MaterialDesignThemes.Wpf;
-using Microsoft.VisualBasic;
 using Paradoxical.Core;
-using Paradoxical.Extensions;
 using Paradoxical.Messages;
 using Paradoxical.Model.Entities;
 using Paradoxical.Services;
 using Paradoxical.Services.Entities;
-using Paradoxical.Services.Entities;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Printing;
-using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media.Effects;
-using System.Xml.Linq;
 
 namespace Paradoxical.ViewModel;
 

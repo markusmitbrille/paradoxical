@@ -2,7 +2,6 @@
 using Paradoxical.Core;
 using Paradoxical.Services;
 using Paradoxical.Services.Entities;
-using Paradoxical.Services.Entities;
 using Paradoxical.View;
 using Paradoxical.ViewModel;
 using System;

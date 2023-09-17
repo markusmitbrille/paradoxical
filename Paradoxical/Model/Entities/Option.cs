@@ -1,7 +1,6 @@
 ﻿using Paradoxical.Core;
 using Paradoxical.Extensions;
 using Paradoxical.Services.Entities;
-using Paradoxical.Services.Entities;
 using SQLite;
 using System;
 using System.Collections.Generic;
