@@ -5,8 +5,16 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class ScriptViewModel : ModelWrapper<Script>, IEquatable<ScriptViewModel?>
+public class ScriptViewModel : ElementWrapper<Script>, IEquatable<ScriptViewModel?>
 {
+    public override string Kind => "script";
+
+    public override string Name
+    {
+        get => model.name;
+        set => SetProperty(ref model.name, value);
+    }
+
     public string Code
     {
         get => model.code;

@@ -8,11 +8,15 @@ using System.IO;
 namespace Paradoxical.Model.Entities;
 
 [Table("scripts")]
-public class Script : IEntity, IModel, IEquatable<Script?>
+public class Script : IEntity, IModel, IElement, IEquatable<Script?>
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }
     public int id;
+
+    [Column("name"), Indexed, NotNull]
+    public string Name { get => name; set => name = value; }
+    public string name = $"src_{Guid.NewGuid().ToString("N").Substring(0, 4)}";
 
     [Column("code"), NotNull]
     public string Code { get => code; set => code = value; }
@@ -24,7 +28,7 @@ public class Script : IEntity, IModel, IEquatable<Script?>
 
     [Column("file"), NotNull]
     public string File { get => file; set => file = value; }
-    public string file = $"src_{Guid.NewGuid().ToString("N").Substring(0, 4)}";
+    public string file = $"script.txt";
 
     public Script()
     {
