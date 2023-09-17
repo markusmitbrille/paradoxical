@@ -14,6 +14,7 @@ namespace Paradoxical.Core;
 public interface INode
 {
     INode? Parent { get; set; }
+    INode Root { get; }
     IEnumerable<INode> Children { get; }
     IEnumerable<INode> Descendants { get; }
 
@@ -28,7 +29,9 @@ public interface INode
     void Select();
     void Focus();
     void Unselect();
+    void UnselectDescendants();
     void Expand();
+    void ExpandAncestors();
     void Collapse();
     void CollapseChildren();
     void CollapseDescendants();
@@ -44,7 +47,37 @@ public abstract partial class Node : ObservableObject, INode
         set => SetProperty(ref parent, value);
     }
 
+    public INode Root
+    {
+        get
+        {
+            INode root = this;
+
+            var parent = this.parent;
+            while (parent != null)
+            {
+                root = parent;
+                parent = parent.Parent;
+            }
+
+            return root;
+        }
+    }
+
     public abstract IEnumerable<INode> Children { get; }
+
+    public IEnumerable<INode> Ancestors
+    {
+        get
+        {
+            var parent = this.parent;
+            while (parent != null)
+            {
+                yield return parent;
+                parent = parent.Parent;
+            }
+        }
+    }
 
     public IEnumerable<INode> Descendants
     {
@@ -110,21 +143,22 @@ public abstract partial class Node : ObservableObject, INode
 
     public void Select()
     {
-        var parent = this.parent;
-        while (parent != null)
-        {
-            parent.Expand();
-            parent = parent.Parent;
-        }
+        ExpandAncestors();
 
         IsSelected = true;
     }
 
+    public void Focus()
+    {
+        Root.CollapseDescendants();
+
+        ExpandAncestors();
+
+        IsSelected = true;
+        IsExpanded = true;
+    }
+
     public void Unselect() => IsSelected = false;
-
-    public void Expand() => IsExpanded = true;
-
-    public void Collapse() => IsExpanded = false;
 
     public void UnselectDescendants()
     {
@@ -133,6 +167,18 @@ public abstract partial class Node : ObservableObject, INode
             node.Unselect();
         }
     }
+
+    public void Expand() => IsExpanded = true;
+
+    public void ExpandAncestors()
+    {
+        foreach (var node in Ancestors)
+        {
+            node.Expand();
+        }
+    }
+
+    public void Collapse() => IsExpanded = false;
 
     public void CollapseChildren()
     {
@@ -160,23 +206,6 @@ public abstract partial class Node : ObservableObject, INode
         {
             node.Collapse();
         }
-    }
-
-    public void Focus()
-    {
-        INode root = this;
-
-        var parent = Parent;
-        while (parent != null)
-        {
-            root = parent;
-            parent = parent.Parent;
-        }
-
-        root.CollapseDescendants();
-
-        Select();
-        Expand();
     }
 }
 
