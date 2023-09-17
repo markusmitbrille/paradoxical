@@ -30,10 +30,10 @@ public abstract partial class Node : ObservableObject
             for (int i = 0; i < descendants.Count; i++)
             {
                 var descendant = descendants[i];
+                yield return descendant;
+
                 descendants.AddRange(descendant.Children);
             }
-
-            return descendants;
         }
     }
 
