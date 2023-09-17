@@ -14,7 +14,7 @@ public abstract class OptionNode : ObservableNode<OptionViewModel>
 
 public sealed class OptionBranch : OptionNode
 {
-    public CollectionNode LinkNodes { get; } = new() { Name = "Triggered Events", IsExpanded = true };
+    public CollectionNode LinkNodes { get; } = new() { Name = "Links", IsExpanded = true };
 
     public OptionBranch()
     {
@@ -25,7 +25,7 @@ public sealed class OptionBranch : OptionNode
     {
         get
         {
-            return LinkNodes.Children;
+            yield return LinkNodes;
         }
     }
 }
