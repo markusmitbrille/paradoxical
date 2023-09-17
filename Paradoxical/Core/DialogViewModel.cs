@@ -1,19 +1,19 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Paradoxical.View;
 using System;
 using System.ComponentModel;
 using System.Windows;
 
 namespace Paradoxical.Core;
 
-public abstract class DialogViewModel<T> : ObservableObject
-    where T : Window, new()
+public abstract class DialogViewModel : ObservableObject
 {
-    private T? Window { get; set; }
+    private DialogWindow? Window { get; set; }
 
     public bool? Show()
     {
-        Window = new T() { DataContext = this };
+        Window = new() { DataContext = this };
 
         Window.Deactivated += Window_Deactivated;
         Window.Closing += Window_Closing;

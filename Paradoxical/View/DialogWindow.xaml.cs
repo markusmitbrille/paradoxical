@@ -3,12 +3,10 @@ using System.Windows.Controls;
 
 namespace Paradoxical.View;
 
-public partial class FinderView : UserControl
+public partial class DialogWindow : Window
 {
-    public FinderView()
+    public DialogWindow()
     {
         InitializeComponent();
-
-        filter.Focus();
     }
 }

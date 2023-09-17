@@ -1,4 +1,4 @@
-﻿<Window
+﻿<UserControl
     x:Class="Paradoxical.View.FinderView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -11,45 +11,27 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance {x:Type viewmodel:FinderViewModel}}"
-    WindowStyle="None"
-    WindowState="Maximized"
-    WindowStartupLocation="CenterScreen"
-    ResizeMode="NoResize"
-    ShowInTaskbar="False"
-    AllowsTransparency="True">
+    Background="White"
+    Height="400"
+    Width="550">
 
-    <Window.Background>
-        <SolidColorBrush
-            Color="Gray"
-            Opacity="0.5" />
-    </Window.Background>
-
-    <Window.Resources>
-        <converters:MathConverter
-            x:Key="MathConverter" />
-        <converters:VisibilityConverter
-            x:Key="VisibilityConverter" />
-    </Window.Resources>
-
-    <Window.InputBindings>
-        <KeyBinding
-            Command="{Binding CancelCommand}"
-            Gesture="ESC" />
-        <KeyBinding
-            Command="{Binding SubmitCommand}"
-            Gesture="Enter" />
+    <UserControl.InputBindings>
         <KeyBinding
             Command="{Binding PreviousCommand}"
             Gesture="Up" />
         <KeyBinding
             Command="{Binding NextCommand}"
             Gesture="Down" />
-    </Window.InputBindings>
+    </UserControl.InputBindings>
 
-    <DockPanel
-        Height="400"
-        Width="550"
-        Background="White">
+    <UserControl.Resources>
+        <converters:MathConverter
+            x:Key="MathConverter" />
+        <converters:VisibilityConverter
+            x:Key="VisibilityConverter" />
+    </UserControl.Resources>
+
+    <DockPanel>
 
         <DockPanel
             DockPanel.Dock="Bottom"
@@ -160,4 +142,4 @@
 
     </DockPanel>
 
-</Window>
+</UserControl>

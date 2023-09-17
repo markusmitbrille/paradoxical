@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Core;
-using Paradoxical.View;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Windows.Data;
 
 namespace Paradoxical.ViewModel;
 
-public class FinderViewModel : DialogViewModel<FinderView>
+public class FinderViewModel : DialogViewModel
 {
     private IEnumerable<IElementWrapper>? items;
     public IEnumerable<IElementWrapper> Items

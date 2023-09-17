@@ -1,0 +1,40 @@
+﻿<Window
+    x:Class="Paradoxical.View.DialogWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:core="clr-namespace:Paradoxical.Core"
+    xmlns:view="clr-namespace:Paradoxical.View"
+    xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
+    xmlns:converters="clr-namespace:Paradoxical.Converters"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance {x:Type core:DialogViewModel}}"
+    WindowStyle="None"
+    WindowState="Maximized"
+    WindowStartupLocation="CenterScreen"
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    AllowsTransparency="True">
+
+    <Window.Background>
+        <SolidColorBrush
+            Color="Gray"
+            Opacity="0.5" />
+    </Window.Background>
+
+    <Window.InputBindings>
+        <KeyBinding
+            Command="{Binding CancelCommand}"
+            Gesture="ESC" />
+        <KeyBinding
+            Command="{Binding SubmitCommand}"
+            Gesture="Enter" />
+    </Window.InputBindings>
+
+    <ContentControl
+        Content="{Binding}" />
+
+</Window>
