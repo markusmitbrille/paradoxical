@@ -215,18 +215,16 @@ public class ContentPageViewModel : PageViewModel
 
     private void EditNode(object? param)
     {
-        if (param is not Node node)
+        if (param is not IObservableNode node)
         { return; }
 
-        if (param is not IObservableWrapper wrapper)
-        { return; }
-
-        var observable = wrapper.Observable;
+        var observable = node.Observable;
         Selected = observable;
     }
     private bool CanEditNode(object? param)
     {
-        return param is Node && param is IObservableWrapper;
+        return param is IObservableNode;
+    }
     }
 
 

@@ -11,22 +11,46 @@ using System.Text.RegularExpressions;
 
 namespace Paradoxical.Core;
 
-public abstract partial class Node : ObservableObject
+public interface INode
 {
-    private Node? parent;
-    public Node? Parent
+    INode? Parent { get; set; }
+    IEnumerable<INode> Children { get; }
+    IEnumerable<INode> Descendants { get; }
+
+    INode? this[string index] { get; }
+
+    string Header { get; }
+    string Path { get; }
+
+    bool IsExpanded { get; set; }
+    bool IsSelected { get; set; }
+
+    void Select();
+    void Focus();
+    void Unselect();
+    void Expand();
+    void Collapse();
+    void CollapseChildren();
+    void CollapseDescendants();
+    void CollapseSiblings();
+}
+
+public abstract partial class Node : ObservableObject, INode
+{
+    private INode? parent;
+    public INode? Parent
     {
         get => parent;
         set => SetProperty(ref parent, value);
     }
 
-    public abstract IEnumerable<Node> Children { get; }
+    public abstract IEnumerable<INode> Children { get; }
 
-    public IEnumerable<Node> Descendants
+    public IEnumerable<INode> Descendants
     {
         get
         {
-            var descendants = new List<Node>(Children);
+            var descendants = new List<INode>(Children);
             for (int i = 0; i < descendants.Count; i++)
             {
                 var descendant = descendants[i];
@@ -41,7 +65,7 @@ public abstract partial class Node : ObservableObject
     private static partial Regex GetPathRegex();
     private static Regex PathRegex => GetPathRegex();
 
-    public Node? this[string index]
+    public INode? this[string index]
     {
         get
         {
@@ -54,7 +78,7 @@ public abstract partial class Node : ObservableObject
             { return null; }
 
             string path = match.Groups["path"].Value;
-            Node? child = Children.FirstOrDefault(node => node.Path == path);
+            INode? child = Children.FirstOrDefault(node => node.Path == path);
 
             if (child == null)
             { return null; }
@@ -77,20 +101,6 @@ public abstract partial class Node : ObservableObject
         set => SetProperty(ref isSelected, value);
     }
 
-    public void Select()
-    {
-        var parent = this.parent;
-        while (parent != null)
-        {
-            parent.Expand();
-            parent = parent.parent;
-        }
-
-        IsSelected = true;
-    }
-
-    public void Unselect() => IsSelected = true;
-
     private bool isExpanded = false;
     public bool IsExpanded
     {
@@ -98,7 +108,22 @@ public abstract partial class Node : ObservableObject
         set => SetProperty(ref isExpanded, value);
     }
 
+    public void Select()
+    {
+        var parent = this.parent;
+        while (parent != null)
+        {
+            parent.Expand();
+            parent = parent.Parent;
+        }
+
+        IsSelected = true;
+    }
+
+    public void Unselect() => IsSelected = true;
+
     public void Expand() => IsExpanded = true;
+
     public void Collapse() => IsExpanded = false;
 
     public void CollapseChildren()
@@ -122,32 +147,49 @@ public abstract partial class Node : ObservableObject
         if (Parent == null)
         { return; }
 
-        var siblings = Parent.Children.Except(new Node[] { this });
+        var siblings = Parent.Children.Except(new INode[] { this });
         foreach (var node in siblings)
         {
             node.Collapse();
         }
     }
+
+    public void Focus()
+    {
+        INode root = this;
+
+        var parent = this.parent;
+        while (parent != null)
+        {
+            root = parent;
+            parent = parent.Parent;
+        }
+
+        root.CollapseDescendants();
+
+        Select();
+        Expand();
+    }
 }
 
 public sealed class CollectionNode : Node
 {
-    private readonly ObservableCollection<Node> children = new();
-    public override IEnumerable<Node> Children => children;
+    private readonly ObservableCollection<INode> children = new();
+    public override IEnumerable<INode> Children => children;
 
-    public void Add(Node node)
+    public void Add(INode node)
     {
         node.Parent = this;
         children.Add(node);
     }
 
-    public void Remove(Node node)
+    public void Remove(INode node)
     {
         node.Parent = null;
         children.Remove(node);
     }
 
-    public void RemoveAll(Predicate<Node> match)
+    public void RemoveAll(Predicate<INode> match)
     {
         var nodes = children.Where(item => match(item)).ToList();
         foreach (var node in nodes)
@@ -163,14 +205,25 @@ public sealed class CollectionNode : Node
     public override string Header => Name;
 }
 
-public abstract class ObservableNode<T> : Node, IObservableWrapper<T>, IObservableWrapper
+public interface IObservableNode : INode
+{
+    public ObservableObject Observable { get; }
+}
+
+public interface IObservableNode<T> : INode
+    where T : ObservableObject, new()
+{
+    public T Observable { get; init; }
+}
+
+public abstract class ObservableNode<T> : Node, IObservableNode<T>, IObservableNode
     where T : ObservableObject, new()
 {
     public T Observable { get; init; } = new();
-    ObservableObject IObservableWrapper.Observable => Observable;
+    ObservableObject IObservableNode.Observable => Observable;
 
     public override string Path => Observable.ToString() ?? string.Empty;
     public override string Header => Observable.ToString() ?? string.Empty;
 
-    public override IEnumerable<Node> Children => Enumerable.Empty<Node>();
+    public override IEnumerable<INode> Children => Enumerable.Empty<INode>();
 }

@@ -21,7 +21,7 @@ public sealed class OptionBranch : OptionNode
         LinkNodes.Parent = this;
     }
 
-    public override IEnumerable<Node> Children
+    public override IEnumerable<INode> Children
     {
         get
         {

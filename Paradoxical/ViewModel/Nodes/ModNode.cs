@@ -26,7 +26,7 @@ public sealed class ModBranch : ModNode
         DecisionNodes.Parent = this;
     }
 
-    public override IEnumerable<Node> Children
+    public override IEnumerable<INode> Children
     {
         get
         {

@@ -20,7 +20,7 @@ public sealed class LinkNode : ObservableNode<LinkViewModel>
     public RelayCommand<object>? EditCommand { get; set; }
     public RelayCommand<object>? DeleteCommand { get; set; }
 
-    public override IEnumerable<Node> Children
+    public override IEnumerable<INode> Children
     {
         get
         {

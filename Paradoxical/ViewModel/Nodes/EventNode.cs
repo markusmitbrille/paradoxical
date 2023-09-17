@@ -29,7 +29,7 @@ public sealed class EventBranch : EventNode
         OnionNodes.Parent = this;
     }
 
-    public override IEnumerable<Node> Children
+    public override IEnumerable<INode> Children
     {
         get
         {
