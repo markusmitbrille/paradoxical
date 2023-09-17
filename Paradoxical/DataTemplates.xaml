@@ -59,4 +59,9 @@
         <view:DecisionView />
     </DataTemplate>
 
+    <DataTemplate
+        DataType="{x:Type viewmodel:LinkViewModel}">
+        <view:LinkView />
+    </DataTemplate>
+
 </ResourceDictionary>
