@@ -17,8 +17,10 @@ public class ContentPageViewModel : PageViewModel
     public override string PageName => "Content";
 
     public IDataService DataService { get; }
+    public IUpdateService UpdateService { get; }
 
     public IModService ModService { get; }
+
     public IScriptService ScriptService { get; }
     public IEventService EventService { get; }
     public IPortraitService PortraitService { get; }
@@ -50,13 +52,18 @@ public class ContentPageViewModel : PageViewModel
     public ObservableObject? Selected
     {
         get => selected;
-        set => SetProperty(ref selected, value);
+        set
+        {
+            Update();
+            SetProperty(ref selected, value);
+    }
     }
 
     public ContentPageViewModel(
         IShell shell,
         IMediatorService mediator,
         IDataService dataService,
+        IUpdateService updateService,
         IModService modService,
         IScriptService scriptService,
         IEventService eventService,
@@ -68,6 +75,7 @@ public class ContentPageViewModel : PageViewModel
         : base(shell, mediator)
     {
         DataService = dataService;
+        UpdateService = updateService;
 
         ModService = modService;
 
@@ -114,6 +122,30 @@ public class ContentPageViewModel : PageViewModel
     void IMessageHandler<ShutdownMessage>.Handle(ShutdownMessage message)
     {
         Save();
+    }
+
+    private void Update()
+    {
+        if (selected is not IModelWrapper wrapper)
+        { return; }
+
+        if (wrapper.Model is not IEntity entity)
+        { return; }
+
+        UpdateService.Update(entity);
+    }
+
+    private void UpdateAll()
+    {
+        ModService.Update(ModViewModel.Model);
+
+        ScriptService.UpdateAll(ScriptModelMap.Models);
+        EventService.UpdateAll(EventModelMap.Models);
+        OptionService.UpdateAll(OptionModelMap.Models);
+        OnionService.UpdateAll(OnionModelMap.Models);
+        PortraitService.UpdateAll(PortraitModelMap.Models);
+        DecisionService.UpdateAll(DecisionModelMap.Models);
+        LinkService.UpdateAll(LinkModelMap.Models);
     }
 
     private RelayCommand? loadCommand;
@@ -175,15 +207,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void Save()
     {
-        ModService.Update(ModViewModel.Model);
-
-        ScriptService.UpdateAll(ScriptModelMap.Models);
-        EventService.UpdateAll(EventModelMap.Models);
-        OptionService.UpdateAll(OptionModelMap.Models);
-        OnionService.UpdateAll(OnionModelMap.Models);
-        PortraitService.UpdateAll(PortraitModelMap.Models);
-        DecisionService.UpdateAll(DecisionModelMap.Models);
-        LinkService.UpdateAll(LinkModelMap.Models);
+        UpdateAll();
 
         DataService.CommitTransaction();
         DataService.BeginTransaction();
