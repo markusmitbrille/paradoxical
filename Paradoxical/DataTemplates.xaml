@@ -10,6 +10,11 @@
     </DataTemplate>
 
     <DataTemplate
+        DataType="{x:Type viewmodel:LinkerViewModel}">
+        <view:LinkerView />
+    </DataTemplate>
+
+    <DataTemplate
         DataType="{x:Type viewmodel:AboutPageViewModel}">
         <view:AboutPageView />
     </DataTemplate>

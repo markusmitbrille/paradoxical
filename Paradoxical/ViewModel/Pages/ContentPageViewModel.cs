@@ -681,27 +681,30 @@ public class ContentPageViewModel : PageViewModel
 
         var events = EventService.Get();
         var links = OptionService.GetLinks(model);
+        var unlinked = events.Where(evt => links.Any(link => link.EventId == evt.Id) == false);
 
-        FinderViewModel finder = new();
-        finder.Items = events.Where(evt => links.Any(link => link.EventId == evt.Id) == false).Select(evt => EventModelMap[evt]);
+        LinkerViewModel linker = new();
+        linker.Items = unlinked.Select(evt => EventModelMap[evt]).ToList();
 
-        var res = finder.Show();
+        var res = linker.Show();
 
         if (res != true)
         { return; }
 
-        if (finder.Selected == null)
+        if (linker.Selected == null)
         { return; }
 
-        if (finder.Selected is not EventViewModel selected)
-        { return; }
+        Link relation = new()
+        {
+            EventId = linker.Selected.Id,
 
-        Link relation = new() { EventId = selected.Id };
+            Scope = linker.Scope,
+            MinDays = linker.MinDays,
+            MaxDays = linker.MaxDays,
+        };
 
         LinkService.Insert(relation);
         OptionService.AddLink(model, relation);
-
-        var relationViewModel = LinkModelMap[relation];
 
         var parents = RootNode.Descendants
             .OfType<OptionBranch>()
@@ -710,13 +713,11 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var parent in parents)
         {
-            var node = new LinkNode() { Observable = relationViewModel };
+            var node = new LinkNode() { Observable = LinkModelMap[relation] };
 
             InitLinkNode(node);
 
             parent.LinkNodes.Add(node);
-
-            node.Highlight();
         }
     }
     private bool CanCreateOptionLink(object? param)
@@ -837,27 +838,30 @@ public class ContentPageViewModel : PageViewModel
 
         var events = EventService.Get();
         var links = DecisionService.GetLinks(model);
+        var unlinked = events.Where(evt => links.Any(link => link.EventId == evt.Id) == false);
 
-        FinderViewModel finder = new();
-        finder.Items = events.Where(evt => links.Any(link => link.EventId == evt.Id) == false).Select(evt => EventModelMap[evt]);
+        LinkerViewModel linker = new();
+        linker.Items = unlinked.Select(evt => EventModelMap[evt]).ToList();
 
-        var res = finder.Show();
+        var res = linker.Show();
 
         if (res != true)
         { return; }
 
-        if (finder.Selected == null)
+        if (linker.Selected == null)
         { return; }
 
-        if (finder.Selected is not EventViewModel selected)
-        { return; }
+        Link relation = new()
+        {
+            EventId = linker.Selected.Id,
 
-        Link relation = new() { EventId = selected.Id };
+            Scope = linker.Scope,
+            MinDays = linker.MinDays,
+            MaxDays = linker.MaxDays,
+        };
 
         LinkService.Insert(relation);
         DecisionService.AddLink(model, relation);
-
-        var relationViewModel = LinkModelMap[relation];
 
         var parents = RootNode.Descendants
             .OfType<DecisionBranch>()
@@ -866,13 +870,11 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var parent in parents)
         {
-            var node = new LinkNode() { Observable = relationViewModel };
+            var node = new LinkNode() { Observable = LinkModelMap[relation] };
 
             InitLinkNode(node);
 
             parent.LinkNodes.Add(node);
-
-            node.Highlight();
         }
     }
     private bool CanCreateDecisionLink(object? param)

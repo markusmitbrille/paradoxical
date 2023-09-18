@@ -29,19 +29,6 @@
 
         </Style>
 
-        <Style
-            TargetType="view:ScriptBox"
-            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
-
-            <Setter
-                Property="Margin"
-                Value="6,12" />
-            <Setter
-                Property="materialDesign:HintAssist.FontFamily"
-                Value="{StaticResource MaterialDesignFont}" />
-
-        </Style>
-
     </UserControl.Resources>
 
     <TabControl
@@ -53,13 +40,16 @@
             <StackPanel>
 
                 <TextBox
-                    Text="{Binding Scope, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    materialDesign:HintAssist.Hint="Scope" />
+                    IsReadOnly="True"
+                    Text="{Binding EventId, Mode=OneWay}"
+                    materialDesign:HintAssist.Hint="Event ID" />
 
                 <Grid
                     Grid.Row="0">
 
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="3*" />
                         <ColumnDefinition
                             Width="1*" />
                         <ColumnDefinition
@@ -68,6 +58,25 @@
 
                     <TextBox
                         Grid.Column="0"
+                        materialDesign:HintAssist.Hint="Scope">
+
+                        <TextBox.Text>
+                            <Binding
+                                Path="Scope"
+                                Mode="TwoWay"
+                                UpdateSourceTrigger="PropertyChanged"
+                                FallbackValue="">
+                                <Binding.ValidationRules>
+                                    <rules:ScopeRule
+                                        ValidatesOnTargetUpdated="True" />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+
+                    </TextBox>
+
+                    <TextBox
+                        Grid.Column="1"
                         materialDesign:HintAssist.Hint="Min Days">
 
                         <TextBox.Text>
@@ -86,7 +95,7 @@
                     </TextBox>
 
                     <TextBox
-                        Grid.Column="1"
+                        Grid.Column="2"
                         materialDesign:HintAssist.Hint="Max Days">
 
                         <TextBox.Text>
