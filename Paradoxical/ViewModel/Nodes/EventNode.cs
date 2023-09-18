@@ -19,9 +19,9 @@ public abstract class EventNode : ObservableNode<EventViewModel>
 
 public sealed class EventBranch : EventNode
 {
-    public CollectionNode PortraitNodes { get; } = new() { Name = "Portraits", IsExpanded = true };
+    public CollectionNode PortraitNodes { get; } = new() { Name = "Portraits", IsExpanded = false };
     public CollectionNode OptionNodes { get; } = new() { Name = "Options", IsExpanded = true };
-    public CollectionNode OnionNodes { get; } = new() { Name = "On-Actions", IsExpanded = true };
+    public CollectionNode OnionNodes { get; } = new() { Name = "On-Actions", IsExpanded = false };
 
     public EventBranch()
     {

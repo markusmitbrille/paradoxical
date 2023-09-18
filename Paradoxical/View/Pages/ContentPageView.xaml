@@ -298,7 +298,7 @@
                         <i:EventTrigger
                             EventName="SelectedItemChanged">
                             <i:InvokeCommandAction
-                                Command="{Binding EditNodeCommand}"
+                                Command="{Binding SelectNodeObservableCommand}"
                                 CommandParameter="{Binding ElementName=ContentTreeView, Path=SelectedItem}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>

@@ -226,16 +226,21 @@ public class ContentPageViewModel : PageViewModel
         { return; }
 
         Selected = observable;
+
+        ModNode.Descendants
+            .OfType<IObservableNode>()
+            .First(node => node.Observable == observable)
+            .Focus();
     }
     private bool CanEdit(object? param)
     {
         return param is ObservableObject;
     }
 
-    private RelayCommand<object>? editNodeCommand;
-    public RelayCommand<object> EditNodeCommand => editNodeCommand ??= new(EditNode, CanEditNode);
+    private RelayCommand<object>? selectNodeObservableCommand;
+    public RelayCommand<object> SelectNodeObservableCommand => selectNodeObservableCommand ??= new(SelectNodeObservable, CanSelectNodeObservable);
 
-    private void EditNode(object? param)
+    private void SelectNodeObservable(object? param)
     {
         if (param is not IObservableNode node)
         { return; }
@@ -243,7 +248,7 @@ public class ContentPageViewModel : PageViewModel
         var observable = node.Observable;
         Selected = observable;
     }
-    private bool CanEditNode(object? param)
+    private bool CanSelectNodeObservable(object? param)
     {
         return param is IObservableNode;
     }
@@ -732,7 +737,7 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var parent in parents)
         {
-            CreateOptionBranch(relation, parent.OptionNodes).Highlight();
+            CreateOptionBranch(relation, parent.OptionNodes).CollapseSiblings().Select();
         }
     }
     private bool CanCreateEventOption(object? param)
@@ -758,7 +763,7 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var parent in parents)
         {
-            CreateOnionBranch(relation, parent.OptionNodes).Highlight();
+            CreateOnionBranch(relation, parent.OptionNodes).CollapseSiblings().Select();
         }
     }
     private bool CanCreateEventOnion(object? param)
@@ -797,7 +802,7 @@ public class ContentPageViewModel : PageViewModel
 
             foreach (var collection in collections)
             {
-                CreateOptionBranch(clone, collection).Highlight();
+                CreateOptionBranch(clone, collection).CollapseSiblings().Select();
             }
         }
         {
@@ -810,7 +815,7 @@ public class ContentPageViewModel : PageViewModel
 
             foreach (var collection in collections)
             {
-                CreateOptionLeaf(clone, collection).Highlight();
+                CreateOptionLeaf(clone, collection).CollapseSiblings().Select();
             }
         }
     }
@@ -986,7 +991,7 @@ public class ContentPageViewModel : PageViewModel
 
             foreach (var collection in collections)
             {
-                CreateOnionBranch(clone, collection).Highlight();
+                CreateOnionBranch(clone, collection).CollapseSiblings().Select();
             }
         }
         {
@@ -999,7 +1004,7 @@ public class ContentPageViewModel : PageViewModel
 
             foreach (var collection in collections)
             {
-                CreateOnionLeaf(clone, collection).Highlight();
+                CreateOnionLeaf(clone, collection).CollapseSiblings().Select();
             }
         }
     }
