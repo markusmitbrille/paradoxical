@@ -30,19 +30,6 @@ public class Script : IEntity, IModel, IElement, IEquatable<Script?>
     public string File { get => file; set => file = value; }
     public string file = $"script.txt";
 
-    public Script()
-    {
-    }
-
-    public Script(Script other)
-    {
-        id = 0;
-
-        code = other.code;
-        dir = other.dir;
-        file = other.file;
-    }
-
     public void Write(
         TextWriter writer)
     {

@@ -148,56 +148,6 @@ public class Decision : IEntity, IModel, IElement, IEquatable<Decision?>, ICompa
     public int AiZealTargetModifier { get => aiZealTargetModifier; set => aiZealTargetModifier = value; }
     public int aiZealTargetModifier;
 
-    public Decision()
-    {
-    }
-
-    public Decision(Decision other)
-    {
-        id = 0;
-
-        name = other.name;
-        title = other.title;
-        description = other.description;
-        confirm = other.confirm;
-        tooltip = other.tooltip;
-        picture = other.picture;
-
-        major = other.major;
-        order = other.order;
-
-        costGold = other.costGold;
-        costPiety = other.costPiety;
-        costPrestige = other.costPrestige;
-
-        minCostGold = other.minCostGold;
-        minCostPiety = other.minCostPiety;
-        minCostPrestige = other.minCostPrestige;
-
-        customShownTrigger = other.customShownTrigger;
-        customFailureTrigger = other.customFailureTrigger;
-        customValidTrigger = other.customValidTrigger;
-        customEffect = other.customEffect;
-
-        aiGoal = other.aiGoal;
-        aiCheckFrequency = other.aiCheckFrequency;
-
-        aiPotential = other.aiPotential;
-
-        aiBaseWillDo = other.aiBaseWillDo;
-        aiCustomWillDo = other.aiCustomWillDo;
-
-        aiBoldnessTargetModifier = other.aiBoldnessTargetModifier;
-        aiCompassionTargetModifier = other.aiCompassionTargetModifier;
-        aiGreedTargetModifier = other.aiGreedTargetModifier;
-        aiEnergyTargetModifier = other.aiEnergyTargetModifier;
-        aiHonorTargetModifier = other.aiHonorTargetModifier;
-        aiRationalityTargetModifier = other.aiRationalityTargetModifier;
-        aiSociabilityTargetModifier = other.aiSociabilityTargetModifier;
-        aiVengefulnessTargetModifier = other.aiVengefulnessTargetModifier;
-        aiZealTargetModifier = other.aiZealTargetModifier;
-    }
-
     public string GetQualifiedName(IModService modService)
     {
         return $"{modService.GetPrefix()}_dec_{Id}";

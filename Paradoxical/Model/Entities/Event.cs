@@ -52,26 +52,6 @@ public class Event : IEntity, IModel, IElement, IEquatable<Event?>, IComparable<
     public string CustomAfterEffect { get => customAfterEffect; set => customAfterEffect = value; }
     public string customAfterEffect = "";
 
-    public Event()
-    {
-    }
-
-    public Event(Event other)
-    {
-        id = 0;
-
-        name = other.name;
-        title = other.title;
-        description = other.description;
-        theme = other.theme;
-        hidden = other.hidden;
-        cooldown = other.cooldown;
-
-        customTrigger = other.customTrigger;
-        customImmediateEffect = other.customImmediateEffect;
-        customAfterEffect = other.customAfterEffect;
-    }
-
     public string GetQualifiedName(IModService modService)
     {
         return $"{modService.GetPrefix()}.{Id}";

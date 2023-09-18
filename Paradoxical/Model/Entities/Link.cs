@@ -30,20 +30,6 @@ public class Link : IEntity, IModel, IEquatable<Link?>
     public int MaxDays { get => maxDays; set => maxDays = value; }
     public int maxDays;
 
-    public Link()
-    {
-    }
-
-    public Link(Link other)
-    {
-        id = 0;
-
-        eventId = other.eventId;
-        scope = other.scope;
-        minDays = other.minDays;
-        maxDays = other.maxDays;
-    }
-
     public void Write(TextWriter writer, IModService modService, ILinkService linkService)
     {
         var evt = linkService.GetEvent(this);
