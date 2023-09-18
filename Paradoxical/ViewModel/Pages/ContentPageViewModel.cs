@@ -131,6 +131,7 @@ public class ContentPageViewModel : PageViewModel
         }
 
         ModViewModel = new() { Model = mod };
+        Selected = ModViewModel;
 
         ScriptModelMap = new(ScriptService.Get());
         EventModelMap = new(EventService.Get());
@@ -140,7 +141,12 @@ public class ContentPageViewModel : PageViewModel
         DecisionModelMap = new(DecisionService.Get());
         LinkModelMap = new(LinkService.Get());
 
-        ModNode = new() { Observable = ModViewModel };
+        ModNode = new()
+        {
+            Observable = ModViewModel,
+            IsSelected = true,
+            IsExpanded = true,
+        };
 
         InitModNode(ModNode);
         InitModBranch(ModNode);
