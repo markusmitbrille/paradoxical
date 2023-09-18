@@ -17,6 +17,8 @@ public class FinderViewModel : DialogViewModel
         {
             SetProperty(ref items, value);
 
+            View.Filter = Predicate;
+
             UpdateView();
             UpdateSelection();
         }
