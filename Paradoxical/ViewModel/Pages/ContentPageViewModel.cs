@@ -240,11 +240,10 @@ public class ContentPageViewModel : PageViewModel
 
         Selected = observable;
 
-        var node = ModNode.Descendants
+        ModNode.Descendants
             .OfType<IObservableNode>()
-            .First(node => node.Observable == observable);
-
-        node.Focus();
+            .First(node => node.Observable == observable)
+            .Focus();
     }
 
 
@@ -545,8 +544,7 @@ public class ContentPageViewModel : PageViewModel
         var model = new Script();
         ScriptService.Insert(model);
 
-        var node = CreateScriptBranch(model, ModNode.ScriptNodes);
-        node.Highlight();
+        CreateScriptBranch(model, ModNode.ScriptNodes).Highlight();
     }
 
     private RelayCommand<object>? deleteScriptCommand;
@@ -603,8 +601,7 @@ public class ContentPageViewModel : PageViewModel
         PortraitService.Insert(new() { EventId = model.Id, Position = PortraitPosition.LowerCenter });
         PortraitService.Insert(new() { EventId = model.Id, Position = PortraitPosition.LowerRight });
 
-        var node = CreateEventBranch(model, ModNode.EventNodes);
-        node.Highlight();
+        CreateEventBranch(model, ModNode.EventNodes).Highlight();
     }
 
     private RelayCommand<object>? deleteEventCommand;
@@ -660,8 +657,7 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var parent in parents)
         {
-            var node = CreateOptionBranch(relation, parent.OptionNodes);
-            node.Highlight();
+            CreateOptionBranch(relation, parent.OptionNodes).Highlight();
         }
     }
     private bool CanCreateEventOption(object? param)
@@ -687,8 +683,7 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var parent in parents)
         {
-            var node = CreateOnionBranch(relation, parent.OptionNodes);
-            node.Highlight();
+            CreateOnionBranch(relation, parent.OptionNodes).Highlight();
         }
     }
     private bool CanCreateEventOnion(object? param)
@@ -823,6 +818,8 @@ public class ContentPageViewModel : PageViewModel
         PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.LowerCenter });
         PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.LowerRight });
 
+        CreateEventBranch(evt, ModNode.EventNodes).Focus();
+
         Link link = new() { EventId = evt.Id };
 
         LinkService.Insert(link);
@@ -835,11 +832,8 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var parent in parents)
         {
-            CreateLinkNode(link, parent.LinkNodes);
+            CreateLinkNode(link, parent.LinkNodes).ExpandAncestors();
         }
-
-        var node = CreateEventBranch(evt, ModNode.EventNodes);
-        node.Focus();
     }
     private bool CanCreateOptionEvent(object? param)
     {
@@ -899,8 +893,7 @@ public class ContentPageViewModel : PageViewModel
         var model = new Decision();
         DecisionService.Insert(model);
 
-        var node = CreateDecisionBranch(model, ModNode.DecisionNodes);
-        node.Highlight();
+        CreateDecisionBranch(model, ModNode.DecisionNodes).Highlight();
     }
 
     private RelayCommand<object>? deleteDecisionCommand;
@@ -1021,6 +1014,8 @@ public class ContentPageViewModel : PageViewModel
         PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.LowerCenter });
         PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.LowerRight });
 
+        CreateEventBranch(evt, ModNode.EventNodes).Focus();
+
         Link link = new() { EventId = evt.Id };
 
         LinkService.Insert(link);
@@ -1033,11 +1028,8 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var parent in parents)
         {
-            CreateLinkNode(link, parent.LinkNodes);
+            CreateLinkNode(link, parent.LinkNodes).ExpandAncestors();
         }
-
-        var node = CreateEventBranch(evt, ModNode.EventNodes);
-        node.Focus();
     }
     private bool CanCreateDecisionEvent(object? param)
     {
