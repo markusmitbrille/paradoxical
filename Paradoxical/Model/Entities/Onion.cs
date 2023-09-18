@@ -36,6 +36,17 @@ public class Onion : IEntity, IModel, IElement, IEquatable<Onion?>
     {
     }
 
+    public Onion(Onion other)
+    {
+        id = 0;
+
+        eventId = other.eventId;
+
+        name = other.name;
+        random = other.random;
+        weight = other.weight;
+    }
+
     public override bool Equals(object? obj)
     {
         return Equals(obj as Onion);
