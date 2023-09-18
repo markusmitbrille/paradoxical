@@ -26,17 +26,17 @@ public interface INode
     bool IsExpanded { get; set; }
     bool IsSelected { get; set; }
 
-    void Select();
-    void Highlight();
-    void Focus();
-    void Unselect();
-    void UnselectDescendants();
-    void Expand();
-    void ExpandAncestors();
-    void Collapse();
-    void CollapseChildren();
-    void CollapseDescendants();
-    void CollapseSiblings();
+    INode Select();
+    INode Highlight();
+    INode Focus();
+    INode Unselect();
+    INode UnselectDescendants();
+    INode Expand();
+    INode ExpandAncestors();
+    INode Collapse();
+    INode CollapseChildren();
+    INode CollapseDescendants();
+    INode CollapseSiblings();
 }
 
 public abstract partial class Node : ObservableObject, INode
@@ -142,14 +142,16 @@ public abstract partial class Node : ObservableObject, INode
         set => SetProperty(ref isExpanded, value);
     }
 
-    public void Select()
+    public INode Select()
     {
         ExpandAncestors();
 
         IsSelected = true;
+
+        return this;
     }
 
-    public void Highlight()
+    public INode Highlight()
     {
         CollapseSiblings();
 
@@ -157,9 +159,11 @@ public abstract partial class Node : ObservableObject, INode
 
         IsSelected = true;
         IsExpanded = true;
+
+        return this;
     }
 
-    public void Focus()
+    public INode Focus()
     {
         Root.CollapseDescendants();
 
@@ -167,56 +171,83 @@ public abstract partial class Node : ObservableObject, INode
 
         IsSelected = true;
         IsExpanded = true;
+
+        return this;
     }
 
-    public void Unselect() => IsSelected = false;
+    public INode Unselect()
+    {
+        IsSelected = false;
 
-    public void UnselectDescendants()
+        return this;
+    }
+
+    public INode UnselectDescendants()
     {
         foreach (var node in Descendants)
         {
             node.Unselect();
         }
+
+        return this;
     }
 
-    public void Expand() => IsExpanded = true;
+    public INode Expand()
+    {
+        IsExpanded = true;
 
-    public void ExpandAncestors()
+        return this;
+    }
+
+    public INode ExpandAncestors()
     {
         foreach (var node in Ancestors)
         {
             node.Expand();
         }
+
+        return this;
     }
 
-    public void Collapse() => IsExpanded = false;
+    public INode Collapse()
+    {
+        IsExpanded = false;
 
-    public void CollapseChildren()
+        return this;
+    }
+
+    public INode CollapseChildren()
     {
         foreach (var node in Children)
         {
             node.Collapse();
         }
+
+        return this;
     }
 
-    public void CollapseDescendants()
+    public INode CollapseDescendants()
     {
         foreach (var node in Descendants)
         {
             node.Collapse();
         }
+
+        return this;
     }
 
-    public void CollapseSiblings()
+    public INode CollapseSiblings()
     {
         if (Parent == null)
-        { return; }
+        { return this; }
 
         var siblings = Parent.Children.Except(new INode[] { this });
         foreach (var node in siblings)
         {
             node.Collapse();
         }
+
+        return this;
     }
 }
 
