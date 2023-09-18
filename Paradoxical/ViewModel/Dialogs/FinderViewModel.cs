@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Core;
+using Paradoxical.Extensions;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
