@@ -650,6 +650,8 @@ public class ContentPageViewModel : PageViewModel
 
         var model = observable.Model;
 
+        DeleteOptionLinks(model);
+
         OptionModelMap.Remove(model);
         OptionService.Delete(model);
 
@@ -668,6 +670,16 @@ public class ContentPageViewModel : PageViewModel
     private bool CanDeleteOption(object? param)
     {
         return param is OptionViewModel;
+    }
+
+    private void DeleteOptionLinks(Option model)
+    {
+        var links = OptionService.GetLinks(model);
+        foreach (var link in links)
+        {
+            var observable = LinkModelMap[link];
+            DeleteLink(observable);
+        }
     }
 
     private RelayCommand<object>? createOptionLinkCommand;
@@ -807,6 +819,8 @@ public class ContentPageViewModel : PageViewModel
 
         var model = observable.Model;
 
+        DeleteDecisionLinks(model);
+
         DecisionModelMap.Remove(model);
         DecisionService.Delete(model);
 
@@ -825,6 +839,16 @@ public class ContentPageViewModel : PageViewModel
     private bool CanDeleteDecision(object? param)
     {
         return param is DecisionViewModel;
+    }
+
+    private void DeleteDecisionLinks(Decision model)
+    {
+        var links = DecisionService.GetLinks(model);
+        foreach (var link in links)
+        {
+            var observable = LinkModelMap[link];
+            DeleteLink(observable);
+        }
     }
 
     private RelayCommand<object>? createDecisionLinkCommand;
