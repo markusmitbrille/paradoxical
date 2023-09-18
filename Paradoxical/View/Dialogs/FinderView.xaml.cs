@@ -8,7 +8,5 @@ public partial class FinderView : UserControl
     public FinderView()
     {
         InitializeComponent();
-
-        filter.Focus();
     }
 }
