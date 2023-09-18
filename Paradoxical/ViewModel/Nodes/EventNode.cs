@@ -10,6 +10,7 @@ public abstract class EventNode : ObservableNode<EventViewModel>
     public override string Header => Observable.Name.ToString();
 
     public RelayCommand<object>? EditCommand { get; set; }
+    public RelayCommand<object>? DuplicateCommand { get; set; }
     public RelayCommand<object>? DeleteCommand { get; set; }
 
     public RelayCommand<object>? CreateOptionCommand { get; set; }

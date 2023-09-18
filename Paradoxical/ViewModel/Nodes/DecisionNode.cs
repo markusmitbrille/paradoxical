@@ -7,6 +7,7 @@ namespace Paradoxical.ViewModel;
 public abstract class DecisionNode : ObservableNode<DecisionViewModel>
 {
     public RelayCommand<object>? EditCommand { get; set; }
+    public RelayCommand<object>? DuplicateCommand { get; set; }
     public RelayCommand<object>? DeleteCommand { get; set; }
 
     public RelayCommand<object>? LinkCommand { get; set; }

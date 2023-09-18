@@ -106,6 +106,12 @@
                     </Menu.Visibility>
 
                     <MenuItem
+                        Header="Duplicate"
+                        Icon="{materialDesign:PackIcon Kind=ContentDuplicate}"
+                        Command="{Binding DuplicateScriptCommand}"
+                        CommandParameter="{Binding Selected}" />
+
+                    <MenuItem
                         Header="Delete"
                         Icon="{materialDesign:PackIcon Kind=Delete}"
                         Command="{Binding DeleteScriptCommand}"
@@ -128,6 +134,12 @@
 
                         </Binding>
                     </Menu.Visibility>
+
+                    <MenuItem
+                        Header="Duplicate"
+                        Icon="{materialDesign:PackIcon Kind=ContentDuplicate}"
+                        Command="{Binding DuplicateEventCommand}"
+                        CommandParameter="{Binding Selected}" />
 
                     <MenuItem
                         Header="Delete"
@@ -166,6 +178,12 @@
                     </Menu.Visibility>
 
                     <MenuItem
+                        Header="Duplicate"
+                        Icon="{materialDesign:PackIcon Kind=ContentDuplicate}"
+                        Command="{Binding DuplicateOptionCommand}"
+                        CommandParameter="{Binding Selected}" />
+
+                    <MenuItem
                         Header="Delete"
                         Icon="{materialDesign:PackIcon Kind=Delete}"
                         Command="{Binding DeleteOptionCommand}"
@@ -202,6 +220,12 @@
                     </Menu.Visibility>
 
                     <MenuItem
+                        Header="Duplicate"
+                        Icon="{materialDesign:PackIcon Kind=ContentDuplicate}"
+                        Command="{Binding DuplicateOnionCommand}"
+                        CommandParameter="{Binding Selected}" />
+
+                    <MenuItem
                         Header="Delete"
                         Icon="{materialDesign:PackIcon Kind=Delete}"
                         Command="{Binding DeleteOnionCommand}"
@@ -224,6 +248,12 @@
 
                         </Binding>
                     </Menu.Visibility>
+
+                    <MenuItem
+                        Header="Duplicate"
+                        Icon="{materialDesign:PackIcon Kind=ContentDuplicate}"
+                        Command="{Binding DuplicateDecisionCommand}"
+                        CommandParameter="{Binding Selected}" />
 
                     <MenuItem
                         Header="Delete"
@@ -366,6 +396,12 @@
                                             CommandParameter="{Binding Observable}" />
 
                                         <MenuItem
+                                            Header="Duplicate"
+                                            Icon="{materialDesign:PackIcon Kind=ContentDuplicate}"
+                                            Command="{Binding DuplicateCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
                                             Header="Delete"
                                             Icon="{materialDesign:PackIcon Kind=Delete}"
                                             Command="{Binding DeleteCommand}"
@@ -392,6 +428,12 @@
                                             Header="Edit"
                                             Icon="{materialDesign:PackIcon Kind=Edit}"
                                             Command="{Binding EditCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Duplicate"
+                                            Icon="{materialDesign:PackIcon Kind=ContentDuplicate}"
+                                            Command="{Binding DuplicateCommand}"
                                             CommandParameter="{Binding Observable}" />
 
                                         <MenuItem
@@ -461,6 +503,12 @@
                                             CommandParameter="{Binding Observable}" />
 
                                         <MenuItem
+                                            Header="Duplicate"
+                                            Icon="{materialDesign:PackIcon Kind=ContentDuplicate}"
+                                            Command="{Binding DuplicateCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
                                             Header="Delete"
                                             Icon="{materialDesign:PackIcon Kind=Delete}"
                                             Command="{Binding DeleteCommand}"
@@ -504,6 +552,12 @@
                                             CommandParameter="{Binding Observable}" />
 
                                         <MenuItem
+                                            Header="Duplicate"
+                                            Icon="{materialDesign:PackIcon Kind=ContentDuplicate}"
+                                            Command="{Binding DuplicateCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
                                             Header="Delete"
                                             Icon="{materialDesign:PackIcon Kind=Delete}"
                                             Command="{Binding DeleteCommand}"
@@ -530,6 +584,12 @@
                                             Header="Edit"
                                             Icon="{materialDesign:PackIcon Kind=Edit}"
                                             Command="{Binding EditCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Duplicate"
+                                            Icon="{materialDesign:PackIcon Kind=ContentDuplicate}"
+                                            Command="{Binding DuplicateCommand}"
                                             CommandParameter="{Binding Observable}" />
 
                                         <MenuItem

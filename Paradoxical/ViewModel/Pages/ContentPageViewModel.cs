@@ -7,6 +7,7 @@ using Paradoxical.Services;
 using Paradoxical.Services.Entities;
 using System;
 using System.Linq;
+using System.Windows.Media.Imaging;
 
 namespace Paradoxical.ViewModel;
 
@@ -18,6 +19,7 @@ public class ContentPageViewModel : PageViewModel
 
     public IDataService DataService { get; }
     public IUpdateService UpdateService { get; }
+    public ICloneService CloneService { get; }
 
     public IModService ModService { get; }
 
@@ -56,7 +58,7 @@ public class ContentPageViewModel : PageViewModel
         {
             Update();
             SetProperty(ref selected, value);
-    }
+        }
     }
 
     public ContentPageViewModel(
@@ -64,6 +66,7 @@ public class ContentPageViewModel : PageViewModel
         IMediatorService mediator,
         IDataService dataService,
         IUpdateService updateService,
+        ICloneService cloneService,
         IModService modService,
         IScriptService scriptService,
         IEventService eventService,
@@ -76,6 +79,7 @@ public class ContentPageViewModel : PageViewModel
     {
         DataService = dataService;
         UpdateService = updateService;
+        CloneService = cloneService;
 
         ModService = modService;
 
@@ -308,6 +312,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void InitScriptNode(ScriptNode node)
     {
+        node.DuplicateCommand = DuplicateScriptCommand;
         node.DeleteCommand = DeleteScriptCommand;
         node.EditCommand = EditCommand;
     }
@@ -318,6 +323,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void InitEventNode(EventNode node)
     {
+        node.DuplicateCommand = DuplicateEventCommand;
         node.DeleteCommand = DeleteEventCommand;
         node.EditCommand = EditCommand;
 
@@ -356,6 +362,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void InitOptionNode(OptionNode node)
     {
+        node.DuplicateCommand = DuplicateOptionCommand;
         node.DeleteCommand = DeleteOptionCommand;
         node.EditCommand = EditCommand;
 
@@ -375,6 +382,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void InitOnionNode(OnionNode node)
     {
+        node.DuplicateCommand = DuplicateOnionCommand;
         node.DeleteCommand = DeleteOnionCommand;
         node.EditCommand = EditCommand;
     }
@@ -385,6 +393,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void InitDecisionNode(DecisionNode node)
     {
+        node.DuplicateCommand = DuplicateDecisionCommand;
         node.DeleteCommand = DeleteDecisionCommand;
         node.EditCommand = EditCommand;
 
@@ -577,6 +586,24 @@ public class ContentPageViewModel : PageViewModel
         CreateScriptBranch(model, ModNode.ScriptNodes).Highlight();
     }
 
+    private RelayCommand<object>? duplicateScriptCommand;
+    public RelayCommand<object> DuplicateScriptCommand => duplicateScriptCommand ??= new(DuplicateScript, CanDuplicateScript);
+
+    private void DuplicateScript(object? param)
+    {
+        if (param is not ScriptViewModel observable)
+        { return; }
+
+        Update();
+
+        var clone = CloneService.Clone(observable.Model);
+        CreateScriptBranch(clone, ModNode.ScriptNodes).Highlight();
+    }
+    private bool CanDuplicateScript(object? param)
+    {
+        return param is ScriptViewModel;
+    }
+
     private RelayCommand<object>? deleteScriptCommand;
     public RelayCommand<object> DeleteScriptCommand => deleteScriptCommand ??= new(DeleteScript, CanDeleteScript);
 
@@ -632,6 +659,24 @@ public class ContentPageViewModel : PageViewModel
         PortraitService.Insert(new() { EventId = model.Id, Position = PortraitPosition.LowerRight });
 
         CreateEventBranch(model, ModNode.EventNodes).Highlight();
+    }
+
+    private RelayCommand<object>? duplicateEventCommand;
+    public RelayCommand<object> DuplicateEventCommand => duplicateEventCommand ??= new(DuplicateEvent, CanDuplicateEvent);
+
+    private void DuplicateEvent(object? param)
+    {
+        if (param is not EventViewModel observable)
+        { return; }
+
+        Update();
+
+        var clone = CloneService.Clone(observable.Model);
+        CreateEventBranch(clone, ModNode.EventNodes).Highlight();
+    }
+    private bool CanDuplicateEvent(object? param)
+    {
+        return param is EventViewModel;
     }
 
     private RelayCommand<object>? deleteEventCommand;
@@ -729,6 +774,50 @@ public class ContentPageViewModel : PageViewModel
 
 
     #region Option Commands
+
+    private RelayCommand<object>? duplicateOptionCommand;
+    public RelayCommand<object> DuplicateOptionCommand => duplicateOptionCommand ??= new(DuplicateOption, CanDuplicateOption);
+
+    private void DuplicateOption(object? param)
+    {
+        if (param is not OptionViewModel observable)
+        { return; }
+
+        Update();
+
+        var clone = CloneService.Clone(observable.Model);
+
+        {
+            var collections = RootNode.Descendants
+                .OfType<OptionBranch>()
+                .Where(node => node.Observable == observable)
+                .Select(node => node.Parent)
+                .OfType<CollectionNode>()
+                .ToArray();
+
+            foreach (var collection in collections)
+            {
+                CreateOptionBranch(clone, collection).Highlight();
+            }
+        }
+        {
+            var collections = RootNode.Descendants
+                .OfType<OptionLeaf>()
+                .Where(node => node.Observable == observable)
+                .Select(node => node.Parent)
+                .OfType<CollectionNode>()
+                .ToArray();
+
+            foreach (var collection in collections)
+            {
+                CreateOptionLeaf(clone, collection).Highlight();
+            }
+        }
+    }
+    private bool CanDuplicateOption(object? param)
+    {
+        return param is OptionViewModel;
+    }
 
     private RelayCommand<object>? deleteOptionCommand;
     public RelayCommand<object> DeleteOptionCommand => deleteOptionCommand ??= new(DeleteOption, CanDeleteOption);
@@ -875,6 +964,50 @@ public class ContentPageViewModel : PageViewModel
 
     #region Onion Commands
 
+    private RelayCommand<object>? duplicateOnionCommand;
+    public RelayCommand<object> DuplicateOnionCommand => duplicateOnionCommand ??= new(DuplicateOnion, CanDuplicateOnion);
+
+    private void DuplicateOnion(object? param)
+    {
+        if (param is not OnionViewModel observable)
+        { return; }
+
+        Update();
+
+        var clone = CloneService.Clone(observable.Model);
+
+        {
+            var collections = RootNode.Descendants
+                .OfType<OnionBranch>()
+                .Where(node => node.Observable == observable)
+                .Select(node => node.Parent)
+                .OfType<CollectionNode>()
+                .ToArray();
+
+            foreach (var collection in collections)
+            {
+                CreateOnionBranch(clone, collection).Highlight();
+            }
+        }
+        {
+            var collections = RootNode.Descendants
+                .OfType<OnionLeaf>()
+                .Where(node => node.Observable == observable)
+                .Select(node => node.Parent)
+                .OfType<CollectionNode>()
+                .ToArray();
+
+            foreach (var collection in collections)
+            {
+                CreateOnionLeaf(clone, collection).Highlight();
+            }
+        }
+    }
+    private bool CanDuplicateOnion(object? param)
+    {
+        return param is OnionViewModel;
+    }
+
     private RelayCommand<object>? deleteOnionCommand;
     public RelayCommand<object> DeleteOnionCommand => deleteOnionCommand ??= new(DeleteOnion, CanDeleteOnion);
 
@@ -924,6 +1057,24 @@ public class ContentPageViewModel : PageViewModel
         DecisionService.Insert(model);
 
         CreateDecisionBranch(model, ModNode.DecisionNodes).Highlight();
+    }
+
+    private RelayCommand<object>? duplicateDecisionCommand;
+    public RelayCommand<object> DuplicateDecisionCommand => duplicateDecisionCommand ??= new(DuplicateDecision, CanDuplicateDecision);
+
+    private void DuplicateDecision(object? param)
+    {
+        if (param is not DecisionViewModel observable)
+        { return; }
+
+        Update();
+
+        var clone = CloneService.Clone(observable.Model);
+        CreateDecisionBranch(clone, ModNode.DecisionNodes).Highlight();
+    }
+    private bool CanDuplicateDecision(object? param)
+    {
+        return param is DecisionViewModel;
     }
 
     private RelayCommand<object>? deleteDecisionCommand;

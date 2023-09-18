@@ -19,6 +19,8 @@ public interface IEntityService<T>
 
     void Update(T entity);
     void UpdateAll(IEnumerable<T> entity);
+
+    T Clone(T entity);
 }
 
 public abstract class EntityService<T> : IEntityService<T>
@@ -74,5 +76,13 @@ public abstract class EntityService<T> : IEntityService<T>
     public virtual void UpdateAll(IEnumerable<T> entity)
     {
         Data.Connection.UpdateAll(entity);
+    }
+
+    public T Clone(T entity)
+    {
+        T copy = Get(entity);
+        Data.Connection.Insert(copy);
+
+        return copy;
     }
 }
