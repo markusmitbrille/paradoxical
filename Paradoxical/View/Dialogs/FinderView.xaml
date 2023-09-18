@@ -11,10 +11,7 @@
     xmlns:converters="clr-namespace:Paradoxical.Converters"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance {x:Type viewmodel:FinderViewModel}}"
-    Background="White"
-    Height="400"
-    Width="550">
+    d:DataContext="{d:DesignInstance {x:Type viewmodel:FinderViewModel}}">
 
     <UserControl.InputBindings>
         <KeyBinding
@@ -26,121 +23,153 @@
     </UserControl.InputBindings>
 
     <UserControl.Resources>
+
         <converters:MathConverter
             x:Key="MathConverter" />
+
         <converters:VisibilityConverter
             x:Key="VisibilityConverter" />
+
+        <Style
+            TargetType="TextBox"
+            BasedOn="{StaticResource MaterialDesignFilledTextBox}">
+
+            <Setter
+                Property="Margin"
+                Value="6,12" />
+            <Setter
+                Property="materialDesign:HintAssist.FontFamily"
+                Value="{StaticResource MaterialDesignFont}" />
+
+        </Style>
+
     </UserControl.Resources>
 
-    <DockPanel>
+    <materialDesign:Card
+        Height="400"
+        Width="550"
+        Background="White">
 
-        <DockPanel
-            DockPanel.Dock="Bottom"
-            Margin="{Binding ActualHeight, ConverterParameter=16|8|16|-x*0.3, Converter={StaticResource MathConverter}, RelativeSource={RelativeSource Self}}">
+        <DockPanel>
 
-            <Button
-                DockPanel.Dock="Right"
-                Margin="8"
-                Style="{DynamicResource MaterialDesignFloatingActionSecondaryButton}"
-                Visibility="{Binding Selected, Converter={StaticResource VisibilityConverter}, FallbackValue=Collapsed}"
-                Command="{Binding SubmitCommand}"
-                Content="{materialDesign:PackIcon Kind=Check}"
-                ToolTip="Submit"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center" />
+            <DockPanel
+                DockPanel.Dock="Bottom"
+                Margin="{Binding ActualHeight, ConverterParameter=16|8|16|-x*0.3, Converter={StaticResource MathConverter}, RelativeSource={RelativeSource Self}}">
 
-            <Button
-                DockPanel.Dock="Left"
-                Margin="8"
-                Style="{DynamicResource MaterialDesignFloatingActionSecondaryButton}"
-                Command="{Binding CancelCommand}"
-                Content="{materialDesign:PackIcon Kind=Close}"
-                ToolTip="Cancel"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center" />
+                <Button
+                    DockPanel.Dock="Right"
+                    Margin="8"
+                    Style="{DynamicResource MaterialDesignFloatingActionSecondaryButton}"
+                    Visibility="{Binding Selected, Converter={StaticResource VisibilityConverter}, FallbackValue=Collapsed}"
+                    Command="{Binding SubmitCommand}"
+                    Content="{materialDesign:PackIcon Kind=Check}"
+                    ToolTip="Submit"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center" />
+
+                <Button
+                    DockPanel.Dock="Left"
+                    Margin="8"
+                    Style="{DynamicResource MaterialDesignFloatingActionSecondaryButton}"
+                    Command="{Binding CancelCommand}"
+                    Content="{materialDesign:PackIcon Kind=Close}"
+                    ToolTip="Cancel"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center" />
+
+            </DockPanel>
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="auto" />
+                    <RowDefinition
+                        Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBox
+                    Grid.Row="0"
+                    Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    prop:FocusHelper.FocusOnLoad="True"
+                    materialDesign:HintAssist.Hint="Filter"
+                    materialDesign:TextFieldAssist.HasClearButton="True">
+
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger
+                            EventName="TextChanged">
+                            <i:InvokeCommandAction
+                                Command="{Binding UpdateSelectionCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+
+                    <TextBox.InputBindings>
+                        <KeyBinding
+                            Command="{Binding CancelCommand}"
+                            Gesture="ESC" />
+                        <KeyBinding
+                            Command="{Binding SubmitCommand}"
+                            Gesture="Enter" />
+                        <KeyBinding
+                            Command="{Binding PreviousCommand}"
+                            Gesture="Up" />
+                        <KeyBinding
+                            Command="{Binding NextCommand}"
+                            Gesture="Down" />
+                    </TextBox.InputBindings>
+
+                </TextBox>
+
+                <ListBox
+                    Grid.Row="1"
+                    Margin="6,12"
+                    ItemsSource="{Binding Items}"
+                    SelectedItem="{Binding Selected}"
+                    IsSynchronizedWithCurrentItem="True">
+
+                    <ListBox.ItemContainerStyle>
+                        <Style
+                            TargetType="ListBoxItem"
+                            BasedOn="{StaticResource MaterialDesignListBoxItem}">
+
+                            <Setter
+                                Property="Margin"
+                                Value="0,1" />
+
+                            <Setter
+                                Property="FocusVisualStyle"
+                                Value="{x:Null}" />
+
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+
+                    <ListBox.Resources>
+                        <Style
+                            TargetType="{x:Type ScrollBar}"
+                            BasedOn="{StaticResource MaterialDesignScrollBarMinimal}" />
+                    </ListBox.Resources>
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate
+                            DataType="model:ParadoxDecision">
+                            <StackPanel
+                                Margin="24,4"
+                                Orientation="Horizontal">
+                                
+                                <TextBlock
+                                    Style="{DynamicResource MaterialDesignButtonTextBlock}"
+                                    Text="{Binding Name}" />
+                           
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+
+                </ListBox>
+
+            </Grid>
 
         </DockPanel>
 
-        <Grid>
-
-            <Grid.RowDefinitions>
-                <RowDefinition
-                    Height="auto" />
-                <RowDefinition
-                    Height="*" />
-            </Grid.RowDefinitions>
-
-            <TextBox
-                Grid.Row="0"
-                Margin="6,12"
-                Style="{DynamicResource MaterialDesignFilledTextBox}"
-                Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                prop:FocusHelper.FocusOnLoad="True"
-                materialDesign:HintAssist.Hint="Filter"
-                materialDesign:TextFieldAssist.HasClearButton="True">
-
-                <i:Interaction.Triggers>
-                    <i:EventTrigger
-                        EventName="TextChanged">
-                        <i:InvokeCommandAction
-                            Command="{Binding UpdateSelectionCommand}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-
-                <TextBox.InputBindings>
-                    <KeyBinding
-                        Command="{Binding CancelCommand}"
-                        Gesture="ESC" />
-                    <KeyBinding
-                        Command="{Binding SubmitCommand}"
-                        Gesture="Enter" />
-                    <KeyBinding
-                        Command="{Binding PreviousCommand}"
-                        Gesture="Up" />
-                    <KeyBinding
-                        Command="{Binding NextCommand}"
-                        Gesture="Down" />
-                </TextBox.InputBindings>
-
-            </TextBox>
-
-            <ListBox
-                Grid.Row="1"
-                Margin="6,12"
-                ItemsSource="{Binding Items}"
-                SelectedItem="{Binding Selected}"
-                IsSynchronizedWithCurrentItem="True">
-
-                <ListBox.Resources>
-                    <Style
-                        TargetType="{x:Type ScrollBar}"
-                        BasedOn="{StaticResource MaterialDesignScrollBarMinimal}" />
-                </ListBox.Resources>
-
-                <ListBox.Style>
-                    <StaticResource
-                        ResourceKey="MaterialDesignNavigationPrimaryListBox" />
-                </ListBox.Style>
-
-                <ListBox.ItemTemplate>
-                    <DataTemplate
-                        DataType="model:ParadoxDecision">
-
-                        <StackPanel
-                            Margin="24,4,0,4"
-                            Orientation="Horizontal">
-                            <TextBlock
-                                Style="{DynamicResource MaterialDesignButtonTextBlock}"
-                                Text="{Binding Name}" />
-                        </StackPanel>
-
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-
-            </ListBox>
-
-        </Grid>
-
-    </DockPanel>
+    </materialDesign:Card>
 
 </UserControl>
