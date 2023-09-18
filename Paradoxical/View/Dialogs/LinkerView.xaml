@@ -195,7 +195,7 @@
                 </TextBox>
 
                 <ListBox
-                    Grid.Row="1"
+                    Grid.Row="2"
                     Margin="6,12"
                     ItemsSource="{Binding Items}"
                     SelectedItem="{Binding Selected}"
