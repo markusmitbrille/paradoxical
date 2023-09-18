@@ -256,7 +256,7 @@ public class ContentPageViewModel : PageViewModel
     private RelayCommand? findCommand;
     public RelayCommand FindCommand => findCommand ??= new(Find);
 
-    private void Find()
+    public void Find()
     {
         FinderViewModel finder = new();
 

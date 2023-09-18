@@ -255,6 +255,22 @@ if you don't save them.",
         Application.Current.Shutdown();
     }
 
+    private RelayCommand? findCommand;
+    public RelayCommand FindCommand => findCommand ??= new(Find);
+
+    private void Find()
+    {
+        if (CurrentPage is not ContentPageViewModel)
+        {
+            GoToContent();
+        }
+
+        if (CurrentPage is not ContentPageViewModel page)
+        { return; }
+
+        page.Find();
+    }
+
     #region Theme
 
     private bool? useAltTheme;
