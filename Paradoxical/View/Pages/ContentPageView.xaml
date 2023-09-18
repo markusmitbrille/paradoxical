@@ -172,8 +172,14 @@
                         CommandParameter="{Binding Selected}" />
 
                     <MenuItem
-                        Header="Link…"
+                        Header="Create Linked Event"
                         Icon="{materialDesign:PackIcon Kind=Add}"
+                        Command="{Binding CreateOptionEventCommand}"
+                        CommandParameter="{Binding Selected}" />
+
+                    <MenuItem
+                        Header="Link Event…"
+                        Icon="{materialDesign:PackIcon Kind=LinkAdd}"
                         Command="{Binding CreateOptionLinkCommand}"
                         CommandParameter="{Binding Selected}" />
 
@@ -226,8 +232,14 @@
                         CommandParameter="{Binding Selected}" />
 
                     <MenuItem
-                        Header="Link…"
+                        Header="Create Linked Event"
                         Icon="{materialDesign:PackIcon Kind=Add}"
+                        Command="{Binding CreateDecisionEventCommand}"
+                        CommandParameter="{Binding Selected}" />
+
+                    <MenuItem
+                        Header="Link Event…"
+                        Icon="{materialDesign:PackIcon Kind=LinkAdd}"
                         Command="{Binding CreateDecisionLinkCommand}"
                         CommandParameter="{Binding Selected}" />
 
@@ -457,8 +469,14 @@
                                         <Separator />
 
                                         <MenuItem
-                                            Header="Link…"
+                                            Header="Create Linked Event"
                                             Icon="{materialDesign:PackIcon Kind=Add}"
+                                            Command="{Binding CreateEventCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Link Event…"
+                                            Icon="{materialDesign:PackIcon Kind=LinkAdd}"
                                             Command="{Binding LinkCommand}"
                                             CommandParameter="{Binding Observable}" />
 
@@ -523,8 +541,14 @@
                                         <Separator />
 
                                         <MenuItem
-                                            Header="Link…"
+                                            Header="Create Linked Event"
                                             Icon="{materialDesign:PackIcon Kind=Add}"
+                                            Command="{Binding CreateEventCommand}"
+                                            CommandParameter="{Binding Observable}" />
+
+                                        <MenuItem
+                                            Header="Link Event…"
+                                            Icon="{materialDesign:PackIcon Kind=LinkAdd}"
                                             Command="{Binding LinkCommand}"
                                             CommandParameter="{Binding Observable}" />
 

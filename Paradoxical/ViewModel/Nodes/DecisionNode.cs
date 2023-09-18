@@ -10,6 +10,7 @@ public abstract class DecisionNode : ObservableNode<DecisionViewModel>
     public RelayCommand<object>? DeleteCommand { get; set; }
 
     public RelayCommand<object>? LinkCommand { get; set; }
+    public RelayCommand<object>? CreateEventCommand { get; set; }
 }
 
 public sealed class DecisionBranch : DecisionNode

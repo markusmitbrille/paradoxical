@@ -7,7 +7,6 @@ using Paradoxical.Services;
 using Paradoxical.Services.Entities;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Paradoxical.ViewModel;
 
@@ -262,34 +261,19 @@ public class ContentPageViewModel : PageViewModel
 
     private void InitModBranch(ModBranch node)
     {
-        foreach (var observable in ScriptModelMap.Wrappers)
+        foreach (var relation in ScriptModelMap.Models)
         {
-            ScriptBranch child = new() { Observable = observable };
-
-            InitScriptNode(child);
-            InitScriptBranch(child);
-
-            node.ScriptNodes.Add(child);
+            CreateScriptBranch(relation, node.ScriptNodes);
         }
 
-        foreach (var observable in EventModelMap.Wrappers)
+        foreach (var relation in EventModelMap.Models)
         {
-            EventBranch child = new() { Observable = observable };
-
-            InitEventNode(child);
-            InitEventBranch(child);
-
-            node.EventNodes.Add(child);
+            CreateEventBranch(relation, node.EventNodes);
         }
 
-        foreach (var observable in DecisionModelMap.Wrappers)
+        foreach (var relation in DecisionModelMap.Models)
         {
-            DecisionBranch child = new() { Observable = observable };
-
-            InitDecisionNode(child);
-            InitDecisionBranch(child);
-
-            node.DecisionNodes.Add(child);
+            CreateDecisionBranch(relation, node.DecisionNodes);
         }
     }
 
@@ -318,35 +302,17 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var relation in EventService.GetPortraits(model))
         {
-            var observable = PortraitModelMap[relation];
-            PortraitBranch child = new() { Observable = observable };
-
-            InitPortraitNode(child);
-            InitPortraitBranch(child);
-
-            node.PortraitNodes.Add(child);
+            CreatePortraitBranch(relation, node.PortraitNodes);
         }
 
         foreach (var relation in EventService.GetOptions(model))
         {
-            var observable = OptionModelMap[relation];
-            OptionBranch child = new() { Observable = observable };
-
-            InitOptionNode(child);
-            InitOptionBranch(child);
-
-            node.OptionNodes.Add(child);
+            CreateOptionBranch(relation, node.OptionNodes);
         }
 
         foreach (var relation in EventService.GetOnions(model))
         {
-            var observable = OnionModelMap[relation];
-            OnionBranch child = new() { Observable = observable };
-
-            InitOnionNode(child);
-            InitOnionBranch(child);
-
-            node.OnionNodes.Add(child);
+            CreateOnionBranch(relation, node.OnionNodes);
         }
     }
 
@@ -365,6 +331,7 @@ public class ContentPageViewModel : PageViewModel
         node.EditCommand = EditCommand;
 
         node.LinkCommand = CreateOptionLinkCommand;
+        node.CreateEventCommand = CreateOptionEventCommand;
     }
 
     private void InitOptionBranch(OptionBranch node)
@@ -373,12 +340,7 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var relation in OptionService.GetLinks(model))
         {
-            var observable = LinkModelMap[relation];
-            LinkNode child = new() { Observable = observable };
-
-            InitLinkNode(child);
-
-            node.LinkNodes.Add(child);
+            CreateLinkNode(relation, node.LinkNodes);
         }
     }
 
@@ -398,6 +360,7 @@ public class ContentPageViewModel : PageViewModel
         node.EditCommand = EditCommand;
 
         node.LinkCommand = CreateDecisionLinkCommand;
+        node.CreateEventCommand = CreateDecisionEventCommand;
     }
 
     private void InitDecisionBranch(DecisionBranch node)
@@ -412,12 +375,161 @@ public class ContentPageViewModel : PageViewModel
         Link model = node.Observable.Model;
         Event relation = LinkService.GetEvent(model);
 
-        var observable = EventModelMap[relation];
-        EventLeaf child = new() { Observable = observable };
+        node.EventNode = CreateEventLeaf(relation);
+    }
 
-        InitEventNode(child);
+    #endregion
 
-        node.EventNode = child;
+
+    #region Node Create
+
+    private ScriptBranch CreateScriptBranch(Script model, CollectionNode? collection = null)
+    {
+        var observable = ScriptModelMap[model];
+        var node = new ScriptBranch() { Observable = observable };
+
+        InitScriptNode(node);
+        InitScriptBranch(node);
+
+        collection?.Add(node);
+        return node;
+    }
+
+    private ScriptLeaf CreateScriptLeaf(Script model, CollectionNode? collection = null)
+    {
+        var observable = ScriptModelMap[model];
+        var node = new ScriptLeaf() { Observable = observable };
+
+        InitScriptNode(node);
+
+        collection?.Add(node);
+        return node;
+    }
+
+    private EventBranch CreateEventBranch(Event model, CollectionNode? collection = null)
+    {
+        var observable = EventModelMap[model];
+        var node = new EventBranch() { Observable = observable };
+
+        InitEventNode(node);
+        InitEventBranch(node);
+
+        collection?.Add(node);
+        return node;
+    }
+
+    private EventLeaf CreateEventLeaf(Event model, CollectionNode? collection = null)
+    {
+        var observable = EventModelMap[model];
+        var node = new EventLeaf() { Observable = observable };
+
+        InitEventNode(node);
+
+        collection?.Add(node);
+        return node;
+    }
+
+    private PortraitBranch CreatePortraitBranch(Portrait model, CollectionNode? collection = null)
+    {
+        var observable = PortraitModelMap[model];
+        var node = new PortraitBranch() { Observable = observable };
+
+        InitPortraitNode(node);
+        InitPortraitBranch(node);
+
+        collection?.Add(node);
+        return node;
+    }
+
+    private PortraitLeaf CreatePortraitLeaf(Portrait model, CollectionNode? collection = null)
+    {
+        var observable = PortraitModelMap[model];
+        var node = new PortraitLeaf() { Observable = observable };
+
+        InitPortraitNode(node);
+
+        collection?.Add(node);
+        return node;
+    }
+
+    private OptionBranch CreateOptionBranch(Option model, CollectionNode? collection = null)
+    {
+        var observable = OptionModelMap[model];
+        var node = new OptionBranch() { Observable = observable };
+
+        InitOptionNode(node);
+        InitOptionBranch(node);
+
+        collection?.Add(node);
+        return node;
+    }
+
+    private OptionLeaf CreateOptionLeaf(Option model, CollectionNode? collection = null)
+    {
+        var observable = OptionModelMap[model];
+        var node = new OptionLeaf() { Observable = observable };
+
+        InitOptionNode(node);
+
+        collection?.Add(node);
+        return node;
+    }
+
+    private OnionBranch CreateOnionBranch(Onion model, CollectionNode? collection = null)
+    {
+        var observable = OnionModelMap[model];
+        var node = new OnionBranch() { Observable = observable };
+
+        InitOnionNode(node);
+        InitOnionBranch(node);
+
+        collection?.Add(node);
+        return node;
+    }
+
+    private OnionLeaf CreateOnionLeaf(Onion model, CollectionNode? collection = null)
+    {
+        var observable = OnionModelMap[model];
+        var node = new OnionLeaf() { Observable = observable };
+
+        InitOnionNode(node);
+
+        collection?.Add(node);
+        return node;
+    }
+
+    private DecisionBranch CreateDecisionBranch(Decision model, CollectionNode? collection = null)
+    {
+        var observable = DecisionModelMap[model];
+        var node = new DecisionBranch() { Observable = observable };
+
+        InitDecisionNode(node);
+        InitDecisionBranch(node);
+
+        collection?.Add(node);
+        return node;
+    }
+
+    private DecisionLeaf CreateDecisionLeaf(Decision model, CollectionNode? collection = null)
+    {
+        var observable = DecisionModelMap[model];
+        var node = new DecisionLeaf() { Observable = observable };
+
+        InitDecisionNode(node);
+
+        collection?.Add(node);
+        return node;
+    }
+
+    private LinkNode CreateLinkNode(Link model, CollectionNode? collection = null)
+    {
+        var observable = LinkModelMap[model];
+        var node = new LinkNode() { Observable = observable };
+
+        InitLinkNode(node);
+
+        collection?.Add(node);
+        return node;
     }
 
     #endregion
@@ -433,16 +545,7 @@ public class ContentPageViewModel : PageViewModel
         var model = new Script();
         ScriptService.Insert(model);
 
-        var observable = ScriptModelMap[model];
-        Selected = observable;
-
-        var node = new ScriptBranch() { Observable = observable };
-
-        InitScriptNode(node);
-        InitScriptBranch(node);
-
-        ModNode.ScriptNodes.Add(node);
-
+        var node = CreateScriptBranch(model, ModNode.ScriptNodes);
         node.Highlight();
     }
 
@@ -494,29 +597,14 @@ public class ContentPageViewModel : PageViewModel
         var model = new Event();
         EventService.Insert(model);
 
-        CreateEventPortrait(model, PortraitPosition.Left);
-        CreateEventPortrait(model, PortraitPosition.Right);
-        CreateEventPortrait(model, PortraitPosition.LowerLeft);
-        CreateEventPortrait(model, PortraitPosition.LowerCenter);
-        CreateEventPortrait(model, PortraitPosition.LowerRight);
+        PortraitService.Insert(new() { EventId = model.Id, Position = PortraitPosition.Left });
+        PortraitService.Insert(new() { EventId = model.Id, Position = PortraitPosition.Right });
+        PortraitService.Insert(new() { EventId = model.Id, Position = PortraitPosition.LowerLeft });
+        PortraitService.Insert(new() { EventId = model.Id, Position = PortraitPosition.LowerCenter });
+        PortraitService.Insert(new() { EventId = model.Id, Position = PortraitPosition.LowerRight });
 
-        var observable = EventModelMap[model];
-        Selected = observable;
-
-        var node = new EventBranch() { Observable = observable };
-
-        InitEventNode(node);
-        InitEventBranch(node);
-
-        ModNode.EventNodes.Add(node);
-
+        var node = CreateEventBranch(model, ModNode.EventNodes);
         node.Highlight();
-    }
-
-    private void CreateEventPortrait(Event parent, PortraitPosition position)
-    {
-        var model = new Portrait() { EventId = parent.Id, Position = position };
-        PortraitService.Insert(model);
     }
 
     private RelayCommand<object>? deleteEventCommand;
@@ -565,9 +653,6 @@ public class ContentPageViewModel : PageViewModel
         Option relation = new() { EventId = observable.Id };
         OptionService.Insert(relation);
 
-        var relationViewModel = OptionModelMap[relation];
-        Selected = relationViewModel;
-
         var parents = RootNode.Descendants
             .OfType<EventBranch>()
             .Where(parent => parent.Observable == observable)
@@ -575,13 +660,7 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var parent in parents)
         {
-            var node = new OptionBranch() { Observable = relationViewModel };
-
-            InitOptionNode(node);
-            InitOptionBranch(node);
-
-            parent.OptionNodes.Add(node);
-
+            var node = CreateOptionBranch(relation, parent.OptionNodes);
             node.Highlight();
         }
     }
@@ -601,9 +680,6 @@ public class ContentPageViewModel : PageViewModel
         Onion relation = new() { EventId = observable.Id };
         OnionService.Insert(relation);
 
-        var relationViewModel = OnionModelMap[relation];
-        Selected = relationViewModel;
-
         var parents = RootNode.Descendants
             .OfType<EventBranch>()
             .Where(parent => parent.Observable == observable)
@@ -611,13 +687,7 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var parent in parents)
         {
-            var node = new OnionBranch() { Observable = relationViewModel };
-
-            InitOnionNode(node);
-            InitOnionBranch(node);
-
-            parent.OnionNodes.Add(node);
-
+            var node = CreateOnionBranch(relation, parent.OptionNodes);
             node.Highlight();
         }
     }
@@ -726,14 +796,52 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var parent in parents)
         {
-            var node = new LinkNode() { Observable = LinkModelMap[relation] };
-
-            InitLinkNode(node);
-
-            parent.LinkNodes.Add(node);
+            CreateLinkNode(relation, parent.LinkNodes);
         }
     }
     private bool CanCreateOptionLink(object? param)
+    {
+        return param is OptionViewModel;
+    }
+
+    private RelayCommand<object>? createOptionEventCommand;
+    public RelayCommand<object> CreateOptionEventCommand => createOptionEventCommand ??= new(CreateOptionEvent, CanCreateOptionEvent);
+
+    private void CreateOptionEvent(object? param)
+    {
+        if (param is not OptionViewModel observable)
+        { return; }
+
+        Option model = observable.Model;
+
+        Event evt = new();
+        EventService.Insert(evt);
+
+        PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.Left });
+        PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.Right });
+        PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.LowerLeft });
+        PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.LowerCenter });
+        PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.LowerRight });
+
+        Link link = new() { EventId = evt.Id };
+
+        LinkService.Insert(link);
+        OptionService.AddLink(model, link);
+
+        var parents = RootNode.Descendants
+            .OfType<OptionBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            CreateLinkNode(link, parent.LinkNodes);
+        }
+
+        var node = CreateEventBranch(evt, ModNode.EventNodes);
+        node.Focus();
+    }
+    private bool CanCreateOptionEvent(object? param)
     {
         return param is OptionViewModel;
     }
@@ -791,16 +899,7 @@ public class ContentPageViewModel : PageViewModel
         var model = new Decision();
         DecisionService.Insert(model);
 
-        var observable = DecisionModelMap[model];
-        Selected = observable;
-
-        var node = new DecisionBranch() { Observable = observable };
-
-        InitDecisionNode(node);
-        InitDecisionBranch(node);
-
-        ModNode.DecisionNodes.Add(node);
-
+        var node = CreateDecisionBranch(model, ModNode.DecisionNodes);
         node.Highlight();
     }
 
@@ -895,14 +994,52 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var parent in parents)
         {
-            var node = new LinkNode() { Observable = LinkModelMap[relation] };
-
-            InitLinkNode(node);
-
-            parent.LinkNodes.Add(node);
+            CreateLinkNode(relation, parent.LinkNodes);
         }
     }
     private bool CanCreateDecisionLink(object? param)
+    {
+        return param is DecisionViewModel;
+    }
+
+    private RelayCommand<object>? createDecisionEventCommand;
+    public RelayCommand<object> CreateDecisionEventCommand => createDecisionEventCommand ??= new(CreateDecisionEvent, CanCreateDecisionEvent);
+
+    private void CreateDecisionEvent(object? param)
+    {
+        if (param is not DecisionViewModel observable)
+        { return; }
+
+        Decision model = observable.Model;
+
+        Event evt = new();
+        EventService.Insert(evt);
+
+        PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.Left });
+        PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.Right });
+        PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.LowerLeft });
+        PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.LowerCenter });
+        PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.LowerRight });
+
+        Link link = new() { EventId = evt.Id };
+
+        LinkService.Insert(link);
+        DecisionService.AddLink(model, link);
+
+        var parents = RootNode.Descendants
+            .OfType<DecisionBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            CreateLinkNode(link, parent.LinkNodes);
+        }
+
+        var node = CreateEventBranch(evt, ModNode.EventNodes);
+        node.Focus();
+    }
+    private bool CanCreateDecisionEvent(object? param)
     {
         return param is DecisionViewModel;
     }
