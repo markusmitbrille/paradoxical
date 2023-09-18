@@ -178,6 +178,7 @@ public class ContentPageViewModel : PageViewModel
         OnionService.UpdateAll(OnionModelMap.Models);
         PortraitService.UpdateAll(PortraitModelMap.Models);
         DecisionService.UpdateAll(DecisionModelMap.Models);
+        LinkService.UpdateAll(LinkModelMap.Models);
 
         DataService.CommitTransaction();
         DataService.BeginTransaction();
