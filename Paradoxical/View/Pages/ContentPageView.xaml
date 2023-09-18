@@ -74,14 +74,17 @@
 
                         <MenuItem
                             Header="Create Script"
+                            Icon="{materialDesign:PackIcon Kind=Add}"
                             Command="{Binding CreateScriptCommand}" />
 
                         <MenuItem
                             Header="Create Event"
+                            Icon="{materialDesign:PackIcon Kind=Add}"
                             Command="{Binding CreateEventCommand}" />
 
                         <MenuItem
                             Header="Create Decision"
+                            Icon="{materialDesign:PackIcon Kind=Add}"
                             Command="{Binding CreateDecisionCommand}" />
 
                     </MenuItem>
@@ -362,14 +365,17 @@
 
                                         <MenuItem
                                             Header="Create Script"
+                                            Icon="{materialDesign:PackIcon Kind=Add}"
                                             Command="{Binding CreateScriptCommand}" />
 
                                         <MenuItem
                                             Header="Create Event"
+                                            Icon="{materialDesign:PackIcon Kind=Add}"
                                             Command="{Binding CreateEventCommand}" />
 
                                         <MenuItem
                                             Header="Create Decision"
+                                            Icon="{materialDesign:PackIcon Kind=Add}"
                                             Command="{Binding CreateDecisionCommand}" />
 
                                     </ContextMenu>
