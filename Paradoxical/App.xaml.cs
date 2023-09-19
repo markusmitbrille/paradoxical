@@ -46,9 +46,9 @@ public partial class App : Application
         services.AddSingleton<ILinkService, LinkService>();
 
         // page view models
-        services.AddSingleton<AboutPageViewModel>();
-        services.AddSingleton<OutputPageViewModel>();
-        services.AddSingleton<ContentPageViewModel>();
+        services.AddTransient<AboutPageViewModel>();
+        services.AddTransient<OutputPageViewModel>();
+        services.AddTransient<ContentPageViewModel>();
 
         ServiceProvider = services.BuildServiceProvider();
     }

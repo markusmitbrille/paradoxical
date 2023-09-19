@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Core;
 using Paradoxical.Messages;
+using Paradoxical.Model;
 using Paradoxical.Model.Entities;
 using Paradoxical.Services;
 using Paradoxical.Services.Entities;
@@ -31,8 +32,7 @@ public class ContentPageViewModel : PageViewModel
     public IDecisionService DecisionService { get; }
     public ILinkService LinkService { get; }
 
-    private ModViewModel ModViewModel { get; set; } = new();
-
+    private ModelMap<Mod, ModViewModel> ModModelMap { get; set; } = new();
     private ModelMap<Script, ScriptViewModel> ScriptModelMap { get; set; } = new();
     private ModelMap<Event, EventViewModel> EventModelMap { get; set; } = new();
     private ModelMap<Option, OptionViewModel> OptionModelMap { get; set; } = new();
@@ -141,8 +141,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void UpdateAll()
     {
-        ModService.Update(ModViewModel.Model);
-
+        ModService.UpdateAll(ModModelMap.Models);
         ScriptService.UpdateAll(ScriptModelMap.Models);
         EventService.UpdateAll(EventModelMap.Models);
         OptionService.UpdateAll(OptionModelMap.Models);
@@ -157,18 +156,7 @@ public class ContentPageViewModel : PageViewModel
 
     private void Load()
     {
-        Selected = null;
-
-        var mod = ModService.Get().SingleOrDefault();
-        if (mod == null)
-        {
-            mod = new();
-            ModService.Insert(mod);
-        }
-
-        ModViewModel = new() { Model = mod };
-        Selected = ModViewModel;
-
+        ModModelMap = new(ModService.Get());
         ScriptModelMap = new(ScriptService.Get());
         EventModelMap = new(EventService.Get());
         OptionModelMap = new(OptionService.Get());
@@ -177,18 +165,10 @@ public class ContentPageViewModel : PageViewModel
         DecisionModelMap = new(DecisionService.Get());
         LinkModelMap = new(LinkService.Get());
 
-        ModNode = new()
-        {
-            Observable = ModViewModel,
-            IsSelected = true,
-            IsExpanded = true,
-        };
-
-        InitModNode(ModNode);
-        InitModBranch(ModNode);
+        var mod = ModService.GetOne();
 
         RootNode = new();
-        RootNode.Add(ModNode);
+        ModNode = CreateModBranch(mod, RootNode);
 
         DataService.BeginTransaction();
     }
@@ -198,6 +178,9 @@ public class ContentPageViewModel : PageViewModel
 
     private void Reload()
     {
+        // unselect and update before rollback
+        Selected = null;
+
         if (DataService.IsInTransaction)
         {
             DataService.RollbackTransaction();
@@ -425,6 +408,29 @@ public class ContentPageViewModel : PageViewModel
 
 
     #region Node Create
+
+    private ModBranch CreateModBranch(Mod model, CollectionNode? collection = null)
+    {
+        var observable = ModModelMap[model];
+        var node = new ModBranch() { Observable = observable };
+
+        InitModNode(node);
+        InitModBranch(node);
+
+        collection?.Add(node);
+        return node;
+    }
+
+    private ModLeaf CreateModLeaf(Mod model, CollectionNode? collection = null)
+    {
+        var observable = ModModelMap[model];
+        var node = new ModLeaf() { Observable = observable };
+
+        InitModNode(node);
+
+        collection?.Add(node);
+        return node;
+    }
 
     private ScriptBranch CreateScriptBranch(Script model, CollectionNode? collection = null)
     {

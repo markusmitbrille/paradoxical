@@ -7,6 +7,8 @@ namespace Paradoxical.Services.Entities;
 
 public interface IModService : IEntityService<Mod>
 {
+    public Mod GetOne();
+
     public string GetModName();
     public string GetModVersion();
     public string GetGameVersion();
@@ -17,6 +19,18 @@ public class ModService : EntityService<Mod>, IModService
 {
     public ModService(IDataService data, IMediatorService mediator) : base(data, mediator)
     {
+    }
+
+    public Mod GetOne()
+    {
+        var entity = Get().SingleOrDefault();
+        if (entity == null)
+        {
+            entity = new();
+            Insert(entity);
+        }
+
+        return entity;
     }
 
     public string GetModName()
