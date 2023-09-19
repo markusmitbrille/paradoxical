@@ -5,9 +5,11 @@ using Paradoxical.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Data;
 
 namespace Paradoxical.Core;
 
@@ -37,6 +39,10 @@ public interface INode
     INode CollapseChildren();
     INode CollapseDescendants();
     INode CollapseSiblings();
+
+    void AddSortDescription(SortDescription item);
+    void RemoveSortDescription(SortDescription item);
+    void Refresh();
 }
 
 public abstract partial class Node : ObservableObject, INode
@@ -248,6 +254,31 @@ public abstract partial class Node : ObservableObject, INode
         }
 
         return this;
+    }
+
+    private ICollectionView CollectionView => CollectionViewSource.GetDefaultView(Children);
+
+    public void AddSortDescription(SortDescription item)
+    {
+        CollectionView.SortDescriptions.Add(item);
+    }
+
+    public void RemoveSortDescription(SortDescription item)
+    {
+        CollectionView.SortDescriptions.Remove(item);
+    }
+
+    public void Refresh()
+    {
+        CollectionView.Refresh();
+    }
+
+    public void RefreshDescendants()
+    {
+        foreach (var node in Descendants)
+        {
+            node.Refresh();
+        }
     }
 }
 

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Core;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Paradoxical.ViewModel;
 
@@ -24,6 +25,13 @@ public sealed class ModBranch : ModNode
         ScriptNodes.Parent = this;
         EventNodes.Parent = this;
         DecisionNodes.Parent = this;
+
+        ScriptNodes.AddSortDescription(new($"{nameof(ScriptNode.Observable)}.{nameof(ScriptViewModel.Dir)}", ListSortDirection.Ascending));
+        ScriptNodes.AddSortDescription(new($"{nameof(ScriptNode.Observable)}.{nameof(ScriptViewModel.File)}", ListSortDirection.Ascending));
+
+        EventNodes.AddSortDescription(new($"{nameof(EventNode.Observable)}.{nameof(EventViewModel.Name)}", ListSortDirection.Ascending));
+
+        DecisionNodes.AddSortDescription(new($"{nameof(DecisionNode.Observable)}.{nameof(DecisionViewModel.Name)}", ListSortDirection.Ascending));
     }
 
     public override IEnumerable<INode> Children

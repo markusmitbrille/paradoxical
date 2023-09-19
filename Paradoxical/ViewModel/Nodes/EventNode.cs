@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Core;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Paradoxical.ViewModel;
 
@@ -28,6 +29,11 @@ public sealed class EventBranch : EventNode
         PortraitNodes.Parent = this;
         OptionNodes.Parent = this;
         OnionNodes.Parent = this;
+
+        OptionNodes.AddSortDescription(new($"{nameof(OptionNode.Observable)}.{nameof(OptionViewModel.Priority)}", ListSortDirection.Ascending));
+        OptionNodes.AddSortDescription(new($"{nameof(OptionNode.Observable)}.{nameof(OptionViewModel.Name)}", ListSortDirection.Ascending));
+
+        OnionNodes.AddSortDescription(new($"{nameof(OnionNode.Observable)}.{nameof(OnionViewModel.Name)}", ListSortDirection.Ascending));
     }
 
     public override IEnumerable<INode> Children

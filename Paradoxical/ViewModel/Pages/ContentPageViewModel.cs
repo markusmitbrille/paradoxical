@@ -268,6 +268,15 @@ public class ContentPageViewModel : PageViewModel
             .Focus();
     }
 
+    private RelayCommand? refreshCommand;
+    public RelayCommand RefreshCommand => refreshCommand ??= new(Refresh);
+
+    public void Refresh()
+    {
+        RootNode.Refresh();
+        RootNode.RefreshDescendants();
+    }
+
 
     #region Node Init
 

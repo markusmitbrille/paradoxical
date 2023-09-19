@@ -60,6 +60,13 @@
 
                 <Menu>
                     <MenuItem
+                        Header="Sort"
+                        Icon="{materialDesign:PackIcon Kind=Sort}"
+                        Command="{Binding RefreshCommand}" />
+                </Menu>
+
+                <Menu>
+                    <MenuItem
                         Header="Find…"
                         Icon="{materialDesign:PackIcon Kind=Search}"
                         Command="{Binding FindCommand}" />
@@ -416,8 +423,13 @@
                                     </ContextMenu>
                                 </Grid.ContextMenu>
 
-                                <TextBlock
-                                    Text="{Binding Observable.File}" />
+                                <TextBlock>
+                                    <Run
+                                        Text="{Binding Observable.Dir}" />
+                                    <Run> → </Run>
+                                    <Run
+                                        Text="{Binding Observable.File}" />
+                                </TextBlock>
 
                             </Grid>
                         </HierarchicalDataTemplate>
