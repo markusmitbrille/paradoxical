@@ -8,7 +8,7 @@
     xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance {x:Type viewmodel:AboutViewModel}}"
+    d:DataContext="{d:DesignInstance {x:Type viewmodel:AboutPageViewModel}}"
     d:DesignHeight="450"
     d:DesignWidth="800">
 
