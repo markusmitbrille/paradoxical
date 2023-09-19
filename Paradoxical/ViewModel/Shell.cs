@@ -29,6 +29,7 @@ public interface IShell
 {
     public void LoadConfig();
     public void SaveConfig();
+    public void ApplyConfig();
 
     public PageViewModel? CurrentPage { get; }
 
@@ -71,6 +72,9 @@ public class Shell : ObservableObject, IShell
     private class ConfigData
     {
         public bool UseAltTheme { get; set; } = false;
+
+        public string LastSavePath { get; set; } = string.Empty;
+        public string LastModPath { get; set; } = string.Empty;
     }
 
     private const string CONFIG_DIR = "./Paradoxical/";
@@ -84,12 +88,7 @@ public class Shell : ObservableObject, IShell
     private ConfigData Config
     {
         get => config ??= new();
-        set
-        {
-            config = value;
-
-            UseAltTheme = config.UseAltTheme;
-        }
+        set => config = value;
     }
 
     public void LoadConfig()
@@ -134,6 +133,19 @@ public class Shell : ObservableObject, IShell
         File.WriteAllText(ConfigPath, json);
     }
 
+    public void ApplyConfig()
+    {
+        UseAltTheme = Config.UseAltTheme;
+
+        if (File.Exists(Config.LastSavePath) == true)
+        {
+            FileService.SetSave(Config.LastSavePath);
+            FileService.SetMod(Config.LastModPath);
+
+            FileService.OpenSave();
+        }
+    }
+
     private void CreateConfig()
     {
         if (Directory.Exists(ConfigDir) == false)
@@ -157,8 +169,12 @@ public class Shell : ObservableObject, IShell
         Mediator.Send<SaveMessage>(new());
 
         ClearPage();
-        FileService.New();
+        FileService.ShowNewDialog();
+        FileService.NewSave();
         GoHome();
+
+        Config.LastSavePath = FileService.SavePath;
+        Config.LastModPath = FileService.ModPath;
     }
 
     private RelayCommand? openCommand;
@@ -169,8 +185,12 @@ public class Shell : ObservableObject, IShell
         Mediator.Send<SaveMessage>(new());
 
         ClearPage();
-        FileService.Open();
+        FileService.ShowOpenDialog();
+        FileService.OpenSave();
         GoHome();
+
+        Config.LastSavePath = FileService.SavePath;
+        Config.LastModPath = FileService.ModPath;
     }
 
     private RelayCommand? saveCommand;
@@ -195,8 +215,12 @@ public class Shell : ObservableObject, IShell
         Mediator.Send<SaveMessage>(new());
 
         ClearPage();
-        FileService.Backup();
+        FileService.ShowBackupDialog();
+        FileService.BackupSave();
         GoHome();
+
+        Config.LastSavePath = FileService.SavePath;
+        Config.LastModPath = FileService.ModPath;
     }
 
     private RelayCommand? exportCommand;
@@ -206,6 +230,9 @@ public class Shell : ObservableObject, IShell
     {
         Mediator.Send<SaveMessage>(new());
         FileService.Export();
+
+        Config.LastSavePath = FileService.SavePath;
+        Config.LastModPath = FileService.ModPath;
     }
 
     private RelayCommand? exportAsCommand;
@@ -215,6 +242,9 @@ public class Shell : ObservableObject, IShell
     {
         Mediator.Send<SaveMessage>(new());
         FileService.ExportAs();
+
+        Config.LastSavePath = FileService.SavePath;
+        Config.LastModPath = FileService.ModPath;
     }
 
     private RelayCommand? exitCommand;

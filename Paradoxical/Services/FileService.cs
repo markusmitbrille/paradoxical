@@ -8,9 +8,22 @@ namespace Paradoxical.Services;
 
 public interface IFileService
 {
-    void New();
-    void Open();
-    void Backup();
+    string SaveDir { get; }
+    string SaveFile { get; }
+    string SavePath { get; }
+
+    string ModDir { get; }
+    string ModFile { get; }
+    string ModPath { get; }
+
+    void SetSave(string file);
+    void SetMod(string file);
+    bool? ShowNewDialog();
+    bool? ShowOpenDialog();
+    bool? ShowBackupDialog();
+    void NewSave();
+    void BackupSave();
+    void OpenSave();
     void Export();
     void ExportAs();
 }
@@ -28,14 +41,18 @@ public class FileService : IFileService
         Build = build;
     }
 
-    private string SaveDir { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-    private string SaveFile { get; set; } = string.Empty;
-    private string SavePath { get; set; } = string.Empty;
+    public string SaveDir { get; private set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+    public string SaveFile { get; private set; } = string.Empty;
+    public string SavePath { get; private set; } = string.Empty;
 
-    private string ModDir { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-    private string ModFile { get; set; } = string.Empty;
+    public void SetSave(string file)
+    {
+        SaveDir = Path.GetDirectoryName(file) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        SaveFile = Path.GetFileNameWithoutExtension(file) ?? string.Empty;
+        SavePath = file;
+    }
 
-    public void New()
+    public bool? ShowNewDialog()
     {
         SaveFileDialog dlg = new()
         {
@@ -49,26 +66,16 @@ public class FileService : IFileService
             FileName = SaveFile,
         };
 
-        if (dlg.ShowDialog() != true)
-        { return; }
+        bool? result = dlg.ShowDialog();
+        if (result != true)
+        { return result; }
 
-        SaveDir = Path.GetDirectoryName(dlg.FileName) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        SaveFile = Path.GetFileNameWithoutExtension(dlg.FileName) ?? string.Empty;
-        SavePath = dlg.FileName;
+        SetSave(dlg.FileName);
 
-        if (Directory.Exists(SaveDir) == false)
-        { return; }
-
-        if (SaveFile == string.Empty)
-        { return; }
-
-        Data.Connect(SavePath, false);
-
-        Data.DropTables();
-        Data.CreateTables();
+        return result;
     }
 
-    public void Backup()
+    public bool? ShowBackupDialog()
     {
         SaveFileDialog dlg = new()
         {
@@ -82,25 +89,16 @@ public class FileService : IFileService
             FileName = SaveFile,
         };
 
-        if (dlg.ShowDialog() != true)
-        { return; }
+        bool? result = dlg.ShowDialog();
+        if (result != true)
+        { return result; }
 
-        SaveDir = Path.GetDirectoryName(dlg.FileName) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        SaveFile = Path.GetFileNameWithoutExtension(dlg.FileName) ?? string.Empty;
-        SavePath = dlg.FileName;
+        SetSave(dlg.FileName);
 
-        if (Directory.Exists(SaveDir) == false)
-        { return; }
-
-        if (SaveFile == string.Empty)
-        { return; }
-
-        Data.Connect(SavePath, true);
-
-        Data.CreateTables();
+        return result;
     }
 
-    public void Open()
+    public bool? ShowOpenDialog()
     {
         OpenFileDialog dlg = new()
         {
@@ -112,19 +110,59 @@ public class FileService : IFileService
             FileName = SaveFile,
         };
 
-        if (dlg.ShowDialog() != true)
+        bool? result = dlg.ShowDialog();
+        if (result != true)
+        { return result; }
+
+        SetSave(dlg.FileName);
+
+        return result;
+    }
+
+    public void NewSave()
+    {
+        if (Directory.Exists(SaveDir) == false)
         { return; }
 
-        SaveDir = Path.GetDirectoryName(dlg.FileName) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        SaveFile = Path.GetFileNameWithoutExtension(dlg.FileName) ?? string.Empty;
-        SavePath = dlg.FileName;
-
-        if (File.Exists(SavePath) == false)
+        if (SaveFile == string.Empty)
         { return; }
 
         Data.Connect(SavePath, false);
 
+        Data.DropTables();
         Data.CreateTables();
+    }
+
+    public void BackupSave()
+    {
+        if (Directory.Exists(SaveDir) == false)
+        { return; }
+
+        if (SaveFile == string.Empty)
+        { return; }
+
+        Data.Connect(SavePath, true);
+        Data.CreateTables();
+    }
+
+    public void OpenSave()
+    {
+        if (File.Exists(SavePath) == false)
+        { return; }
+
+        Data.Connect(SavePath, false);
+        Data.CreateTables();
+    }
+
+    public string ModDir { get; private set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+    public string ModFile { get; private set; } = string.Empty;
+    public string ModPath { get; private set; } = string.Empty;
+
+    public void SetMod(string file)
+    {
+        ModDir = Path.GetDirectoryName(file) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        ModFile = Path.GetFileNameWithoutExtension(file) ?? string.Empty;
+        ModPath = file;
     }
 
     public void Export()
@@ -155,8 +193,7 @@ public class FileService : IFileService
         if (dlg.ShowDialog() != true)
         { return; }
 
-        ModDir = Path.GetDirectoryName(dlg.FileName) ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        ModFile = Path.GetFileNameWithoutExtension(dlg.FileName) ?? string.Empty;
+        SetMod(dlg.FileName);
 
         if (Directory.Exists(ModDir) == false)
         { return; }

@@ -59,6 +59,7 @@ public partial class App : Application
 
         IShell shell = ServiceProvider.GetRequiredService<IShell>();
         shell.LoadConfig();
+        shell.ApplyConfig();
 
         MainWindow main = ServiceProvider.GetRequiredService<MainWindow>();
         main.Show();
