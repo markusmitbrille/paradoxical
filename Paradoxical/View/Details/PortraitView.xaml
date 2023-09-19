@@ -14,36 +14,6 @@
     d:DataContext="{d:DesignInstance {x:Type viewmodel:PortraitViewModel}}"
     d:DesignWidth="800">
 
-    <UserControl.Resources>
-
-        <Style
-            TargetType="TextBox"
-            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
-
-            <Setter
-                Property="Margin"
-                Value="6,12" />
-            <Setter
-                Property="materialDesign:HintAssist.FontFamily"
-                Value="{StaticResource MaterialDesignFont}" />
-
-        </Style>
-
-        <Style
-            TargetType="view:ScriptBox"
-            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
-
-            <Setter
-                Property="Margin"
-                Value="6,12" />
-            <Setter
-                Property="materialDesign:HintAssist.FontFamily"
-                Value="{StaticResource MaterialDesignFont}" />
-
-        </Style>
-
-    </UserControl.Resources>
-
     <TabControl
         Padding="20">
 
@@ -66,7 +36,7 @@
                     FontFamily="Consolas"
                     Text="{Binding Character, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     materialDesign:HintAssist.Hint="Character" />
-              
+
                 <view:ScriptBox
                     Grid.Row="1"
                     AcceptsReturn="False"

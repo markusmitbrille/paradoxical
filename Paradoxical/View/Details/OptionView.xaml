@@ -14,36 +14,6 @@
     mc:Ignorable="d"
     d:DesignWidth="800">
 
-    <UserControl.Resources>
-
-        <Style
-            TargetType="TextBox"
-            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
-
-            <Setter
-                Property="Margin"
-                Value="6,12" />
-            <Setter
-                Property="materialDesign:HintAssist.FontFamily"
-                Value="{StaticResource MaterialDesignFont}" />
-
-        </Style>
-
-        <Style
-            TargetType="view:ScriptBox"
-            BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
-
-            <Setter
-                Property="Margin"
-                Value="6,12" />
-            <Setter
-                Property="materialDesign:HintAssist.FontFamily"
-                Value="{StaticResource MaterialDesignFont}" />
-
-        </Style>
-
-    </UserControl.Resources>
-
     <TabControl
         Padding="20">
 
