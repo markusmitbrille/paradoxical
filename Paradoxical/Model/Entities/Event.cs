@@ -101,13 +101,13 @@ public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
         }
 
         writer.WriteLine();
-        WriteTrigger(writer, modService, eventService);
+        WriteTrigger(writer);
 
         writer.WriteLine();
         WriteImmediate(writer, modService, eventService, linkService);
 
         writer.WriteLine();
-        WriteAfter(writer, modService, eventService);
+        WriteAfter(writer);
 
         if (Hidden == false)
         {
@@ -150,9 +150,7 @@ public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
     }
 
     private void WriteTrigger(
-        TextWriter writer,
-        IModService modService,
-        IEventService eventService)
+        TextWriter writer)
     {
         if (CustomTrigger.IsEmpty() == true)
         {
@@ -182,6 +180,7 @@ public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
         ILinkService linkService)
     {
         var links = eventService.GetLinks(this);
+
         if (CustomImmediateEffect.IsEmpty() == true && links.Any() == false)
         {
             writer.Indent().WriteLine("# no immediate");
@@ -219,9 +218,7 @@ public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
     }
 
     private void WriteAfter(
-        TextWriter writer,
-        IModService modService,
-        IEventService eventService)
+        TextWriter writer)
     {
         if (CustomAfterEffect.IsEmpty() == true)
         {

@@ -192,13 +192,13 @@ public class Decision : IEntity, IModel, IEquatable<Decision?>, IComparable<Deci
         WriteMinCost(writer);
 
         writer.WriteLine();
-        WriteShown(writer, modService, decisionService);
+        WriteShown(writer);
 
         writer.WriteLine();
-        WriteFailure(writer, modService, decisionService);
+        WriteFailure(writer);
 
         writer.WriteLine();
-        WriteValid(writer, modService, decisionService);
+        WriteValid(writer);
 
         writer.WriteLine();
         WriteEffect(writer, modService, decisionService, linkService);
@@ -208,7 +208,7 @@ public class Decision : IEntity, IModel, IEquatable<Decision?>, IComparable<Deci
         writer.Indent().WriteLine($"ai_check_interval = {AiCheckFrequency}");
 
         writer.WriteLine();
-        WriteAiPotential(writer, modService, decisionService);
+        WriteAiPotential(writer);
 
         writer.WriteLine();
         WriteAiWillDo(writer);
@@ -298,9 +298,7 @@ public class Decision : IEntity, IModel, IEquatable<Decision?>, IComparable<Deci
     }
 
     private void WriteShown(
-        TextWriter writer,
-        IModService modService,
-        IDecisionService decisionService)
+        TextWriter writer)
     {
         if (CustomShownTrigger.IsEmpty() == true)
         {
@@ -313,8 +311,6 @@ public class Decision : IEntity, IModel, IEquatable<Decision?>, IComparable<Deci
 
         if (CustomShownTrigger.IsEmpty() == false)
         {
-            writer.Indent().WriteLine("# custom trigger");
-
             foreach (string line in CustomShownTrigger.Split(ParadoxText.NewParagraph))
             {
                 writer.Indent().WriteLine(line);
@@ -326,9 +322,7 @@ public class Decision : IEntity, IModel, IEquatable<Decision?>, IComparable<Deci
     }
 
     private void WriteFailure(
-        TextWriter writer,
-        IModService modService,
-        IDecisionService decisionService)
+        TextWriter writer)
     {
         if (CustomFailureTrigger.IsEmpty() == true)
         {
@@ -341,8 +335,6 @@ public class Decision : IEntity, IModel, IEquatable<Decision?>, IComparable<Deci
 
         if (CustomFailureTrigger.IsEmpty() == false)
         {
-            writer.Indent().WriteLine("# custom trigger");
-
             foreach (string line in CustomFailureTrigger.Split(ParadoxText.NewParagraph))
             {
                 writer.Indent().WriteLine(line);
@@ -354,9 +346,7 @@ public class Decision : IEntity, IModel, IEquatable<Decision?>, IComparable<Deci
     }
 
     private void WriteValid(
-        TextWriter writer,
-        IModService modService,
-        IDecisionService decisionService)
+        TextWriter writer)
     {
         if (CustomValidTrigger.IsEmpty() == true)
         {
@@ -369,8 +359,6 @@ public class Decision : IEntity, IModel, IEquatable<Decision?>, IComparable<Deci
 
         if (CustomValidTrigger.IsEmpty() == false)
         {
-            writer.Indent().WriteLine("# custom trigger");
-
             foreach (string line in CustomValidTrigger.Split(ParadoxText.NewParagraph))
             {
                 writer.Indent().WriteLine(line);
@@ -398,15 +386,26 @@ public class Decision : IEntity, IModel, IEquatable<Decision?>, IComparable<Deci
         writer.Indent().WriteLine("effect = {");
         ParadoxText.IndentLevel++;
 
-        WriteLinks(writer, modService, decisionService, linkService);
-
         if (CustomEffect.IsEmpty() == false)
         {
-            writer.Indent().WriteLine("# custom effect");
-
             foreach (string line in CustomEffect.Split(ParadoxText.NewParagraph))
             {
                 writer.Indent().WriteLine(line);
+            }
+        }
+        else
+        {
+            writer.Indent().WriteLine("# no custom effect");
+        }
+
+        if (links.Any() == true)
+        {
+            writer.WriteLine();
+            writer.Indent().WriteLine("# follow-up events");
+
+            foreach (var link in links)
+            {
+                link.Write(writer, modService, linkService);
             }
         }
 
@@ -414,31 +413,8 @@ public class Decision : IEntity, IModel, IEquatable<Decision?>, IComparable<Deci
         writer.Indent().WriteLine("}");
     }
 
-    private void WriteLinks(
-        TextWriter writer,
-        IModService modService,
-        IDecisionService decisionService,
-        ILinkService linkService)
-    {
-        var links = decisionService.GetLinks(this);
-        if (links.Any() == false)
-        {
-            writer.Indent().WriteLine("# no follow-up events");
-            return;
-        }
-
-        writer.Indent().WriteLine("# follow-up events");
-
-        foreach (var link in links)
-        {
-            link.Write(writer, modService, linkService);
-        }
-    }
-
     private void WriteAiPotential(
-        TextWriter writer,
-        IModService modService,
-        IDecisionService decisionService)
+        TextWriter writer)
     {
         if (AiPotential.IsEmpty() == true)
         {
@@ -523,15 +499,16 @@ public class Decision : IEntity, IModel, IEquatable<Decision?>, IComparable<Deci
             {
                 writer.Indent().WriteLine($"ai_zeal_target_modifier = {{ VALUE = {AiZealTargetModifier} }}");
             }
+        }
 
-            if (AiCustomWillDo.IsEmpty() == false)
+        if (AiCustomWillDo.IsEmpty() == false)
+        {
+            writer.WriteLine();
+            writer.Indent().WriteLine("# custom ai will-do");
+
+            foreach (string line in AiCustomWillDo.Split(ParadoxText.NewParagraph))
             {
-                writer.Indent().WriteLine("# custom ai will-do");
-
-                foreach (string line in AiCustomWillDo.Split(ParadoxText.NewParagraph))
-                {
-                    writer.Indent().WriteLine(line);
-                }
+                writer.Indent().WriteLine(line);
             }
         }
 

@@ -112,13 +112,13 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
         WriteTooltip(writer, modService);
 
         writer.WriteLine();
-        WriteTrigger(writer, modService, optionService);
+        WriteTrigger(writer);
 
         writer.WriteLine();
         WriteAiChance(writer);
 
         writer.WriteLine();
-        WriteEffect(writer, modService, optionService);
+        WriteEffect(writer);
 
         writer.WriteLine();
         WriteLinks(writer, modService, optionService, linkService);
@@ -141,9 +141,7 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
     }
 
     private void WriteTrigger(
-        TextWriter writer,
-        IModService modService,
-        IOptionService optionService)
+        TextWriter writer)
     {
         if (CustomTrigger.IsEmpty() == true)
         {
@@ -156,8 +154,6 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
 
         if (CustomTrigger.IsEmpty() == false)
         {
-            writer.Indent().WriteLine("# custom trigger");
-
             foreach (string line in CustomTrigger.Split(ParadoxText.NewParagraph))
             {
                 writer.Indent().WriteLine(line);
@@ -229,15 +225,16 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
             {
                 writer.Indent().WriteLine($"ai_zeal_target_modifier = {{ VALUE = {AiZealTargetModifier} }}");
             }
+        }
 
-            if (AiCustomChance.IsEmpty() == false)
+        if (AiCustomChance.IsEmpty() == false)
+        {
+            writer.WriteLine();
+            writer.Indent().WriteLine("# custom ai chance");
+
+            foreach (string line in AiCustomChance.Split(ParadoxText.NewParagraph))
             {
-                writer.Indent().WriteLine("# custom ai chance");
-
-                foreach (string line in AiCustomChance.Split(ParadoxText.NewParagraph))
-                {
-                    writer.Indent().WriteLine(line);
-                }
+                writer.Indent().WriteLine(line);
             }
         }
 
@@ -258,8 +255,6 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
             return;
         }
 
-        writer.Indent().WriteLine("# follow-up events");
-
         foreach (var link in links)
         {
             link.Write(writer, modService, linkService);
@@ -267,24 +262,17 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
     }
 
     private void WriteEffect(
-        TextWriter writer,
-        IModService modService,
-        IOptionService optionService)
+        TextWriter writer)
     {
-        if (CustomEffect.IsEmpty() == true)
+        if (CustomEffect.IsEmpty() != false)
         {
-            writer.Indent().WriteLine("# no special effect");
+            writer.Indent().WriteLine("# no custom effect");
             return;
         }
 
-        if (CustomEffect.IsEmpty() == false)
+        foreach (string line in CustomEffect.Split(ParadoxText.NewParagraph))
         {
-            writer.Indent().WriteLine("# custom effect");
-
-            foreach (string line in CustomEffect.Split(ParadoxText.NewParagraph))
-            {
-                writer.Indent().WriteLine(line);
-            }
+            writer.Indent().WriteLine(line);
         }
     }
 
