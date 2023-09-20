@@ -20,28 +20,14 @@ public interface IEventService : IEntityService<Event>
     Portrait? GetLowerLeftPortrait(Event model);
     Portrait? GetLowerCenterPortrait(Event model);
     Portrait? GetLowerRightPortrait(Event model);
+
+    IEnumerable<Link> GetLinks(Event model);
 }
 
 public class EventService : EntityService<Event>, IEventService
 {
     public EventService(IDataService data, IMediatorService mediator) : base(data, mediator)
     {
-    }
-
-    public override void Delete(Event model)
-    {
-        base.Delete(model);
-
-        string deleteOptions = ParadoxQuery.CompositionDelete(
-            c: "options",
-            fk: "event_id");
-
-        string deletePortraits = ParadoxQuery.CompositionDelete(
-            c: "portraits",
-            fk: "event_id");
-
-        Data.Connection.Execute(deleteOptions, model.Id);
-        Data.Connection.Execute(deletePortraits, model.Id);
     }
 
     public IEnumerable<Option> GetOptions(Event model)
@@ -100,5 +86,16 @@ public class EventService : EntityService<Event>, IEventService
     public Portrait? GetLowerRightPortrait(Event model)
     {
         return GetPortraits(model).FirstOrDefault(portrait => portrait.Position == PortraitPosition.LowerRight);
+    }
+
+    public IEnumerable<Link> GetLinks(Event model)
+    {
+        string query = ParadoxQuery.Composition(
+            c: "links",
+            o: "events",
+            fk: "event_id",
+            pk: "id");
+
+        return Data.Connection.Query<Link>(query, model.Id);
     }
 }
