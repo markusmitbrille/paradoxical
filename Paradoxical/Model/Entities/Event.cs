@@ -104,7 +104,7 @@ public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
         WriteTrigger(writer, modService, eventService);
 
         writer.WriteLine();
-        WriteImmediate(writer, modService, eventService);
+        WriteImmediate(writer, modService, eventService, linkService);
 
         writer.WriteLine();
         WriteAfter(writer, modService, eventService);
@@ -165,8 +165,6 @@ public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
 
         if (CustomTrigger.IsEmpty() == false)
         {
-            writer.Indent().WriteLine("# custom trigger");
-
             foreach (string line in CustomTrigger.Split(ParadoxText.NewParagraph))
             {
                 writer.Indent().WriteLine(line);
@@ -180,9 +178,11 @@ public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
     private void WriteImmediate(
         TextWriter writer,
         IModService modService,
-        IEventService eventService)
+        IEventService eventService,
+        ILinkService linkService)
     {
-        if (CustomImmediateEffect.IsEmpty() == true)
+        var links = eventService.GetLinks(this);
+        if (CustomImmediateEffect.IsEmpty() == true && links.Any() == false)
         {
             writer.Indent().WriteLine("# no immediate");
             return;
@@ -193,11 +193,24 @@ public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
 
         if (CustomImmediateEffect.IsEmpty() == false)
         {
-            writer.Indent().WriteLine("# custom effect");
-
             foreach (string line in CustomImmediateEffect.Split(ParadoxText.NewParagraph))
             {
                 writer.Indent().WriteLine(line);
+            }
+        }
+        else
+        {
+            writer.Indent().WriteLine("# no custom effect");
+        }
+
+        if (links.Any() == true)
+        {
+            writer.WriteLine();
+            writer.Indent().WriteLine("# follow-up events");
+
+            foreach (var link in links)
+            {
+                link.Write(writer, modService, linkService);
             }
         }
 
@@ -221,8 +234,6 @@ public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
 
         if (CustomAfterEffect.IsEmpty() == false)
         {
-            writer.Indent().WriteLine("# custom effect");
-
             foreach (string line in CustomAfterEffect.Split(ParadoxText.NewParagraph))
             {
                 writer.Indent().WriteLine(line);

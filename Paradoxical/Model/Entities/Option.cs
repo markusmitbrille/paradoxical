@@ -118,10 +118,10 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
         WriteAiChance(writer);
 
         writer.WriteLine();
-        WriteLinks(writer, modService, optionService, linkService);
+        WriteEffect(writer, modService, optionService);
 
         writer.WriteLine();
-        WriteEffect(writer, modService, optionService);
+        WriteLinks(writer, modService, optionService, linkService);
 
         ParadoxText.IndentLevel--;
         writer.Indent().WriteLine("}");

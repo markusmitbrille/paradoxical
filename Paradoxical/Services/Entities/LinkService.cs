@@ -20,6 +20,10 @@ public class LinkService : EntityService<Link>, ILinkService
     {
         base.Delete(model);
 
+        string deleteEvents = ParadoxQuery.CollectionDelete(
+            mn: "event_links",
+            fk: "link_id");
+
         string deleteOptions = ParadoxQuery.CollectionDelete(
             mn: "option_links",
             fk: "link_id");
@@ -28,6 +32,7 @@ public class LinkService : EntityService<Link>, ILinkService
             mn: "decision_links",
             fk: "link_id");
 
+        Data.Connection.Execute(deleteEvents, model.Id);
         Data.Connection.Execute(deleteOptions, model.Id);
         Data.Connection.Execute(deleteDecisions, model.Id);
     }

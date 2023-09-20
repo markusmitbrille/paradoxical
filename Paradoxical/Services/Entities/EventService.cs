@@ -21,13 +21,28 @@ public interface IEventService : IEntityService<Event>
     Portrait? GetLowerCenterPortrait(Event model);
     Portrait? GetLowerRightPortrait(Event model);
 
+    IEnumerable<Link> GetOwnedLinks(Event model);
+
     IEnumerable<Link> GetLinks(Event model);
+    void AddLink(Event model, Link relation);
+    void RemoveLink(Event model, Link relation);
 }
 
 public class EventService : EntityService<Event>, IEventService
 {
     public EventService(IDataService data, IMediatorService mediator) : base(data, mediator)
     {
+    }
+
+    public override void Delete(Event model)
+    {
+        base.Delete(model);
+
+        string deleteLinks = ParadoxQuery.CollectionDelete(
+            mn: "event_links",
+            fk: "event_id");
+
+        Data.Connection.Execute(deleteLinks, model.Id);
     }
 
     public IEnumerable<Option> GetOptions(Event model)
@@ -88,7 +103,7 @@ public class EventService : EntityService<Event>, IEventService
         return GetPortraits(model).FirstOrDefault(portrait => portrait.Position == PortraitPosition.LowerRight);
     }
 
-    public IEnumerable<Link> GetLinks(Event model)
+    public IEnumerable<Link> GetOwnedLinks(Event model)
     {
         string query = ParadoxQuery.Composition(
             c: "links",
@@ -97,5 +112,37 @@ public class EventService : EntityService<Event>, IEventService
             pk: "id");
 
         return Data.Connection.Query<Link>(query, model.Id);
+    }
+
+    public IEnumerable<Link> GetLinks(Event model)
+    {
+        string query = ParadoxQuery.Collection(
+            m: "links",
+            n: "events",
+            mn: "event_links",
+            mfk: "link_id",
+            nfk: "event_id",
+            mpk: "id",
+            npk: "id");
+
+        return Data.Connection.Query<Link>(query, model.Id);
+    }
+    public void AddLink(Event model, Link relation)
+    {
+        string query = ParadoxQuery.CollectionAdd(
+            mn: "event_links",
+            mfk: "event_id",
+            nfk: "link_id");
+
+        Data.Connection.Execute(query, model.Id, relation.Id);
+    }
+    public void RemoveLink(Event model, Link relation)
+    {
+        string query = ParadoxQuery.CollectionRemove(
+            mn: "event_links",
+            mfk: "event_id",
+            nfk: "link_id");
+
+        Data.Connection.Execute(query, model.Id, relation.Id);
     }
 }

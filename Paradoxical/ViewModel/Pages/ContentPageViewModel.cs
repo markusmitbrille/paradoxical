@@ -324,6 +324,8 @@ public class ContentPageViewModel : PageViewModel
         node.EditCommand = EditCommand;
 
         node.CreateOptionCommand = CreateEventOptionCommand;
+        node.LinkCommand = CreateEventLinkCommand;
+        node.CreateEventCommand = CreateEventEventCommand;
         node.CreateOnionCommand = CreateEventOnionCommand;
     }
 
@@ -339,6 +341,11 @@ public class ContentPageViewModel : PageViewModel
         foreach (var relation in EventService.GetOptions(model))
         {
             CreateOptionBranch(relation, node.OptionNodes);
+        }
+
+        foreach (var relation in EventService.GetLinks(model))
+        {
+            CreateLinkNode(relation, node.LinkNodes);
         }
 
         foreach (var relation in EventService.GetOnions(model))
@@ -770,10 +777,15 @@ public class ContentPageViewModel : PageViewModel
 
     private void DeleteEventLinks(Event model)
     {
-        var links = EventService.GetLinks(model);
-        foreach (var link in links)
+        foreach (var relation in EventService.GetOwnedLinks(model))
         {
-            var observable = LinkModelMap[link];
+            var observable = LinkModelMap[relation];
+            DeleteLink(observable);
+        }
+
+        foreach (var relation in EventService.GetLinks(model))
+        {
+            var observable = LinkModelMap[relation];
             DeleteLink(observable);
         }
     }
@@ -800,6 +812,99 @@ public class ContentPageViewModel : PageViewModel
         }
     }
     private bool CanCreateEventOption(object? param)
+    {
+        return param is EventViewModel;
+    }
+
+    private RelayCommand<object>? createEventLinkCommand;
+    public RelayCommand<object> CreateEventLinkCommand => createEventLinkCommand ??= new(CreateEventLink, CanCreateEventLink);
+
+    private void CreateEventLink(object? param)
+    {
+        if (param is not EventViewModel observable)
+        { return; }
+
+        Event model = observable.Model;
+
+        var events = EventService.Get();
+        var links = EventService.GetLinks(model);
+        var unlinked = events.Where(evt => links.Any(link => link.EventId == evt.Id) == false);
+
+        LinkerViewModel linker = new();
+        linker.Items = unlinked.Select(evt => EventModelMap[evt]).ToArray();
+
+        var res = linker.Show();
+
+        if (res != true)
+        { return; }
+
+        if (linker.Selected is not EventViewModel selected)
+        { return; }
+
+        Link relation = new()
+        {
+            EventId = selected.Id,
+
+            Scope = linker.Scope,
+            MinDays = linker.MinDays,
+            MaxDays = linker.MaxDays,
+        };
+
+        LinkService.Insert(relation);
+        EventService.AddLink(model, relation);
+
+        var parents = RootNode.Descendants
+            .OfType<EventBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            CreateLinkNode(relation, parent.LinkNodes);
+        }
+    }
+    private bool CanCreateEventLink(object? param)
+    {
+        return param is EventViewModel;
+    }
+
+    private RelayCommand<object>? createEventEventCommand;
+    public RelayCommand<object> CreateEventEventCommand => createEventEventCommand ??= new(CreateEventEvent, CanCreateEventEvent);
+
+    private void CreateEventEvent(object? param)
+    {
+        if (param is not EventViewModel observable)
+        { return; }
+
+        Event model = observable.Model;
+
+        Event evt = new();
+        EventService.Insert(evt);
+
+        PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.Left });
+        PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.Right });
+        PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.LowerLeft });
+        PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.LowerCenter });
+        PortraitService.Insert(new() { EventId = evt.Id, Position = PortraitPosition.LowerRight });
+
+        CreateEventBranch(evt, ModNode.EventNodes).Focus();
+
+        Link link = new() { EventId = evt.Id };
+
+        LinkService.Insert(link);
+        EventService.AddLink(model, link);
+
+        var parents = RootNode.Descendants
+            .OfType<EventBranch>()
+            .Where(parent => parent.Observable == observable)
+            .ToArray();
+
+        foreach (var parent in parents)
+        {
+            CreateLinkNode(link, parent.LinkNodes).ExpandAncestors();
+        }
+    }
+    private bool CanCreateEventEvent(object? param)
     {
         return param is EventViewModel;
     }

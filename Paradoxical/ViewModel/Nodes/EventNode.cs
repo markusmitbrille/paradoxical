@@ -15,6 +15,8 @@ public abstract class EventNode : ObservableNode<EventViewModel>
     public RelayCommand<object>? DeleteCommand { get; set; }
 
     public RelayCommand<object>? CreateOptionCommand { get; set; }
+    public RelayCommand<object>? LinkCommand { get; set; }
+    public RelayCommand<object>? CreateEventCommand { get; set; }
     public RelayCommand<object>? CreateOnionCommand { get; set; }
 }
 
@@ -22,7 +24,8 @@ public sealed class EventBranch : EventNode
 {
     public CollectionNode PortraitNodes { get; } = new() { Name = "Portraits", IsExpanded = false };
     public CollectionNode OptionNodes { get; } = new() { Name = "Options", IsExpanded = true };
-    public CollectionNode OnionNodes { get; } = new() { Name = "On-Actions", IsExpanded = false };
+    public CollectionNode LinkNodes { get; } = new() { Name = "Links", IsExpanded = true };
+    public CollectionNode OnionNodes { get; } = new() { Name = "On-Actions", IsExpanded = true };
 
     public EventBranch()
     {
@@ -42,6 +45,7 @@ public sealed class EventBranch : EventNode
         {
             yield return PortraitNodes;
             yield return OptionNodes;
+            yield return LinkNodes;
             yield return OnionNodes;
         }
     }

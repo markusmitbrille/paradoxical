@@ -77,6 +77,7 @@ public class DataService : IDataService
         Connection.CreateTable<Script>();
 
         Connection.CreateTable<Event>();
+        Connection.CreateTable<EventLink>();
 
         Connection.CreateTable<Portrait>();
 
@@ -98,6 +99,7 @@ public class DataService : IDataService
         Connection.DropTable<Script>();
 
         Connection.DropTable<Event>();
+        Connection.DropTable<EventLink>();
 
         Connection.DropTable<Portrait>();
 
@@ -119,6 +121,7 @@ public class DataService : IDataService
         Connection.DeleteAll<Script>();
 
         Connection.DeleteAll<Event>();
+        Connection.DeleteAll<EventLink>();
 
         Connection.DeleteAll<Portrait>();
 

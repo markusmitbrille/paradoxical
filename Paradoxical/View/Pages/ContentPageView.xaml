@@ -140,6 +140,16 @@
                     Command="{Binding CreateEventOptionCommand}"
                     CommandParameter="{Binding Selected}" />
 
+          <MenuItem Header="Create Linked Event"
+                    Icon="{materialDesign:PackIcon Kind=Add}"
+                    Command="{Binding CreateEventEventCommand}"
+                    CommandParameter="{Binding Selected}" />
+
+          <MenuItem Header="Link Event…"
+                    Icon="{materialDesign:PackIcon Kind=LinkAdd}"
+                    Command="{Binding CreateEventLinkCommand}"
+                    CommandParameter="{Binding Selected}" />
+
           <MenuItem Header="Create On-Action"
                     Icon="{materialDesign:PackIcon Kind=Add}"
                     Command="{Binding CreateEventOnionCommand}"
@@ -396,6 +406,16 @@
                     <MenuItem Header="Create Option"
                               Icon="{materialDesign:PackIcon Kind=Add}"
                               Command="{Binding CreateOptionCommand}"
+                              CommandParameter="{Binding Observable}" />
+
+                    <MenuItem Header="Create Linked Event"
+                              Icon="{materialDesign:PackIcon Kind=Add}"
+                              Command="{Binding CreateEventCommand}"
+                              CommandParameter="{Binding Observable}" />
+
+                    <MenuItem Header="Link Event…"
+                              Icon="{materialDesign:PackIcon Kind=LinkAdd}"
+                              Command="{Binding LinkCommand}"
                               CommandParameter="{Binding Observable}" />
 
                     <MenuItem Header="Create On-Action"
