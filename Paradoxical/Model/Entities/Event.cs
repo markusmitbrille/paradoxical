@@ -75,15 +75,15 @@ public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
         writer.Indent().WriteLine($"{GetQualifiedName(modService)} = {{");
         ParadoxText.IndentLevel++;
 
-        writer.Indent().WriteLine($"type = character_event");
-
-        if (Hidden)
+        if (Hidden == true)
         {
             writer.Indent().WriteLine("hidden = yes");
         }
 
         if (Hidden == false)
         {
+            writer.Indent().WriteLine($"type = character_event");
+
             writer.WriteLine();
 
             writer.Indent().WriteLine($"title = {GetLocationKey(modService)}.t");
