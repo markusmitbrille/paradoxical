@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class ModViewModel : ModelWrapper<Mod>, IEquatable<ModViewModel?>
+public class ModViewModel : ViewModel<Mod>, IEquatable<ModViewModel?>
 {
     public string ModName
     {

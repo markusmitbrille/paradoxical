@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class DecisionViewModel : ModelWrapper<Decision>, IEquatable<DecisionViewModel?>, ISearchable
+public class DecisionViewModel : ViewModel<Decision>, IEquatable<DecisionViewModel?>, ISearchable
 {
     public string Name
     {

@@ -5,21 +5,21 @@ using static Paradoxical.View.CompleteBox;
 
 namespace Paradoxical.Core;
 
-public interface IModelWrapper
+public interface IViewModel
 {
     IModel Model { get; }
     int Id { get; }
 }
 
-public interface IModelWrapper<T> where T : IModel
+public interface IViewModel<T> where T : IModel
 {
     T Model { get; init; }
     int Id { get; }
 }
 
-public abstract class ModelWrapper<T> : ObservableObject
-    , IModelWrapper
-    , IModelWrapper<T>
+public abstract class ViewModel<T> : ObservableObject
+    , IViewModel
+    , IViewModel<T>
     where T : IModel, new()
 {
     protected readonly T model = new();
@@ -29,7 +29,7 @@ public abstract class ModelWrapper<T> : ObservableObject
         init => model = value;
     }
 
-    IModel IModelWrapper.Model => Model;
+    IModel IViewModel.Model => Model;
 
     public int Id
     {

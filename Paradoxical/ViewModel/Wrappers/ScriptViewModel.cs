@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class ScriptViewModel : ModelWrapper<Script>, IEquatable<ScriptViewModel?>, ISearchable
+public class ScriptViewModel : ViewModel<Script>, IEquatable<ScriptViewModel?>, ISearchable
 {
     public string Name
     {

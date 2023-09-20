@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class OnionViewModel : ModelWrapper<Onion>, IEquatable<OnionViewModel?>
+public class OnionViewModel : ViewModel<Onion>, IEquatable<OnionViewModel?>
 {
     public int EventId
     {

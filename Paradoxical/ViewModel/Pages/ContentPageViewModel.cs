@@ -129,10 +129,10 @@ public class ContentPageViewModel : PageViewModel
 
     private void Update()
     {
-        if (selected is not IModelWrapper wrapper)
+        if (selected is not IViewModel vm)
         { return; }
 
-        if (wrapper.Model is not IEntity entity)
+        if (vm.Model is not IEntity entity)
         { return; }
 
         UpdateService.Update(entity);
@@ -243,9 +243,9 @@ public class ContentPageViewModel : PageViewModel
         FinderViewModel finder = new();
 
         finder.Items = Enumerable.Empty<ISearchable>()
-            .Union(ScriptModelMap.Wrappers)
-            .Union(EventModelMap.Wrappers)
-            .Union(DecisionModelMap.Wrappers)
+            .Union(ScriptModelMap.ViewModels)
+            .Union(EventModelMap.ViewModels)
+            .Union(DecisionModelMap.ViewModels)
             .ToArray();
 
         var res = finder.Show();

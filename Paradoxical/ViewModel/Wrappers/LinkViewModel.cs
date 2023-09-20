@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class LinkViewModel : ModelWrapper<Link>, IEquatable<LinkViewModel?>
+public class LinkViewModel : ViewModel<Link>, IEquatable<LinkViewModel?>
 {
     public int EventId
     {

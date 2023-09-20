@@ -5,7 +5,7 @@ namespace Paradoxical.Core;
 
 public class ModelMap<M, W>
     where M : IModel, new()
-    where W : IModelWrapper<M>, new()
+    where W : IViewModel<M>, new()
 {
     private Dictionary<M, W> Map { get; } = new();
 
@@ -18,15 +18,15 @@ public class ModelMap<M, W>
                 return Map[model];
             }
 
-            var wrapper = new W() { Model = model };
-            Map[model] = wrapper;
+            var vm = new W() { Model = model };
+            Map[model] = vm;
 
-            return wrapper;
+            return vm;
         }
     }
 
     public IEnumerable<M> Models => Map.Keys;
-    public IEnumerable<W> Wrappers => Map.Values;
+    public IEnumerable<W> ViewModels => Map.Values;
 
     public ModelMap()
     {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public partial class PortraitViewModel : ModelWrapper<Portrait>, IEquatable<PortraitViewModel?>
+public partial class PortraitViewModel : ViewModel<Portrait>, IEquatable<PortraitViewModel?>
 {
     public int EventId
     {

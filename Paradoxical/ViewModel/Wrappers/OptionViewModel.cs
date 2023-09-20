@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class OptionViewModel : ModelWrapper<Option>, IEquatable<OptionViewModel?>
+public class OptionViewModel : ViewModel<Option>, IEquatable<OptionViewModel?>
 {
     public int EventId
     {

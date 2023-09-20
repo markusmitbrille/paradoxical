@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class EventViewModel : ModelWrapper<Event>, IEquatable<EventViewModel?>, ISearchable
+public class EventViewModel : ViewModel<Event>, IEquatable<EventViewModel?>, ISearchable
 {
     public string Name
     {
