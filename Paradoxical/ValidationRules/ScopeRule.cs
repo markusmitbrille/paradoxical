@@ -32,6 +32,6 @@ public partial class ScopeRule : ValidationRule
         return ValidationResult.ValidResult;
     }
 
-    [GeneratedRegex(@"^[a-zA-Z][a-zA-Z0-9_]*$")]
+    [GeneratedRegex(@"^[a-zA-Z.:][a-zA-Z0-9_.:]*$")]
     private static partial Regex GetScopeRegex();
 }
