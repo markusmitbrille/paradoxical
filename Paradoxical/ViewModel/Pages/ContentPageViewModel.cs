@@ -822,7 +822,7 @@ public class ContentPageViewModel : PageViewModel
 
         foreach (var parent in parents)
         {
-            CreateOnionBranch(relation, parent.OptionNodes).CollapseSiblings().Select();
+            CreateOnionBranch(relation, parent.OnionNodes).CollapseSiblings().Select();
         }
     }
     private bool CanCreateEventOnion(object? param)
