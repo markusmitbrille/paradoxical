@@ -1,147 +1,130 @@
-﻿<UserControl
-    x:Class="Paradoxical.View.OutputPageView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:view="clr-namespace:Paradoxical.View"
-    xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
-    xmlns:converters="clr-namespace:Paradoxical.Converters"
-    xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance {x:Type viewmodel:OutputPageViewModel}}"
-    d:DesignWidth="800">
+﻿<UserControl x:Class="Paradoxical.View.OutputPageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:view="clr-namespace:Paradoxical.View"
+             xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
+             xmlns:converters="clr-namespace:Paradoxical.Converters"
+             xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance {x:Type viewmodel:OutputPageViewModel}}"
+             d:DesignWidth="800">
 
-    <DockPanel>
+  <DockPanel>
 
-        <ToolBarTray
-            DockPanel.Dock="Top"
-            Margin="20">
-            <ToolBar
-                ClipToBounds="False"
-                Style="{StaticResource MaterialDesignToolBar}">
+    <ToolBarTray DockPanel.Dock="Top"
+                 Margin="20">
+      <ToolBar ClipToBounds="False"
+               Style="{StaticResource MaterialDesignToolBar}">
 
-                <Menu>
-                    <MenuItem
-                        Header="Reload"
-                        Icon="{materialDesign:PackIcon Kind=Reload}"
-                        Command="{Binding ReloadCommand}" />
-                </Menu>
+        <Menu>
+          <MenuItem Header="Reload"
+                    Icon="{materialDesign:PackIcon Kind=Reload}"
+                    Command="{Binding ReloadCommand}" />
+        </Menu>
 
-            </ToolBar>
-        </ToolBarTray>
+      </ToolBar>
+    </ToolBarTray>
 
-        <TabControl
-            Padding="20"
-            SelectedIndex="{Binding SelectedTab}">
+    <TabControl Padding="20"
+                SelectedIndex="{Binding SelectedTab}">
 
-            <TabItem
-                x:Name="EventsTab"
-                Header="Events">
-                <Grid>
+      <TabItem x:Name="EventsTab"
+               Header="Events">
+        <Grid>
 
-                    <view:ScriptBox
-                        IsReadOnly="True"
-                        FontFamily="Consolas"
-                        AcceptsReturn="True"
-                        AcceptsTab="True"
-                        AcceptsDot="True"
-                        AllowFormatting="True"
-                        AllowedCompleteItems="All">
+          <view:ScriptBox IsReadOnly="True"
+                          FontFamily="Consolas"
+                          AcceptsReturn="True"
+                          AcceptsTab="True"
+                          AcceptsDot="True"
+                          AllowFormatting="True"
+                          AllowedCompleteItems="All">
 
-                        <view:ScriptBox.Text>
-                            <Binding
-                                Path="EventsFileOutput"
-                                Mode="OneWay">
-                            </Binding>
-                        </view:ScriptBox.Text>
+            <view:ScriptBox.Text>
+              <Binding Path="EventsFileOutput"
+                       Mode="OneWay">
+              </Binding>
+            </view:ScriptBox.Text>
 
-                    </view:ScriptBox>
+          </view:ScriptBox>
 
-                </Grid>
-            </TabItem>
+        </Grid>
+      </TabItem>
 
-            <TabItem
-                x:Name="DecisionsTab"
-                Header="Decisions">
-                <Grid>
+      <TabItem x:Name="DecisionsTab"
+               Header="Decisions">
+        <Grid>
 
-                    <view:ScriptBox
-                        IsReadOnly="True"
-                        FontFamily="Consolas"
-                        AcceptsReturn="True"
-                        AcceptsTab="True"
-                        AcceptsDot="True"
-                        AllowFormatting="True"
-                        AllowedCompleteItems="All">
+          <view:ScriptBox IsReadOnly="True"
+                          FontFamily="Consolas"
+                          AcceptsReturn="True"
+                          AcceptsTab="True"
+                          AcceptsDot="True"
+                          AllowFormatting="True"
+                          AllowedCompleteItems="All">
 
-                        <view:ScriptBox.Text>
-                            <Binding
-                                Path="DecisionsFileOutput"
-                                Mode="OneWay">
-                            </Binding>
-                        </view:ScriptBox.Text>
+            <view:ScriptBox.Text>
+              <Binding Path="DecisionsFileOutput"
+                       Mode="OneWay">
+              </Binding>
+            </view:ScriptBox.Text>
 
-                    </view:ScriptBox>
+          </view:ScriptBox>
 
-                </Grid>
-            </TabItem>
+        </Grid>
+      </TabItem>
 
-            <TabItem
-                x:Name="OnionsTab"
-                Header="On-Actions">
-                <Grid>
+      <TabItem x:Name="OnionsTab"
+               Header="On-Actions">
+        <Grid>
 
-                    <view:ScriptBox
-                        IsReadOnly="True"
-                        FontFamily="Consolas"
-                        AcceptsReturn="True"
-                        AcceptsTab="True"
-                        AcceptsDot="True"
-                        AllowFormatting="True"
-                        AllowedCompleteItems="All">
+          <view:ScriptBox IsReadOnly="True"
+                          FontFamily="Consolas"
+                          AcceptsReturn="True"
+                          AcceptsTab="True"
+                          AcceptsDot="True"
+                          AllowFormatting="True"
+                          AllowedCompleteItems="All">
 
-                        <view:ScriptBox.Text>
-                            <Binding
-                                Path="OnionsFileOutput"
-                                Mode="OneWay">
-                            </Binding>
-                        </view:ScriptBox.Text>
+            <view:ScriptBox.Text>
+              <Binding Path="OnionsFileOutput"
+                       Mode="OneWay">
+              </Binding>
+            </view:ScriptBox.Text>
 
-                    </view:ScriptBox>
+          </view:ScriptBox>
 
-                </Grid>
-            </TabItem>
+        </Grid>
+      </TabItem>
 
-            <TabItem
-                x:Name="LocTab"
-                Header="Localization">
-                <Grid>
+      <TabItem x:Name="LocTab"
+               Header="Localization">
+        <Grid>
 
-                    <view:ScriptBox
-                        IsReadOnly="True"
-                        FontFamily="Consolas"
-                        AcceptsReturn="True"
-                        AcceptsTab="True"
-                        AcceptsDot="True"
-                        AllowFormatting="True"
-                        AllowedCompleteItems="All">
+          <view:ScriptBox IsReadOnly="True"
+                          FontFamily="Consolas"
+                          AcceptsReturn="True"
+                          AcceptsTab="True"
+                          AcceptsDot="True"
+                          AllowFormatting="True"
+                          AllowedCompleteItems="All">
 
-                        <view:ScriptBox.Text>
-                            <Binding
-                                Path="LocFileOutput"
-                                Mode="OneWay">
-                            </Binding>
-                        </view:ScriptBox.Text>
+            <view:ScriptBox.Text>
+              <Binding Path="LocFileOutput"
+                       Mode="OneWay">
+              </Binding>
+            </view:ScriptBox.Text>
 
-                    </view:ScriptBox>
+          </view:ScriptBox>
 
-                </Grid>
-            </TabItem>
+        </Grid>
+      </TabItem>
 
-        </TabControl>
+    </TabControl>
 
-    </DockPanel>
+  </DockPanel>
 
 </UserControl>

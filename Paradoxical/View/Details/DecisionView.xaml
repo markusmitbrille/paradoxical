@@ -1,827 +1,690 @@
-﻿<UserControl
-    x:Class="Paradoxical.View.DecisionView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:view="clr-namespace:Paradoxical.View"
-    xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
-    xmlns:converters="clr-namespace:Paradoxical.Converters"
-    xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    d:DataContext="{d:DesignInstance {x:Type viewmodel:DecisionViewModel}}"
-    mc:Ignorable="d"
-    d:DesignWidth="1200">
+﻿<UserControl x:Class="Paradoxical.View.DecisionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:view="clr-namespace:Paradoxical.View"
+             xmlns:viewmodel="clr-namespace:Paradoxical.ViewModel"
+             xmlns:converters="clr-namespace:Paradoxical.Converters"
+             xmlns:rules="clr-namespace:Paradoxical.ValidationRules"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             d:DataContext="{d:DesignInstance {x:Type viewmodel:DecisionViewModel}}"
+             mc:Ignorable="d"
+             d:DesignWidth="1200">
 
-    <TabControl
-        Padding="20">
+  <TabControl Padding="20">
 
-        <TabItem
-            x:Name="DisplayTab"
-            Header="Display">
-            <Grid>
+    <TabItem x:Name="DisplayTab"
+             Header="Display">
+      <Grid>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition
-                        Height="auto" />
-                    <RowDefinition
-                        Height="auto" />
-                    <RowDefinition
-                        Height="*" />
-                    <RowDefinition
-                        Height="auto" />
-                    <RowDefinition
-                        Height="auto" />
-                    <RowDefinition
-                        Height="auto" />
-                    <RowDefinition
-                        Height="auto" />
-                    <RowDefinition
-                        Height="auto" />
-                    <RowDefinition
-                        Height="auto" />
-                </Grid.RowDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="auto" />
+          <RowDefinition Height="auto" />
+          <RowDefinition Height="*" />
+          <RowDefinition Height="auto" />
+          <RowDefinition Height="auto" />
+          <RowDefinition Height="auto" />
+          <RowDefinition Height="auto" />
+          <RowDefinition Height="auto" />
+          <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
 
-                <Grid
-                    Grid.Row="0">
+        <Grid Grid.Row="0">
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                            Width="4*" />
-                        <ColumnDefinition
-                            Width="1*" />
-                        <ColumnDefinition
-                            Width="auto" />
-                    </Grid.ColumnDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="auto" />
+          </Grid.ColumnDefinitions>
 
-                    <TextBox
-                        Grid.Column="0"
-                        materialDesign:HintAssist.Hint="Name">
+          <TextBox Grid.Column="0"
+                   materialDesign:HintAssist.Hint="Name">
 
-                        <TextBox.Text>
-                            <Binding
-                                Path="Name"
-                                Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged"
-                                FallbackValue="element_name">
-                                <Binding.ValidationRules>
-                                    <rules:RequiredRule
-                                        ValidatesOnTargetUpdated="True" />
-                                    <rules:NameRule
-                                        ValidatesOnTargetUpdated="True" />
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
+            <TextBox.Text>
+              <Binding Path="Name"
+                       Mode="TwoWay"
+                       UpdateSourceTrigger="PropertyChanged"
+                       FallbackValue="element_name">
+                <Binding.ValidationRules>
+                  <rules:RequiredRule ValidatesOnTargetUpdated="True" />
+                  <rules:NameRule ValidatesOnTargetUpdated="True" />
+                </Binding.ValidationRules>
+              </Binding>
+            </TextBox.Text>
 
-                    </TextBox>
+          </TextBox>
 
-                    <TextBox
-                        Grid.Column="1"
+          <TextBox Grid.Column="1"
+                   AcceptsReturn="False"
+                   materialDesign:HintAssist.Hint="Order">
+
+            <TextBox.Text>
+              <Binding Path="Order"
+                       Mode="TwoWay"
+                       UpdateSourceTrigger="PropertyChanged">
+                <Binding.ValidationRules>
+                  <rules:IntRule />
+                </Binding.ValidationRules>
+              </Binding>
+            </TextBox.Text>
+
+          </TextBox>
+
+          <CheckBox Grid.Column="2"
+                    IsChecked="{Binding Major}"
+                    Content="Major" />
+
+        </Grid>
+
+        <view:ScriptBox Grid.Row="1"
+                        FontFamily="Consolas"
                         AcceptsReturn="False"
-                        materialDesign:HintAssist.Hint="Order">
+                        AcceptsTab="False"
+                        AcceptsDot="True"
+                        AllowFormatting="False"
+                        AllowedCompleteItems="Localization"
+                        materialDesign:HintAssist.Hint="Title">
 
-                        <TextBox.Text>
-                            <Binding
-                                Path="Order"
-                                Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <rules:IntRule />
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
+          <view:ScriptBox.Text>
+            <Binding Path="Title"
+                     Mode="TwoWay"
+                     UpdateSourceTrigger="PropertyChanged">
 
-                    </TextBox>
+              <Binding.Converter>
+                <converters:ScriptConverter />
+              </Binding.Converter>
 
-                    <CheckBox
-                        Grid.Column="2"
-                        IsChecked="{Binding Major}"
-                        Content="Major" />
+            </Binding>
+          </view:ScriptBox.Text>
 
-                </Grid>
+        </view:ScriptBox>
 
-                <view:ScriptBox
-                    Grid.Row="1"
-                    FontFamily="Consolas"
-                    AcceptsReturn="False"
-                    AcceptsTab="False"
-                    AcceptsDot="True"
-                    AllowFormatting="False"
-                    AllowedCompleteItems="Localization"
-                    materialDesign:HintAssist.Hint="Title">
+        <view:ScriptBox Grid.Row="2"
+                        FontFamily="Consolas"
+                        AcceptsReturn="True"
+                        AcceptsTab="False"
+                        AcceptsDot="True"
+                        AllowFormatting="False"
+                        AllowedCompleteItems="Localization"
+                        materialDesign:HintAssist.Hint="Description">
 
-                    <view:ScriptBox.Text>
-                        <Binding
-                            Path="Title"
-                            Mode="TwoWay"
-                            UpdateSourceTrigger="PropertyChanged">
+          <view:ScriptBox.Text>
+            <Binding Path="Description"
+                     Mode="TwoWay"
+                     UpdateSourceTrigger="PropertyChanged">
 
-                            <Binding.Converter>
-                                <converters:ScriptConverter />
-                            </Binding.Converter>
+              <Binding.Converter>
+                <converters:ScriptConverter />
+              </Binding.Converter>
 
-                        </Binding>
-                    </view:ScriptBox.Text>
+            </Binding>
+          </view:ScriptBox.Text>
 
-                </view:ScriptBox>
+        </view:ScriptBox>
 
-                <view:ScriptBox
-                    Grid.Row="2"
-                    FontFamily="Consolas"
-                    AcceptsReturn="True"
-                    AcceptsTab="False"
-                    AcceptsDot="True"
-                    AllowFormatting="False"
-                    AllowedCompleteItems="Localization"
-                    materialDesign:HintAssist.Hint="Description">
-
-                    <view:ScriptBox.Text>
-                        <Binding
-                            Path="Description"
-                            Mode="TwoWay"
-                            UpdateSourceTrigger="PropertyChanged">
-
-                            <Binding.Converter>
-                                <converters:ScriptConverter />
-                            </Binding.Converter>
-
-                        </Binding>
-                    </view:ScriptBox.Text>
-
-                </view:ScriptBox>
-
-                <view:ScriptBox
-                    Grid.Row="3"
-                    FontFamily="Consolas"
-                    AcceptsReturn="False"
-                    AcceptsTab="False"
-                    AcceptsDot="True"
-                    AllowFormatting="False"
-                    AllowedCompleteItems="Localization"
-                    materialDesign:HintAssist.Hint="Selection Tooltip">
-
-                    <view:ScriptBox.Text>
-                        <Binding
-                            Path="Tooltip"
-                            Mode="TwoWay"
-                            UpdateSourceTrigger="PropertyChanged">
-
-                            <Binding.Converter>
-                                <converters:ScriptConverter />
-                            </Binding.Converter>
-
-                        </Binding>
-                    </view:ScriptBox.Text>
-
-                </view:ScriptBox>
-
-                <view:ScriptBox
-                    Grid.Row="4"
-                    FontFamily="Consolas"
-                    AcceptsReturn="False"
-                    AcceptsTab="False"
-                    AcceptsDot="True"
-                    AllowFormatting="False"
-                    AllowedCompleteItems="Localization"
-                    materialDesign:HintAssist.Hint="Confirm Text">
-
-                    <view:ScriptBox.Text>
-                        <Binding
-                            Path="Confirm"
-                            Mode="TwoWay"
-                            UpdateSourceTrigger="PropertyChanged">
-
-                            <Binding.Converter>
-                                <converters:ScriptConverter />
-                            </Binding.Converter>
-
-                        </Binding>
-                    </view:ScriptBox.Text>
-
-                </view:ScriptBox>
-
-                <view:ScriptBox
-                    Grid.Row="5"
-                    AcceptsReturn="False"
-                    AcceptsTab="False"
-                    AcceptsDot="False"
-                    AllowFormatting="False"
-                    AllowedCompleteItems="Picture"
-                    materialDesign:HintAssist.Hint="Picture">
-
-                    <view:ScriptBox.Text>
-                        <Binding
-                            Path="Picture"
-                            Mode="TwoWay"
-                            UpdateSourceTrigger="PropertyChanged">
-
-                            <Binding.Converter>
-                                <converters:ScriptConverter />
-                            </Binding.Converter>
-
-                        </Binding>
-                    </view:ScriptBox.Text>
-
-                </view:ScriptBox>
-
-                <Grid
-                    Grid.Row="6">
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                            Width="4*" />
-                        <ColumnDefinition
-                            Width="1*" />
-                        <ColumnDefinition
-                            Width="auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <TextBox
-                        Grid.Column="0"
-                        materialDesign:HintAssist.Hint="Cooldown in days">
-
-                        <TextBox.Text>
-                            <Binding
-                                Path="Cooldown"
-                                Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged"
-                                FallbackValue="0">
-
-                                <Binding.ValidationRules>
-                                    <rules:IntRule
-                                        ValidatesOnTargetUpdated="True" />
-                                </Binding.ValidationRules>
-
-                            </Binding>
-                        </TextBox.Text>
-
-                    </TextBox>
-
-                    <TextBox
-                        Grid.Column="1"
+        <view:ScriptBox Grid.Row="3"
+                        FontFamily="Consolas"
                         AcceptsReturn="False"
-                        materialDesign:HintAssist.Hint="AI Check Interval">
+                        AcceptsTab="False"
+                        AcceptsDot="True"
+                        AllowFormatting="False"
+                        AllowedCompleteItems="Localization"
+                        materialDesign:HintAssist.Hint="Selection Tooltip">
 
-                        <TextBox.Text>
-                            <Binding
-                                Path="AiCheckFrequency"
-                                Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <rules:IntRule />
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
+          <view:ScriptBox.Text>
+            <Binding Path="Tooltip"
+                     Mode="TwoWay"
+                     UpdateSourceTrigger="PropertyChanged">
 
-                    </TextBox>
+              <Binding.Converter>
+                <converters:ScriptConverter />
+              </Binding.Converter>
 
-                    <CheckBox
-                        Grid.Column="2"
-                        IsChecked="{Binding AiGoal}"
-                        Content="AI Goal" />
+            </Binding>
+          </view:ScriptBox.Text>
 
-                </Grid>
+        </view:ScriptBox>
 
-                <Grid
-                    Grid.Row="7">
+        <view:ScriptBox Grid.Row="4"
+                        FontFamily="Consolas"
+                        AcceptsReturn="False"
+                        AcceptsTab="False"
+                        AcceptsDot="True"
+                        AllowFormatting="False"
+                        AllowedCompleteItems="Localization"
+                        materialDesign:HintAssist.Hint="Confirm Text">
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                            Width="*" />
-                        <ColumnDefinition
-                            Width="*" />
-                        <ColumnDefinition
-                            Width="*" />
-                    </Grid.ColumnDefinitions>
+          <view:ScriptBox.Text>
+            <Binding Path="Confirm"
+                     Mode="TwoWay"
+                     UpdateSourceTrigger="PropertyChanged">
 
-                    <TextBox
-                        Grid.Column="0"
-                        materialDesign:HintAssist.Hint="Gold Cost">
+              <Binding.Converter>
+                <converters:ScriptConverter />
+              </Binding.Converter>
 
-                        <TextBox.Text>
-                            <Binding
-                                Path="CostGold"
-                                Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged"
-                                FallbackValue="0">
+            </Binding>
+          </view:ScriptBox.Text>
 
-                                <Binding.ValidationRules>
-                                    <rules:IntRule
-                                        ValidatesOnTargetUpdated="True" />
-                                </Binding.ValidationRules>
+        </view:ScriptBox>
 
-                            </Binding>
-                        </TextBox.Text>
+        <view:ScriptBox Grid.Row="5"
+                        AcceptsReturn="False"
+                        AcceptsTab="False"
+                        AcceptsDot="False"
+                        AllowFormatting="False"
+                        AllowedCompleteItems="Picture"
+                        materialDesign:HintAssist.Hint="Picture">
 
-                    </TextBox>
+          <view:ScriptBox.Text>
+            <Binding Path="Picture"
+                     Mode="TwoWay"
+                     UpdateSourceTrigger="PropertyChanged">
 
-                    <TextBox
-                        Grid.Column="1"
-                        materialDesign:HintAssist.Hint="Piety Cost">
+              <Binding.Converter>
+                <converters:ScriptConverter />
+              </Binding.Converter>
 
-                        <TextBox.Text>
-                            <Binding
-                                Path="CostPiety"
-                                Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged"
-                                FallbackValue="0">
+            </Binding>
+          </view:ScriptBox.Text>
 
-                                <Binding.ValidationRules>
-                                    <rules:IntRule
-                                        ValidatesOnTargetUpdated="True" />
-                                </Binding.ValidationRules>
+        </view:ScriptBox>
 
-                            </Binding>
-                        </TextBox.Text>
+        <Grid Grid.Row="6">
 
-                    </TextBox>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="auto" />
+          </Grid.ColumnDefinitions>
 
-                    <TextBox
-                        Grid.Column="2"
-                        materialDesign:HintAssist.Hint="Prestige Cost">
+          <TextBox Grid.Column="0"
+                   materialDesign:HintAssist.Hint="Cooldown in days">
 
-                        <TextBox.Text>
-                            <Binding
-                                Path="CostPrestige"
-                                Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged"
-                                FallbackValue="0">
+            <TextBox.Text>
+              <Binding Path="Cooldown"
+                       Mode="TwoWay"
+                       UpdateSourceTrigger="PropertyChanged"
+                       FallbackValue="0">
 
-                                <Binding.ValidationRules>
-                                    <rules:IntRule
-                                        ValidatesOnTargetUpdated="True" />
-                                </Binding.ValidationRules>
+                <Binding.ValidationRules>
+                  <rules:IntRule ValidatesOnTargetUpdated="True" />
+                </Binding.ValidationRules>
 
-                            </Binding>
-                        </TextBox.Text>
+              </Binding>
+            </TextBox.Text>
 
-                    </TextBox>
+          </TextBox>
 
-                </Grid>
+          <TextBox Grid.Column="1"
+                   AcceptsReturn="False"
+                   materialDesign:HintAssist.Hint="AI Check Interval">
 
-                <Grid
-                    Grid.Row="8">
+            <TextBox.Text>
+              <Binding Path="AiCheckFrequency"
+                       Mode="TwoWay"
+                       UpdateSourceTrigger="PropertyChanged">
+                <Binding.ValidationRules>
+                  <rules:IntRule />
+                </Binding.ValidationRules>
+              </Binding>
+            </TextBox.Text>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                            Width="*" />
-                        <ColumnDefinition
-                            Width="*" />
-                        <ColumnDefinition
-                            Width="*" />
-                    </Grid.ColumnDefinitions>
+          </TextBox>
 
-                    <TextBox
-                        Grid.Column="0"
-                        materialDesign:HintAssist.Hint="Gold Cost (min.)">
+          <CheckBox Grid.Column="2"
+                    IsChecked="{Binding AiGoal}"
+                    Content="AI Goal" />
 
-                        <TextBox.Text>
-                            <Binding
-                                Path="MinCostGold"
-                                Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged"
-                                FallbackValue="0">
+        </Grid>
 
-                                <Binding.ValidationRules>
-                                    <rules:IntRule
-                                        ValidatesOnTargetUpdated="True" />
-                                </Binding.ValidationRules>
+        <Grid Grid.Row="7">
 
-                            </Binding>
-                        </TextBox.Text>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
 
-                    </TextBox>
+          <TextBox Grid.Column="0"
+                   materialDesign:HintAssist.Hint="Gold Cost">
 
-                    <TextBox
-                        Grid.Column="1"
-                        materialDesign:HintAssist.Hint="Piety Cost (min.)">
+            <TextBox.Text>
+              <Binding Path="CostGold"
+                       Mode="TwoWay"
+                       UpdateSourceTrigger="PropertyChanged"
+                       FallbackValue="0">
 
-                        <TextBox.Text>
-                            <Binding
-                                Path="MinCostPiety"
-                                Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged"
-                                FallbackValue="0">
+                <Binding.ValidationRules>
+                  <rules:IntRule ValidatesOnTargetUpdated="True" />
+                </Binding.ValidationRules>
 
-                                <Binding.ValidationRules>
-                                    <rules:IntRule
-                                        ValidatesOnTargetUpdated="True" />
-                                </Binding.ValidationRules>
+              </Binding>
+            </TextBox.Text>
 
-                            </Binding>
-                        </TextBox.Text>
+          </TextBox>
 
-                    </TextBox>
+          <TextBox Grid.Column="1"
+                   materialDesign:HintAssist.Hint="Piety Cost">
 
-                    <TextBox
-                        Grid.Column="2"
-                        materialDesign:HintAssist.Hint="Prestige Cost (min.)">
+            <TextBox.Text>
+              <Binding Path="CostPiety"
+                       Mode="TwoWay"
+                       UpdateSourceTrigger="PropertyChanged"
+                       FallbackValue="0">
 
-                        <TextBox.Text>
-                            <Binding
-                                Path="MinCostPrestige"
-                                Mode="TwoWay"
-                                UpdateSourceTrigger="PropertyChanged"
-                                FallbackValue="0">
+                <Binding.ValidationRules>
+                  <rules:IntRule ValidatesOnTargetUpdated="True" />
+                </Binding.ValidationRules>
 
-                                <Binding.ValidationRules>
-                                    <rules:IntRule
-                                        ValidatesOnTargetUpdated="True" />
-                                </Binding.ValidationRules>
+              </Binding>
+            </TextBox.Text>
 
-                            </Binding>
-                        </TextBox.Text>
+          </TextBox>
 
-                    </TextBox>
+          <TextBox Grid.Column="2"
+                   materialDesign:HintAssist.Hint="Prestige Cost">
 
-                </Grid>
+            <TextBox.Text>
+              <Binding Path="CostPrestige"
+                       Mode="TwoWay"
+                       UpdateSourceTrigger="PropertyChanged"
+                       FallbackValue="0">
 
-            </Grid>
-        </TabItem>
+                <Binding.ValidationRules>
+                  <rules:IntRule ValidatesOnTargetUpdated="True" />
+                </Binding.ValidationRules>
 
-        <TabItem
-            x:Name="AiPotentialTriggerTab"
-            Header="AI Potential">
-            <view:ScriptBox
-                FontFamily="Consolas"
-                AcceptsReturn="True"
-                AcceptsTab="True"
-                AcceptsDot="True"
-                AllowFormatting="True"
-                AllowedCompleteItems="Code"
-                materialDesign:HintAssist.Hint="Custom Trigger">
+              </Binding>
+            </TextBox.Text>
 
-                <view:ScriptBox.Text>
-                    <Binding
-                        Path="AiPotential"
-                        Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+          </TextBox>
 
-                        <Binding.Converter>
-                            <converters:ScriptConverter />
-                        </Binding.Converter>
+        </Grid>
 
-                    </Binding>
-                </view:ScriptBox.Text>
+        <Grid Grid.Row="8">
 
-            </view:ScriptBox>
-        </TabItem>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
 
-        <TabItem
-            x:Name="AiWillDoTab"
-            Header="AI Will-Do">
+          <TextBox Grid.Column="0"
+                   materialDesign:HintAssist.Hint="Gold Cost (min.)">
 
-            <Grid>
+            <TextBox.Text>
+              <Binding Path="MinCostGold"
+                       Mode="TwoWay"
+                       UpdateSourceTrigger="PropertyChanged"
+                       FallbackValue="0">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition
-                        Width="5*" />
-                    <ColumnDefinition
-                        Width="2*" />
-                </Grid.ColumnDefinitions>
+                <Binding.ValidationRules>
+                  <rules:IntRule ValidatesOnTargetUpdated="True" />
+                </Binding.ValidationRules>
 
-                <Grid
-                    Grid.Column="1"
-                    Margin="6,12">
+              </Binding>
+            </TextBox.Text>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                            Width="*" />
-                        <ColumnDefinition
-                            Width="auto" />
-                    </Grid.ColumnDefinitions>
+          </TextBox>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition
-                            Height="*" />
-                        <RowDefinition
-                            Height="*" />
-                        <RowDefinition
-                            Height="*" />
-                        <RowDefinition
-                            Height="*" />
-                        <RowDefinition
-                            Height="*" />
-                        <RowDefinition
-                            Height="*" />
-                        <RowDefinition
-                            Height="*" />
-                        <RowDefinition
-                            Height="*" />
-                        <RowDefinition
-                            Height="*" />
-                        <RowDefinition
-                            Height="*" />
-                    </Grid.RowDefinitions>
+          <TextBox Grid.Column="1"
+                   materialDesign:HintAssist.Hint="Piety Cost (min.)">
 
-                    <Grid.Resources>
+            <TextBox.Text>
+              <Binding Path="MinCostPiety"
+                       Mode="TwoWay"
+                       UpdateSourceTrigger="PropertyChanged"
+                       FallbackValue="0">
 
-                        <Style
-                            TargetType="TextBlock"
-                            BasedOn="{StaticResource MaterialDesignCaptionTextBlock}">
+                <Binding.ValidationRules>
+                  <rules:IntRule ValidatesOnTargetUpdated="True" />
+                </Binding.ValidationRules>
 
-                            <Setter
-                                Property="Margin"
-                                Value="6,12" />
-                            <Setter
-                                Property="VerticalAlignment"
-                                Value="Center" />
-                            <Setter
-                                Property="HorizontalAlignment"
-                                Value="Left" />
+              </Binding>
+            </TextBox.Text>
 
-                        </Style>
+          </TextBox>
 
-                        <Style
-                            TargetType="Slider"
-                            BasedOn="{StaticResource MaterialDesignDiscreteHorizontalSlider}">
+          <TextBox Grid.Column="2"
+                   materialDesign:HintAssist.Hint="Prestige Cost (min.)">
 
-                            <Setter
-                                Property="Margin"
-                                Value="6,12" />
-                            <Setter
-                                Property="VerticalAlignment"
-                                Value="Center" />
-                            <Setter
-                                Property="IsSelectionRangeEnabled"
-                                Value="True" />
-                            <Setter
-                                Property="Minimum"
-                                Value="-200" />
-                            <Setter
-                                Property="Maximum"
-                                Value="200" />
-                            <!--<Setter
+            <TextBox.Text>
+              <Binding Path="MinCostPrestige"
+                       Mode="TwoWay"
+                       UpdateSourceTrigger="PropertyChanged"
+                       FallbackValue="0">
+
+                <Binding.ValidationRules>
+                  <rules:IntRule ValidatesOnTargetUpdated="True" />
+                </Binding.ValidationRules>
+
+              </Binding>
+            </TextBox.Text>
+
+          </TextBox>
+
+        </Grid>
+
+      </Grid>
+    </TabItem>
+
+    <TabItem x:Name="AiPotentialTriggerTab"
+             Header="AI Potential">
+      <view:ScriptBox FontFamily="Consolas"
+                      AcceptsReturn="True"
+                      AcceptsTab="True"
+                      AcceptsDot="True"
+                      AllowFormatting="True"
+                      AllowedCompleteItems="Code"
+                      materialDesign:HintAssist.Hint="Custom Trigger">
+
+        <view:ScriptBox.Text>
+          <Binding Path="AiPotential"
+                   Mode="TwoWay"
+                   UpdateSourceTrigger="PropertyChanged">
+
+            <Binding.Converter>
+              <converters:ScriptConverter />
+            </Binding.Converter>
+
+          </Binding>
+        </view:ScriptBox.Text>
+
+      </view:ScriptBox>
+    </TabItem>
+
+    <TabItem x:Name="AiWillDoTab"
+             Header="AI Will-Do">
+
+      <Grid>
+
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="5*" />
+          <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="1"
+              Margin="6,12">
+
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+          </Grid.ColumnDefinitions>
+
+          <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+
+          <Grid.Resources>
+
+            <Style TargetType="TextBlock"
+                   BasedOn="{StaticResource MaterialDesignCaptionTextBlock}">
+
+              <Setter Property="Margin"
+                      Value="6,12" />
+              <Setter Property="VerticalAlignment"
+                      Value="Center" />
+              <Setter Property="HorizontalAlignment"
+                      Value="Left" />
+
+            </Style>
+
+            <Style TargetType="Slider"
+                   BasedOn="{StaticResource MaterialDesignDiscreteHorizontalSlider}">
+
+              <Setter Property="Margin"
+                      Value="6,12" />
+              <Setter Property="VerticalAlignment"
+                      Value="Center" />
+              <Setter Property="IsSelectionRangeEnabled"
+                      Value="True" />
+              <Setter Property="Minimum"
+                      Value="-200" />
+              <Setter Property="Maximum"
+                      Value="200" />
+              <!--<Setter
                                     Property="SelectionStart"
                                     Value="-100" />
                                 <Setter
                                     Property="SelectionEnd"
                                     Value="100" />-->
-                            <Setter
-                                Property="TickFrequency"
-                                Value="10" />
-                            <Setter
-                                Property="TickPlacement"
-                                Value="None" />
-                            <Setter
-                                Property="LargeChange"
-                                Value="20" />
-                            <Setter
-                                Property="SmallChange"
-                                Value="10" />
-                            <Setter
-                                Property="materialDesign:SliderAssist.OnlyShowFocusVisualWhileDragging"
-                                Value="True" />
+              <Setter Property="TickFrequency"
+                      Value="10" />
+              <Setter Property="TickPlacement"
+                      Value="None" />
+              <Setter Property="LargeChange"
+                      Value="20" />
+              <Setter Property="SmallChange"
+                      Value="10" />
+              <Setter Property="materialDesign:SliderAssist.OnlyShowFocusVisualWhileDragging"
+                      Value="True" />
 
-                        </Style>
+            </Style>
 
-                    </Grid.Resources>
+          </Grid.Resources>
 
-                    <TextBlock
-                        Grid.Column="1"
-                        Grid.Row="0"
-                        Text="Base" />
+          <TextBlock Grid.Column="1"
+                     Grid.Row="0"
+                     Text="Base" />
 
-                    <Slider
-                        Grid.Column="0"
-                        Grid.Row="0"
-                        Minimum="0"
-                        Maximum="500"
-                        Value="{Binding AiBaseWillDo}" />
+          <Slider Grid.Column="0"
+                  Grid.Row="0"
+                  Minimum="0"
+                  Maximum="500"
+                  Value="{Binding AiBaseWillDo}" />
 
-                    <TextBlock
-                        Grid.Column="1"
-                        Grid.Row="1"
-                        Text="Boldness" />
+          <TextBlock Grid.Column="1"
+                     Grid.Row="1"
+                     Text="Boldness" />
 
-                    <Slider
-                        Grid.Column="0"
-                        Grid.Row="1"
-                        Value="{Binding AiBoldnessTargetModifier}" />
+          <Slider Grid.Column="0"
+                  Grid.Row="1"
+                  Value="{Binding AiBoldnessTargetModifier}" />
 
-                    <TextBlock
-                        Grid.Column="1"
-                        Grid.Row="2"
-                        Text="Compassion" />
+          <TextBlock Grid.Column="1"
+                     Grid.Row="2"
+                     Text="Compassion" />
 
-                    <Slider
-                        Grid.Column="0"
-                        Grid.Row="2"
-                        Value="{Binding AiCompassionTargetModifier}" />
+          <Slider Grid.Column="0"
+                  Grid.Row="2"
+                  Value="{Binding AiCompassionTargetModifier}" />
 
-                    <TextBlock
-                        Grid.Column="1"
-                        Grid.Row="3"
-                        Text="Greed" />
+          <TextBlock Grid.Column="1"
+                     Grid.Row="3"
+                     Text="Greed" />
 
-                    <Slider
-                        Grid.Column="0"
-                        Grid.Row="3"
-                        Value="{Binding AiGreedTargetModifier}" />
+          <Slider Grid.Column="0"
+                  Grid.Row="3"
+                  Value="{Binding AiGreedTargetModifier}" />
 
-                    <TextBlock
-                        Grid.Column="1"
-                        Grid.Row="4"
-                        Text="Energy" />
+          <TextBlock Grid.Column="1"
+                     Grid.Row="4"
+                     Text="Energy" />
 
-                    <Slider
-                        Grid.Column="0"
-                        Grid.Row="4"
-                        Value="{Binding AiEnergyTargetModifier}" />
+          <Slider Grid.Column="0"
+                  Grid.Row="4"
+                  Value="{Binding AiEnergyTargetModifier}" />
 
-                    <TextBlock
-                        Grid.Column="1"
-                        Grid.Row="5"
-                        Text="Honor" />
+          <TextBlock Grid.Column="1"
+                     Grid.Row="5"
+                     Text="Honor" />
 
-                    <Slider
-                        Grid.Column="0"
-                        Grid.Row="5"
-                        Value="{Binding AiHonorTargetModifier}" />
+          <Slider Grid.Column="0"
+                  Grid.Row="5"
+                  Value="{Binding AiHonorTargetModifier}" />
 
-                    <TextBlock
-                        Grid.Column="1"
-                        Grid.Row="6"
-                        Text="Rationality" />
+          <TextBlock Grid.Column="1"
+                     Grid.Row="6"
+                     Text="Rationality" />
 
-                    <Slider
-                        Grid.Column="0"
-                        Grid.Row="6"
-                        Value="{Binding AiRationalityTargetModifier}" />
+          <Slider Grid.Column="0"
+                  Grid.Row="6"
+                  Value="{Binding AiRationalityTargetModifier}" />
 
-                    <TextBlock
-                        Grid.Column="1"
-                        Grid.Row="7"
-                        Text="Sociability" />
+          <TextBlock Grid.Column="1"
+                     Grid.Row="7"
+                     Text="Sociability" />
 
-                    <Slider
-                        Grid.Column="0"
-                        Grid.Row="7"
-                        Value="{Binding AiSociabilityTargetModifier}" />
+          <Slider Grid.Column="0"
+                  Grid.Row="7"
+                  Value="{Binding AiSociabilityTargetModifier}" />
 
-                    <TextBlock
-                        Grid.Column="1"
-                        Grid.Row="8"
-                        Text="Vengefulness" />
+          <TextBlock Grid.Column="1"
+                     Grid.Row="8"
+                     Text="Vengefulness" />
 
-                    <Slider
-                        Grid.Column="0"
-                        Grid.Row="8"
-                        Value="{Binding AiVengefulnessTargetModifier}" />
+          <Slider Grid.Column="0"
+                  Grid.Row="8"
+                  Value="{Binding AiVengefulnessTargetModifier}" />
 
-                    <TextBlock
-                        Grid.Column="1"
-                        Grid.Row="9"
-                        Text="Zeal" />
+          <TextBlock Grid.Column="1"
+                     Grid.Row="9"
+                     Text="Zeal" />
 
-                    <Slider
-                        Grid.Column="0"
-                        Grid.Row="9"
-                        Value="{Binding AiZealTargetModifier}" />
+          <Slider Grid.Column="0"
+                  Grid.Row="9"
+                  Value="{Binding AiZealTargetModifier}" />
 
-                </Grid>
+        </Grid>
 
-                <view:ScriptBox
-                    Grid.Column="0"
-                    AcceptsReturn="True"
-                    AcceptsTab="True"
-                    AcceptsDot="True"
-                    AllowFormatting="True"
-                    AllowedCompleteItems="Code"
-                    materialDesign:HintAssist.Hint="Custom Modifier">
+        <view:ScriptBox Grid.Column="0"
+                        AcceptsReturn="True"
+                        AcceptsTab="True"
+                        AcceptsDot="True"
+                        AllowFormatting="True"
+                        AllowedCompleteItems="Code"
+                        materialDesign:HintAssist.Hint="Custom Modifier">
 
-                    <view:ScriptBox.Text>
-                        <Binding
-                            Path="AiCustomWillDo"
-                            Mode="TwoWay"
-                            UpdateSourceTrigger="PropertyChanged">
+          <view:ScriptBox.Text>
+            <Binding Path="AiCustomWillDo"
+                     Mode="TwoWay"
+                     UpdateSourceTrigger="PropertyChanged">
 
-                            <Binding.Converter>
-                                <converters:ScriptConverter />
-                            </Binding.Converter>
+              <Binding.Converter>
+                <converters:ScriptConverter />
+              </Binding.Converter>
 
-                        </Binding>
-                    </view:ScriptBox.Text>
+            </Binding>
+          </view:ScriptBox.Text>
 
-                </view:ScriptBox>
+        </view:ScriptBox>
 
-            </Grid>
+      </Grid>
 
-        </TabItem>
+    </TabItem>
 
-        <TabItem
-            x:Name="ShownTriggerTab"
-            Header="Is-Shown">
-            <view:ScriptBox
-                FontFamily="Consolas"
-                AcceptsReturn="True"
-                AcceptsTab="True"
-                AcceptsDot="True"
-                AllowFormatting="True"
-                AllowedCompleteItems="Code"
-                materialDesign:HintAssist.Hint="Custom Trigger">
+    <TabItem x:Name="ShownTriggerTab"
+             Header="Is-Shown">
+      <view:ScriptBox FontFamily="Consolas"
+                      AcceptsReturn="True"
+                      AcceptsTab="True"
+                      AcceptsDot="True"
+                      AllowFormatting="True"
+                      AllowedCompleteItems="Code"
+                      materialDesign:HintAssist.Hint="Custom Trigger">
 
-                <view:ScriptBox.Text>
-                    <Binding
-                        Path="CustomShownTrigger"
-                        Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+        <view:ScriptBox.Text>
+          <Binding Path="CustomShownTrigger"
+                   Mode="TwoWay"
+                   UpdateSourceTrigger="PropertyChanged">
 
-                        <Binding.Converter>
-                            <converters:ScriptConverter />
-                        </Binding.Converter>
+            <Binding.Converter>
+              <converters:ScriptConverter />
+            </Binding.Converter>
 
-                    </Binding>
-                </view:ScriptBox.Text>
+          </Binding>
+        </view:ScriptBox.Text>
 
-            </view:ScriptBox>
-        </TabItem>
+      </view:ScriptBox>
+    </TabItem>
 
-        <TabItem
-            x:Name="ValidTriggerTab"
-            Header="Is-Valid">
-            <view:ScriptBox
-                FontFamily="Consolas"
-                AcceptsReturn="True"
-                AcceptsTab="True"
-                AcceptsDot="True"
-                AllowFormatting="True"
-                AllowedCompleteItems="Code"
-                materialDesign:HintAssist.Hint="Custom Trigger">
+    <TabItem x:Name="ValidTriggerTab"
+             Header="Is-Valid">
+      <view:ScriptBox FontFamily="Consolas"
+                      AcceptsReturn="True"
+                      AcceptsTab="True"
+                      AcceptsDot="True"
+                      AllowFormatting="True"
+                      AllowedCompleteItems="Code"
+                      materialDesign:HintAssist.Hint="Custom Trigger">
 
-                <view:ScriptBox.Text>
-                    <Binding
-                        Path="CustomValidTrigger"
-                        Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+        <view:ScriptBox.Text>
+          <Binding Path="CustomValidTrigger"
+                   Mode="TwoWay"
+                   UpdateSourceTrigger="PropertyChanged">
 
-                        <Binding.Converter>
-                            <converters:ScriptConverter />
-                        </Binding.Converter>
+            <Binding.Converter>
+              <converters:ScriptConverter />
+            </Binding.Converter>
 
-                    </Binding>
-                </view:ScriptBox.Text>
+          </Binding>
+        </view:ScriptBox.Text>
 
-            </view:ScriptBox>
-        </TabItem>
+      </view:ScriptBox>
+    </TabItem>
 
-        <TabItem
-            x:Name="FailureTriggerTab"
-            Header="Is-Valid-Failures">
-            <view:ScriptBox
-                FontFamily="Consolas"
-                AcceptsReturn="True"
-                AcceptsTab="True"
-                AcceptsDot="True"
-                AllowFormatting="True"
-                AllowedCompleteItems="Code"
-                materialDesign:HintAssist.Hint="Custom Trigger">
+    <TabItem x:Name="FailureTriggerTab"
+             Header="Is-Valid-Failures">
+      <view:ScriptBox FontFamily="Consolas"
+                      AcceptsReturn="True"
+                      AcceptsTab="True"
+                      AcceptsDot="True"
+                      AllowFormatting="True"
+                      AllowedCompleteItems="Code"
+                      materialDesign:HintAssist.Hint="Custom Trigger">
 
-                <view:ScriptBox.Text>
-                    <Binding
-                        Path="CustomFailureTrigger"
-                        Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+        <view:ScriptBox.Text>
+          <Binding Path="CustomFailureTrigger"
+                   Mode="TwoWay"
+                   UpdateSourceTrigger="PropertyChanged">
 
-                        <Binding.Converter>
-                            <converters:ScriptConverter />
-                        </Binding.Converter>
+            <Binding.Converter>
+              <converters:ScriptConverter />
+            </Binding.Converter>
 
-                    </Binding>
-                </view:ScriptBox.Text>
+          </Binding>
+        </view:ScriptBox.Text>
 
-            </view:ScriptBox>
-        </TabItem>
+      </view:ScriptBox>
+    </TabItem>
 
-        <TabItem
-            x:Name="EffectTab"
-            Header="Effect">
-            <view:ScriptBox
-                FontFamily="Consolas"
-                AcceptsReturn="True"
-                AcceptsTab="True"
-                AcceptsDot="True"
-                AllowFormatting="True"
-                AllowedCompleteItems="Code"
-                materialDesign:HintAssist.Hint="Custom Effect">
+    <TabItem x:Name="EffectTab"
+             Header="Effect">
+      <view:ScriptBox FontFamily="Consolas"
+                      AcceptsReturn="True"
+                      AcceptsTab="True"
+                      AcceptsDot="True"
+                      AllowFormatting="True"
+                      AllowedCompleteItems="Code"
+                      materialDesign:HintAssist.Hint="Custom Effect">
 
-                <view:ScriptBox.Text>
-                    <Binding
-                        Path="CustomEffect"
-                        Mode="TwoWay"
-                        UpdateSourceTrigger="PropertyChanged">
+        <view:ScriptBox.Text>
+          <Binding Path="CustomEffect"
+                   Mode="TwoWay"
+                   UpdateSourceTrigger="PropertyChanged">
 
-                        <Binding.Converter>
-                            <converters:ScriptConverter />
-                        </Binding.Converter>
+            <Binding.Converter>
+              <converters:ScriptConverter />
+            </Binding.Converter>
 
-                    </Binding>
-                </view:ScriptBox.Text>
+          </Binding>
+        </view:ScriptBox.Text>
 
-            </view:ScriptBox>
-        </TabItem>
+      </view:ScriptBox>
+    </TabItem>
 
-    </TabControl>
+  </TabControl>
 
 </UserControl>
