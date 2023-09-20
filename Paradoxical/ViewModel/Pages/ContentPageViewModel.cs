@@ -168,6 +168,7 @@ public class ContentPageViewModel : PageViewModel
 
         RootNode = new();
         ModNode = CreateModBranch(mod, RootNode);
+        ModNode.Expand();
 
         DataService.BeginTransaction();
     }
