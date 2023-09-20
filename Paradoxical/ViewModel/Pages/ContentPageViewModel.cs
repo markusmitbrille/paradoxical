@@ -714,6 +714,11 @@ public class ContentPageViewModel : PageViewModel
 
         var model = observable.Model;
 
+        DeleteEventPortraits(model);
+        DeleteEventOptions(model);
+        DeleteEventOnions(model);
+        DeleteEventLinks(model);
+
         EventModelMap.Remove(model);
         EventService.Delete(model);
 
@@ -732,6 +737,46 @@ public class ContentPageViewModel : PageViewModel
     private bool CanDeleteEvent(object? param)
     {
         return param is EventViewModel;
+    }
+
+    private void DeleteEventPortraits(Event model)
+    {
+        var Portraits = EventService.GetPortraits(model);
+        foreach (var Portrait in Portraits)
+        {
+            var observable = PortraitModelMap[Portrait];
+            DeletePortrait(observable);
+        }
+    }
+
+    private void DeleteEventOptions(Event model)
+    {
+        var Options = EventService.GetOptions(model);
+        foreach (var Option in Options)
+        {
+            var observable = OptionModelMap[Option];
+            DeleteOption(observable);
+        }
+    }
+
+    private void DeleteEventOnions(Event model)
+    {
+        var Onions = EventService.GetOnions(model);
+        foreach (var Onion in Onions)
+        {
+            var observable = OnionModelMap[Onion];
+            DeleteOnion(observable);
+        }
+    }
+
+    private void DeleteEventLinks(Event model)
+    {
+        var links = EventService.GetLinks(model);
+        foreach (var link in links)
+        {
+            var observable = LinkModelMap[link];
+            DeleteLink(observable);
+        }
     }
 
     private RelayCommand<object>? createEventOptionCommand;
@@ -790,6 +835,42 @@ public class ContentPageViewModel : PageViewModel
 
 
     #region Portrait Commands
+
+    private RelayCommand<object>? deletePortraitCommand;
+    public RelayCommand<object> DeletePortraitCommand => deletePortraitCommand ??= new(DeletePortrait, CanDeletePortrait);
+
+    private void DeletePortrait(object? param)
+    {
+        if (param is not PortraitViewModel observable)
+        { return; }
+
+        if (Selected is PortraitViewModel selected && selected == observable)
+        {
+            Selected = null;
+        }
+
+        var model = observable.Model;
+
+        PortraitModelMap.Remove(model);
+        PortraitService.Delete(model);
+
+        var nodes = RootNode.Descendants
+            .OfType<PortraitNode>()
+            .Where(node => node.Observable == observable)
+            .ToArray();
+
+        var collections = RootNode.Descendants.OfType<CollectionNode>().ToArray();
+
+        foreach (var collection in collections)
+        {
+            collection.RemoveAll(node => nodes.Contains(node));
+        }
+    }
+    private bool CanDeletePortrait(object? param)
+    {
+        return param is PortraitViewModel;
+    }
+
     #endregion
 
 
