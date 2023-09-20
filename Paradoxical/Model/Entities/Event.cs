@@ -10,7 +10,7 @@ using System.Linq;
 namespace Paradoxical.Model.Entities;
 
 [Table("events")]
-public class Event : IEntity, IModel, IElement, IEquatable<Event?>, IComparable<Event>
+public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }

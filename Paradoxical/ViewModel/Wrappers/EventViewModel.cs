@@ -5,11 +5,9 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class EventViewModel : ElementWrapper<Event>, IEquatable<EventViewModel?>
+public class EventViewModel : ModelWrapper<Event>, IEquatable<EventViewModel?>, ISearchable
 {
-    public override string Kind => "event";
-
-    public override string Name
+    public string Name
     {
         get => model.name;
         set => SetProperty(ref model.name, value);
@@ -61,6 +59,20 @@ public class EventViewModel : ElementWrapper<Event>, IEquatable<EventViewModel?>
     {
         get => model.customAfterEffect;
         set => SetProperty(ref model.customAfterEffect, value);
+    }
+
+    public string Filter => Name;
+
+    public IEnumerable<Tag> Tags
+    {
+        get
+        {
+            yield return new("type", "event");
+            yield return new("id", Id.ToString());
+            yield return new("name", Name);
+            yield return new("title", Title);
+            yield return new("desc", Description);
+        }
     }
 
     public override bool Equals(object? obj)

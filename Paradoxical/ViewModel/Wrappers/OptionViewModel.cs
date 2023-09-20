@@ -5,16 +5,14 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class OptionViewModel : ElementWrapper<Option>, IEquatable<OptionViewModel?>
+public class OptionViewModel : ModelWrapper<Option>, IEquatable<OptionViewModel?>
 {
-    public override string Kind => "option";
-
     public int EventId
     {
         get => model.eventId;
     }
 
-    public override string Name
+    public string Name
     {
         get => model.name;
         set => SetProperty(ref model.name, value);

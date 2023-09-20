@@ -8,7 +8,7 @@ using System.IO;
 namespace Paradoxical.Model.Entities;
 
 [Table("scripts")]
-public class Script : IEntity, IModel, IElement, IEquatable<Script?>
+public class Script : IEntity, IModel, IEquatable<Script?>
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }

@@ -1,5 +1,4 @@
-﻿using Paradoxical.Model;
-using Paradoxical.Model.Entities;
+﻿using Paradoxical.Model.Entities;
 using Paradoxical.Model.Relationships;
 using SQLite;
 using System;

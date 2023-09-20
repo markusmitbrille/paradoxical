@@ -10,7 +10,7 @@ using System.Linq;
 namespace Paradoxical.Model.Entities;
 
 [Table("options")]
-public class Option : IEntity, IModel, IElement, IEquatable<Option?>, IComparable<Option>
+public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }

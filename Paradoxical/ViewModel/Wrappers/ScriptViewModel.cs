@@ -5,11 +5,9 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class ScriptViewModel : ElementWrapper<Script>, IEquatable<ScriptViewModel?>
+public class ScriptViewModel : ModelWrapper<Script>, IEquatable<ScriptViewModel?>, ISearchable
 {
-    public override string Kind => "script";
-
-    public override string Name
+    public string Name
     {
         get => model.name;
         set => SetProperty(ref model.name, value);
@@ -34,6 +32,20 @@ public class ScriptViewModel : ElementWrapper<Script>, IEquatable<ScriptViewMode
     }
 
     public string Path => System.IO.Path.Combine(Dir, File);
+
+    public string Filter => Name;
+
+    public IEnumerable<Tag> Tags
+    {
+        get
+        {
+            yield return new("type", "script");
+            yield return new("id", Id.ToString());
+            yield return new("name", Name);
+            yield return new("dir", Dir);
+            yield return new("file", File);
+        }
+    }
 
     public override bool Equals(object? obj)
     {

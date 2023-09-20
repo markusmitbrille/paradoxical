@@ -5,11 +5,9 @@ using System.Collections.Generic;
 
 namespace Paradoxical.ViewModel;
 
-public class DecisionViewModel : ElementWrapper<Decision>, IEquatable<DecisionViewModel?>
+public class DecisionViewModel : ModelWrapper<Decision>, IEquatable<DecisionViewModel?>, ISearchable
 {
-    public override string Kind => "decision";
-
-    public override string Name
+    public string Name
     {
         get => model.name;
         set => SetProperty(ref model.name, value);
@@ -205,6 +203,20 @@ public class DecisionViewModel : ElementWrapper<Decision>, IEquatable<DecisionVi
     {
         get => model.aiZealTargetModifier;
         set => SetProperty(ref model.aiZealTargetModifier, value);
+    }
+
+    public string Filter => Name;
+
+    public IEnumerable<Tag> Tags
+    {
+        get
+        {
+            yield return new("type", "decision");
+            yield return new("id", Id.ToString());
+            yield return new("name", Name);
+            yield return new("title", Title);
+            yield return new("desc", Description);
+        }
     }
 
     public override bool Equals(object? obj)

@@ -10,7 +10,7 @@ using System.Linq;
 namespace Paradoxical.Model.Entities;
 
 [Table("on_actions")]
-public class Onion : IEntity, IModel, IElement, IEquatable<Onion?>
+public class Onion : IEntity, IModel, IEquatable<Onion?>
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get => id; set => id = value; }

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.Generic;
 using System.Xml.Linq;
 using static Paradoxical.View.CompleteBox;
 

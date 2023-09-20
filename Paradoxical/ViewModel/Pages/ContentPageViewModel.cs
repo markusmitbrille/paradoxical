@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using Paradoxical.Core;
 using Paradoxical.Messages;
-using Paradoxical.Model;
 using Paradoxical.Model.Entities;
 using Paradoxical.Services;
 using Paradoxical.Services.Entities;
@@ -243,11 +242,11 @@ public class ContentPageViewModel : PageViewModel
     {
         FinderViewModel finder = new();
 
-        finder.Items = Enumerable.Empty<IElementWrapper>()
+        finder.Items = Enumerable.Empty<ISearchable>()
             .Union(ScriptModelMap.Wrappers)
             .Union(EventModelMap.Wrappers)
-            .Union(OptionModelMap.Wrappers)
-            .Union(DecisionModelMap.Wrappers);
+            .Union(DecisionModelMap.Wrappers)
+            .ToArray();
 
         var res = finder.Show();
 
@@ -982,19 +981,19 @@ public class ContentPageViewModel : PageViewModel
         var unlinked = events.Where(evt => links.Any(link => link.EventId == evt.Id) == false);
 
         LinkerViewModel linker = new();
-        linker.Items = unlinked.Select(evt => EventModelMap[evt]).ToList();
+        linker.Items = unlinked.Select(evt => EventModelMap[evt]).ToArray();
 
         var res = linker.Show();
 
         if (res != true)
         { return; }
 
-        if (linker.Selected == null)
+        if (linker.Selected is not EventViewModel selected)
         { return; }
 
         Link relation = new()
         {
-            EventId = linker.Selected.Id,
+            EventId = selected.Id,
 
             Scope = linker.Scope,
             MinDays = linker.MinDays,
@@ -1240,19 +1239,19 @@ public class ContentPageViewModel : PageViewModel
         var unlinked = events.Where(evt => links.Any(link => link.EventId == evt.Id) == false);
 
         LinkerViewModel linker = new();
-        linker.Items = unlinked.Select(evt => EventModelMap[evt]).ToList();
+        linker.Items = unlinked.Select(evt => EventModelMap[evt]).ToArray();
 
         var res = linker.Show();
 
         if (res != true)
         { return; }
 
-        if (linker.Selected == null)
+        if (linker.Selected is not EventViewModel selected)
         { return; }
 
         Link relation = new()
         {
-            EventId = linker.Selected.Id,
+            EventId = selected.Id,
 
             Scope = linker.Scope,
             MinDays = linker.MinDays,

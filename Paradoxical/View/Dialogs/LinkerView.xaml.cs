@@ -9,4 +9,12 @@ public partial class LinkerView : UserControl
     {
         InitializeComponent();
     }
+
+    private void ListBoxItemSelectedHandler(object sender, RoutedEventArgs e)
+    {
+        if (sender is not ListBoxItem item)
+        { return; }
+
+        item.BringIntoView();
+    }
 }

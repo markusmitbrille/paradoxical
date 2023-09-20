@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Paradoxical.Model;
+namespace Paradoxical.Model.Entities;
 
 [Table("mods")]
 public class Mod : IEntity, IModel, IEquatable<Mod?>
