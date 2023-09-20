@@ -31,6 +31,18 @@ public class EventViewModel : ViewModel<Event>, IEquatable<EventViewModel?>, ISe
         set => SetProperty(ref model.theme, value);
     }
 
+    public string Type
+    {
+        get => model.type;
+        set => SetProperty(ref model.type, value);
+    }
+
+    public string Scope
+    {
+        get => model.scope;
+        set => SetProperty(ref model.scope, value);
+    }
+
     public bool Hidden
     {
         get => model.hidden;

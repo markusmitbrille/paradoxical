@@ -32,6 +32,14 @@ public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
     public string Theme { get => theme; set => theme = value; }
     public string theme = "";
 
+    [Column("type"), NotNull]
+    public string Type { get => type; set => type = value; }
+    public string type = "character_event";
+
+    [Column("scope"), NotNull]
+    public string Scope { get => scope; set => scope = value; }
+    public string scope = "none";
+
     [Column("hidden"), NotNull]
     public bool Hidden { get => hidden; set => hidden = value; }
     public bool hidden;
@@ -78,11 +86,12 @@ public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
         if (Hidden == true)
         {
             writer.Indent().WriteLine("hidden = yes");
+            writer.Indent().WriteLine($"scope = {Scope}");
         }
 
         if (Hidden == false)
         {
-            writer.Indent().WriteLine($"type = character_event");
+            writer.Indent().WriteLine($"type = {Type}");
 
             writer.WriteLine();
 
