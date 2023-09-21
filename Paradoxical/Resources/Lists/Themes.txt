@@ -30,6 +30,7 @@ friendly
 generic_intrigue_scheme
 healthcare
 host_dinner
+hostage
 hunt_activity
 hunt_activity_camp
 hunting
@@ -102,6 +103,7 @@ travel_danger
 travel_pilgrimage
 travel_tour
 unfriendly
+university
 vassal
 war
 wedding_banquet_activity

@@ -6,5 +6,6 @@ monk_outfit
 nightgown
 no_clothes
 priest_outfit
+spectacles_outfit
 travel_cloak
 western_stealth_hood

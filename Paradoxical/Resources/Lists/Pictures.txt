@@ -1,4 +1,5 @@
 gfx/interface/illustrations/activity_header_backgrounds/activity_tournament.dds
+gfx/interface/illustrations/decisions/bp2_playdate.dds
 gfx/interface/illustrations/decisions/decision_activity.dds
 gfx/interface/illustrations/decisions/decision_destiny_goal.dds
 gfx/interface/illustrations/decisions/decision_dynasty_house.dds

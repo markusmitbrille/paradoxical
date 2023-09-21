@@ -108,6 +108,7 @@ GetAttackerMen
 GetAttackerStrength
 GetAttendingCharacters
 GetAuntUncle
+GetAuntieUncle
 GetAutoGrantCountyToLocalRulerEffectDesc
 GetAutosaveName
 GetBadWeatherDesc
@@ -170,6 +171,8 @@ GetCharacterContestStatus
 GetCharacterInvolvementTypeNoConcept
 GetCharacterList
 GetCharacterToOverwrite
+GetChildChildren
+GetChildEducationFocus
 GetChildInvalid
 GetChildInvalidPossessive
 GetChildren
@@ -345,6 +348,7 @@ GetDiarchyTypeNameNoTooltip
 GetDifferenceFromExpectedLevel
 GetDifficulty
 GetDifficultyInfoText
+GetDiplomacyBuilding
 GetDisability
 GetDiscontent
 GetDisembarkPenaltyDays
@@ -375,6 +379,7 @@ GetDynastyTemplate
 GetEconomyMapModeTooltip
 GetEducationLifestylePercentageBoost
 GetEducationTrait
+GetEducationTraitConcept
 GetEffect
 GetEffectDesc
 GetEffectDescription
@@ -423,6 +428,7 @@ GetFaithCreationReaction
 GetFaithDoctrine
 GetFaithGetName
 GetFaithGrandTemple
+GetFaithSacredLanguage
 GetFaithTaxExemptInstitution
 GetFaithTemple
 GetFallbackEffects
@@ -446,7 +452,6 @@ GetFirstName
 GetFirstNameNicknamed
 GetFirstNameNicknamedNoTooltip
 GetFirstNameNoTooltip
-GetFirstNameNotooltip
 GetFirstNameOrMe
 GetFirstNameOrMeNoTooltip
 GetFirstNamePossessive
@@ -518,8 +523,10 @@ GetHeldCourtAndCouncilPositionsString
 GetHeldCourtPositionsString
 GetHerHi
 GetHerHim
+GetHerHimOpposite
 GetHerHis
 GetHerHisMy
+GetHerHisOpposite
 GetHeritage
 GetHeroineHero
 GetHeroineHeroPossessive
@@ -542,6 +549,7 @@ GetHolyOrderPatron
 GetHomageDeliveryDescLiege
 GetHomageDeliveryDescVassal
 GetHomeCounty
+GetHomeCourt
 GetHookOn
 GetHookStrengthState
 GetHost
@@ -587,6 +595,7 @@ GetInt
 GetIntValue
 GetIntentTarget
 GetInteractionDesc
+GetIntrigueBuilding
 GetInventory
 GetInverseStrengthBalance
 GetInvestedGold
@@ -627,6 +636,7 @@ GetLawGroup
 GetLaws
 GetLeader
 GetLeadingTroopsBonus
+GetLearningBuilding
 GetLeaseInfo
 GetLeasedOutVassalList
 GetLeftCombatSide
@@ -674,6 +684,7 @@ GetLocalizedText
 GetLocalizedTextWithFallback
 GetLocation
 GetLocationDesc
+GetLocationFaithTemple
 GetLogEntries
 GetLootCap
 GetLootTime
@@ -690,6 +701,7 @@ GetMaintenanceCost
 GetMamaPapa
 GetManeuver
 GetMarriageOrBetrothal
+GetMartialBuilding
 GetMaternalPaternal
 GetMax
 GetMaxCount
@@ -731,6 +743,7 @@ GetMonthsUntilMaxDiscontent
 GetMother
 GetMotherFather
 GetMotto
+GetMumDad
 GetMyCultureInfo
 GetMythicalFounder
 GetName
@@ -741,7 +754,6 @@ GetNameNoTier
 GetNameNoTierNoTooltip
 GetNameNoTierPossessive
 GetNameNoTierPossessiveNoTooltip
-GetNameNoTitle
 GetNameNoTooltip
 GetNameNoTooltipWithDefault
 GetNameOrMe
@@ -905,6 +917,7 @@ GetPrestigeLevel
 GetPrestigeLevelDesc
 GetPrestigeLevelName
 GetPrestigeProgress
+GetPrettyAdjective
 GetPrideEnvy
 GetPrimaryHolding
 GetPrimarySpouse
@@ -1060,12 +1073,14 @@ GetServerInfo
 GetSetting
 GetSexuality
 GetSheHe
+GetSheHeOpposite
 GetShockedExpression
 GetShortCostString
 GetShortDescForPlayer
 GetShortName
 GetShortNameNoTooltip
 GetShortObligationLevelNameWithHighlightFor
+GetShortUINAME
 GetShortUIName
 GetShortUINameNoFormat
 GetShortUINameNoTooltip
@@ -1077,6 +1092,7 @@ GetShortUINamePossessiveNoFormat
 GetShortUINamePossessiveNoTooltip
 GetShortUINamePossessiveNoTooltipNoFormat
 GetShortUINamePossessiveOrMy
+GetShortUiName
 GetShownCount
 GetSiblings
 GetSiege
@@ -1117,6 +1133,7 @@ GetStartRaidBlockers
 GetStat
 GetStatDesc
 GetStepName
+GetStewardshipBuilding
 GetStrengthBalance
 GetStrengthTooltip
 GetStress
@@ -1207,6 +1224,7 @@ GetTitledFirstNamePossessiveNoTooltip
 GetTitledFirstNamePossessiveOrMyNoTooltip
 GetTitledFirstNamePossessiveRegnal
 GetTitledFirstNameRegnal
+GetTitledHerHis
 GetTitledName
 GetTitles
 GetTooltip
@@ -1296,6 +1314,7 @@ GetWarChestPiety
 GetWarChestPrestige
 GetWarContribution
 GetWarDuration
+GetWarden
 GetWarning_DiarchAppointmentCourtlies
 GetWarning_WeakDiarchSuccessionScore
 GetWifeHusband
@@ -1304,6 +1323,7 @@ GetWinterHarshModifier
 GetWinterNormalModifier
 GetWinterSeverityName
 GetWomanMan
+GetWomanManGirlBoy
 GetWomenMen
 GetWorldRank
 GetWorth
@@ -1317,3 +1337,12 @@ GetYearlyFervorChangeDesc
 GetYearsUntilDecay
 GetYearsUntilHouseClaim
 GetYoungMiddleAgedOld
+Geta
+Getachew
+Geteina
+Geteye
+Getinge
+Getong
+Getrude
+Gets
+Getting

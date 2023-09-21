@@ -1,3 +1,7 @@
+# run this from the solution directory
+game_dir = 'C:/Program Files (x86)/Steam/steamapps/common/Crusader Kings III/'
+out_dir = './Compiler/'
+
 import os
 import re
 import glob
@@ -28,32 +32,37 @@ def match_and_save_files(path, regex_pattern, output_file):
         for match in sorted_matches:
             outfile.write(f"{match}\n")
 
-dir = 'C:/Program Files (x86)/Steam/steamapps/common/Crusader Kings III/game/localization/english/**/*.yml'
+# commands
+dir = game_dir + 'game/localization/english/**/*.yml'
 pattern = r'\bGet\w+'
-output = 'Paradoxical/Compiler/out_commands.txt'
+output = out_dir + 'out_commands.txt'
 
 match_and_save_files(dir, pattern, output)
 
-dir = 'C:/Program Files (x86)/Steam/steamapps/common/Crusader Kings III/game/events/**/*.txt'
+# animations
+dir = game_dir + 'game/events/**/*.txt'
 pattern = r'(?<=animation = )\w+'
-output = 'Paradoxical/Compiler/out_animations.txt'
+output = out_dir + 'out_animations.txt'
 
 match_and_save_files(dir, pattern, output)
 
-dir = 'C:/Program Files (x86)/Steam/steamapps/common/Crusader Kings III/game/events/**/*.txt'
+# themes
+dir = game_dir + 'game/events/**/*.txt'
 pattern = r'(?<=theme = )\w+'
-output = 'Paradoxical/Compiler/out_themes.txt'
+output = out_dir + 'out_themes.txt'
 
 match_and_save_files(dir, pattern, output)
 
-dir = 'C:/Program Files (x86)/Steam/steamapps/common/Crusader Kings III/game/events/**/*.txt'
+# outfits
+dir = game_dir + 'game/events/**/*.txt'
 pattern = r'(?<=outfit_tags = \{ )\w+'
-output = 'Paradoxical/Compiler/out_outfits.txt'
+output = out_dir + 'out_outfits.txt'
 
 match_and_save_files(dir, pattern, output)
 
-dir = 'C:/Program Files (x86)/Steam/steamapps/common/Crusader Kings III/game/common/decisions/**/*.txt'
+# pictures
+dir = game_dir + 'game/common/decisions/**/*.txt'
 pattern = r'(?<=picture = ").+(?=")'
-output = 'Paradoxical/Compiler/out_pictures.txt'
+output = out_dir + 'out_pictures.txt'
 
 match_and_save_files(dir, pattern, output)
