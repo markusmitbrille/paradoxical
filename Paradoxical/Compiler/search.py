@@ -39,13 +39,6 @@ output = out_dir + 'out_commands.txt'
 
 match_and_save_files(dir, pattern, output)
 
-# animations
-dir = game_dir + 'game/events/**/*.txt'
-pattern = r'(?<=animation = )\w+'
-output = out_dir + 'out_animations.txt'
-
-match_and_save_files(dir, pattern, output)
-
 # outfits
 dir = game_dir + 'game/events/**/*.txt'
 pattern = r'(?<=outfit_tags = \{ )\w+'
@@ -71,5 +64,12 @@ match_and_save_files(dir, pattern, output)
 dir = game_dir + 'game/common/event_backgrounds/01_event_backgrounds.txt'
 pattern = r'^\w+(?= =)'
 output = out_dir + 'out_backgrounds.txt'
+
+match_and_save_files(dir, pattern, output)
+
+# animations
+dir = game_dir + 'game/gfx/portraits/portrait_animations/animations.txt'
+pattern = r'^\w+(?= =)'
+output = out_dir + 'out_animations.txt'
 
 match_and_save_files(dir, pattern, output)
