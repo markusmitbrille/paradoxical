@@ -32,6 +32,10 @@ public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
     public string Theme { get => theme; set => theme = value; }
     public string theme = "";
 
+    [Column("background")]
+    public string Background { get => background; set => background = value; }
+    public string background = "";
+
     [Column("type")]
     public string Type { get => type; set => type = value; }
     public string type = "character_event";
@@ -70,8 +74,6 @@ public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
         return $"{modService.GetPrefix()}.event.{Id}";
     }
 
-    private const string DEFAULT_THEME = "default";
-
     public void Write(
         TextWriter writer,
         IModService modService,
@@ -97,7 +99,15 @@ public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
 
             writer.Indent().WriteLine($"title = {GetLocationKey(modService)}.t");
             writer.Indent().WriteLine($"desc = {GetLocationKey(modService)}.d");
-            writer.Indent().WriteLine($"theme = {(Theme == string.Empty ? DEFAULT_THEME : Theme)}");
+
+            if (Theme.IsEmpty() == false)
+            {
+                writer.Indent().WriteLine($"theme = {Theme}");
+            }
+            if (Background.IsEmpty() == false)
+            {
+                writer.Indent().WriteLine($"override_background = {{ reference = {Background} }}");
+            }
         }
 
         writer.WriteLine();

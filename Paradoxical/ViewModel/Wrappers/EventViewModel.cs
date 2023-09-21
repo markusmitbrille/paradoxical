@@ -31,6 +31,12 @@ public class EventViewModel : ViewModel<Event>, IEquatable<EventViewModel?>, ISe
         set => SetProperty(ref model.theme, value);
     }
 
+    public string Background
+    {
+        get => model.background;
+        set => SetProperty(ref model.background, value);
+    }
+
     public string Type
     {
         get => model.type;

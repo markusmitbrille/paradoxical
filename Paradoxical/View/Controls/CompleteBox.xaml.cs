@@ -62,17 +62,20 @@ public partial class CompleteBox : Window
         Theme =
             0b0000001000000000,
 
-        Animation =
+        Background =
             0b0000010000000000,
 
-        Outfit =
+        Animation =
             0b0000100000000000,
 
-        Picture =
+        Outfit =
             0b0001000000000000,
 
-        Onion =
+        Picture =
             0b0010000000000000,
+
+        Onion =
+            0b0100000000000000,
 
         Code =
             Scope
@@ -840,8 +843,20 @@ public partial class CompleteBox : Window
             {
                 Name = info.Name,
                 Code = info.Name,
-                Icon = PackIconKind.Landscape,
+                Icon = PackIconKind.Eye,
                 Kind = Kind.Theme,
+            });
+        }
+
+        var backgrounds = BackgroundInfo.ParseText();
+        foreach (var info in backgrounds)
+        {
+            Suggestions.Add(new()
+            {
+                Name = info.Name,
+                Code = info.Name,
+                Icon = PackIconKind.Landscape,
+                Kind = Kind.Background,
             });
         }
     }

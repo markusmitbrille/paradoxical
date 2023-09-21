@@ -20,7 +20,7 @@ def match_and_save_files(path, regex_pattern, output_file):
                 file_contents = infile.read()
               
                 # Use regex to find matches in the file contents
-                matches = re.findall(regex_pattern, file_contents)
+                matches = re.findall(regex_pattern, file_contents, flags=re.M)
                 if matches:
                     # Add the matches to the set
                     distinct_matches.update(matches)
@@ -64,5 +64,12 @@ match_and_save_files(dir, pattern, output)
 dir = game_dir + 'game/common/decisions/**/*.txt'
 pattern = r'(?<=picture = ").+(?=")'
 output = out_dir + 'out_pictures.txt'
+
+match_and_save_files(dir, pattern, output)
+
+# backgrounds
+dir = game_dir + 'game/common/event_backgrounds/01_event_backgrounds.txt'
+pattern = r'^\w+(?= =)'
+output = out_dir + 'out_backgrounds.txt'
 
 match_and_save_files(dir, pattern, output)

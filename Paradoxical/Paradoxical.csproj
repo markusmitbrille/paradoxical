@@ -23,6 +23,7 @@
     <None Remove="Info\event_targets.log" />
     <None Remove="Info\on_actions.log" />
     <None Remove="Info\triggers.log" />
+    <None Remove="Resources\Lists\Backgrounds.txt" />
     <None Remove="Resources\Lists\Commands.txt" />
     <None Remove="Resources\Lists\Outfits.txt" />
     <None Remove="Resources\Lists\Pictures.txt" />
@@ -38,6 +39,7 @@
     <EmbeddedResource Include="Resources\Lists\Commands.txt" />
     <EmbeddedResource Include="Resources\Lists\Outfits.txt" />
     <EmbeddedResource Include="Resources\Lists\Pictures.txt" />
+    <EmbeddedResource Include="Resources\Lists\Backgrounds.txt" />
     <EmbeddedResource Include="Resources\Logs\custom_localization.log" />
     <EmbeddedResource Include="Resources\Logs\effects.log" />
     <EmbeddedResource Include="Resources\Logs\event_targets.log" />
