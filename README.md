@@ -1,2 +1,2 @@
 # Paradoxical
-A modding tool that helps create Crusader Kings III mods.
+A modding tool for Crusader Kings III.
