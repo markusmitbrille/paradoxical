@@ -903,16 +903,11 @@ public partial class ScriptBox : TextBox
             InverseOffsetY = 5,
             Filter = CurrentWord?.Value ?? string.Empty,
             AllowedItems = AllowedCompleteItems,
-            MaxItems = 10,
         };
 
         Popup.Closed += PopupClosedHandler;
 
         Popup.Show();
-
-        Popup.UpdateScores();
-        Popup.UpdateView();
-        Popup.UpdateSelection();
 
         // refocus
         Focus();
@@ -1003,7 +998,6 @@ public partial class ScriptBox : TextBox
 
         Popup.UpdateScores();
         Popup.UpdateView();
-        Popup.UpdateSelection();
     }
 
     private void ValidatePopup()

@@ -710,15 +710,12 @@ public partial class CompleteBox : Window
     };
 
     private IEnumerable<Item> Items { get; } = Suggestions.ToArray();
-
-    private ICollectionView View => CollectionViewSource.GetDefaultView(Items);
-    private IEnumerable<Item> FilteredItems => View.Cast<Item>();
+    private IEnumerable<Item> ScoredItems { get; set; } = Suggestions.ToArray();
 
     public Item? Selected { get; set; }
 
     public string Filter { get; set; } = string.Empty;
     public Kind AllowedItems { get; set; } = Kind.All;
-    public int MaxItems { get; set; } = 10;
 
     public bool? Result { get; set; }
 
@@ -732,10 +729,6 @@ public partial class CompleteBox : Window
     public CompleteBox()
     {
         InitializeComponent();
-
-        ItemsBox.ItemsSource = Items;
-        View.Filter = Predicate;
-        View.SortDescriptions.Add(new(nameof(Item.Score), ListSortDirection.Descending));
     }
 
     static CompleteBox()
@@ -867,18 +860,46 @@ public partial class CompleteBox : Window
         }
     }
 
-    private bool Predicate(object obj)
+    private int ViewPortLength { get; set; } = 10;
+    private int ViewPortIndex { get; set; } = 0;
+
+    public void UpdateView()
     {
-        if (obj is not Item item)
-        { return false; }
+        if (Selected != null && Selected.Score < Cutoff)
+        {
+            ItemsBox.SelectedItem = null;
+        }
 
-        if (AllowedItems.HasFlag(item.Kind) == false)
-        { return false; }
+        var list = ScoredItems.ToList();
+        list.Sort((x, y) => y.Score - x.Score);
 
-        if (item.Score > 10)
-        { return true; }
+        if (Selected != null)
+        {
+            var selectedIndex = list.IndexOf(Selected);
+            if (selectedIndex < ViewPortIndex)
+            {
+                ViewPortIndex = selectedIndex;
+            }
+            if (selectedIndex >= ViewPortIndex + ViewPortLength)
+            {
+                ViewPortIndex = selectedIndex - ViewPortLength + 1;
+            }
+        }
 
-        return false;
+        if (ViewPortIndex + ViewPortLength > list.Count)
+        {
+            ViewPortIndex = list.Count - ViewPortLength;
+        }
+
+        ViewPortIndex = ViewPortIndex < 0 ? 0 : ViewPortIndex;
+        if (ViewPortIndex + ViewPortLength <= list.Count)
+        {
+            ItemsBox.ItemsSource = list.GetRange(ViewPortIndex, ViewPortLength);
+        }
+        else
+        {
+            ItemsBox.ItemsSource = list.TakeLast(ViewPortLength);
+        }
     }
 
     public void SelectPrevious()
@@ -887,6 +908,15 @@ public partial class CompleteBox : Window
         if (i >= 0)
         {
             ItemsBox.SelectedIndex = i;
+        }
+        else if (ViewPortIndex > 0)
+        {
+            Selected = null;
+            ViewPortIndex--;
+
+            UpdateView();
+
+            ItemsBox.SelectedIndex = 0;
         }
     }
 
@@ -897,26 +927,21 @@ public partial class CompleteBox : Window
         {
             ItemsBox.SelectedIndex = i;
         }
+        else if (ViewPortIndex < ScoredItems.Count() - ViewPortLength)
+        {
+            Selected = null;
+            ViewPortIndex++;
+
+            UpdateView();
+
+            ItemsBox.SelectedIndex = ItemsBox.Items.Count - 1;
+        }
     }
+
+    public int Cutoff { get; set; } = 15;
 
     public void UpdateScores()
     {
-        if (Filter.IsEmpty() == true)
-        {
-            foreach (var item in Items)
-            {
-                item.Score = 0;
-            }
-
-            var defaults = Items.Where(item => AllowedItems.HasFlag(item.Kind) == true).Take(MaxItems);
-            foreach (var item in defaults)
-            {
-                item.Score = 100;
-            }
-
-            return;
-        }
-
         var invalids = Items.Where(item => AllowedItems.HasFlag(item.Kind) == false);
         foreach (var item in invalids)
         {
@@ -924,42 +949,38 @@ public partial class CompleteBox : Window
         }
 
         var valids = Items.Where(item => AllowedItems.HasFlag(item.Kind) == true);
-        foreach (var item in valids)
+
+        if (Filter.IsEmpty() == true)
         {
-            string filter = Filter.ToLowerInvariant();
-            string name = item.Name.ToLowerInvariant();
-
-            item.Score = Fuzz.Ratio(filter, name);
-
-            foreach (string tag in item.Tags)
+            foreach (var item in valids)
             {
-                if (string.IsNullOrEmpty(tag) == true)
-                { continue; }
+                item.Score = 100;
+            }
+        }
+        else
+        {
+            foreach (var item in valids)
+            {
+                string filter = Filter.ToLowerInvariant();
+                string name = item.Name.ToLowerInvariant();
 
-                int score = Fuzz.Ratio(filter, tag);
-                if (score > item.Score)
+                item.Score = Fuzz.Ratio(filter, name);
+
+                foreach (string tag in item.Tags)
                 {
-                    item.Score = score;
+                    if (string.IsNullOrEmpty(tag) == true)
+                    { continue; }
+
+                    int score = Fuzz.Ratio(filter, tag);
+                    if (score > item.Score)
+                    {
+                        item.Score = score;
+                    }
                 }
             }
         }
 
-        var garbage = valids.OrderBy(item => item.Score).Take(valids.Count() - MaxItems);
-        foreach (var item in garbage)
-        {
-            item.Score = 0;
-        }
-    }
-
-    public void UpdateView()
-    {
-        View.Refresh();
-    }
-
-    public void UpdateSelection()
-    {
-        Item? selected = FilteredItems.FirstOrDefault();
-        ItemsBox.SelectedItem = selected;
+        ScoredItems = Items.Where(item => item.Score >= Cutoff);
     }
 
     private void SelectedHandler(object sender, SelectionChangedEventArgs e)
@@ -1001,5 +1022,13 @@ public partial class CompleteBox : Window
         {
             Top = AnchorY + OffsetY;
         }
+    }
+
+    private void ItemsBoxLoadedHandler(object sender, RoutedEventArgs e)
+    {
+        UpdateScores();
+        UpdateView();
+
+        ItemsBox.SelectedItem = 0;
     }
 }

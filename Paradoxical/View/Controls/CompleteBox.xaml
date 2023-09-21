@@ -24,6 +24,7 @@
             SelectionMode="Single"
             SelectionChanged="SelectedHandler"
             IsSynchronizedWithCurrentItem="True"
+            Loaded="ItemsBoxLoadedHandler"
             ScrollViewer.VerticalScrollBarVisibility="Disabled"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
