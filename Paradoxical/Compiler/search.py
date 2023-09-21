@@ -46,13 +46,6 @@ output = out_dir + 'out_animations.txt'
 
 match_and_save_files(dir, pattern, output)
 
-# themes
-dir = game_dir + 'game/events/**/*.txt'
-pattern = r'(?<=theme = )\w+'
-output = out_dir + 'out_themes.txt'
-
-match_and_save_files(dir, pattern, output)
-
 # outfits
 dir = game_dir + 'game/events/**/*.txt'
 pattern = r'(?<=outfit_tags = \{ )\w+'
@@ -64,6 +57,13 @@ match_and_save_files(dir, pattern, output)
 dir = game_dir + 'game/common/decisions/**/*.txt'
 pattern = r'(?<=picture = ").+(?=")'
 output = out_dir + 'out_pictures.txt'
+
+match_and_save_files(dir, pattern, output)
+
+# themes
+dir = game_dir + 'game/common/event_themes/00_event_themes.txt'
+pattern = r'^\w+(?= =)'
+output = out_dir + 'out_themes.txt'
 
 match_and_save_files(dir, pattern, output)
 
