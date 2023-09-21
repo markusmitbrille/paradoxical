@@ -14,19 +14,19 @@ public class Script : IEntity, IModel, IEquatable<Script?>
     public int Id { get => id; set => id = value; }
     public int id;
 
-    [Column("name"), Indexed, NotNull]
+    [Column("name"), Indexed]
     public string Name { get => name; set => name = value; }
     public string name = $"src_{Guid.NewGuid().ToString("N").Substring(0, 4)}";
 
-    [Column("code"), NotNull]
+    [Column("code")]
     public string Code { get => code; set => code = value; }
     public string code = "";
 
-    [Column("dir"), NotNull]
+    [Column("dir")]
     public string Dir { get => dir; set => dir = value; }
     public string dir = "./";
 
-    [Column("file"), NotNull]
+    [Column("file")]
     public string File { get => file; set => file = value; }
     public string file = $"script.txt";
 

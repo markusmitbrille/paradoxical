@@ -16,47 +16,47 @@ public class Event : IEntity, IModel, IEquatable<Event?>, IComparable<Event>
     public int Id { get => id; set => id = value; }
     public int id;
 
-    [Column("name"), Indexed, NotNull]
+    [Column("name"), Indexed]
     public string Name { get => name; set => name = value; }
     public string name = $"evt_{Guid.NewGuid().ToString("N").Substring(0, 4)}";
 
-    [Column("title"), NotNull]
+    [Column("title")]
     public string Title { get => title; set => title = value; }
     public string title = "";
 
-    [Column("description"), NotNull]
+    [Column("description")]
     public string Description { get => description; set => description = value; }
     public string description = "";
 
-    [Column("theme"), NotNull]
+    [Column("theme")]
     public string Theme { get => theme; set => theme = value; }
     public string theme = "";
 
-    [Column("type"), NotNull]
+    [Column("type")]
     public string Type { get => type; set => type = value; }
     public string type = "character_event";
 
-    [Column("scope"), NotNull]
+    [Column("scope")]
     public string Scope { get => scope; set => scope = value; }
     public string scope = "none";
 
-    [Column("hidden"), NotNull]
+    [Column("hidden")]
     public bool Hidden { get => hidden; set => hidden = value; }
     public bool hidden;
 
-    [Column("cooldown"), NotNull]
+    [Column("cooldown")]
     public int Cooldown { get => cooldown; set => cooldown = value; }
     public int cooldown;
 
-    [Column("custom_trigger"), NotNull]
+    [Column("custom_trigger")]
     public string CustomTrigger { get => customTrigger; set => customTrigger = value; }
     public string customTrigger = "";
 
-    [Column("custom_immediate_effect"), NotNull]
+    [Column("custom_immediate_effect")]
     public string CustomImmediateEffect { get => customImmediateEffect; set => customImmediateEffect = value; }
     public string customImmediateEffect = "";
 
-    [Column("custom_after_effect"), NotNull]
+    [Column("custom_after_effect")]
     public string CustomAfterEffect { get => customAfterEffect; set => customAfterEffect = value; }
     public string customAfterEffect = "";
 

@@ -16,135 +16,135 @@ public class Decision : IEntity, IModel, IEquatable<Decision?>, IComparable<Deci
     public int Id { get => id; set => id = value; }
     public int id;
 
-    [Column("name"), Indexed, NotNull]
+    [Column("name"), Indexed]
     public string Name { get => name; set => name = value; }
     public string name = $"dec_{Guid.NewGuid().ToString("N").Substring(0, 4)}";
 
-    [Column("title"), NotNull]
+    [Column("title")]
     public string Title { get => title; set => title = value; }
     public string title = "";
 
-    [Column("description"), NotNull]
+    [Column("description")]
     public string Description { get => description; set => description = value; }
     public string description = "";
 
-    [Column("confirm"), NotNull]
+    [Column("confirm")]
     public string Confirm { get => confirm; set => confirm = value; }
     public string confirm = "";
 
-    [Column("tooltip"), NotNull]
+    [Column("tooltip")]
     public string Tooltip { get => tooltip; set => tooltip = value; }
     public string tooltip = "";
 
-    [Column("picture"), NotNull]
+    [Column("picture")]
     public string Picture { get => picture; set => picture = value; }
     public string picture = "";
 
-    [Column("cooldown"), NotNull]
+    [Column("cooldown")]
     public int Cooldown { get => cooldown; set => cooldown = value; }
     public int cooldown;
 
-    [Column("major"), NotNull]
+    [Column("major")]
     public bool Major { get => major; set => major = value; }
     public bool major;
 
-    [Column("order"), NotNull]
+    [Column("order")]
     public int Order { get => order; set => order = value; }
     public int order;
 
-    [Column("cost_gold"), NotNull]
+    [Column("cost_gold")]
     public int CostGold { get => costGold; set => costGold = value; }
     public int costGold;
 
-    [Column("cost_piety"), NotNull]
+    [Column("cost_piety")]
     public int CostPiety { get => costPiety; set => costPiety = value; }
     public int costPiety;
 
-    [Column("cost_prestige"), NotNull]
+    [Column("cost_prestige")]
     public int CostPrestige { get => costPrestige; set => costPrestige = value; }
     public int costPrestige;
 
-    [Column("min_cost_gold"), NotNull]
+    [Column("min_cost_gold")]
     public int MinCostGold { get => minCostGold; set => minCostGold = value; }
     public int minCostGold;
 
-    [Column("min_cost_piety"), NotNull]
+    [Column("min_cost_piety")]
     public int MinCostPiety { get => minCostPiety; set => minCostPiety = value; }
     public int minCostPiety;
 
-    [Column("min_cost_prestige"), NotNull]
+    [Column("min_cost_prestige")]
     public int MinCostPrestige { get => minCostPrestige; set => minCostPrestige = value; }
     public int minCostPrestige;
 
-    [Column("custom_shown_trigger"), NotNull]
+    [Column("custom_shown_trigger")]
     public string CustomShownTrigger { get => customShownTrigger; set => customShownTrigger = value; }
     public string customShownTrigger = "";
 
-    [Column("custom_failure_trigger"), NotNull]
+    [Column("custom_failure_trigger")]
     public string CustomFailureTrigger { get => customFailureTrigger; set => customFailureTrigger = value; }
     public string customFailureTrigger = "";
 
-    [Column("custom_valid_trigger"), NotNull]
+    [Column("custom_valid_trigger")]
     public string CustomValidTrigger { get => customValidTrigger; set => customValidTrigger = value; }
     public string customValidTrigger = "";
 
-    [Column("custom_effect"), NotNull]
+    [Column("custom_effect")]
     public string CustomEffect { get => customEffect; set => customEffect = value; }
     public string customEffect = "";
 
-    [Column("ai_goal"), NotNull]
+    [Column("ai_goal")]
     public bool AiGoal { get => aiGoal; set => aiGoal = value; }
     public bool aiGoal;
 
-    [Column("ai_check_frequency"), NotNull]
+    [Column("ai_check_frequency")]
     public int AiCheckFrequency { get => aiCheckFrequency; set => aiCheckFrequency = value; }
     public int aiCheckFrequency;
 
-    [Column("ai_potential"), NotNull]
+    [Column("ai_potential")]
     public string AiPotential { get => aiPotential; set => aiPotential = value; }
     public string aiPotential = "";
 
-    [Column("ai_base_will_do"), NotNull]
+    [Column("ai_base_will_do")]
     public int AiBaseWillDo { get => aiBaseWillDo; set => aiBaseWillDo = value; }
     public int aiBaseWillDo;
 
-    [Column("ai_custom_will_do"), NotNull]
+    [Column("ai_custom_will_do")]
     public string AiCustomWillDo { get => aiCustomWillDo; set => aiCustomWillDo = value; }
     public string aiCustomWillDo = "";
 
-    [Column("ai_boldness"), NotNull]
+    [Column("ai_boldness")]
     public int AiBoldnessTargetModifier { get => aiBoldnessTargetModifier; set => aiBoldnessTargetModifier = value; }
     public int aiBoldnessTargetModifier;
 
-    [Column("ai_compassion"), NotNull]
+    [Column("ai_compassion")]
     public int AiCompassionTargetModifier { get => aiCompassionTargetModifier; set => aiCompassionTargetModifier = value; }
     public int aiCompassionTargetModifier;
 
-    [Column("ai_greed"), NotNull]
+    [Column("ai_greed")]
     public int AiGreedTargetModifier { get => aiGreedTargetModifier; set => aiGreedTargetModifier = value; }
     public int aiGreedTargetModifier;
 
-    [Column("ai_energy"), NotNull]
+    [Column("ai_energy")]
     public int AiEnergyTargetModifier { get => aiEnergyTargetModifier; set => aiEnergyTargetModifier = value; }
     public int aiEnergyTargetModifier;
 
-    [Column("ai_honor"), NotNull]
+    [Column("ai_honor")]
     public int AiHonorTargetModifier { get => aiHonorTargetModifier; set => aiHonorTargetModifier = value; }
     public int aiHonorTargetModifier;
 
-    [Column("ai_rationality"), NotNull]
+    [Column("ai_rationality")]
     public int AiRationalityTargetModifier { get => aiRationalityTargetModifier; set => aiRationalityTargetModifier = value; }
     public int aiRationalityTargetModifier;
 
-    [Column("ai_sociability"), NotNull]
+    [Column("ai_sociability")]
     public int AiSociabilityTargetModifier { get => aiSociabilityTargetModifier; set => aiSociabilityTargetModifier = value; }
     public int aiSociabilityTargetModifier;
 
-    [Column("ai_vengefulness"), NotNull]
+    [Column("ai_vengefulness")]
     public int AiVengefulnessTargetModifier { get => aiVengefulnessTargetModifier; set => aiVengefulnessTargetModifier = value; }
     public int aiVengefulnessTargetModifier;
 
-    [Column("ai_zeal"), NotNull]
+    [Column("ai_zeal")]
     public int AiZealTargetModifier { get => aiZealTargetModifier; set => aiZealTargetModifier = value; }
     public int aiZealTargetModifier;
 

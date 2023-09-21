@@ -13,19 +13,19 @@ public class Mod : IEntity, IModel, IEquatable<Mod?>
     public int Id { get => id; set => id = value; }
     public int id;
 
-    [Column("mod_name"), NotNull]
+    [Column("mod_name")]
     public string ModName { get => modName; set => modName = value; }
     public string modName = "New Mod";
 
-    [Column("mod_version"), NotNull]
+    [Column("mod_version")]
     public string ModVersion { get => modVersion; set => modVersion = value; }
     public string modVersion = "1.0";
 
-    [Column("game_version"), NotNull]
+    [Column("game_version")]
     public string GameVersion { get => gameVersion; set => gameVersion = value; }
     public string gameVersion = "2.*";
 
-    [Column("prefix"), NotNull]
+    [Column("prefix")]
     public string Prefix { get => prefix; set => prefix = value; }
     public string prefix = "mod";
 

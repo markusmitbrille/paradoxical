@@ -18,7 +18,7 @@ public class Link : IEntity, IModel, IEquatable<Link?>
     public int EventId { get => eventId; set => eventId = value; }
     public int eventId;
 
-    [Column("scope"), NotNull]
+    [Column("scope")]
     public string Scope { get => scope; set => scope = value; }
     public string scope = "";
 

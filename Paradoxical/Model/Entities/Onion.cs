@@ -16,19 +16,19 @@ public class Onion : IEntity, IModel, IEquatable<Onion?>
     public int Id { get => id; set => id = value; }
     public int id;
 
-    [Column("event_id"), Indexed, NotNull]
+    [Column("event_id"), Indexed]
     public int EventId { get => eventId; set => eventId = value; }
     public int eventId;
 
-    [Column("name"), Indexed, NotNull]
+    [Column("name"), Indexed]
     public string Name { get => name; set => name = value; }
     public string name = $"act_{Guid.NewGuid().ToString("N").Substring(0, 4)}";
 
-    [Column("random"), NotNull]
+    [Column("random")]
     public bool Random { get => random; set => random = value; }
     public bool random;
 
-    [Column("weight"), NotNull]
+    [Column("weight")]
     public int Weight { get => weight; set => weight = value; }
     public int weight;
 

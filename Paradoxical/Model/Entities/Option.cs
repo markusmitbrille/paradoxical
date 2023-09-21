@@ -16,19 +16,19 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
     public int Id { get => id; set => id = value; }
     public int id;
 
-    [Column("event_id"), Indexed, NotNull]
+    [Column("event_id"), Indexed]
     public int EventId { get => eventId; set => eventId = value; }
     public int eventId;
 
-    [Column("name"), Indexed, NotNull]
+    [Column("name"), Indexed]
     public string Name { get => name; set => name = value; }
     public string name = $"opt_{Guid.NewGuid().ToString("N").Substring(0, 4)}";
 
-    [Column("title"), NotNull]
+    [Column("title")]
     public string Title { get => title; set => title = value; }
     public string title = "";
 
-    [Column("tooltip"), NotNull]
+    [Column("tooltip")]
     public string Tooltip { get => tooltip; set => tooltip = value; }
     public string tooltip = "";
 
@@ -36,55 +36,55 @@ public class Option : IEntity, IModel, IEquatable<Option?>, IComparable<Option>
     public int? Priority { get => priority; set => priority = value; }
     public int? priority = null;
 
-    [Column("custom_trigger"), NotNull]
+    [Column("custom_trigger")]
     public string CustomTrigger { get => customTrigger; set => customTrigger = value; }
     public string customTrigger = "";
 
-    [Column("custom_effect"), NotNull]
+    [Column("custom_effect")]
     public string CustomEffect { get => customEffect; set => customEffect = value; }
     public string customEffect = "";
 
-    [Column("ai_base_chance"), NotNull]
+    [Column("ai_base_chance")]
     public int AiBaseChance { get => aiBaseChance; set => aiBaseChance = value; }
     public int aiBaseChance;
 
-    [Column("ai_custom_chance"), NotNull]
+    [Column("ai_custom_chance")]
     public string AiCustomChance { get => aiCustomChance; set => aiCustomChance = value; }
     public string aiCustomChance = "";
 
-    [Column("ai_boldness"), NotNull]
+    [Column("ai_boldness")]
     public int AiBoldnessTargetModifier { get => aiBoldnessTargetModifier; set => aiBoldnessTargetModifier = value; }
     public int aiBoldnessTargetModifier;
 
-    [Column("ai_compassion"), NotNull]
+    [Column("ai_compassion")]
     public int AiCompassionTargetModifier { get => aiCompassionTargetModifier; set => aiCompassionTargetModifier = value; }
     public int aiCompassionTargetModifier;
 
-    [Column("ai_greed"), NotNull]
+    [Column("ai_greed")]
     public int AiGreedTargetModifier { get => aiGreedTargetModifier; set => aiGreedTargetModifier = value; }
     public int aiGreedTargetModifier;
 
-    [Column("ai_energy"), NotNull]
+    [Column("ai_energy")]
     public int AiEnergyTargetModifier { get => aiEnergyTargetModifier; set => aiEnergyTargetModifier = value; }
     public int aiEnergyTargetModifier;
 
-    [Column("ai_honor"), NotNull]
+    [Column("ai_honor")]
     public int AiHonorTargetModifier { get => aiHonorTargetModifier; set => aiHonorTargetModifier = value; }
     public int aiHonorTargetModifier;
 
-    [Column("ai_rationality"), NotNull]
+    [Column("ai_rationality")]
     public int AiRationalityTargetModifier { get => aiRationalityTargetModifier; set => aiRationalityTargetModifier = value; }
     public int aiRationalityTargetModifier;
 
-    [Column("ai_sociability"), NotNull]
+    [Column("ai_sociability")]
     public int AiSociabilityTargetModifier { get => aiSociabilityTargetModifier; set => aiSociabilityTargetModifier = value; }
     public int aiSociabilityTargetModifier;
 
-    [Column("ai_vengefulness"), NotNull]
+    [Column("ai_vengefulness")]
     public int AiVengefulnessTargetModifier { get => aiVengefulnessTargetModifier; set => aiVengefulnessTargetModifier = value; }
     public int aiVengefulnessTargetModifier;
 
-    [Column("ai_zeal"), NotNull]
+    [Column("ai_zeal")]
     public int AiZealTargetModifier { get => aiZealTargetModifier; set => aiZealTargetModifier = value; }
     public int aiZealTargetModifier;
 

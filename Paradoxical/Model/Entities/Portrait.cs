@@ -25,23 +25,23 @@ public class Portrait : IEntity, IModel, IEquatable<Portrait?>
     public int Id { get => id; set => id = value; }
     public int id;
 
-    [Column("event_id"), Indexed, NotNull]
+    [Column("event_id"), Indexed]
     public int EventId { get => eventId; set => eventId = value; }
     public int eventId;
 
-    [Column("position"), NotNull]
+    [Column("position")]
     public PortraitPosition Position { get => position; set => position = value; }
     public PortraitPosition position;
 
-    [Column("character"), NotNull]
+    [Column("character")]
     public string Character { get => character; set => character = value; }
     public string character = "";
 
-    [Column("animation"), NotNull]
+    [Column("animation")]
     public string Animation { get => animation; set => animation = value; }
     public string animation = "";
 
-    [Column("outfit"), NotNull]
+    [Column("outfit")]
     public string OutfitTags { get => outfitTags; set => outfitTags = value; }
     public string outfitTags = "";
 
